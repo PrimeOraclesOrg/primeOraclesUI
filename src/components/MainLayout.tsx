@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { AppSidebar } from "./AppSidebar";
+import { MobileMenu } from "./MobileMenu";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -8,8 +9,15 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="min-h-screen bg-background">
-      <AppSidebar />
-      <main className="ml-64 min-h-screen">
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">
+        <AppSidebar />
+      </div>
+      
+      {/* Mobile Menu */}
+      <MobileMenu />
+      
+      <main className="lg:ml-64 min-h-screen pt-[57px] lg:pt-0">
         {children}
       </main>
     </div>

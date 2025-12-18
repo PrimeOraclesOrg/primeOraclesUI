@@ -296,33 +296,35 @@ export default function Settings() {
 
   return (
     <MainLayout>
-      <div className="p-8">
-        <h1 className="text-2xl font-semibold mb-8">Настройки Аккаунта</h1>
+      <div className="p-4 md:p-6 lg:p-8">
+        <h1 className="text-xl md:text-2xl font-semibold mb-6 md:mb-8">Настройки Аккаунта</h1>
 
-        <div className="flex gap-12">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12">
           {/* Left sidebar with profile and tabs */}
-          <div className="w-64 shrink-0">
+          <div className="w-full lg:w-64 shrink-0">
             {/* Profile card */}
-            <div className="mb-6">
-              <div className="w-20 h-20 rounded-full bg-muted overflow-hidden mb-3">
+            <div className="mb-6 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0">
+              <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-muted overflow-hidden lg:mb-3">
                 <img
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face"
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <h2 className="font-semibold text-lg">Lesha Maisak</h2>
-              <p className="text-muted-foreground text-sm">@Leshamais</p>
+              <div>
+                <h2 className="font-semibold text-lg">Lesha Maisak</h2>
+                <p className="text-muted-foreground text-sm">@Leshamais</p>
+              </div>
             </div>
 
-            {/* Navigation tabs */}
-            <nav className="space-y-1">
+            {/* Navigation tabs - horizontal scroll on mobile */}
+            <nav className="flex lg:flex-col gap-2 lg:gap-1 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
               {tabItems.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-left transition-colors",
+                    "flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-2.5 rounded-lg text-left transition-colors whitespace-nowrap",
                     activeTab === tab.id
                       ? "bg-muted text-foreground"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -337,7 +339,7 @@ export default function Settings() {
             {/* Logout button */}
             <Button
               variant="outline"
-              className="w-full mt-8 border-primary/50 text-primary hover:bg-primary/10"
+              className="w-full mt-6 lg:mt-8 border-primary/50 text-primary hover:bg-primary/10"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Выход

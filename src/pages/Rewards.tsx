@@ -133,38 +133,39 @@ const rewardsData = [
 export default function Rewards() {
   return (
     <MainLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-6 lg:p-8">
         {/* Header */}
-        <div className="flex items-start justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
               Награды за контент
             </h1>
-            <p className="text-muted-foreground">
-              Публикуйте контент в социальных сетях и получайте вознаграждение за
+            <p className="text-sm md:text-base text-muted-foreground">
+              Публикуйте контент в социальных сетях и получайте вознаграждение
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" className="gap-2">
+          <div className="flex items-center gap-2 md:gap-3">
+            <Button variant="outline" size="sm" className="gap-2">
               <Info className="w-4 h-4" />
-              Подробнее
+              <span className="hidden sm:inline">Подробнее</span>
             </Button>
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Создать компанию
+            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <span className="hidden sm:inline">Создать компанию</span>
+              <span className="sm:hidden">Создать</span>
             </Button>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <span className="text-sm text-muted-foreground">
             43 Доступных наград за контент
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Категории:</span>
+              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">Категории:</span>
               <Select defaultValue="all">
-                <SelectTrigger className="w-[100px] h-8 bg-card border-border">
+                <SelectTrigger className="w-[80px] md:w-[100px] h-8 bg-card border-border text-xs md:text-sm">
                   <SelectValue placeholder="Все" />
                 </SelectTrigger>
                 <SelectContent>
@@ -176,9 +177,9 @@ export default function Rewards() {
               </Select>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Тип:</span>
+              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">Тип:</span>
               <Select defaultValue="clip">
-                <SelectTrigger className="w-[100px] h-8 bg-card border-border">
+                <SelectTrigger className="w-[80px] md:w-[100px] h-8 bg-card border-border text-xs md:text-sm">
                   <SelectValue placeholder="Клип" />
                 </SelectTrigger>
                 <SelectContent>
@@ -189,9 +190,9 @@ export default function Rewards() {
               </Select>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Сортировать по:</span>
+              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">Сортировка:</span>
               <Select defaultValue="popularity">
-                <SelectTrigger className="w-[140px] h-8 bg-card border-border">
+                <SelectTrigger className="w-[100px] md:w-[140px] h-8 bg-card border-border text-xs md:text-sm">
                   <SelectValue placeholder="Популярности" />
                 </SelectTrigger>
                 <SelectContent>

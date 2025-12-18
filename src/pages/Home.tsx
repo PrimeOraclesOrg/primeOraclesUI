@@ -128,19 +128,19 @@ const marketplaceProducts = [
 export default function Home() {
   return (
     <MainLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-6 lg:p-8">
         {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-primary tracking-wider mb-4">
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary tracking-wider mb-4">
             PRIME ORACLES
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base md:text-lg px-4">
             Все необходимые инструменты для роста — в одном месте.
           </p>
         </div>
 
         {/* Featured Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-12">
           {/* Награда за контент preview */}
           <Link
             to="/rewards"
@@ -232,17 +232,17 @@ export default function Home() {
         </div>
 
         {/* CTA Button */}
-        <div className="flex justify-center mb-16">
+        <div className="flex justify-center mb-10 md:mb-16">
           <Button
             variant="outline"
-            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-3"
+            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 md:px-8 py-3"
           >
             Создать компанию
           </Button>
         </div>
 
         {/* Content Rewards Info Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-10 md:mb-16">
           <div className="lg:col-span-2">
             <p className="text-lg text-foreground leading-relaxed mb-6">
               <span className="text-primary font-semibold">
@@ -255,23 +255,23 @@ export default function Home() {
             <p className="text-muted-foreground">
               Но только после того, как одобрите их публикацию.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6 md:mt-8">
               {bottomRewards.map((reward, i) => (
                 <RewardCard key={i} {...reward} />
               ))}
             </div>
           </div>
-          <div>
+          <div className="lg:block hidden">
             <RewardCard {...sideReward} />
           </div>
         </div>
 
         {/* Marketplace Section */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-foreground text-center mb-8">
+        <div className="mb-10 md:mb-16">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-6 md:mb-8">
             Маркетплейс
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {marketplaceProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
