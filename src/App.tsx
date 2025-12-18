@@ -2,7 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Rewards from "./pages/Rewards";
 import Marketplace from "./pages/Marketplace";
 import Learning from "./pages/Learning";
 import LearningDetail from "./pages/LearningDetail";
@@ -19,7 +21,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/marketplace" replace />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/rewards" element={<Rewards />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/learning" element={<Learning />} />
           <Route path="/learning/:id" element={<LearningDetail />} />
@@ -27,7 +30,6 @@ const App = () => (
           <Route path="/profile" element={<Settings />} />
           <Route path="/settings" element={<Settings />} />
           {/* Placeholder routes */}
-          <Route path="/rewards" element={<Marketplace />} />
           <Route path="/messages" element={<Marketplace />} />
           <Route path="/notifications" element={<Marketplace />} />
           <Route path="/workspace" element={<Marketplace />} />
