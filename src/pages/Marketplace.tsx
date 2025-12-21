@@ -3,99 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/MainLayout";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryTabs } from "@/components/CategoryTabs";
-import { ProductCard, Product } from "@/components/ProductCard";
+import { ProductCard } from "@/components/ProductCard";
+import { Pagination } from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
-import productCrypto from "@/assets/product-crypto.jpg";
-import productWealth from "@/assets/product-wealth.jpg";
-import productTradingBot from "@/assets/product-trading-bot.jpg";
-import productSoftware from "@/assets/product-software.jpg";
-
-const categories = ["Все", "Софты/боты", "Сообщества", "Обучения", "Цифровые материалы"];
-
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    title: "№1 комьюнити по торговле криптовалютой",
-    image: productWealth,
-    price: "free",
-    author: { name: "Wealth Group Credit Card Pay" },
-    rating: 4.95,
-    reviewCount: 421,
-    category: "Сообщества",
-  },
-  {
-    id: "2",
-    title: "Криптовалютная торговая стратегия, которая работает с Точность 98%",
-    image: productCrypto,
-    price: 230,
-    author: { name: "Crypto Auto Pump Signals Pro" },
-    rating: 5.0,
-    reviewCount: 145,
-    category: "Обучения",
-  },
-  {
-    id: "3",
-    title: "Продажа торгового бота на форексе",
-    image: productTradingBot,
-    price: "free",
-    author: { name: "The Haven Free" },
-    rating: 4.1,
-    reviewCount: 521,
-    category: "Софты/боты",
-  },
-  {
-    id: "4",
-    title: "Аренда Adobe Photoshop +",
-    image: productSoftware,
-    price: 10,
-    author: { name: "Quavo Speaks" },
-    rating: 5.0,
-    reviewCount: 19,
-    category: "Цифровые материалы",
-  },
-  {
-    id: "5",
-    title: "№1 комьюнити по торговле криптовалютой",
-    image: productWealth,
-    price: "free",
-    author: { name: "Wealth Group Credit Card Pay" },
-    rating: 4.95,
-    reviewCount: 421,
-    category: "Сообщества",
-  },
-  {
-    id: "6",
-    title: "Криптовалютная торговая стратегия, которая работает с Точность 98%",
-    image: productCrypto,
-    price: 230,
-    author: { name: "Crypto Auto Pump Signals Pro" },
-    rating: 5.0,
-    reviewCount: 145,
-    category: "Обучения",
-  },
-  {
-    id: "7",
-    title: "Продажа торгового бота на форексе",
-    image: productTradingBot,
-    price: "free",
-    author: { name: "The Haven Free" },
-    rating: 4.1,
-    reviewCount: 521,
-    category: "Софты/боты",
-  },
-  {
-    id: "8",
-    title: "Аренда Adobe Photoshop +",
-    image: productSoftware,
-    price: 10,
-    author: { name: "Quavo Speaks" },
-    rating: 5.0,
-    reviewCount: 19,
-    category: "Цифровые материалы",
-  },
-];
+import { mockProducts, productCategories } from "@/data/products";
 
 export default function Marketplace() {
   const navigate = useNavigate();
@@ -126,7 +37,7 @@ export default function Marketplace() {
         {/* Category Tabs */}
         <div className="mb-6">
           <CategoryTabs
-            categories={categories}
+            categories={productCategories}
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
           />
@@ -163,34 +74,11 @@ export default function Marketplace() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-center gap-2">
-          <button className="p-2 rounded-lg hover:bg-secondary transition-colors">
-            <ChevronLeft className="w-5 h-5 text-muted-foreground" />
-          </button>
-          {[1, 2, 3, 4, 5].map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
-                currentPage === page
-                  ? "bg-secondary text-foreground"
-                  : "text-muted-foreground hover:bg-secondary/50"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-          <span className="text-muted-foreground px-2">...</span>
-          <button
-            onClick={() => setCurrentPage(37)}
-            className="w-10 h-10 rounded-lg text-sm font-medium text-muted-foreground hover:bg-secondary/50 transition-colors"
-          >
-            37
-          </button>
-          <button className="p-2 rounded-lg hover:bg-secondary transition-colors">
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
-          </button>
-        </div>
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={37}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </MainLayout>
   );

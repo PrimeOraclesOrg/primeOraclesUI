@@ -1,50 +1,9 @@
 import { useState } from "react";
 import { NavLink as RouterNavLink, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import {
-  Home,
-  Gift,
-  Store,
-  GraduationCap,
-  Mail,
-  Bell,
-  Briefcase,
-  ShoppingCart,
-  User,
-  Menu,
-  X,
-  type LucideIcon,
-} from "lucide-react";
+import { User, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-interface NavItem {
-  icon: LucideIcon;
-  label: string;
-  href: string;
-  children?: { label: string; href: string }[];
-}
-
-const mainNavItems: NavItem[] = [
-  { icon: Home, label: "Главная страница", href: "/" },
-  { icon: Gift, label: "Награды за контент", href: "/rewards" },
-  { icon: Store, label: "Маркетплейс", href: "/marketplace" },
-  { icon: GraduationCap, label: "Обучение", href: "/learning" },
-  { icon: Mail, label: "Сообщения", href: "/messages" },
-  { icon: Bell, label: "Уведомления", href: "/notifications" },
-];
-
-const workspaceItems: NavItem[] = [
-  { 
-    icon: Briefcase, 
-    label: "Рабочее пространство", 
-    href: "/workspace",
-    children: [
-      { label: "Маркетплейс", href: "/workspace/marketplace" },
-      { label: "Награда за контент", href: "/workspace/rewards" },
-    ]
-  },
-  { icon: ShoppingCart, label: "Мои покупки", href: "/purchases" },
-];
+import { mainNavItems, workspaceItems } from "@/config/navigation";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);

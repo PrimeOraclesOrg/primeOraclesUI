@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { MainLayout } from "@/components/MainLayout";
 import { RewardCard } from "@/components/RewardCard";
+import { Pagination } from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
-import { Info, ChevronLeft, ChevronRight } from "lucide-react";
+import { Info } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -9,128 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const rewardsData = [
-  {
-    logo: "M",
-    name: "Mellstroy game",
-    rate: "$3.50/1K",
-    description: "Получайте деньги за просмотры вирусного контента...",
-    paidAmount: "43,795.5$",
-    totalAmount: "50,000$",
-    progress: 88,
-    category: "Личный бренд",
-    type: "UGS",
-    views: "12,513,023",
-    socialNetworks: ["instagram", "youtube", "tiktok"],
-  },
-  {
-    logo: "С",
-    name: "Стив Хоук",
-    rate: "$2.50/1K",
-    description: "Делайте нарезки с моего подкаста.",
-    paidAmount: "1,395.5$",
-    totalAmount: "3,000$",
-    progress: 43,
-    category: "Личный бренд",
-    type: "Клип",
-    views: "213,023",
-    socialNetworks: ["instagram", "youtube", "tiktok", "vk"],
-  },
-  {
-    logo: "А",
-    name: "Александр Соколов...",
-    rate: "$2.00/1K",
-    description: "Создавайте мотивационные ролики с участ...",
-    paidAmount: "6,795.5$",
-    totalAmount: "10,000$",
-    progress: 78,
-    category: "Личный бренд",
-    type: "Клип",
-    views: "1,513,023",
-    socialNetworks: ["instagram", "youtube"],
-  },
-  {
-    logo: "A",
-    name: "Axiom trade",
-    rate: "$4.00/1K",
-    description: "Создавайте вовлекающий контент про нашу пл...",
-    paidAmount: "0$",
-    totalAmount: "12,000$",
-    progress: 0,
-    category: "Личный бренд",
-    type: "UGS",
-    views: "0",
-    socialNetworks: ["instagram", "youtube", "x"],
-  },
-  {
-    logo: "Г",
-    name: "Галактус",
-    rate: "$0.20/1K",
-    description: "Нарезки с шоу 50 хейтеров, просмотры считаю...",
-    paidAmount: "80.5$",
-    totalAmount: "1,000$",
-    progress: 21,
-    category: "Личный бренд",
-    type: "Клип",
-    views: "1,113,023",
-    socialNetworks: ["tiktok", "youtube", "vk"],
-  },
-  {
-    logo: "Q",
-    name: "Quack Game",
-    rate: "$2.50/1K",
-    description: "Делайте обзоры на наше приложение и полу...",
-    paidAmount: "29,795.5$",
-    totalAmount: "30,000$",
-    progress: 98,
-    category: "Личный бренд",
-    type: "UGS",
-    views: "9,513,023",
-    socialNetworks: ["instagram", "youtube"],
-  },
-  {
-    logo: "E",
-    name: "Evelone",
-    rate: "$2.50/1K",
-    description: "Нарезки со стримов и видео на ютубе",
-    paidAmount: "32,795.5$",
-    totalAmount: "50,000$",
-    progress: 65,
-    category: "Личный бренд",
-    type: "UGS",
-    views: "12,513,023",
-    socialNetworks: ["youtube", "tiktok"],
-  },
-  {
-    logo: "M",
-    name: "Macan",
-    rate: "$0.10/1K",
-    description: 'Создавайте видео под звук "название"',
-    paidAmount: "25,000.5$",
-    totalAmount: "50,000$",
-    progress: 50,
-    category: "Музыка",
-    type: "Клип",
-    views: "120,513,023",
-    socialNetworks: ["instagram", "youtube", "tiktok"],
-  },
-  {
-    logo: "Е",
-    name: "Евроторг Бонстики 7",
-    rate: "$0.50/1K",
-    description: "Описание",
-    paidAmount: "43,795.5$",
-    totalAmount: "50,000$",
-    progress: 88,
-    category: "Продукт",
-    type: "UGS",
-    views: "12,513,023",
-    socialNetworks: ["instagram", "youtube"],
-  },
-];
+import { mockRewards } from "@/data/rewards";
 
 export default function Rewards() {
+  const [currentPage, setCurrentPage] = useState(1);
+
   return (
     <MainLayout>
       <div className="p-4 md:p-6 lg:p-8">
@@ -207,34 +92,17 @@ export default function Rewards() {
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {rewardsData.map((reward, index) => (
+          {mockRewards.map((reward, index) => (
             <RewardCard key={index} {...reward} />
           ))}
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-center gap-2">
-          <Button variant="ghost" size="icon" className="w-8 h-8">
-            <ChevronLeft className="w-4 h-4" />
-          </Button>
-          {[1, 2, 3, 4, 5].map((page) => (
-            <Button
-              key={page}
-              variant={page === 1 ? "default" : "ghost"}
-              size="icon"
-              className="w-8 h-8"
-            >
-              {page}
-            </Button>
-          ))}
-          <span className="px-2 text-muted-foreground">...</span>
-          <Button variant="ghost" size="icon" className="w-8 h-8">
-            37
-          </Button>
-          <Button variant="ghost" size="icon" className="w-8 h-8">
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        </div>
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={37}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </MainLayout>
   );
