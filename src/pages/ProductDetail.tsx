@@ -1,84 +1,17 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/MainLayout";
 import { RatingStars } from "@/components/RatingStars";
+import { ReviewList } from "@/components/product/ReviewList";
+import { RatingDistribution } from "@/components/product/RatingDistribution";
+import { FAQSection } from "@/components/product/FAQSection";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Star } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-import productCrypto from "@/assets/product-crypto.jpg";
-
-interface Review {
-  id: string;
-  author: string;
-  avatar?: string;
-  rating: number;
-  text: string;
-  date: string;
-}
-
-const mockReviews: Review[] = [
-  {
-    id: "1",
-    author: "Михаил Грибенюк",
-    rating: 5,
-    text: "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
-    date: "1 День назад",
-  },
-  {
-    id: "2",
-    author: "Михаил Грибенюк",
-    rating: 5,
-    text: "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
-    date: "1 День назад",
-  },
-  {
-    id: "3",
-    author: "Михаил Грибенюк",
-    rating: 5,
-    text: "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
-    date: "1 День назад",
-  },
-];
-
-const faqs = [
-  { id: "1", question: "Вопрос 1", answer: "Ответ на первый вопрос будет здесь." },
-  { id: "2", question: "Вопрос 2", answer: "Ответ на второй вопрос будет здесь." },
-  { id: "3", question: "Вопрос 3", answer: "Ответ на третий вопрос будет здесь." },
-];
-
-const ratingDistribution = [
-  { stars: 5, percentage: 85 },
-  { stars: 4, percentage: 10 },
-  { stars: 3, percentage: 3 },
-  { stars: 2, percentage: 1 },
-  { stars: 1, percentage: 1 },
-];
+import { ChevronLeft } from "lucide-react";
+import { useProductDetails } from "@/hooks/useProducts";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  // Mock product data
-  const product = {
-    id,
-    title: "Закрытый клуб предпринимателей",
-    subtitle: "Феномен КОФЕМАНИИ",
-    description: "Описание продукта будет здесь. Это подробная информация о том, что входит в данный продукт и какие преимущества вы получите при покупке.",
-    image: productCrypto,
-    price: 100,
-    author: {
-      name: "Михаил Грибенюк",
-      avatar: undefined,
-    },
-    rating: 4.67,
-    reviewCount: 51,
-    memberCount: 271,
-  };
+  const { product, reviews, faqs, ratingDistribution } = useProductDetails(id || "1");
 
   return (
     <MainLayout>
@@ -117,7 +50,7 @@ export default function ProductDetail() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                    <span className="text-sm font-medium">М</span>
+                    <span className="text-sm font-medium">{product.author.name.charAt(0)}</span>
                   </div>
                   <span className="text-foreground font-medium">{product.author.name}</span>
                 </div>
@@ -146,92 +79,17 @@ export default function ProductDetail() {
           <h2 className="text-xl font-bold text-foreground mb-6">Отзывы</h2>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Rating Summary */}
-            <div className="lg:w-64 flex-shrink-0">
-              <div className="flex items-center gap-2 mb-2">
-                <RatingStars rating={product.rating} size="lg" showNumber={false} />
-                <span className="text-lg font-semibold text-foreground">
-                  {product.rating.toFixed(2)} из 5
-                </span>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                {product.reviewCount} Всего отзывов
-              </p>
-
-              {/* Rating Distribution */}
-              <div className="space-y-2">
-                {ratingDistribution.map((item) => (
-                  <div key={item.stars} className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground w-16">
-                      {item.stars} {item.stars === 1 ? "Звезда" : item.stars < 5 ? "Звезды" : "Звезд"}
-                    </span>
-                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-primary rounded-full transition-all duration-500"
-                        style={{ width: `${item.percentage}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Review List */}
-            <div className="flex-1 space-y-4">
-              {mockReviews.map((review) => (
-                <div
-                  key={review.id}
-                  className="surface-card p-4 animate-fade-in"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                        <span className="text-sm font-medium">М</span>
-                      </div>
-                      <div>
-                        <div className="font-medium text-foreground">{review.author}</div>
-                        <div className="flex">
-                          {Array.from({ length: 5 }, (_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-3 h-3 ${
-                                i < review.rating
-                                  ? "fill-primary text-primary"
-                                  : "fill-muted text-muted"
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <span className="text-sm text-muted-foreground">{review.date}</span>
-                  </div>
-                  <p className="text-muted-foreground text-sm">{review.text}</p>
-                </div>
-              ))}
-            </div>
+            <RatingDistribution 
+              distribution={ratingDistribution}
+              rating={product.rating}
+              totalReviews={product.reviewCount}
+            />
+            <ReviewList reviews={reviews} />
           </div>
         </div>
 
         {/* FAQ Section */}
-        <div>
-          <h2 className="text-xl font-bold text-foreground mb-6 text-center">
-            Часто задаваемые вопросы:
-          </h2>
-
-          <Accordion type="single" collapsible className="max-w-2xl mx-auto">
-            {faqs.map((faq) => (
-              <AccordionItem key={faq.id} value={faq.id} className="border-border">
-                <AccordionTrigger className="text-foreground hover:text-primary">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+        <FAQSection faqs={faqs} />
       </div>
     </MainLayout>
   );

@@ -1,26 +1,11 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { MainLayout } from "@/components/MainLayout";
-import { ChevronLeft, Play } from "lucide-react";
-
-import learningIntro from "@/assets/learning-intro.jpg";
+import { Play } from "lucide-react";
+import { useLessonDetails } from "@/hooks/useLearning";
 
 export default function LearningDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
-
-  // Mock data
-  const lesson = {
-    id,
-    title: "Что такое Prime Oracles",
-    subtitle: "Как работает платформа и на чем строится заработок - Тут будет описание",
-    image: learningIntro,
-    videoDescription: [
-      "Как устроена площадка Prime Oracles",
-      "На чем мы зарабатываем",
-      "Бла бла бла Блэ блэ блэ Блу блу блу",
-    ],
-    articleContent: "Пересказ видео в тексте. Здесь будет полный текст статьи с подробным описанием всех аспектов работы платформы Prime Oracles. Мы расскажем о том, как начать работу, какие инструменты доступны и как максимизировать свой доход.",
-  };
+  const { lesson } = useLessonDetails(id || "1");
 
   return (
     <MainLayout>

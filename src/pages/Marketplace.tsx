@@ -6,7 +6,7 @@ import { CategoryTabs } from "@/components/CategoryTabs";
 import { ProductCard } from "@/components/ProductCard";
 import { Pagination } from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
-import { mockProducts, productCategories } from "@/data/products";
+import { useProducts } from "@/hooks/useProducts";
 
 export default function Marketplace() {
   const navigate = useNavigate();
@@ -14,11 +14,7 @@ export default function Marketplace() {
   const [activeCategory, setActiveCategory] = useState("Все");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredProducts = mockProducts.filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = activeCategory === "Все" || product.category === activeCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const { products, categories } = useProducts(activeCategory, searchQuery);
 
   return (
     <MainLayout>
@@ -37,7 +33,7 @@ export default function Marketplace() {
         {/* Category Tabs */}
         <div className="mb-6">
           <CategoryTabs
-            categories={productCategories}
+            categories={categories}
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
           />
@@ -45,7 +41,7 @@ export default function Marketplace() {
 
         {/* Results Info */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
-          <span className="text-sm text-muted-foreground">Найдено {filteredProducts.length}</span>
+          <span className="text-sm text-muted-foreground">Найдено {products.length}</span>
           <div className="flex items-center gap-2">
             <span className="text-xs sm:text-sm text-muted-foreground">Сортировать:</span>
             <select className="bg-secondary border border-border rounded-lg px-2 md:px-3 py-1.5 text-xs sm:text-sm text-foreground">
@@ -59,7 +55,7 @@ export default function Marketplace() {
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-          {filteredProducts.map((product, index) => (
+          {products.map((product, index) => (
             <div 
               key={`${product.id}-${index}`}
               className="animate-fade-in"

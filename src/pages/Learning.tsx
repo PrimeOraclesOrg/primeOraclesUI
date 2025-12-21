@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/MainLayout";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { LearningCard } from "@/components/LearningCard";
-import { mockLearningItems, learningCategories } from "@/data/learning";
+import { useLearning } from "@/hooks/useLearning";
 
 export default function Learning() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Старт на Prime Oracles");
-
-  const filteredItems = mockLearningItems.filter((item) => item.tab === activeTab);
+  
+  const { items, categories } = useLearning(activeTab);
 
   return (
     <MainLayout>
@@ -22,7 +22,7 @@ export default function Learning() {
         {/* Tabs */}
         <div className="mb-8">
           <CategoryTabs
-            categories={learningCategories}
+            categories={categories}
             activeCategory={activeTab}
             onCategoryChange={setActiveTab}
           />
@@ -30,7 +30,7 @@ export default function Learning() {
 
         {/* Learning Cards */}
         <div className="space-y-6">
-          {filteredItems.map((item, index) => (
+          {items.map((item, index) => (
             <div
               key={item.id}
               className="animate-fade-in"

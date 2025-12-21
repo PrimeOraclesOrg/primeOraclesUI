@@ -11,10 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { mockRewards } from "@/data/rewards";
+import { useRewards } from "@/hooks/useRewards";
 
 export default function Rewards() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [category, setCategory] = useState("all");
+  const [type, setType] = useState("all");
+
+  const { rewards } = useRewards(category, type);
 
   return (
     <MainLayout>
@@ -44,12 +48,12 @@ export default function Rewards() {
         {/* Filters */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <span className="text-sm text-muted-foreground">
-            43 Доступных наград за контент
+            {rewards.length} Доступных наград за контент
           </span>
           <div className="flex flex-wrap items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
               <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">Категории:</span>
-              <Select defaultValue="all">
+              <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="w-[80px] md:w-[100px] h-8 bg-card border-border text-xs md:text-sm">
                   <SelectValue placeholder="Все" />
                 </SelectTrigger>
@@ -63,13 +67,13 @@ export default function Rewards() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">Тип:</span>
-              <Select defaultValue="clip">
+              <Select value={type} onValueChange={setType}>
                 <SelectTrigger className="w-[80px] md:w-[100px] h-8 bg-card border-border text-xs md:text-sm">
-                  <SelectValue placeholder="Клип" />
+                  <SelectValue placeholder="Все" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все</SelectItem>
-                  <SelectItem value="clip">Клип</SelectItem>
+                  <SelectItem value="клип">Клип</SelectItem>
                   <SelectItem value="ugs">UGS</SelectItem>
                 </SelectContent>
               </Select>
@@ -92,7 +96,7 @@ export default function Rewards() {
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {mockRewards.map((reward, index) => (
+          {rewards.map((reward, index) => (
             <RewardCard key={index} {...reward} />
           ))}
         </div>
