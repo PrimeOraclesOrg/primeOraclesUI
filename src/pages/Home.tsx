@@ -3,127 +3,8 @@ import { RewardCard } from "@/components/RewardCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import productCrypto from "@/assets/product-crypto.jpg";
-import productTradingBot from "@/assets/product-trading-bot.jpg";
-import productSoftware from "@/assets/product-software.jpg";
-
-const featuredRewards = [
-  {
-    logo: "С",
-    name: "Стив Хоук",
-    rate: "$2.50/1K",
-    description: "Делайте нарезки с моего подкаста.",
-    paidAmount: "1,395.5$",
-    totalAmount: "3,000$",
-    progress: 43,
-    category: "Личный бренд",
-    type: "Клип",
-    views: "213,023",
-    socialNetworks: ["instagram", "youtube", "tiktok", "vk"],
-  },
-  {
-    logo: "А",
-    name: "Александр Соколов...",
-    rate: "$2.00/1K",
-    description: "Создавайте мотивационные ролики с участ...",
-    paidAmount: "6,795.5$",
-    totalAmount: "10,000$",
-    progress: 78,
-    category: "Личный бренд",
-    type: "Клип",
-    views: "1,513,023",
-    socialNetworks: ["instagram", "youtube"],
-  },
-];
-
-const bottomRewards = [
-  {
-    logo: "E",
-    name: "Eleps",
-    rate: "$2.50/1K",
-    description: "Нарезки со стримов и видео на ютубе",
-    paidAmount: "32,795.5$",
-    totalAmount: "50,000$",
-    progress: 65,
-    category: "Категория",
-    type: "Тип",
-    views: "",
-    socialNetworks: ["instagram", "youtube", "tiktok"],
-  },
-  {
-    logo: "А",
-    name: "Александр Соколов...",
-    rate: "$2.00/1K",
-    description: "Создавайте мотивационные ролики с участ...",
-    paidAmount: "6,795.5$",
-    totalAmount: "10,000$",
-    progress: 78,
-    category: "Категория",
-    type: "Тип",
-    views: "",
-    socialNetworks: ["instagram", "youtube"],
-  },
-  {
-    logo: "Q",
-    name: "Quaks Nod",
-    rate: "$2.50/1K",
-    description: "Делайте обзоры на наше приложение и полу..",
-    paidAmount: "29,795.5$",
-    totalAmount: "30,000$",
-    progress: 78,
-    category: "Категория",
-    type: "Тип",
-    views: "",
-    socialNetworks: ["instagram", "youtube"],
-  },
-];
-
-const sideReward = {
-  logo: "U",
-  name: "Unblox Game",
-  rate: "$3.50/1K",
-  description: "Получайте деньги за просмотры вирусного конт...",
-  paidAmount: "43,795.5$",
-  totalAmount: "50,000$",
-  progress: 88,
-  category: "Личный бренд",
-  type: "UGS",
-  views: "12,513,023",
-  socialNetworks: ["instagram", "youtube", "tiktok"],
-};
-
-const marketplaceProducts = [
-  {
-    id: "1",
-    image: productCrypto,
-    title: "Криптовалютная торговая стратегия, которая работает с Точность 98%🚀",
-    author: { name: "Crypto Auto Pump Signals Pro" },
-    rating: 5.0,
-    reviewCount: 145,
-    price: 230.0 as number | "free",
-    category: "Крипто",
-  },
-  {
-    id: "2",
-    image: productTradingBot,
-    title: "Продажа торгового бота на форексе",
-    author: { name: "The Haven Free" },
-    rating: 4.1,
-    reviewCount: 521,
-    price: "free" as number | "free",
-    category: "Торговля",
-  },
-  {
-    id: "3",
-    image: productSoftware,
-    title: "Аренда Adobe Photoshop + AI",
-    author: { name: "Quavo Speaks" },
-    rating: 5.0,
-    reviewCount: 19,
-    price: 10.0 as number | "free",
-    category: "Софт",
-  },
-];
+import { featuredRewards, bottomRewards, sideReward } from "@/data/rewards";
+import { homePageProducts } from "@/data/products";
 
 export default function Home() {
   return (
@@ -197,7 +78,7 @@ export default function Home() {
             className="relative bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
           >
             <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
-              {marketplaceProducts.slice(0, 2).map((product, i) => (
+              {homePageProducts.slice(0, 2).map((product, i) => (
                 <div
                   key={i}
                   className="bg-background/50 border border-border rounded-lg overflow-hidden"
@@ -272,7 +153,7 @@ export default function Home() {
             Маркетплейс
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            {marketplaceProducts.map((product) => (
+            {homePageProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
