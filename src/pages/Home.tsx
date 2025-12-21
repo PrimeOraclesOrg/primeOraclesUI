@@ -3,10 +3,13 @@ import { RewardCard } from "@/components/RewardCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { featuredRewards, bottomRewards, sideReward } from "@/data/rewards";
-import { homePageProducts } from "@/data/products";
+import { useHomeRewards } from "@/hooks/useRewards";
+import { useHomeProducts } from "@/hooks/useProducts";
 
 export default function Home() {
+  const { featuredRewards, bottomRewards, sideReward } = useHomeRewards();
+  const { products: marketplaceProducts } = useHomeProducts();
+
   return (
     <MainLayout>
       <div className="p-4 md:p-6 lg:p-8">
@@ -78,7 +81,7 @@ export default function Home() {
             className="relative bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
           >
             <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
-              {homePageProducts.slice(0, 2).map((product, i) => (
+              {marketplaceProducts.slice(0, 2).map((product, i) => (
                 <div
                   key={i}
                   className="bg-background/50 border border-border rounded-lg overflow-hidden"
@@ -153,7 +156,7 @@ export default function Home() {
             Маркетплейс
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            {homePageProducts.map((product) => (
+            {marketplaceProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
