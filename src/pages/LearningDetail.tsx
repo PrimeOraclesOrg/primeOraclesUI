@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
-import { MainLayout } from "@/components/MainLayout";
+import { MainLayout } from "@/components/templates";
+import { Loader } from "@/components/atoms";
 import { Play } from "lucide-react";
 import { useGetLessonDetailsQuery } from "@/store";
 
@@ -11,7 +12,7 @@ export default function LearningDetail() {
     return (
       <MainLayout>
         <div className="p-6 lg:p-8 flex items-center justify-center min-h-[400px]">
-          <div className="text-muted-foreground">Загрузка...</div>
+          <Loader size="lg" />
         </div>
       </MainLayout>
     );

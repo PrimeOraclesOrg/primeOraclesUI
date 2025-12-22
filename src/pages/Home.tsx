@@ -1,6 +1,5 @@
-import { MainLayout } from "@/components/MainLayout";
-import { RewardCard } from "@/components/RewardCard";
-import { ProductCard } from "@/components/ProductCard";
+import { MainLayout } from "@/components/templates";
+import { RewardCard, ProductCard } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useGetHomeRewardsQuery, useGetHomeProductsQuery } from "@/store";

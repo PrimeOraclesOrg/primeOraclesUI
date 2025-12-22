@@ -1,8 +1,7 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
-import type { Product } from "@/types";
-import type { ProductDetails, Review, FAQ, RatingDistributionItem } from "@/types/details";
+import type { Product, ProductDetails, Review, FAQ, RatingDistributionItem } from "@/types";
 
 interface ProductsQueryArgs {
   category?: string;
@@ -23,7 +22,6 @@ interface ProductDetailsResponse {
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Get products with optional filtering
     getProducts: builder.query<ProductsResponse, ProductsQueryArgs>({
       queryFn: ({ category, searchQuery }) => {
         let filtered = [...mockProducts];
@@ -34,9 +32,7 @@ export const productsApi = baseApi.injectEndpoints({
 
         if (searchQuery) {
           const query = searchQuery.toLowerCase();
-          filtered = filtered.filter((p) =>
-            p.title.toLowerCase().includes(query)
-          );
+          filtered = filtered.filter((p) => p.title.toLowerCase().includes(query));
         }
 
         return {
@@ -49,7 +45,6 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    // Get home page products
     getHomeProducts: builder.query<Product[], void>({
       queryFn: () => {
         return { data: homePageProducts };
@@ -57,7 +52,6 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    // Get single product details
     getProductDetails: builder.query<ProductDetailsResponse, string>({
       queryFn: (id) => {
         const product = getProductDetails(id);

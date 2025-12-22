@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MainLayout } from "@/components/MainLayout";
-import { SearchBar } from "@/components/SearchBar";
-import { CategoryTabs } from "@/components/CategoryTabs";
-import { ProductCard } from "@/components/ProductCard";
-import { Pagination } from "@/components/Pagination";
+import { MainLayout } from "@/components/templates";
+import { SearchBar, CategoryTabs, ProductCard, Pagination } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { useGetProductsQuery } from "@/store";
 

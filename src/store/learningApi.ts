@@ -1,8 +1,7 @@
 import { baseApi } from "./baseApi";
 import { mockLearningItems, learningCategories } from "@/data/learning";
 import { getLessonDetails } from "@/data/details";
-import type { LearningItem } from "@/types";
-import type { LessonDetails } from "@/types/details";
+import type { LearningItem, LessonDetails } from "@/types";
 
 interface LearningQueryArgs {
   tab?: string;
@@ -15,7 +14,6 @@ interface LearningResponse {
 
 export const learningApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Get learning items with optional tab filtering
     getLearningItems: builder.query<LearningResponse, LearningQueryArgs>({
       queryFn: ({ tab }) => {
         let items = [...mockLearningItems];
@@ -34,7 +32,6 @@ export const learningApi = baseApi.injectEndpoints({
       providesTags: ["Learning"],
     }),
 
-    // Get single lesson details
     getLessonDetails: builder.query<LessonDetails, string>({
       queryFn: (id) => {
         const lesson = getLessonDetails(id);

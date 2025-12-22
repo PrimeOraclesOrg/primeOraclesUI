@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { MainLayout } from "@/components/MainLayout";
-import { RewardCard } from "@/components/RewardCard";
-import { Pagination } from "@/components/Pagination";
+import { MainLayout } from "@/components/templates";
+import { RewardCard, Pagination } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 import {

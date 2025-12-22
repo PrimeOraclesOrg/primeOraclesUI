@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { MainLayout } from "@/components/MainLayout";
-import { Settings as SettingsIcon, Shield, Wallet, FileText, LogOut } from "lucide-react";
+import { MainLayout } from "@/components/templates";
+import { StatusBadge } from "@/components/atoms";
+import { Settings as SettingsIcon, Shield, Wallet, FileText, LogOut, Pencil, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { BasicSettings, SecuritySettings, BalanceSettings, OrderHistory } from "@/components/settings";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/utils/helpers";
+import { mockTransactions, mockOrders, mockSocialLinks } from "@/data/transactions";
+import type { SocialLink } from "@/types";
 
 type SettingsTab = "basic" | "security" | "balance" | "history";
 
@@ -14,19 +18,180 @@ const tabItems = [
   { id: "history" as const, label: "История заказов", icon: FileText },
 ];
 
+// Basic Settings Component
+function BasicSettings() {
+  const [name, setName] = useState("Lesha Maisak");
+  const [description, setDescription] = useState("");
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>(mockSocialLinks);
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <label className="text-sm text-muted-foreground mb-2 block">Имя</label>
+        <div className="relative">
+          <Input value={name} onChange={(e) => setName(e.target.value)} className="bg-card border-border pr-10" />
+          <Pencil className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        </div>
+      </div>
+
+      <div>
+        <label className="text-sm text-muted-foreground mb-2 block">Описание</label>
+        <div className="relative">
+          <Textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Описание"
+            className="bg-card border-border min-h-[100px] pr-10"
+          />
+          <Pencil className="absolute right-3 top-3 w-4 h-4 text-muted-foreground" />
+        </div>
+      </div>
+
+      <div>
+        <label className="text-sm text-muted-foreground mb-3 block">Добавьте ссылки на ваши аккаунты</label>
+        <div className="space-y-2">
+          {socialLinks.map((link, index) => (
+            <div key={link.platform} className="flex items-center gap-3 bg-card border border-border rounded-lg px-4 py-3">
+              <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm", link.color)}>
+                {link.icon}
+              </div>
+              <Input
+                value={link.url}
+                onChange={(e) => {
+                  const newLinks = [...socialLinks];
+                  newLinks[index].url = e.target.value;
+                  setSocialLinks(newLinks);
+                }}
+                className="flex-1 bg-transparent border-0 p-0 h-auto focus-visible:ring-0"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-6">
+        Сохранить
+      </Button>
+    </div>
+  );
+}
+
+// Security Settings Component
+function SecuritySettings() {
+  return (
+    <div className="space-y-6">
+      <p className="text-sm text-muted-foreground">
+        Защитите свою учетную запись, запросив проверочный код при входе в систему.
+      </p>
+
+      <div className="bg-card border border-primary/30 rounded-lg p-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+            <Check className="w-4 h-4 text-green-500" />
+          </div>
+          <div>
+            <p className="font-medium">Двухфакторная аутентификация ( Рекомендуется )</p>
+            <p className="text-sm text-muted-foreground">Получите код через приложение-аутентификатор.</p>
+          </div>
+        </div>
+        <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          Подключить 2FA
+        </Button>
+      </div>
+
+      <div className="bg-card border border-border rounded-lg p-4 flex items-center justify-between">
+        <div>
+          <p className="font-medium">Пароль</p>
+          <p className="text-sm text-muted-foreground">Вы можете изменить пароль в любой момент</p>
+        </div>
+        <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          Изменить пароль
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// Balance Settings Component
+function BalanceSettings() {
+  const [balance] = useState(22.00);
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <p className="text-sm text-muted-foreground">Доступный баланс</p>
+        <p className="text-4xl font-bold mt-1">$ {balance.toFixed(2)}</p>
+      </div>
+
+      <div className="h-px bg-border" />
+
+      <div className="flex gap-4">
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8">Пополнить</Button>
+        <Button variant="outline" className="border-border hover:bg-accent px-8">Вывести</Button>
+      </div>
+
+      <div>
+        <h3 className="font-medium mb-4 border-b border-border pb-2">История</h3>
+        <div className="space-y-0">
+          <div className="grid grid-cols-3 text-sm text-muted-foreground py-2 border-b border-border">
+            <span>Сумма</span>
+            <span>Статус</span>
+            <span>Отправлено</span>
+          </div>
+          {mockTransactions.map((tx) => (
+            <div key={tx.id} className="grid grid-cols-3 py-3 border-b border-border items-center">
+              <span>$ {tx.amount.toFixed(2)}</span>
+              <span><StatusBadge status={tx.status} type="transaction" /></span>
+              <div className="text-sm">
+                <p>{tx.method}</p>
+                <p className="text-muted-foreground text-xs truncate">{tx.address}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p className="text-xs text-muted-foreground text-center mt-8">
+        * Prime Oracles — технологическая компания, а не банк. Платежные услуги предоставляются партнёрами Prime Oracles. Балансы Prime Oracles не застрахованы
+      </p>
+    </div>
+  );
+}
+
+// Order History Component
+function OrderHistory() {
+  return (
+    <div>
+      <h3 className="text-xl font-medium italic mb-4">История заказов</h3>
+      <div className="space-y-0">
+        <div className="grid grid-cols-4 text-sm text-muted-foreground py-2 border-b border-border">
+          <span>Заголовок</span>
+          <span>Статус</span>
+          <span>Тип</span>
+          <span>Сумма</span>
+        </div>
+        {mockOrders.map((order) => (
+          <div key={order.id} className="grid grid-cols-4 py-3 border-b border-border items-center">
+            <span>{order.title}</span>
+            <span><StatusBadge status={order.status} type="order" /></span>
+            <span className="text-muted-foreground">{order.type}</span>
+            <span>$ {order.amount.toFixed(2)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>("basic");
 
   const renderContent = () => {
     switch (activeTab) {
-      case "basic":
-        return <BasicSettings />;
-      case "security":
-        return <SecuritySettings />;
-      case "balance":
-        return <BalanceSettings />;
-      case "history":
-        return <OrderHistory />;
+      case "basic": return <BasicSettings />;
+      case "security": return <SecuritySettings />;
+      case "balance": return <BalanceSettings />;
+      case "history": return <OrderHistory />;
     }
   };
 
@@ -53,7 +218,7 @@ export default function Settings() {
               </div>
             </div>
 
-            {/* Navigation tabs - horizontal scroll on mobile */}
+            {/* Navigation tabs */}
             <nav className="flex lg:flex-col gap-2 lg:gap-1 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
               {tabItems.map((tab) => (
                 <button
@@ -73,19 +238,14 @@ export default function Settings() {
             </nav>
 
             {/* Logout button */}
-            <Button
-              variant="outline"
-              className="w-full mt-6 lg:mt-8 border-primary/50 text-primary hover:bg-primary/10"
-            >
+            <Button variant="outline" className="w-full mt-6 lg:mt-8 border-primary/50 text-primary hover:bg-primary/10">
               <LogOut className="w-4 h-4 mr-2" />
               Выход
             </Button>
           </div>
 
           {/* Content area */}
-          <div className="flex-1 max-w-2xl">
-            {renderContent()}
-          </div>
+          <div className="flex-1 max-w-2xl">{renderContent()}</div>
         </div>
       </div>
     </MainLayout>

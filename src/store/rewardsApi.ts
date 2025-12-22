@@ -15,7 +15,6 @@ interface HomeRewardsResponse {
 
 export const rewardsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Get rewards with optional filtering
     getRewards: builder.query<Reward[], RewardsQueryArgs>({
       queryFn: ({ category, type }) => {
         let filtered = [...mockRewards];
@@ -37,7 +36,6 @@ export const rewardsApi = baseApi.injectEndpoints({
       providesTags: ["Rewards"],
     }),
 
-    // Get home page rewards
     getHomeRewards: builder.query<HomeRewardsResponse, void>({
       queryFn: () => {
         return {
