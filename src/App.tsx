@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ErrorBoundary } from "@/components/shared";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
@@ -15,31 +16,33 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/rewards" element={<Rewards />} />
-          <Route path="/marketplace" element={<Marketplace />} />
-          <Route path="/learning" element={<Learning />} />
-          <Route path="/learning/:id" element={<LearningDetail />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/profile" element={<Settings />} />
-          <Route path="/settings" element={<Settings />} />
-          {/* Placeholder routes */}
-          <Route path="/messages" element={<Marketplace />} />
-          <Route path="/notifications" element={<Marketplace />} />
-          <Route path="/workspace" element={<Marketplace />} />
-          <Route path="/workspace/*" element={<Marketplace />} />
-          <Route path="/purchases" element={<Marketplace />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/rewards" element={<Rewards />} />
+            <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/learning" element={<Learning />} />
+            <Route path="/learning/:id" element={<LearningDetail />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/profile" element={<Settings />} />
+            <Route path="/settings" element={<Settings />} />
+            {/* Placeholder routes */}
+            <Route path="/messages" element={<Marketplace />} />
+            <Route path="/notifications" element={<Marketplace />} />
+            <Route path="/workspace" element={<Marketplace />} />
+            <Route path="/workspace/*" element={<Marketplace />} />
+            <Route path="/purchases" element={<Marketplace />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
