@@ -6,7 +6,7 @@ import { CategoryTabs } from "@/components/CategoryTabs";
 import { ProductCard } from "@/components/ProductCard";
 import { Pagination } from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
-import { useProducts } from "@/hooks/useProducts";
+import { useGetProductsQuery } from "@/store";
 
 export default function Marketplace() {
   const navigate = useNavigate();
@@ -14,7 +14,9 @@ export default function Marketplace() {
   const [activeCategory, setActiveCategory] = useState("Все");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { products, categories } = useProducts(activeCategory, searchQuery);
+  const { data, isLoading } = useGetProductsQuery({ category: activeCategory, searchQuery });
+  const products = data?.products ?? [];
+  const categories = data?.categories ?? [];
 
   return (
     <MainLayout>

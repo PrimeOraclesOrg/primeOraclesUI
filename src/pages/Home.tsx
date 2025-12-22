@@ -4,11 +4,11 @@ import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useHomeRewards } from "@/hooks/useRewards";
-import { useHomeProducts } from "@/hooks/useProducts";
+import { useGetHomeProductsQuery } from "@/store";
 
 export default function Home() {
   const { featuredRewards, bottomRewards, sideReward } = useHomeRewards();
-  const { products: marketplaceProducts } = useHomeProducts();
+  const { data: marketplaceProducts = [] } = useGetHomeProductsQuery();
 
   return (
     <MainLayout>
