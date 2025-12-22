@@ -6,12 +6,27 @@ import { RatingDistribution } from "@/components/product/RatingDistribution";
 import { FAQSection } from "@/components/product/FAQSection";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import { useProductDetails } from "@/hooks/useProducts";
+import { useGetProductDetailsQuery } from "@/store";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { product, reviews, faqs, ratingDistribution } = useProductDetails(id || "1");
+  const { data, isLoading } = useGetProductDetailsQuery(id || "1");
+  
+  const product = data?.product;
+  const reviews = data?.reviews ?? [];
+  const faqs = data?.faqs ?? [];
+  const ratingDistribution = data?.ratingDistribution ?? [];
+
+  if (isLoading || !product) {
+    return (
+      <MainLayout>
+        <div className="p-6 lg:p-8 flex items-center justify-center min-h-[400px]">
+          <div className="text-muted-foreground">Загрузка...</div>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
