@@ -1,3 +1,6 @@
 export { store, type RootState, type AppDispatch } from "./store";
 export { useAppDispatch, useAppSelector } from "./hooks";
-export * from "./api";
+export { baseApi } from "./baseApi";
+export { productsApi, useGetProductsQuery, useGetHomeProductsQuery, useGetProductDetailsQuery } from "./productsApi";
+export { rewardsApi, useGetRewardsQuery, useGetHomeRewardsQuery } from "./rewardsApi";
+export { learningApi, useGetLearningItemsQuery, useGetLessonDetailsQuery } from "./learningApi";

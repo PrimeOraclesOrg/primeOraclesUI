@@ -1,12 +1,125 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { MainLayout } from "@/components/MainLayout";
-import { RatingStars } from "@/components/RatingStars";
-import { ReviewList } from "@/components/product/ReviewList";
-import { RatingDistribution } from "@/components/product/RatingDistribution";
-import { FAQSection } from "@/components/product/FAQSection";
+import { MainLayout } from "@/components/templates";
+import { RatingStars, Loader } from "@/components/atoms";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Star } from "lucide-react";
 import { useGetProductDetailsQuery } from "@/store";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import type { RatingDistributionItem, Review, FAQ } from "@/types";
+
+// Rating Distribution Component
+function RatingDistribution({ 
+  distribution, 
+  rating, 
+  totalReviews 
+}: { 
+  distribution: RatingDistributionItem[]; 
+  rating: number; 
+  totalReviews: number; 
+}) {
+  const getStarLabel = (stars: number) => {
+    if (stars === 1) return "Звезда";
+    if (stars < 5) return "Звезды";
+    return "Звезд";
+  };
+
+  return (
+    <div className="lg:w-64 flex-shrink-0">
+      <div className="flex items-center gap-2 mb-2">
+        <div className="flex">
+          {Array.from({ length: 5 }, (_, i) => (
+            <span
+              key={i}
+              className={`text-lg ${i < Math.floor(rating) ? "text-primary" : "text-muted"}`}
+            >
+              ★
+            </span>
+          ))}
+        </div>
+        <span className="text-lg font-semibold text-foreground">
+          {rating.toFixed(2)} из 5
+        </span>
+      </div>
+      <p className="text-sm text-muted-foreground mb-4">
+        {totalReviews} Всего отзывов
+      </p>
+
+      <div className="space-y-2">
+        {distribution.map((item) => (
+          <div key={item.stars} className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground w-16">
+              {item.stars} {getStarLabel(item.stars)}
+            </span>
+            <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary rounded-full transition-all duration-500"
+                style={{ width: `${item.percentage}%` }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Review List Component
+function ReviewList({ reviews }: { reviews: Review[] }) {
+  return (
+    <div className="flex-1 space-y-4">
+      {reviews.map((review) => (
+        <div key={review.id} className="surface-card p-4 animate-fade-in">
+          <div className="flex items-start justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                <span className="text-sm font-medium">{review.author.charAt(0)}</span>
+              </div>
+              <div>
+                <div className="font-medium text-foreground">{review.author}</div>
+                <div className="flex">
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-3 h-3 ${
+                        i < review.rating ? "fill-primary text-primary" : "fill-muted text-muted"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <span className="text-sm text-muted-foreground">{review.date}</span>
+          </div>
+          <p className="text-muted-foreground text-sm">{review.text}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// FAQ Section Component
+function FAQSection({ faqs, title = "Часто задаваемые вопросы:" }: { faqs: FAQ[]; title?: string }) {
+  return (
+    <div>
+      <h2 className="text-xl font-bold text-foreground mb-6 text-center">{title}</h2>
+      <Accordion type="single" collapsible className="max-w-2xl mx-auto">
+        {faqs.map((faq) => (
+          <AccordionItem key={faq.id} value={faq.id} className="border-border">
+            <AccordionTrigger className="text-foreground hover:text-primary">
+              {faq.question}
+            </AccordionTrigger>
+            <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </div>
+  );
+}
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -22,7 +135,7 @@ export default function ProductDetail() {
     return (
       <MainLayout>
         <div className="p-6 lg:p-8 flex items-center justify-center min-h-[400px]">
-          <div className="text-muted-foreground">Загрузка...</div>
+          <Loader size="lg" />
         </div>
       </MainLayout>
     );
@@ -45,11 +158,7 @@ export default function ProductDetail() {
           {/* Product Image */}
           <div className="lg:w-96 flex-shrink-0">
             <div className="aspect-[4/3] rounded-xl overflow-hidden bg-card">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-full object-cover"
-              />
+              <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
               <div className="relative -mt-20 p-4">
                 <div className="text-primary font-bold italic text-lg">{product.subtitle}</div>
                 <div className="text-foreground text-xs uppercase tracking-wider mt-1">
@@ -92,7 +201,6 @@ export default function ProductDetail() {
         {/* Reviews Section */}
         <div className="mb-12">
           <h2 className="text-xl font-bold text-foreground mb-6">Отзывы</h2>
-
           <div className="flex flex-col lg:flex-row gap-8">
             <RatingDistribution 
               distribution={ratingDistribution}

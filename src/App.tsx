@@ -1,18 +1,11 @@
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ErrorBoundary } from "@/components/shared";
 import { store } from "@/store";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Rewards from "./pages/Rewards";
-import Marketplace from "./pages/Marketplace";
-import Learning from "./pages/Learning";
-import LearningDetail from "./pages/LearningDetail";
-import ProductDetail from "./pages/ProductDetail";
-import Settings from "./pages/Settings";
-import NotFound from "./pages/NotFound";
+import { AppRoutes } from "@/routes";
 
 const App = () => (
   <ErrorBoundary>
@@ -21,23 +14,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/rewards" element={<Rewards />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/learning" element={<Learning />} />
-            <Route path="/learning/:id" element={<LearningDetail />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/profile" element={<Settings />} />
-            <Route path="/settings" element={<Settings />} />
-            {/* Placeholder routes */}
-            <Route path="/messages" element={<Marketplace />} />
-            <Route path="/notifications" element={<Marketplace />} />
-            <Route path="/workspace" element={<Marketplace />} />
-            <Route path="/workspace/*" element={<Marketplace />} />
-            <Route path="/purchases" element={<Marketplace />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AppRoutes />
         </BrowserRouter>
       </TooltipProvider>
     </Provider>

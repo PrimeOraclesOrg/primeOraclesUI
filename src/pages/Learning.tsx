@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MainLayout } from "@/components/MainLayout";
-import { CategoryTabs } from "@/components/CategoryTabs";
-import { LearningCard } from "@/components/LearningCard";
+import { MainLayout } from "@/components/templates";
+import { CategoryTabs, LearningCard } from "@/components/molecules";
 import { useGetLearningItemsQuery } from "@/store";
 
 export default function Learning() {

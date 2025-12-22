@@ -23,11 +23,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // Log error for monitoring (Sentry integration point)
     console.error("ErrorBoundary caught an error:", error, errorInfo);
-    
-    // TODO: When Sentry is added, capture here:
-    // Sentry.captureException(error, { extra: { componentStack: errorInfo.componentStack } });
   }
 
   handleReset = (): void => {
@@ -36,34 +32,27 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   render(): ReactNode {
     if (this.state.hasError) {
-      if (this.props.fallback) {
-        return this.props.fallback;
-      }
+      if (this.props.fallback) return this.props.fallback;
 
       return (
         <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 p-8">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
             <AlertTriangle className="h-8 w-8 text-destructive" />
           </div>
-          <h2 className="text-xl font-semibold text-foreground">
-            Что-то пошло не так
-          </h2>
+          <h2 className="text-xl font-semibold text-foreground">Что-то пошло не так</h2>
           <p className="max-w-md text-center text-muted-foreground">
-            Произошла непредвиденная ошибка. Попробуйте обновить страницу или вернуться назад.
+            Произошла непредвиденная ошибка. Попробуйте обновить страницу.
           </p>
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => window.location.reload()}>
               <RefreshCw className="mr-2 h-4 w-4" />
               Обновить страницу
             </Button>
-            <Button onClick={this.handleReset}>
-              Попробовать снова
-            </Button>
+            <Button onClick={this.handleReset}>Попробовать снова</Button>
           </div>
         </div>
       );
     }
-
     return this.props.children;
   }
 }
