@@ -3,12 +3,15 @@ import { RewardCard } from "@/components/RewardCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useHomeRewards } from "@/hooks/useRewards";
-import { useGetHomeProductsQuery } from "@/store";
+import { useGetHomeRewardsQuery, useGetHomeProductsQuery } from "@/store";
 
 export default function Home() {
-  const { featuredRewards, bottomRewards, sideReward } = useHomeRewards();
+  const { data: rewardsData } = useGetHomeRewardsQuery();
   const { data: marketplaceProducts = [] } = useGetHomeProductsQuery();
+
+  const featuredRewards = rewardsData?.featuredRewards ?? [];
+  const bottomRewards = rewardsData?.bottomRewards ?? [];
+  const sideReward = rewardsData?.sideReward;
 
   return (
     <MainLayout>
@@ -145,9 +148,11 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="lg:block hidden">
-            <RewardCard {...sideReward} />
-          </div>
+          {sideReward && (
+            <div className="lg:block hidden">
+              <RewardCard {...sideReward} />
+            </div>
+          )}
         </div>
 
         {/* Marketplace Section */}
