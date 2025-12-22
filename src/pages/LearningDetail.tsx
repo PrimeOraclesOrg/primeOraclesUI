@@ -1,11 +1,21 @@
 import { useParams } from "react-router-dom";
 import { MainLayout } from "@/components/MainLayout";
 import { Play } from "lucide-react";
-import { useLessonDetails } from "@/hooks/useLearning";
+import { useGetLessonDetailsQuery } from "@/store";
 
 export default function LearningDetail() {
   const { id } = useParams();
-  const { lesson } = useLessonDetails(id || "1");
+  const { data: lesson, isLoading } = useGetLessonDetailsQuery(id || "1");
+
+  if (isLoading || !lesson) {
+    return (
+      <MainLayout>
+        <div className="p-6 lg:p-8 flex items-center justify-center min-h-[400px]">
+          <div className="text-muted-foreground">Загрузка...</div>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>

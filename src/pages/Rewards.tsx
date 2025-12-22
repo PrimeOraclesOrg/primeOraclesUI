@@ -11,14 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRewards } from "@/hooks/useRewards";
+import { useGetRewardsQuery } from "@/store";
 
 export default function Rewards() {
   const [currentPage, setCurrentPage] = useState(1);
   const [category, setCategory] = useState("all");
   const [type, setType] = useState("all");
 
-  const { rewards } = useRewards(category, type);
+  const { data: rewards = [] } = useGetRewardsQuery({ category, type });
 
   return (
     <MainLayout>

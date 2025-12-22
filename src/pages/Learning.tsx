@@ -3,13 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { MainLayout } from "@/components/MainLayout";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { LearningCard } from "@/components/LearningCard";
-import { useLearning } from "@/hooks/useLearning";
+import { useGetLearningItemsQuery } from "@/store";
 
 export default function Learning() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Старт на Prime Oracles");
   
-  const { items, categories } = useLearning(activeTab);
+  const { data } = useGetLearningItemsQuery({ tab: activeTab });
+  const items = data?.items ?? [];
+  const categories = data?.categories ?? [];
 
   return (
     <MainLayout>
