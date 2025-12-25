@@ -47,90 +47,27 @@ export function HomeTemplate({
           {/* Награда за контент preview */}
           <Link
             to="/rewards"
-            className="relative bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
+            className="relative bg-card aspect-[490/280] border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
           >
-            <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
-              {featuredRewards.map((reward, i) => (
-                <div
-                  key={i}
-                  className="bg-background/50 border border-border rounded-lg p-3 text-xs"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs font-bold">
-                        {reward.logo}
-                      </div>
-                      <span className="font-medium text-foreground truncate text-xs">
-                        {reward.name}
-                      </span>
-                    </div>
-                    <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded">
-                      {reward.rate}
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground text-[10px] mb-2 line-clamp-1">
-                    {reward.description}
-                  </p>
-                  <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
-                    <span>
-                      Выплачено {reward.paidAmount} из {reward.totalAmount}
-                    </span>
-                    <span>{reward.progress}%</span>
-                  </div>
-                  <div className="h-1 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full"
-                      style={{ width: `${reward.progress}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
-            <div className="relative z-10 text-center">
-              <h3 className="text-xl font-bold text-foreground">
-                Награда за контент
-              </h3>
-            </div>
+            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 text-[--size-l] group-hover:backdrop-blur-sm">Награды за контент</strong>
+            <img
+                className="absolute left-0 top-0 block w-full h-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:-rotate-1"
+                src="/img/preview/tasks_preview.png"
+                alt="rewards preview"
+              />
           </Link>
 
           {/* Маркетплейс preview */}
           <Link
             to="/marketplace"
-            className="relative bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
+            className="relative bg-card aspect-[490/280] border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
           >
-            <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
-              {marketplaceProducts.slice(0, 2).map((product, i) => (
-                <div
-                  key={i}
-                  className="bg-background/50 border border-border rounded-lg overflow-hidden"
-                >
-                  <div className="h-20 overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-2">
-                    <p className="text-[10px] text-foreground line-clamp-2 mb-1">
-                      {product.title}
-                    </p>
-                    <div className="flex items-center gap-1 text-[10px]">
-                      <span className="text-primary">★</span>
-                      <span>{product.rating}</span>
-                      <span className="text-muted-foreground">
-                        ({product.reviewCount})
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
-            <div className="relative z-10 text-center">
-              <h3 className="text-xl font-bold text-foreground">Маркетплейс</h3>
-            </div>
+            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 text-[--size-l] group-hover:backdrop-blur-sm">Маркетплейс</strong>
+            <img
+              className="absolute left-0 top-0 block w-full h-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:-rotate-1"
+              src="/img/preview/market_preview.png"
+              alt="market preview"
+            />
           </Link>
         </div>
 
