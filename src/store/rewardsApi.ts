@@ -1,5 +1,5 @@
 import { baseApi } from "./baseApi";
-import { mockRewards, featuredRewards, bottomRewards, sideReward } from "@/data/rewards";
+import { homeRewardsPreview, mockRewards } from "@/data/rewards";
 import type { Reward } from "@/types";
 
 interface RewardsQueryArgs {
@@ -8,9 +8,7 @@ interface RewardsQueryArgs {
 }
 
 interface HomeRewardsResponse {
-  featuredRewards: Reward[];
-  bottomRewards: Reward[];
-  sideReward: Reward;
+  homeRewardsPreview: Reward[];
 }
 
 export const rewardsApi = baseApi.injectEndpoints({
@@ -40,9 +38,7 @@ export const rewardsApi = baseApi.injectEndpoints({
       queryFn: () => {
         return {
           data: {
-            featuredRewards,
-            bottomRewards,
-            sideReward,
+            homeRewardsPreview
           },
         };
       },

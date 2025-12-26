@@ -15,18 +15,14 @@ interface FeaturedReward {
 }
 
 interface HomeTemplateProps {
-  featuredRewards: FeaturedReward[];
-  bottomRewards: Reward[];
-  sideReward?: Reward;
-  marketplaceProducts: Product[];
+  rewardsPreview: Reward[];
+  productsPreview: Product[];
   onCreateClick: () => void;
 }
 
 export function HomeTemplate({
-  featuredRewards,
-  bottomRewards,
-  sideReward,
-  marketplaceProducts,
+  rewardsPreview,
+  productsPreview,
   onCreateClick,
 }: HomeTemplateProps) {
   return (
@@ -83,8 +79,8 @@ export function HomeTemplate({
         </div>
 
         {/* Content Rewards Info Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-10 md:mb-16">
-          <div className="lg:col-span-2">
+        <div className="lg:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6 md:gap-8 mb-10 md:mb-16 items-center flex flex-col">
+          <div className="lg:col-span-2 max-w-[720px]">
             <p className="text-lg text-foreground leading-relaxed mb-6">
               <span className="text-primary font-semibold">
                 Награды за контент
@@ -96,17 +92,10 @@ export function HomeTemplate({
             <p className="text-muted-foreground">
               Но только после того, как одобрите их публикацию.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6 md:mt-8">
-              {bottomRewards.map((reward, i) => (
-                <RewardCard key={i} {...reward} />
-              ))}
-            </div>
           </div>
-          {sideReward && (
-            <div className="lg:block hidden">
-              <RewardCard {...sideReward} />
-            </div>
-          )}
+          {rewardsPreview.map((reward, i) => (
+            <RewardCard key={i} {...reward} />
+          ))}
         </div>
 
         {/* Marketplace Section */}
@@ -115,7 +104,7 @@ export function HomeTemplate({
             Маркетплейс
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            {marketplaceProducts.map((product) => (
+            {productsPreview.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
