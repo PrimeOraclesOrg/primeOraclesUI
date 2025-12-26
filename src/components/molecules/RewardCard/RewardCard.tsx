@@ -30,7 +30,7 @@ export function RewardCard({
       {/* Header */}
       <div className="flex items-center justify-between mb-3 w-full gap-4">
         <div className="flex items-center gap-3 grow-1">
-          <div className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center flex-shrink-0">
             <span className="text-lg font-bold">{logo}</span>
           </div>
           <span className="font-semibold text-foreground line-clamp-1">{name}</span>
