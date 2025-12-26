@@ -94,7 +94,7 @@ export function HomeTemplate({
             </p>
           </div>
           {rewardsPreview.map((reward, i) => (
-            <RewardCard key={i} {...reward} />
+            <RewardCard key={i} reward={reward} />
           ))}
         </div>
 

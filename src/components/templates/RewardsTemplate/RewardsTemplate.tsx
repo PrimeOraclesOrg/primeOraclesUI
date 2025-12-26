@@ -113,7 +113,7 @@ export function RewardsTemplate({
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {rewards.map((reward, index) => (
-            <RewardCard key={index} {...reward} />
+            <RewardCard key={index} reward={reward} />
           ))}
         </div>
 
