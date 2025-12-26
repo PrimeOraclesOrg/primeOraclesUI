@@ -39,7 +39,7 @@ export function HomeTemplate({
         </div>
 
         {/* Featured Sections */}
-        <div className="flex justify-center items-center gap-8 flex-col lg:flex-row w-full">
+        <div className="flex justify-center items-center gap-8 flex-col md:flex-row w-full">
           {/* Награда за контент preview */}
           <Link
             to="/rewards"
@@ -80,7 +80,7 @@ export function HomeTemplate({
 
         {/* Content Rewards Info Section */}
         <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6 md:gap-8 mb-10 md:mb-16 items-center flex flex-col max-w-[1280px] w-full">
-          <div className="md:col-span-2 max-w-[720px]">
+          <div className="md:col-span-2">
             <p className="text-lg text-foreground leading-relaxed mb-6">
               <span className="text-primary font-semibold">
                 Награды за контент
