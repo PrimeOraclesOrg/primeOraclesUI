@@ -26,7 +26,7 @@ export function RewardCard({
   };
 
   return (
-    <div className="bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-colors w-full">
+    <div className="bg-card border border-border rounded-xl p-4 transition-colors w-full cursor-pointer hover:bg-surface">
       {/* Header */}
       <div className="flex items-center justify-between mb-3 w-full gap-4">
         <div className="flex items-center gap-3 grow-1">

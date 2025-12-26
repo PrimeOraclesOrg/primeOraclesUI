@@ -122,4 +122,14 @@ export const homePageProducts: Product[] = [
     price: 10.0,
     category: "Софт",
   },
+  {
+    id: "5",
+    title: "№1 комьюнити по торговле криптовалютой",
+    image: productWealth,
+    price: "free",
+    author: { name: "Wealth Group Credit Card Pay" },
+    rating: 4.95,
+    reviewCount: 421,
+    category: "Сообщества",
+  },
 ];
