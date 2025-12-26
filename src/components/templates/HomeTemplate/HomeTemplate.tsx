@@ -4,16 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import type { Reward, Product } from "@/types";
 import { BrandLogo } from "@/components/atoms";
-
-interface FeaturedReward {
-  logo: string;
-  name: string;
-  rate: string;
-  description: string;
-  paidAmount: string;
-  totalAmount: string;
-  progress: number;
-}
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface HomeTemplateProps {
   rewardsPreview: Reward[];
@@ -114,7 +105,7 @@ export function HomeTemplate({
         </div>
 
         {/* Footer Text */}
-        <div className="text-center max-w-4xl mx-auto text-xl">
+        <div className="text-center max-w-4xl mx-auto text-xl mb-10">
           <p className="leading-relaxed">
             Prime Oracles — место, где можно запустить и монетизировать любой
             цифровой продукт: от веб-приложений и автоматизаций до обучающих
@@ -122,6 +113,47 @@ export function HomeTemplate({
             <br />
             Всё — в одном удобном интерфейсе.
           </p>
+        </div>
+
+        {/* FAQ */}
+        <div className="w-full mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-6 md:mb-8">Вопросы которые могут возникнуть:</h2>
+          <Accordion type="single" collapsible className="max-w-2xl w-full mx-auto">
+            <AccordionItem value={"1"} className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
+                Вопрос 1
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">Ответ 1</AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value={"2"} className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
+                Вопрос 2
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">Ответ 2</AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value={"3"} className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
+                Вопрос 3
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">Ответ 3</AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value={"4"} className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
+                Вопрос 4
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">Ответ 4</AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value={"5"} className="border-border">
+              <AccordionTrigger className="text-foreground hover:text-primary">
+                Вопрос 5
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">Ответ 5</AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
     </MainLayout>
