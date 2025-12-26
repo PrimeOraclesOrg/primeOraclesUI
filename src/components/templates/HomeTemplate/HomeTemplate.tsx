@@ -43,11 +43,11 @@ export function HomeTemplate({
         </div>
 
         {/* Featured Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-12 justify-items-center">
           {/* Награда за контент preview */}
           <Link
             to="/rewards"
-            className="relative bg-card aspect-[490/280] border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
+            className="relative bg-card aspect-[490/280] border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden max-w-[540px] w-full"
           >
             <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 text-[--size-l] group-hover:backdrop-blur-sm">Награды за контент</strong>
             <img
@@ -60,7 +60,7 @@ export function HomeTemplate({
           {/* Маркетплейс preview */}
           <Link
             to="/marketplace"
-            className="relative bg-card aspect-[490/280] border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
+            className="relative bg-card aspect-[490/280] border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden max-w-[540px] w-full"
           >
             <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 text-[--size-l] group-hover:backdrop-blur-sm">Маркетплейс</strong>
             <img
