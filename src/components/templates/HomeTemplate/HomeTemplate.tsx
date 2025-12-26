@@ -34,7 +34,7 @@ export function HomeTemplate({
       <div className="p-4 md:p-6 lg:p-8">
         {/* Hero Section */}
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary tracking-wider mb-4">
+          <h1 className="text-3xl md:text-6xl lg:text-6xl font-bold text-primary tracking-wider mb-4 mt-8 lg:mt-20">
             PRIME ORACLES
           </h1>
           <p className="text-muted-foreground text-base md:text-lg px-4">
