@@ -27,7 +27,7 @@ export function HomeTemplate({
 }: HomeTemplateProps) {
   return (
     <MainLayout>
-      <div className="p-4 md:p-6 lg:p-8">
+      <div className="p-4 md:p-6 lg:p-8 flex flex-col items-center">
         {/* Hero Section */}
         <div className="text-center mb-8 md:mb-12">
           <h1 className="text-3xl md:text-6xl lg:text-6xl font-bold text-primary tracking-wider mb-4 mt-8 lg:mt-20">
@@ -39,7 +39,7 @@ export function HomeTemplate({
         </div>
 
         {/* Featured Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-12 justify-items-center">
+        <div className="flex justify-center items-center gap-8 flex-col lg:flex-row w-full">
           {/* Награда за контент preview */}
           <Link
             to="/rewards"
@@ -68,7 +68,7 @@ export function HomeTemplate({
         </div>
 
         {/* CTA Button */}
-        <div className="flex justify-center mb-10 md:mb-16">
+        <div className="flex justify-center mb-10 md:mb-16 mt-8">
           <Button
             variant="outline"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 md:px-8 py-3"
@@ -79,7 +79,7 @@ export function HomeTemplate({
         </div>
 
         {/* Content Rewards Info Section */}
-        <div className="lg:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6 md:gap-8 mb-10 md:mb-16 items-center flex flex-col">
+        <div className="lg:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6 md:gap-8 mb-10 md:mb-16 items-center flex flex-col max-w-[1280px]">
           <div className="lg:col-span-2 max-w-[720px]">
             <p className="text-lg text-foreground leading-relaxed mb-6">
               <span className="text-primary font-semibold">
