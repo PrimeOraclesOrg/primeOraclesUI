@@ -30,7 +30,7 @@ export function RewardCard({
           <div className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center">
             <span className="text-lg font-bold">{logo}</span>
           </div>
-          <span className="font-semibold text-foreground">{name}</span>
+          <span className="font-semibold text-foreground whitespace-nowrap">{name}</span>
         </div>
         <div className="flex items-center gap-1.5 bg-muted px-3 py-1 rounded-full">
           <span className="text-sm font-medium text-foreground">{rate}</span>

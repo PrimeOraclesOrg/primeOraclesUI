@@ -79,8 +79,8 @@ export function HomeTemplate({
         </div>
 
         {/* Content Rewards Info Section */}
-        <div className="lg:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6 md:gap-8 mb-10 md:mb-16 items-center flex flex-col max-w-[1280px]">
-          <div className="lg:col-span-2 max-w-[720px]">
+        <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6 md:gap-8 mb-10 md:mb-16 items-center flex flex-col max-w-[1280px] w-full">
+          <div className="md:col-span-2 max-w-[720px]">
             <p className="text-lg text-foreground leading-relaxed mb-6">
               <span className="text-primary font-semibold">
                 Награды за контент
@@ -99,11 +99,11 @@ export function HomeTemplate({
         </div>
 
         {/* Marketplace Section */}
-        <div className="mb-10 md:mb-16">
+        <div className="mb-10 md:mb-16 flex flex-col items-center">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-6 md:mb-8">
             Маркетплейс
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-[1280px]">
             {productsPreview.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
