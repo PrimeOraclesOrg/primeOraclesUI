@@ -149,7 +149,7 @@ export const homeRewardsPreview: Reward[] = [
   },
   {
     logo: "А",
-    name: "Александр Соколов...",
+    name: "Александр Соколов",
     rate: "$2.00/1K",
     description: "Создавайте мотивационные ролики с участ...",
     paidAmount: "6,795.5$",
