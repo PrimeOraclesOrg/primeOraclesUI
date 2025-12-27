@@ -1,5 +1,5 @@
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
-import { RewardCard, ProductCard } from "@/components/molecules";
+import { RewardCard, ProductCard, FAQAccordion } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import type { Reward, Product } from "@/types";
@@ -118,42 +118,35 @@ export function HomeTemplate({
         {/* FAQ */}
         <div className="w-full mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-6 md:mb-8">Вопросы которые могут возникнуть:</h2>
-          <Accordion type="single" collapsible className="max-w-2xl w-full mx-auto">
-            <AccordionItem value={"1"} className="border-border">
-              <AccordionTrigger className="text-foreground hover:text-primary">
-                Вопрос 1
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">Ответ 1</AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value={"2"} className="border-border">
-              <AccordionTrigger className="text-foreground hover:text-primary">
-                Вопрос 2
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">Ответ 2</AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value={"3"} className="border-border">
-              <AccordionTrigger className="text-foreground hover:text-primary">
-                Вопрос 3
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">Ответ 3</AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value={"4"} className="border-border">
-              <AccordionTrigger className="text-foreground hover:text-primary">
-                Вопрос 4
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">Ответ 4</AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value={"5"} className="border-border">
-              <AccordionTrigger className="text-foreground hover:text-primary">
-                Вопрос 5
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">Ответ 5</AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <FAQAccordion
+            questions={[
+              {
+                id: '1',
+                question: 'Вопрос 1',
+                answer: 'Ответ 1'
+              },
+              {
+                id: '2',
+                question: 'Вопрос 2',
+                answer: 'Ответ 2'
+              },
+              {
+                id: '3',
+                question: 'Вопрос 3',
+                answer: 'Ответ 3'
+              },
+              {
+                id: '4',
+                question: 'Вопрос 4',
+                answer: 'Ответ 4'
+              },
+              {
+                id: '5',
+                question: 'Вопрос 5',
+                answer: 'Ответ 5'
+              },
+            ]}
+          />
         </div>
 
         {/* Income banner */}
@@ -175,13 +168,13 @@ export function HomeTemplate({
           />
 
           <div className="flex flex-col items-center gap-xl text-center scale-75 sm:scale-70 lg:scale-100 transition-transform">
-            <h2 className="font-[Oswald] text-3xl font-medium leading-tight text-white mb-5">
+            <h2 className="font-[Oswald] text-3xl xl:text-5xl font-medium text-white mb-10">
               Наша миссия
               <br />
               обеспечить каждому доход
             </h2>
             <Button  
-              className="px-16 py-8 font-semibold bg-primary"
+              className="px-16 py-8 font-semibold bg-primary text-lg xl:text-xl"
             >
               Присоединиться
             </Button>
