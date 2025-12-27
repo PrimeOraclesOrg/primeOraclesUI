@@ -37,7 +37,7 @@ export function HomeTemplate({
             to="/rewards"
             className="relative bg-card aspect-[490/280] rounded-xl p-6 border-2 border-primary transition-colors group overflow-hidden max-w-[540px] w-full"
           >
-            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 text-[--size-l] group-hover:backdrop-blur-sm">Награды за контент</strong>
+            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 group-hover:backdrop-blur-sm">Награды за контент</strong>
             <img
                 className="absolute left-0 top-0 block w-full h-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:-rotate-1"
                 src="/img/preview/tasks_preview.png"
@@ -50,7 +50,7 @@ export function HomeTemplate({
             to="/marketplace"
             className="relative bg-card aspect-[490/280] rounded-xl p-6 border-2 border-primary transition-colors group overflow-hidden max-w-[540px] w-full"
           >
-            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 text-[--size-l] group-hover:backdrop-blur-sm">Маркетплейс</strong>
+            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 group-hover:backdrop-blur-sm">Маркетплейс</strong>
             <img
               className="absolute left-0 top-0 block w-full h-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:-rotate-1"
               src="/img/preview/market_preview.png"
@@ -155,6 +155,38 @@ export function HomeTemplate({
             </AccordionItem>
           </Accordion>
         </div>
+
+        {/* Income banner */}
+        <section className="relative flex flex-col items-center justify-evenly overflow-hidden rounded-sm bg-[#5E25BC] p-xl z-[1] sm:flex-row sm:p-0 min-h-[410px] w-full">
+          <img 
+            className="absolute inset-0 h-full w-full object-cover z-[-1]" 
+            src='/img/bg/pattern_1.png' 
+            alt="background pattern" 
+            width={1440} 
+            height={410} 
+          />
+
+          <img
+            className="w-[185px] h-[185px] sm:w-[259px] sm:h-[259px] lg:w-[370px] lg:h-[370px] transition-transform"
+            src="/img/illustrations/hand_cash.png"
+            alt="hand with cash"
+            width={370}
+            height={370}
+          />
+
+          <div className="flex flex-col items-center gap-xl text-center scale-75 sm:scale-70 lg:scale-100 transition-transform">
+            <h2 className="font-[Oswald] text-3xl font-medium leading-tight text-white mb-5">
+              Наша миссия
+              <br />
+              обеспечить каждому доход
+            </h2>
+            <Button  
+              className="px-16 py-8 font-semibold bg-primary"
+            >
+              Присоединиться
+            </Button>
+          </div>
+        </section>
       </div>
     </MainLayout>
   );
