@@ -1,8 +1,6 @@
-import type { FC, SVGAttributes } from "react";
+import type { SVGAttributes } from "react";
 
-interface BrandLogoProps extends SVGAttributes<SVGSVGElement> {}
-
-export const BrandLogo: FC<BrandLogoProps> = (props) => {
+export const BrandLogo = (props: SVGAttributes<SVGSVGElement>) => {
     return (
         <svg
             width="128"
