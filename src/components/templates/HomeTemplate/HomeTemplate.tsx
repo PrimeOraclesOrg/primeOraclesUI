@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import type { Reward, Product } from "@/types";
 import { BrandLogo } from "@/components/atoms";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface HomeTemplateProps {
   rewardsPreview: Reward[];
