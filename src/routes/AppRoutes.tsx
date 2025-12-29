@@ -8,22 +8,18 @@ import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
 import Settings from "@/pages/Settings";
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
-import ConfirmCode from "@/pages/ConfirmCode";
-import ForgotPassword from "@/pages/ForgotPassword";
-import ResetPassword from "@/pages/ResetPassword";
+import Auth from "@/pages/Auth";
 import NotFound from "@/pages/NotFound";
 
 export function AppRoutes() {
   return (
     <Routes>
-      {/* Public auth routes - redirect to home if authenticated */}
+      {/* Auth routes - single page handles all auth flows */}
       <Route
         path="/login"
         element={
           <PublicRoute>
-            <Login />
+            <Auth />
           </PublicRoute>
         }
       />
@@ -31,15 +27,7 @@ export function AppRoutes() {
         path="/register"
         element={
           <PublicRoute>
-            <Register />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/confirm-code"
-        element={
-          <PublicRoute>
-            <ConfirmCode />
+            <Auth />
           </PublicRoute>
         }
       />
@@ -47,7 +35,15 @@ export function AppRoutes() {
         path="/forgot-password"
         element={
           <PublicRoute>
-            <ForgotPassword />
+            <Auth />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/confirm-code"
+        element={
+          <PublicRoute>
+            <Auth />
           </PublicRoute>
         }
       />
@@ -55,7 +51,7 @@ export function AppRoutes() {
         path="/reset-password"
         element={
           <PublicRoute>
-            <ResetPassword />
+            <Auth />
           </PublicRoute>
         }
       />

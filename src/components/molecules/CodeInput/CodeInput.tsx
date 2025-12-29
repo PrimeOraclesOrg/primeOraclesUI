@@ -100,10 +100,8 @@ export function CodeInput({
             onBlur={() => setFocused(null)}
             disabled={disabled}
             className={cn(
-              "w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-semibold rounded-lg border bg-secondary/50 text-foreground transition-all duration-200 outline-none",
-              focused === index
-                ? "border-primary ring-2 ring-primary/20"
-                : "border-border",
+              "w-10 h-12 sm:w-11 sm:h-14 text-center text-xl font-semibold rounded-lg border bg-secondary/30 border-border/50 text-foreground transition-all duration-200 outline-none focus:border-primary/50",
+              focused === index && "border-primary/50",
               error && "border-destructive",
               disabled && "opacity-50 cursor-not-allowed"
             )}
