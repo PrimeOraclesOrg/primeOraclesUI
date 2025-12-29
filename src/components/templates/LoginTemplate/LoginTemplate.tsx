@@ -1,6 +1,6 @@
 /**
  * LoginTemplate
- * 
+ *
  * Presentational component for the login page.
  */
 
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Logo } from "@/components/atoms/Logo/Logo";
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { AuthInput } from "@/components/molecules/AuthInput/AuthInput";
+import { PasswordInput } from "@/components/molecules/PasswordInput/PasswordInput";
 import { Button } from "@/components/ui/button";
 
 interface LoginTemplateProps {
@@ -34,10 +35,10 @@ export function LoginTemplate({
 }: LoginTemplateProps) {
   return (
     <AuthLayout>
-      <div className="flex flex-col items-center space-y-6">
+      <div className="flex flex-col items-center space-y-5 sm:space-y-6">
         <Logo size="lg" />
-        
-        <h1 className="text-2xl font-semibold text-foreground">
+
+        <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
           Присоединиться
         </h1>
 
@@ -54,9 +55,8 @@ export function LoginTemplate({
           />
 
           <div className="space-y-1">
-            <AuthInput
+            <PasswordInput
               label="Пароль"
-              type="password"
               placeholder="Введите пароль"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
@@ -64,7 +64,7 @@ export function LoginTemplate({
               autoComplete="current-password"
               disabled={isLoading}
             />
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-1">
               <Link
                 to="/forgot-password"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -76,15 +76,15 @@ export function LoginTemplate({
 
           <Button
             type="submit"
-            className="w-full h-12 text-base font-medium gold-gradient hover:opacity-90 transition-opacity"
+            className="w-full h-12 text-base font-medium gold-gradient hover:opacity-90 transition-opacity active:scale-[0.98]"
             disabled={isLoading}
           >
             {isLoading ? "Вход..." : "Продолжить"}
           </Button>
         </form>
 
-        <div className="text-center space-y-2">
-          <p className="text-muted-foreground">
+        <div className="text-center space-y-3">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Нету аккаунта?{" "}
             <Link
               to="/register"
@@ -93,7 +93,7 @@ export function LoginTemplate({
               Зарегистрироваться
             </Link>
           </p>
-          <p className="text-xs text-muted-foreground px-4">
+          <p className="text-xs text-muted-foreground px-2 sm:px-4 leading-relaxed">
             Регистрируясь, вы соглашаетесь с Условиями обслуживания и Политикой
             конфиденциальности Prime Oracles.
           </p>
