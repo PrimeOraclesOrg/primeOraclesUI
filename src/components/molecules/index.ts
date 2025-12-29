@@ -4,3 +4,5 @@ export { Pagination } from "./Pagination/Pagination";
 export { ProductCard } from "./ProductCard/ProductCard";
 export { LearningCard } from "./LearningCard/LearningCard";
 export { RewardCard } from "./RewardCard/RewardCard";
+export { AuthInput } from "./AuthInput/AuthInput";
+export { CodeInput } from "./CodeInput/CodeInput";

@@ -6,11 +6,24 @@ import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
 import Settings from "@/pages/Settings";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import ConfirmCode from "@/pages/ConfirmCode";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
 import NotFound from "@/pages/NotFound";
 
 export function AppRoutes() {
   return (
     <Routes>
+      {/* Auth routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/confirm-code" element={<ConfirmCode />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      
+      {/* App routes */}
       <Route path="/" element={<Home />} />
       <Route path="/rewards" element={<Rewards />} />
       <Route path="/marketplace" element={<Marketplace />} />
