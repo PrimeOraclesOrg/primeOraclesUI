@@ -24,9 +24,7 @@ export const rewardsApi = baseApi.injectEndpoints({
         }
 
         if (type && type !== "all") {
-          filtered = filtered.filter((r) =>
-            r.type.toLowerCase() === type.toLowerCase()
-          );
+          filtered = filtered.filter((r) => r.type.toLowerCase() === type.toLowerCase());
         }
 
         return { data: filtered };
@@ -38,7 +36,7 @@ export const rewardsApi = baseApi.injectEndpoints({
       queryFn: () => {
         return {
           data: {
-            homeRewardsPreview
+            homeRewardsPreview,
           },
         };
       },
@@ -47,7 +45,4 @@ export const rewardsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetRewardsQuery,
-  useGetHomeRewardsQuery,
-} = rewardsApi;
+export const { useGetRewardsQuery, useGetHomeRewardsQuery } = rewardsApi;

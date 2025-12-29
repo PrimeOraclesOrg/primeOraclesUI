@@ -5,7 +5,13 @@ import productWealth from "@/assets/product-wealth.jpg";
 import productTradingBot from "@/assets/product-trading-bot.jpg";
 import productSoftware from "@/assets/product-software.jpg";
 
-export const productCategories = ["Все", "Софты/боты", "Сообщества", "Обучения", "Цифровые материалы"];
+export const productCategories = [
+  "Все",
+  "Софты/боты",
+  "Сообщества",
+  "Обучения",
+  "Цифровые материалы",
+];
 
 export const mockProducts: Product[] = [
   {

@@ -2,7 +2,7 @@ import { SocialIcons } from "@/components/atoms";
 import type { Reward } from "@/types";
 
 interface RewardCardProps {
-  reward: Omit<Reward, 'views'>;
+  reward: Omit<Reward, "views">;
 }
 
 export function RewardCard({
@@ -16,8 +16,8 @@ export function RewardCard({
     rate,
     socialNetworks,
     totalAmount,
-    type
-  }
+    type,
+  },
 }: RewardCardProps) {
   const getProgressColor = () => {
     if (progress >= 80) return "bg-primary";
@@ -49,7 +49,9 @@ export function RewardCard({
       {/* Progress */}
       <div className="mb-4">
         <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
-          <span>Выплачено {paidAmount} из {totalAmount}</span>
+          <span>
+            Выплачено {paidAmount} из {totalAmount}
+          </span>
           <span>{progress}%</span>
         </div>
         <div className="h-1.5 bg-muted rounded-full overflow-hidden">
