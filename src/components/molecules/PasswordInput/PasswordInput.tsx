@@ -2,6 +2,7 @@
  * PasswordInput Component
  *
  * Password input with visibility toggle for authentication forms.
+ * Modern minimal design matching AuthInput styling.
  */
 
 import { forwardRef, useState } from "react";
@@ -11,13 +12,15 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface PasswordInputProps extends Omit<React.ComponentProps<"input">, "type"> {
+interface PasswordInputProps
+  extends Omit<React.ComponentProps<"input">, "type"> {
   label: string;
   error?: string;
+  labelRight?: React.ReactNode;
 }
 
 export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
-  ({ label, error, className, id, disabled, ...props }, ref) => {
+  ({ label, error, labelRight, className, id, disabled, ...props }, ref) => {
     const [isVisible, setIsVisible] = useState(false);
     const inputId = id || label.toLowerCase().replace(/\s+/g, "-");
 
@@ -29,9 +32,15 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
 
     return (
       <div className="space-y-2">
-        <Label htmlFor={inputId} className="text-muted-foreground text-sm">
-          {label}
-        </Label>
+        <div className="flex items-center justify-between">
+          <Label
+            htmlFor={inputId}
+            className="text-foreground text-sm font-normal"
+          >
+            {label}
+          </Label>
+          {labelRight}
+        </div>
         <div className="relative">
           <Input
             id={inputId}
@@ -39,9 +48,8 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             type={isVisible ? "text" : "password"}
             disabled={disabled}
             className={cn(
-              "bg-secondary/50 border-border h-12 pr-12 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 transition-colors",
-              error &&
-                "border-destructive focus:border-destructive focus:ring-destructive/20",
+              "bg-secondary/30 border-border/50 h-12 pr-12 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg",
+              error && "border-destructive focus:border-destructive",
               className
             )}
             {...props}
