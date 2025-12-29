@@ -1,6 +1,6 @@
 /**
  * RegisterTemplate
- * 
+ *
  * Presentational component for the registration page.
  */
 
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Logo } from "@/components/atoms/Logo/Logo";
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { AuthInput } from "@/components/molecules/AuthInput/AuthInput";
+import { PasswordInput } from "@/components/molecules/PasswordInput/PasswordInput";
 import { Button } from "@/components/ui/button";
 
 interface RegisterTemplateProps {
@@ -39,10 +40,10 @@ export function RegisterTemplate({
 }: RegisterTemplateProps) {
   return (
     <AuthLayout>
-      <div className="flex flex-col items-center space-y-6">
+      <div className="flex flex-col items-center space-y-5 sm:space-y-6">
         <Logo size="lg" />
 
-        <h1 className="text-2xl font-semibold text-foreground">
+        <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
           Регистрация
         </h1>
 
@@ -58,9 +59,8 @@ export function RegisterTemplate({
             disabled={isLoading}
           />
 
-          <AuthInput
+          <PasswordInput
             label="Пароль"
-            type="password"
             placeholder="Введите пароль"
             value={password}
             onChange={(e) => onPasswordChange(e.target.value)}
@@ -69,9 +69,8 @@ export function RegisterTemplate({
             disabled={isLoading}
           />
 
-          <AuthInput
+          <PasswordInput
             label="Подтвердите пароль"
-            type="password"
             placeholder="Введите пароль ещё раз"
             value={confirmPassword}
             onChange={(e) => onConfirmPasswordChange(e.target.value)}
@@ -82,14 +81,14 @@ export function RegisterTemplate({
 
           <Button
             type="submit"
-            className="w-full h-12 text-base font-medium gold-gradient hover:opacity-90 transition-opacity"
+            className="w-full h-12 text-base font-medium gold-gradient hover:opacity-90 transition-opacity active:scale-[0.98]"
             disabled={isLoading}
           >
             {isLoading ? "Регистрация..." : "Зарегистрироваться"}
           </Button>
         </form>
 
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           Уже есть аккаунт?{" "}
           <Link
             to="/login"

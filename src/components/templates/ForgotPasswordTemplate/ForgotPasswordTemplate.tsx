@@ -1,6 +1,6 @@
 /**
  * ForgotPasswordTemplate
- * 
+ *
  * Presentational component for the forgot password page.
  */
 
@@ -26,13 +26,18 @@ export function ForgotPasswordTemplate({
   onSubmit,
 }: ForgotPasswordTemplateProps) {
   return (
-    <AuthLayout>
-      <div className="flex flex-col items-center space-y-6">
+    <AuthLayout showBackButton backPath="/login">
+      <div className="flex flex-col items-center space-y-5 sm:space-y-6">
         <Logo size="lg" />
 
-        <h1 className="text-2xl font-semibold text-foreground text-center">
-          Восстановление пароля
-        </h1>
+        <div className="text-center space-y-2">
+          <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
+            Восстановление пароля
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Введите email, и мы отправим вам код для восстановления
+          </p>
+        </div>
 
         <form onSubmit={onSubmit} className="w-full space-y-4">
           <AuthInput
@@ -48,14 +53,14 @@ export function ForgotPasswordTemplate({
 
           <Button
             type="submit"
-            className="w-full h-12 text-base font-medium gold-gradient hover:opacity-90 transition-opacity"
+            className="w-full h-12 text-base font-medium gold-gradient hover:opacity-90 transition-opacity active:scale-[0.98]"
             disabled={isLoading}
           >
             {isLoading ? "Отправка..." : "Восстановить пароль"}
           </Button>
         </form>
 
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           Вспомнили пароль?{" "}
           <Link
             to="/login"
