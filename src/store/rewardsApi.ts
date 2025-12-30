@@ -1,5 +1,5 @@
 import { baseApi } from "./baseApi";
-import { mockRewards, featuredRewards, bottomRewards, sideReward } from "@/data/rewards";
+import { homeRewardsPreview, mockRewards } from "@/data/rewards";
 import type { Reward } from "@/types";
 
 interface RewardsQueryArgs {
@@ -8,9 +8,7 @@ interface RewardsQueryArgs {
 }
 
 interface HomeRewardsResponse {
-  featuredRewards: Reward[];
-  bottomRewards: Reward[];
-  sideReward: Reward;
+  homeRewardsPreview: Reward[];
 }
 
 export const rewardsApi = baseApi.injectEndpoints({
@@ -26,9 +24,7 @@ export const rewardsApi = baseApi.injectEndpoints({
         }
 
         if (type && type !== "all") {
-          filtered = filtered.filter((r) =>
-            r.type.toLowerCase() === type.toLowerCase()
-          );
+          filtered = filtered.filter((r) => r.type.toLowerCase() === type.toLowerCase());
         }
 
         return { data: filtered };
@@ -40,9 +36,7 @@ export const rewardsApi = baseApi.injectEndpoints({
       queryFn: () => {
         return {
           data: {
-            featuredRewards,
-            bottomRewards,
-            sideReward,
+            homeRewardsPreview,
           },
         };
       },
@@ -51,7 +45,4 @@ export const rewardsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetRewardsQuery,
-  useGetHomeRewardsQuery,
-} = rewardsApi;
+export const { useGetRewardsQuery, useGetHomeRewardsQuery } = rewardsApi;

@@ -1,40 +1,27 @@
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
-import { RewardCard, ProductCard } from "@/components/molecules";
+import { RewardCard, ProductCard, FAQAccordion } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import type { Reward, Product } from "@/types";
-
-interface FeaturedReward {
-  logo: string;
-  name: string;
-  rate: string;
-  description: string;
-  paidAmount: string;
-  totalAmount: string;
-  progress: number;
-}
+import { BrandLogo } from "@/components/atoms";
 
 interface HomeTemplateProps {
-  featuredRewards: FeaturedReward[];
-  bottomRewards: Reward[];
-  sideReward?: Reward;
-  marketplaceProducts: Product[];
+  rewardsPreview: Reward[];
+  productsPreview: Product[];
   onCreateClick: () => void;
 }
 
 export function HomeTemplate({
-  featuredRewards,
-  bottomRewards,
-  sideReward,
-  marketplaceProducts,
+  rewardsPreview,
+  productsPreview,
   onCreateClick,
 }: HomeTemplateProps) {
   return (
     <MainLayout>
-      <div className="p-4 md:p-6 lg:p-8">
+      <div className="p-4 md:p-6 lg:p-8 flex flex-col items-center">
         {/* Hero Section */}
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary tracking-wider mb-4">
+          <h1 className="text-3xl md:text-7xl lg:text-7xl font-bold text-primary tracking-wider mb-4 mt-8 lg:mt-20">
             PRIME ORACLES
           </h1>
           <p className="text-muted-foreground text-base md:text-lg px-4">
@@ -43,99 +30,40 @@ export function HomeTemplate({
         </div>
 
         {/* Featured Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-12">
+        <div className="flex justify-center items-center gap-8 flex-col md:flex-row w-full">
           {/* Награда за контент preview */}
           <Link
             to="/rewards"
-            className="relative bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
+            className="relative bg-card aspect-[490/280] rounded-xl p-6 border-2 border-primary transition-colors group overflow-hidden max-w-[540px] w-full"
           >
-            <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
-              {featuredRewards.map((reward, i) => (
-                <div
-                  key={i}
-                  className="bg-background/50 border border-border rounded-lg p-3 text-xs"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs font-bold">
-                        {reward.logo}
-                      </div>
-                      <span className="font-medium text-foreground truncate text-xs">
-                        {reward.name}
-                      </span>
-                    </div>
-                    <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded">
-                      {reward.rate}
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground text-[10px] mb-2 line-clamp-1">
-                    {reward.description}
-                  </p>
-                  <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
-                    <span>
-                      Выплачено {reward.paidAmount} из {reward.totalAmount}
-                    </span>
-                    <span>{reward.progress}%</span>
-                  </div>
-                  <div className="h-1 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full"
-                      style={{ width: `${reward.progress}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
-            <div className="relative z-10 text-center">
-              <h3 className="text-xl font-bold text-foreground">
-                Награда за контент
-              </h3>
-            </div>
+            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 group-hover:backdrop-blur-sm">
+              Награды за контент
+            </strong>
+            <img
+              className="absolute left-0 top-0 block w-full h-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:-rotate-1"
+              src="/img/preview/tasks_preview.png"
+              alt="rewards preview"
+            />
           </Link>
 
           {/* Маркетплейс preview */}
           <Link
             to="/marketplace"
-            className="relative bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group overflow-hidden"
+            className="relative bg-card aspect-[490/280] rounded-xl p-6 border-2 border-primary transition-colors group overflow-hidden max-w-[540px] w-full"
           >
-            <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
-              {marketplaceProducts.slice(0, 2).map((product, i) => (
-                <div
-                  key={i}
-                  className="bg-background/50 border border-border rounded-lg overflow-hidden"
-                >
-                  <div className="h-20 overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-2">
-                    <p className="text-[10px] text-foreground line-clamp-2 mb-1">
-                      {product.title}
-                    </p>
-                    <div className="flex items-center gap-1 text-[10px]">
-                      <span className="text-primary">★</span>
-                      <span>{product.rating}</span>
-                      <span className="text-muted-foreground">
-                        ({product.reviewCount})
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
-            <div className="relative z-10 text-center">
-              <h3 className="text-xl font-bold text-foreground">Маркетплейс</h3>
-            </div>
+            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 group-hover:backdrop-blur-sm">
+              Маркетплейс
+            </strong>
+            <img
+              className="absolute left-0 top-0 block w-full h-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:-rotate-1"
+              src="/img/preview/market_preview.png"
+              alt="market preview"
+            />
           </Link>
         </div>
 
         {/* CTA Button */}
-        <div className="flex justify-center mb-10 md:mb-16">
+        <div className="flex justify-center mb-10 md:mb-16 mt-8">
           <Button
             variant="outline"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 md:px-8 py-3"
@@ -146,54 +74,113 @@ export function HomeTemplate({
         </div>
 
         {/* Content Rewards Info Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-10 md:mb-16">
-          <div className="lg:col-span-2">
+        <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-6 md:mb-8">
+          Награды за контент
+        </h2>
+        <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card p-4 rounded-xl items-center">
+          <div className="md:col-span-2 h-full flex flex-col justify-center">
+            <BrandLogo className="text-primary mb-4" />
             <p className="text-lg text-foreground leading-relaxed mb-6">
-              <span className="text-primary font-semibold">
-                Награды за контент
-              </span>
-              — это маркетинговый инструмент, который связывает ваш бренд с
-              создателями контента — Они создают контент, публикуют его в своих
-              социальных сетях, а вы платите им за просмотры
+              <span className="text-primary font-semibold">Награды за контент</span>— это
+              маркетинговый инструмент, который связывает ваш бренд с создателями контента — Они
+              создают контент, публикуют его в своих социальных сетях, а вы платите им за просмотры
             </p>
             <p className="text-muted-foreground">
               Но только после того, как одобрите их публикацию.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6 md:mt-8">
-              {bottomRewards.map((reward, i) => (
-                <RewardCard key={i} {...reward} />
-              ))}
-            </div>
           </div>
-          {sideReward && (
-            <div className="lg:block hidden">
-              <RewardCard {...sideReward} />
-            </div>
-          )}
+          {rewardsPreview.map((reward, i) => (
+            <RewardCard key={i} reward={reward} />
+          ))}
         </div>
 
         {/* Marketplace Section */}
-        <div className="mb-10 md:mb-16">
+        <div className="mb-10 md:mb-16 flex flex-col items-center w-full">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-6 md:mb-8">
             Маркетплейс
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            {marketplaceProducts.map((product) => (
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4 w-full max-w-6xl">
+            {productsPreview.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>
 
         {/* Footer Text */}
-        <div className="text-center max-w-3xl mx-auto">
-          <p className="text-muted-foreground leading-relaxed">
-            Prime Oracles — место, где можно запустить и монетизировать любой
-            цифровой продукт: от веб-приложений и автоматизаций до обучающих
-            программ и закрытых комьюнити.
+        <div className="text-center max-w-4xl mx-auto text-xl mb-10">
+          <p className="leading-relaxed">
+            Prime Oracles — место, где можно запустить и монетизировать любой цифровой продукт: от
+            веб-приложений и автоматизаций до обучающих программ и закрытых комьюнити.
             <br />
             Всё — в одном удобном интерфейсе.
           </p>
         </div>
+
+        {/* FAQ */}
+        <div className="w-full mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-6 md:mb-8">
+            Вопросы которые могут возникнуть:
+          </h2>
+          <FAQAccordion
+            questions={[
+              {
+                id: "1",
+                question: "Вопрос 1",
+                answer: "Ответ 1",
+              },
+              {
+                id: "2",
+                question: "Вопрос 2",
+                answer: "Ответ 2",
+              },
+              {
+                id: "3",
+                question: "Вопрос 3",
+                answer: "Ответ 3",
+              },
+              {
+                id: "4",
+                question: "Вопрос 4",
+                answer: "Ответ 4",
+              },
+              {
+                id: "5",
+                question: "Вопрос 5",
+                answer: "Ответ 5",
+              },
+            ]}
+          />
+        </div>
+
+        {/* Income banner */}
+        <section className="relative flex flex-col items-center justify-evenly overflow-hidden rounded-sm bg-[#5E25BC] p-xl z-[1] sm:flex-row sm:p-0 min-h-[410px] w-full">
+          <img
+            className="absolute inset-0 h-full w-full object-cover z-[-1]"
+            src="/img/bg/pattern_1.png"
+            alt="background pattern"
+            width={1440}
+            height={410}
+          />
+
+          <img
+            className="w-[185px] h-[185px] sm:w-[259px] sm:h-[259px] lg:w-[370px] lg:h-[370px] transition-transform"
+            src="/img/illustrations/hand_cash.png"
+            alt="hand with cash"
+            width={370}
+            height={370}
+          />
+
+          <div className="flex flex-col items-center gap-xl text-center scale-75 sm:scale-70 lg:scale-100 transition-transform">
+            <h2 className="font-[Oswald] text-3xl xl:text-5xl font-medium text-white mb-10">
+              Наша миссия
+              <br />
+              обеспечить каждому доход
+            </h2>
+            <Button className="px-16 py-8 font-semibold bg-primary text-lg xl:text-xl">
+              Присоединиться
+            </Button>
+          </div>
+        </section>
       </div>
     </MainLayout>
   );

@@ -5,16 +5,12 @@ export default function Home() {
   const { data: rewardsData } = useGetHomeRewardsQuery();
   const { data: marketplaceProducts = [] } = useGetHomeProductsQuery();
 
-  const featuredRewards = rewardsData?.featuredRewards ?? [];
-  const bottomRewards = rewardsData?.bottomRewards ?? [];
-  const sideReward = rewardsData?.sideReward;
+  const rewards = rewardsData?.homeRewardsPreview ?? [];
 
   return (
     <HomeTemplate
-      featuredRewards={featuredRewards}
-      bottomRewards={bottomRewards}
-      sideReward={sideReward}
-      marketplaceProducts={marketplaceProducts}
+      rewardsPreview={rewards}
+      productsPreview={marketplaceProducts}
       onCreateClick={() => {}}
     />
   );
