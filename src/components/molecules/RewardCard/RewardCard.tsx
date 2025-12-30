@@ -1,7 +1,5 @@
 import { SocialIcons } from "@/components/atoms";
-import type { Reward } from "@/types";
-
-interface RewardCardProps extends Reward {}
+import { Reward } from "@/types";
 
 export function RewardCard({
   logo,
@@ -15,7 +13,7 @@ export function RewardCard({
   type,
   views,
   socialNetworks,
-}: RewardCardProps) {
+}: Reward) {
   const getProgressColor = () => {
     if (progress >= 80) return "bg-primary";
     if (progress >= 40) return "bg-primary";

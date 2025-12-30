@@ -8,7 +8,7 @@ export { ProductDetailTemplate } from "./ProductDetailTemplate/ProductDetailTemp
 export { HomeTemplate } from "./HomeTemplate/HomeTemplate";
 export { SettingsTemplate } from "./SettingsTemplate/SettingsTemplate";
 export { LoginTemplate } from "./LoginTemplate/LoginTemplate";
-export { RegisterTemplate } from "./RegisterTemplate/RegisterTemplate";
+export { SignUpTemplate } from "./SignUpTemplate/SignUpTemplate";
 export { ConfirmCodeTemplate } from "./ConfirmCodeTemplate/ConfirmCodeTemplate";
 export { ForgotPasswordTemplate } from "./ForgotPasswordTemplate/ForgotPasswordTemplate";
 export { ResetPasswordTemplate } from "./ResetPasswordTemplate/ResetPasswordTemplate";
