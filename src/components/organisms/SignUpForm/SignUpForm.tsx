@@ -74,9 +74,9 @@ export const SignUpForm = ({ goToConfirmCode }: SignUpFormProps) => {
   return (
     <form className="space-y-5" onSubmit={handleSignUp}>
       <AuthInput
-        label="Email Address"
+        label="Э-почта"
         type="email"
-        placeholder="Email"
+        placeholder="Э-почта"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         error={errors.email}
@@ -85,7 +85,7 @@ export const SignUpForm = ({ goToConfirmCode }: SignUpFormProps) => {
       />
 
       <PasswordInput
-        label="Password"
+        label="Пароль"
         placeholder="Введите пароль"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -95,7 +95,7 @@ export const SignUpForm = ({ goToConfirmCode }: SignUpFormProps) => {
       />
 
       <PasswordInput
-        label="Confirm Password"
+        label="Повтор пароля"
         placeholder="Подтвердите пароль"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}

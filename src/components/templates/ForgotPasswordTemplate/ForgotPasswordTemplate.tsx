@@ -17,7 +17,7 @@ export function ForgotPasswordTemplate({ goToConfirmCode, onBack }: ForgotPasswo
   return (
     <AuthLayout
       title="Восстановление пароля"
-      subtitle="Введите email, и мы отправим вам код для восстановления"
+      subtitle="Введите э-почту, и мы отправим вам код для восстановления"
       showBackButton
       onBack={onBack}
     >

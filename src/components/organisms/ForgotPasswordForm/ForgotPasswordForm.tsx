@@ -54,9 +54,9 @@ export const ForgotPasswordForm = ({ goToConfirmCode }: ForgotPasswordFormProps)
   return (
     <form className="space-y-5" onSubmit={handleForgotPassword}>
       <AuthInput
-        label="Email Address"
+        label="Э-почта"
         type="email"
-        placeholder="Email"
+        placeholder="Э-почта"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         error={error}

@@ -65,7 +65,7 @@ export const ResetPasswordForm = ({ goToLogin }: ResetPasswordForm) => {
   return (
     <form className="space-y-5" onSubmit={handleResetPassword}>
       <PasswordInput
-        label="New Password"
+        label="Новый пароль"
         placeholder="Введите новый пароль"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -75,7 +75,7 @@ export const ResetPasswordForm = ({ goToLogin }: ResetPasswordForm) => {
       />
 
       <PasswordInput
-        label="Confirm Password"
+        label="Повтор пароля"
         placeholder="Подтвердите пароль"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}

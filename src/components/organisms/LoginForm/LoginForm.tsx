@@ -74,9 +74,9 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
   return (
     <form className="space-y-5" onSubmit={handleLogin}>
       <AuthInput
-        label="Email Address"
+        label="Э-почта"
         type="email"
-        placeholder="Email"
+        placeholder="Э-почта"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         error={errors.email}
@@ -85,8 +85,8 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
       />
 
       <PasswordInput
-        label="Password"
-        placeholder="Password"
+        label="Пароль"
+        placeholder="Пароль"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         error={errors.password}
