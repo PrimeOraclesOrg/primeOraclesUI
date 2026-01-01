@@ -1,25 +1,12 @@
 /**
  * Auth Service
- * 
+ *
  * Authentication logic for the application.
  * Prepared for Supabase Auth integration.
  */
 
-import type { UserProfile } from "@/types";
-
-export interface AuthUser {
-  id: string;
-  email: string;
-  emailConfirmedAt?: string;
-  createdAt: string;
-}
-
-export interface AuthSession {
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: number;
-  user: AuthUser;
-}
+import { supabase } from "@/utils";
+import { Session, User } from "@supabase/supabase-js";
 
 export interface SignUpCredentials {
   email: string;
@@ -48,7 +35,7 @@ export interface AuthResult<T> {
 /**
  * Sign up a new user with email and password
  */
-export async function signUp(credentials: SignUpCredentials): Promise<AuthResult<AuthSession>> {
+export async function signUp(credentials: SignUpCredentials): Promise<AuthResult<Session>> {
   // TODO: Replace with Supabase auth
   // const { data, error } = await supabase.auth.signUp({
   //   email: credentials.email,
@@ -69,17 +56,16 @@ export async function signUp(credentials: SignUpCredentials): Promise<AuthResult
 /**
  * Sign in with email and password
  */
-export async function signIn(credentials: SignInCredentials): Promise<AuthResult<AuthSession>> {
+export async function signIn(credentials: SignInCredentials): Promise<AuthResult<Session>> {
   // TODO: Replace with Supabase auth
-  // const { data, error } = await supabase.auth.signInWithPassword({
-  //   email: credentials.email,
-  //   password: credentials.password,
-  // });
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: credentials.email,
+    password: credentials.password,
+  });
 
-  console.log("signIn called with:", credentials.email);
   return {
-    data: null,
-    error: { message: "Not implemented - requires Supabase integration" },
+    data: data?.session,
+    error,
   };
 }
 
@@ -100,7 +86,7 @@ export async function signOut(): Promise<AuthResult<null>> {
 /**
  * Get the current session
  */
-export async function getSession(): Promise<AuthResult<AuthSession>> {
+export async function getSession(): Promise<AuthResult<Session>> {
   // TODO: Replace with Supabase auth
   // const { data: { session }, error } = await supabase.auth.getSession();
 
@@ -113,7 +99,7 @@ export async function getSession(): Promise<AuthResult<AuthSession>> {
 /**
  * Get the current user
  */
-export async function getCurrentUser(): Promise<AuthResult<AuthUser>> {
+export async function getCurrentUser(): Promise<AuthResult<User>> {
   // TODO: Replace with Supabase auth
   // const { data: { user }, error } = await supabase.auth.getUser();
 
@@ -142,7 +128,7 @@ export async function resetPassword(email: string): Promise<AuthResult<null>> {
 /**
  * Update user password
  */
-export async function updatePassword(newPassword: string): Promise<AuthResult<AuthUser>> {
+export async function updatePassword(newPassword: string): Promise<AuthResult<User>> {
   // TODO: Replace with Supabase auth
   // const { data, error } = await supabase.auth.updateUser({
   //   password: newPassword,
@@ -159,7 +145,7 @@ export async function updatePassword(newPassword: string): Promise<AuthResult<Au
  * Subscribe to auth state changes
  */
 export function onAuthStateChange(
-  callback: (event: string, session: AuthSession | null) => void
+  callback: (event: string, session: Session | null) => void
 ): () => void {
   // TODO: Replace with Supabase auth
   // const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
