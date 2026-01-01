@@ -12,7 +12,7 @@ interface Errors {
 }
 
 interface SignUpFormProps {
-  goToConfirmCode: () => void;
+  goToConfirmCode: (email: string) => void;
 }
 
 export const SignUpForm = ({ goToConfirmCode }: SignUpFormProps) => {
@@ -56,7 +56,7 @@ export const SignUpForm = ({ goToConfirmCode }: SignUpFormProps) => {
             variant: "destructive",
           });
         } else {
-          goToConfirmCode();
+          goToConfirmCode(email);
         }
       } catch {
         toast({

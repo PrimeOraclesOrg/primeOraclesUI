@@ -6,7 +6,7 @@ import { forgotPasswordSchema } from "@/utils";
 import { useCallback, useState } from "react";
 
 interface ForgotPasswordFormProps {
-  goToConfirmCode: () => void;
+  goToConfirmCode: (email: string) => void;
 }
 
 export const ForgotPasswordForm = ({ goToConfirmCode }: ForgotPasswordFormProps) => {
@@ -36,7 +36,7 @@ export const ForgotPasswordForm = ({ goToConfirmCode }: ForgotPasswordFormProps)
             variant: "destructive",
           });
         } else {
-          goToConfirmCode();
+          goToConfirmCode(email);
         }
       } catch {
         toast({

@@ -7,7 +7,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { LoginTemplate } from "@/components/templates/LoginTemplate/LoginTemplate";
 import { ForgotPasswordTemplate } from "@/components/templates/ForgotPasswordTemplate/ForgotPasswordTemplate";
 import { ConfirmCodeTemplate } from "@/components/templates/ConfirmCodeTemplate/ConfirmCodeTemplate";
@@ -37,8 +37,9 @@ export default function Auth() {
     setStep(newStep);
   }, []);
 
-  const goToConfirmCode = (codeMode: "register" | "reset") => {
+  const goToConfirmCode = (codeMode: "register" | "reset", email: string) => {
     setCodeMode(codeMode);
+    setEmail(email);
     goToStep("confirm-code");
   };
 
@@ -54,14 +55,14 @@ export default function Auth() {
       {step === "register" && (
         <SignUpTemplate
           onBack={() => goToStep("login")}
-          goToConfirmCode={() => goToConfirmCode("register")}
+          goToConfirmCode={(email: string) => goToConfirmCode("register", email)}
         />
       )}
 
       {step === "forgot-password" && (
         <ForgotPasswordTemplate
           onBack={() => goToStep("login")}
-          goToConfirmCode={() => goToConfirmCode("reset")}
+          goToConfirmCode={(email: string) => goToConfirmCode("reset", email)}
         />
       )}
 
@@ -76,11 +77,7 @@ export default function Auth() {
         />
       )}
 
-      {step === "reset-password" && (
-        <ResetPasswordTemplate
-          goToLogin={() => goToStep("login")}
-        />
-      )}
+      {step === "reset-password" && <ResetPasswordTemplate goToLogin={() => goToStep("login")} />}
     </>
   );
 }

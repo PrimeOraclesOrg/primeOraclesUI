@@ -6,19 +6,14 @@
  */
 
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
-import { AuthInput } from "@/components/molecules/AuthInput/AuthInput";
-import { Button } from "@/components/ui/button";
 import { ForgotPasswordForm } from "@/components/organisms";
 
 interface ForgotPasswordTemplateProps {
-  goToConfirmCode: () => void;
+  goToConfirmCode: (email: string) => void;
   onBack: () => void;
 }
 
-export function ForgotPasswordTemplate({
-  goToConfirmCode,
-  onBack,
-}: ForgotPasswordTemplateProps) {
+export function ForgotPasswordTemplate({ goToConfirmCode, onBack }: ForgotPasswordTemplateProps) {
   return (
     <AuthLayout
       title="Восстановление пароля"

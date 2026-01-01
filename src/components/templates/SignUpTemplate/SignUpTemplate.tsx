@@ -10,7 +10,7 @@ import { SignUpForm } from "@/components/organisms";
 
 interface RegisterTemplateProps {
   onBack: () => void;
-  goToConfirmCode: () => void;
+  goToConfirmCode: (email: string) => void;
 }
 
 export function SignUpTemplate({ onBack, goToConfirmCode }: RegisterTemplateProps) {
