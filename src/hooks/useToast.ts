@@ -60,9 +60,6 @@ export function useToast() {
           ...props,
           id,
           open: true,
-          onOpenChange: (open) => {
-            if (!open) dismissThis();
-          },
         })
       );
 
@@ -107,7 +104,7 @@ export function toast(props: ToastInput) {
     addToast({
       ...props,
       id,
-      open: true
+      open: true,
     })
   );
 

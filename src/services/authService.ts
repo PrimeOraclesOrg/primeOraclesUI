@@ -37,19 +37,19 @@ export interface AuthResult<T> {
  */
 export async function signUp(credentials: SignUpCredentials): Promise<AuthResult<Session>> {
   // TODO: Replace with Supabase auth
-  // const { data, error } = await supabase.auth.signUp({
-  //   email: credentials.email,
-  //   password: credentials.password,
-  //   options: {
-  //     emailRedirectTo: `${window.location.origin}/`,
-  //     data: credentials.metadata,
-  //   },
-  // });
+  const { data, error } = await supabase.auth.signUp({
+    email: credentials.email,
+    password: credentials.password,
+    options: {
+      emailRedirectTo: `${window.location.origin}/`,
+      data: credentials.metadata,
+    },
+  });
 
   console.log("signUp called with:", credentials.email);
   return {
-    data: null,
-    error: { message: "Not implemented - requires Supabase integration" },
+    data: data?.session,
+    error,
   };
 }
 

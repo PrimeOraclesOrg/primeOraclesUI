@@ -10,7 +10,6 @@ export interface ToasterToast {
   action?: ReactNode;
   open?: boolean;
   variant?: "default" | "destructive";
-  onOpenChange?: (open: boolean) => void;
 }
 
 interface ToastState {
