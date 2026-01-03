@@ -9,10 +9,11 @@ import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { ConfirmCodeForm } from "@/components/organisms/ConfirmCodeForm/ConfirmCodeForm";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "@/hooks/useToast";
+import { resendSignUpOtp } from "@/services";
 
 interface ConfirmCodeTemplateProps {
   email: string;
-  mode: "register" | "reset";
+  mode: "signup" | "recovery";
   goToResetPassword: () => void;
   onBack: () => void;
 }
@@ -24,13 +25,13 @@ export function ConfirmCodeTemplate({
   onBack,
 }: ConfirmCodeTemplateProps) {
   const [isResending, setIsResending] = useState(false);
-  const [resendTimer, setResendTimer] = useState(0);
+  const [resendTimer, setResendTimer] = useState(60);
 
   const handleResendCode = useCallback(async () => {
     setIsResending(true);
     try {
-      // Simulate resend
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const { error } = await resendSignUpOtp(email);
+      if (error) throw error;
       setResendTimer(60);
       toast({
         title: "Код отправлен",
@@ -45,7 +46,7 @@ export function ConfirmCodeTemplate({
     } finally {
       setIsResending(false);
     }
-  }, []);
+  }, [email]);
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -61,7 +62,7 @@ export function ConfirmCodeTemplate({
       showBackButton
       onBack={onBack}
     >
-      <ConfirmCodeForm mode={mode} goToResetPassword={goToResetPassword} />
+      <ConfirmCodeForm mode={mode} email={email} goToResetPassword={goToResetPassword} />
 
       {/* Resend section */}
       <div className="text-center mt-8 pt-4 space-y-2">

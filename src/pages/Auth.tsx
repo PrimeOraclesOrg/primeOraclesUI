@@ -30,14 +30,14 @@ export default function Auth() {
   };
 
   const [step, setStep] = useState<AuthStep>(getInitialStep);
-  const [codeMode, setCodeMode] = useState<"register" | "reset">("register");
+  const [codeMode, setCodeMode] = useState<"signup" | "recovery">("signup");
   const [email, setEmail] = useState("");
 
   const goToStep = useCallback((newStep: AuthStep) => {
     setStep(newStep);
   }, []);
 
-  const goToConfirmCode = (codeMode: "register" | "reset", email: string) => {
+  const goToConfirmCode = (codeMode: "signup" | "recovery", email: string) => {
     setCodeMode(codeMode);
     setEmail(email);
     goToStep("confirm-code");
@@ -55,14 +55,14 @@ export default function Auth() {
       {step === "register" && (
         <SignUpTemplate
           onBack={() => goToStep("login")}
-          goToConfirmCode={(email: string) => goToConfirmCode("register", email)}
+          goToConfirmCode={(email: string) => goToConfirmCode("signup", email)}
         />
       )}
 
       {step === "forgot-password" && (
         <ForgotPasswordTemplate
           onBack={() => goToStep("login")}
-          goToConfirmCode={(email: string) => goToConfirmCode("reset", email)}
+          goToConfirmCode={(email: string) => goToConfirmCode("signup", email)}
         />
       )}
 
@@ -72,7 +72,7 @@ export default function Auth() {
           goToResetPassword={() => goToStep("reset-password")}
           mode={codeMode}
           onBack={() =>
-            codeMode === "register" ? goToStep("register") : goToStep("reset-password")
+            codeMode === "signup" ? goToStep("register") : goToStep("reset-password")
           }
         />
       )}

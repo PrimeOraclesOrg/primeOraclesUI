@@ -1,68 +1,73 @@
 import { CodeInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/useToast";
+import { verifyOtp } from "@/services";
 import { verificationCodeSchema } from "@/utils";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface ConfirmCodeFormProps {
-  mode: 'register' | 'reset';
+  email: string;
+  mode: "signup" | "recovery";
   goToResetPassword: () => void;
 }
 
-export const ConfirmCodeForm = ({ mode, goToResetPassword }: ConfirmCodeFormProps) => {
+export const ConfirmCodeForm = ({ email, mode, goToResetPassword }: ConfirmCodeFormProps) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const buttonText = mode === "register" ? "Подтвердить" : "Восстановить пароль";
+  const buttonText = mode === "signup" ? "Подтвердить" : "Восстановить пароль";
   const loadingText = "Проверка...";
 
   const handleConfirmCode = useCallback(
-      async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-  
-        const result = verificationCodeSchema.safeParse({ code: code });
-  
-        if (!result.success) {
-          setError(result.error.errors[0]?.message);
-          return;
-        }
-  
-        setIsLoading(true);
-        try {
-          // Simulate code verification
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-  
-          // Mock verification - in real app, call API
-          if (code === "12345678") {
-            if (mode === "register") {
-              toast({
-                title: "Успешно",
-                description: "Регистрация завершена",
-              });
-              navigate("/");
-            } else {
-              goToResetPassword();
-            }
-          } else {
-            setError("Неверный код. Попробуйте снова.");
-          }
-        } catch {
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setError("");
+
+      const result = verificationCodeSchema.safeParse(code);
+
+      if (!result.success) {
+        setError(result.error.errors[0]?.message);
+        return;
+      }
+
+      console.log(result.data);
+
+      setIsLoading(true);
+      try {
+        const { error } = await verifyOtp({ email, code, type: mode });
+
+        if (error) {
           toast({
-            title: "Ошибка",
-            description: "Произошла ошибка. Попробуйте позже.",
+            title: "Ошибка подтверждения",
+            description: error.message,
             variant: "destructive",
           });
-        } finally {
-          setIsLoading(false);
+        } else {
+          if (mode === "signup") {
+            toast({
+              title: "Успешно",
+              description: "Регистрация завершена",
+            });
+            navigate("/");
+          }
+          if (mode === "recovery") goToResetPassword();
         }
-      },
-      [code, mode, navigate, goToResetPassword]
-    );
+      } catch {
+        toast({
+          title: "Ошибка",
+          description: "Произошла ошибка. Попробуйте позже.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [email, code, mode, navigate, goToResetPassword]
+  );
 
   return (
     <form className="space-y-6" onSubmit={handleConfirmCode}>
