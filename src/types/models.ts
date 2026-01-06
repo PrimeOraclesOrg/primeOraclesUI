@@ -30,6 +30,10 @@ export interface ProductDetails {
   rating: number;
   reviewCount: number;
   memberCount: number;
+  features: {
+    id: string;
+    text: string;
+  }[];
 }
 
 // ========================================
