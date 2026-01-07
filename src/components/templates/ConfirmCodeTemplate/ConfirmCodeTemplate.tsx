@@ -9,7 +9,7 @@ import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { ConfirmCodeForm } from "@/components/organisms/ConfirmCodeForm/ConfirmCodeForm";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "@/hooks/useToast";
-import { resendSignUpOtp } from "@/services";
+import { resendSignUpOtp, resetPassword } from "@/services";
 
 interface ConfirmCodeTemplateProps {
   email: string;
@@ -30,7 +30,7 @@ export function ConfirmCodeTemplate({
   const handleResendCode = useCallback(async () => {
     setIsResending(true);
     try {
-      const { error } = await resendSignUpOtp(email);
+      const { error } = (mode === 'signup')? await resendSignUpOtp(email) : await resetPassword(email);
       if (error) throw error;
       setResendTimer(60);
       toast({
@@ -46,7 +46,7 @@ export function ConfirmCodeTemplate({
     } finally {
       setIsResending(false);
     }
-  }, [email]);
+  }, [email, mode]);
 
   useEffect(() => {
     if (resendTimer > 0) {

@@ -62,7 +62,7 @@ export default function Auth() {
       {step === "forgot-password" && (
         <ForgotPasswordTemplate
           onBack={() => goToStep("login")}
-          goToConfirmCode={(email: string) => goToConfirmCode("signup", email)}
+          goToConfirmCode={(email: string) => goToConfirmCode("recovery", email)}
         />
       )}
 
@@ -72,7 +72,7 @@ export default function Auth() {
           goToResetPassword={() => goToStep("reset-password")}
           mode={codeMode}
           onBack={() =>
-            codeMode === "signup" ? goToStep("register") : goToStep("reset-password")
+            codeMode === "signup" ? goToStep("register") : goToStep("forgot-password")
           }
         />
       )}

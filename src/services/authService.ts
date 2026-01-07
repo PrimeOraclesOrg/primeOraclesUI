@@ -52,7 +52,6 @@ export interface AuthResult<T> {
  * Sign up a new user with email and password
  */
 export async function signUp(credentials: SignUpCredentials): Promise<AuthResult<UserAndSession>> {
-  // TODO: Replace with Supabase auth
   const { data, error } = await supabase.auth.signUp({
     email: credentials.email,
     password: credentials.password,
@@ -73,7 +72,6 @@ export async function signUp(credentials: SignUpCredentials): Promise<AuthResult
  * Sign in with email and password
  */
 export async function signIn(credentials: SignInCredentials): Promise<AuthResult<UserAndSession>> {
-  // TODO: Replace with Supabase auth
   const { data, error } = await supabase.auth.signInWithPassword({
     email: credentials.email,
     password: credentials.password,
@@ -129,31 +127,28 @@ export async function getCurrentUser(): Promise<AuthResult<User>> {
  * Send password reset email
  */
 export async function resetPassword(email: string): Promise<AuthResult<null>> {
-  // TODO: Replace with Supabase auth
-  // const { error } = await supabase.auth.resetPasswordForEmail(email, {
-  //   redirectTo: `${window.location.origin}/reset-password`,
-  // });
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reset-password`,
+  });
 
   console.log("resetPassword called for:", email);
   return {
     data: null,
-    error: { message: "Not implemented - requires Supabase integration" },
+    error
   };
 }
 
 /**
  * Update user password
  */
-export async function updatePassword(newPassword: string): Promise<AuthResult<User>> {
-  // TODO: Replace with Supabase auth
-  // const { data, error } = await supabase.auth.updateUser({
-  //   password: newPassword,
-  // });
+export async function updatePassword(newPassword: string): Promise<AuthResult<{user: User}>> {
+  const { data, error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
 
-  console.log("updatePassword called");
   return {
-    data: null,
-    error: { message: "Not implemented - requires Supabase integration" },
+    data,
+    error
   };
 }
 

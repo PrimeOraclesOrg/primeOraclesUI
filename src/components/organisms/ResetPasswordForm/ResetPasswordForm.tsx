@@ -1,6 +1,7 @@
 import { PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/useToast";
+import { updatePassword } from "@/services";
 import { resetPasswordSchema } from "@/utils";
 import { useCallback, useState } from "react";
 
@@ -42,8 +43,9 @@ export const ResetPasswordForm = ({ goToLogin }: ResetPasswordForm) => {
 
       setIsLoading(true);
       try {
-        // Simulate password reset
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const { error } = await updatePassword(password);
+        if (error) throw error;
+        
         toast({
           title: "Пароль изменён",
           description: "Теперь вы можете войти с новым паролем",
