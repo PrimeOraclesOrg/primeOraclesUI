@@ -100,12 +100,11 @@ export async function signOut(): Promise<AuthResult<null>> {
  * Get the current session
  */
 export async function getSession(): Promise<AuthResult<Session>> {
-  // TODO: Replace with Supabase auth
-  // const { data: { session }, error } = await supabase.auth.getSession();
+  const { data: { session }, error } = await supabase.auth.getSession();
 
   return {
-    data: null,
-    error: null,
+    data: session,
+    error,
   };
 }
 

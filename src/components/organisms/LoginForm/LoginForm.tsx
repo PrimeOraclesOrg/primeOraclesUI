@@ -1,5 +1,7 @@
 import { AuthInput, PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { signIn } from "@/services";
 import { loginSchema } from "@/utils";
@@ -20,8 +22,10 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const { setAuthentication } = useAuth();
 
   const navigate = useNavigate();
+  const { close, routeAfterLogin } = useAuthModal();
 
   const handleLogin = useCallback(
     async (e: React.FormEvent) => {
@@ -56,7 +60,9 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
             variant: "destructive",
           });
         } else {
-          navigate("/");
+          setAuthentication(true);
+          close();
+          if (routeAfterLogin) navigate(routeAfterLogin);
         }
       } catch {
         toast({
@@ -68,7 +74,7 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
         setIsLoading(false);
       }
     },
-    [email, password, navigate]
+    [email, password, navigate, close, routeAfterLogin, setAuthentication]
   );
 
   return (

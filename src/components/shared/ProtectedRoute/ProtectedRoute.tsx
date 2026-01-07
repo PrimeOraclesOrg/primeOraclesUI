@@ -10,6 +10,7 @@ import { getSession } from "@/services/authService";
 import { Loader } from "@/components/atoms/Loader/Loader";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, setAuthentication } = useAuth();
   const [authModalWasOpened, setAuthModalWasOpened] = useState(false);
   const { open, isOpen } = useAuthModal();
 
@@ -27,19 +28,19 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     const checkAuth = async () => {
       try {
         const { data: session } = await getSession();
-        setIsAuthenticated(!!session);
+        setAuthentication(!!session);
       } catch {
-        setIsAuthenticated(false);
+        setAuthentication(false);
       } finally {
         setIsLoading(false);
       }
     };
 
     checkAuth();
-  }, []);
+  }, [setAuthentication]);
 
   useEffect(() => {
-    if (!isAuthenticated && !isAuthenticated) {
+    if (!isAuthenticated && !isLoading) {
       open();
       setAuthModalWasOpened(true);
     }
