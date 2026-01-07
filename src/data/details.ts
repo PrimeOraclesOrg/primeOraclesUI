@@ -33,6 +33,11 @@ export const getProductDetails = (id: string): ProductDetails => ({
   rating: 4.67,
   reviewCount: 51,
   memberCount: 271,
+  features: [
+    { id: "1", text: "Особенность 1" },
+    { id: "2", text: "Особенность 2" },
+    { id: "3", text: "Особенность 3" },
+  ],
 });
 
 export const getLessonDetails = (id: string): LessonDetails => ({
