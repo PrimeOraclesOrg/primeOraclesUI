@@ -87,13 +87,12 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
  * Sign out the current user
  */
 export async function signOut(): Promise<AuthResult<null>> {
-  // TODO: Replace with Supabase auth
-  // const { error } = await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut();
 
   console.log("signOut called");
   return {
     data: null,
-    error: { message: "Not implemented - requires Supabase integration" },
+    error,
   };
 }
 
@@ -134,21 +133,21 @@ export async function resetPassword(email: string): Promise<AuthResult<null>> {
   console.log("resetPassword called for:", email);
   return {
     data: null,
-    error
+    error,
   };
 }
 
 /**
  * Update user password
  */
-export async function updatePassword(newPassword: string): Promise<AuthResult<{user: User}>> {
+export async function updatePassword(newPassword: string): Promise<AuthResult<{ user: User }>> {
   const { data, error } = await supabase.auth.updateUser({
     password: newPassword,
   });
 
   return {
     data,
-    error
+    error,
   };
 }
 

@@ -40,7 +40,7 @@ export function AuthLayout({
   };
 
   return (
-    <div className="min-h-screen w-full bg-background flex">
+    <div className="min-h-screen w-full bg-background flex fixed left-0 top-0">
       {/* Left side - Hero Image (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <img

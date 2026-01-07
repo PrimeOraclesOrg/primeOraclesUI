@@ -1,7 +1,7 @@
 import { PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/useToast";
-import { updatePassword } from "@/services";
+import { signOut, updatePassword } from "@/services";
 import { resetPasswordSchema } from "@/utils";
 import { useCallback, useState } from "react";
 
@@ -27,7 +27,7 @@ export const ResetPasswordForm = ({ goToLogin }: ResetPasswordForm) => {
 
       const result = resetPasswordSchema.safeParse({
         password,
-        confirmPassword
+        confirmPassword,
       });
 
       if (!result.success) {
@@ -45,11 +45,12 @@ export const ResetPasswordForm = ({ goToLogin }: ResetPasswordForm) => {
       try {
         const { error } = await updatePassword(password);
         if (error) throw error;
-        
+
         toast({
           title: "Пароль изменён",
           description: "Теперь вы можете войти с новым паролем",
         });
+        await signOut();
         goToLogin();
       } catch {
         toast({
