@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { getSession } from "@/services/authService";
+import { getCurrentUser } from "@/services/authService";
 import { Loader } from "@/components/atoms/Loader/Loader";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useNavigate } from "react-router-dom";
@@ -27,8 +27,8 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: session } = await getSession();
-        setAuthentication(!!session);
+        const { data: user } = await getCurrentUser();
+        setAuthentication(!!user);
       } catch {
         setAuthentication(false);
       } finally {

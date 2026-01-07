@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SettingsTemplate } from "@/components/templates";
 import { mockTransactions, mockOrders, mockSocialLinks } from "@/data/transactions";
+import { signOut } from "@/services";
 
 type SettingsTab = "basic" | "security" | "balance" | "history";
 
@@ -30,7 +31,7 @@ export default function Settings() {
       onDescriptionChange={setDescription}
       onSocialLinkChange={handleSocialLinkChange}
       onSaveBasic={() => {}}
-      onLogout={() => {}}
+      onLogout={signOut}
     />
   );
 }

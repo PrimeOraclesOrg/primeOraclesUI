@@ -89,7 +89,6 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
 export async function signOut(): Promise<AuthResult<null>> {
   const { error } = await supabase.auth.signOut();
 
-  console.log("signOut called");
   return {
     data: null,
     error,
@@ -100,7 +99,10 @@ export async function signOut(): Promise<AuthResult<null>> {
  * Get the current session
  */
 export async function getSession(): Promise<AuthResult<Session>> {
-  const { data: { session }, error } = await supabase.auth.getSession();
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
 
   return {
     data: session,
@@ -112,12 +114,14 @@ export async function getSession(): Promise<AuthResult<Session>> {
  * Get the current user
  */
 export async function getCurrentUser(): Promise<AuthResult<User>> {
-  // TODO: Replace with Supabase auth
-  // const { data: { user }, error } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
   return {
-    data: null,
-    error: null,
+    data: user,
+    error,
   };
 }
 
