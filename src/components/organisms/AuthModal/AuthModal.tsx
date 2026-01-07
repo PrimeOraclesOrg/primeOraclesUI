@@ -7,29 +7,18 @@
  */
 
 import { useState, useCallback } from "react";
-import { useLocation } from "react-router-dom";
 import { LoginTemplate } from "@/components/templates/LoginTemplate/LoginTemplate";
 import { ForgotPasswordTemplate } from "@/components/templates/ForgotPasswordTemplate/ForgotPasswordTemplate";
 import { ConfirmCodeTemplate } from "@/components/templates/ConfirmCodeTemplate/ConfirmCodeTemplate";
 import { ResetPasswordTemplate } from "@/components/templates/ResetPasswordTemplate/ResetPasswordTemplate";
 import { SignUpTemplate } from "@/components/templates";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 type AuthStep = "login" | "register" | "forgot-password" | "confirm-code" | "reset-password";
 
-export default function Auth() {
-  const location = useLocation();
-
-  // Determine initial step from route
-  const getInitialStep = (): AuthStep => {
-    const path = location.pathname;
-    if (path === "/register") return "register";
-    if (path === "/forgot-password") return "forgot-password";
-    if (path === "/confirm-code") return "confirm-code";
-    if (path === "/reset-password") return "reset-password";
-    return "login";
-  };
-
-  const [step, setStep] = useState<AuthStep>(getInitialStep);
+export const AuthModal = () => {
+  const { isOpen } = useAuthModal();
+  const [step, setStep] = useState<AuthStep>("login");
   const [codeMode, setCodeMode] = useState<"signup" | "recovery">("signup");
   const [email, setEmail] = useState("");
 
@@ -43,7 +32,7 @@ export default function Auth() {
     goToStep("confirm-code");
   };
 
-  return (
+  if (isOpen) return (
     <>
       {step === "login" && (
         <LoginTemplate

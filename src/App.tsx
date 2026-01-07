@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ErrorBoundary } from "@/components/shared";
 import { store } from "@/store";
 import { AppRoutes } from "@/routes";
+import { AuthModal } from "./components/organisms";
 
 const App = () => (
   <ErrorBoundary>
@@ -14,6 +15,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <AuthModal />
           <AppRoutes />
         </BrowserRouter>
       </TooltipProvider>

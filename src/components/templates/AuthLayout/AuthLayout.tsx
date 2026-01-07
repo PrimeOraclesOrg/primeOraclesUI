@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import authHero from "@/assets/auth-hero.jpg";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -27,10 +28,10 @@ export function AuthLayout({
   title,
   subtitle,
 }: AuthLayoutProps) {
-  const navigate = useNavigate();
+  const { close } = useAuthModal();
 
   const handleClose = () => {
-    navigate("/");
+    close();
   };
 
   const handleBack = () => {
@@ -40,7 +41,7 @@ export function AuthLayout({
   };
 
   return (
-    <div className="min-h-screen w-full bg-background flex fixed left-0 top-0">
+    <div className="min-h-screen w-full bg-background flex fixed left-0 top-0 z-20">
       {/* Left side - Hero Image (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <img

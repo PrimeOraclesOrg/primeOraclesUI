@@ -6,18 +6,22 @@
  */
 
 import { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
 import { getSession } from "@/services/authService";
 import { Loader } from "@/components/atoms/Loader/Loader";
+import { useAuthModal } from "@/hooks/useAuthModal";
+import { useNavigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authModalWasOpened, setAuthModalWasOpened] = useState(false);
+  const { open, isOpen } = useAuthModal();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -34,6 +38,19 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    if (!isAuthenticated && !isAuthenticated) {
+      open();
+      setAuthModalWasOpened(true);
+    }
+  }, [isLoading, isAuthenticated, open]);
+
+  useEffect(() => {
+    if (!isAuthenticated && !isOpen && authModalWasOpened) {
+      navigate("/");
+    }
+  }, [isOpen, authModalWasOpened, isAuthenticated, navigate]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen w-full bg-background flex items-center justify-center">
@@ -43,8 +60,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   if (!isAuthenticated) {
-    // Redirect to login with return path
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+    return;
   }
 
   return <>{children}</>;

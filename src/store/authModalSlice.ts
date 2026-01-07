@@ -8,6 +8,7 @@ interface AuthModalState {
   view: AuthView;
   codeMode: AuthCodeMode;
   email: string;
+  routeAfterLogin: string | null;
 }
 
 const initialState: AuthModalState = {
@@ -15,6 +16,7 @@ const initialState: AuthModalState = {
   view: "login",
   codeMode: "signup",
   email: "",
+  routeAfterLogin: null
 };
 
 const authModalSlice = createSlice({
@@ -23,7 +25,7 @@ const authModalSlice = createSlice({
   reducers: {
     openAuthModal: (state, action: PayloadAction<AuthView>) => {
       state.isOpen = true;
-      state.view = action.payload;
+      state.view = action.payload || 'login';
     },
     closeAuthModal: (state) => {
       state.isOpen = false;
@@ -37,6 +39,9 @@ const authModalSlice = createSlice({
     setAuthModalEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload;
     },
+    setRouteAfterLogin: (state, action: PayloadAction<string | null>) => {
+      state.routeAfterLogin = action.payload;
+    }
   },
 });
 
@@ -48,3 +53,4 @@ export const {
   setAuthModalCodeMode,
   setAuthModalEmail,
 } = authModalSlice.actions;
+export const selectAuthModal = (state: { authModal: AuthModalState }) => state.authModal;

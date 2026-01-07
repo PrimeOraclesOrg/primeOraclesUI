@@ -25,4 +25,5 @@ export {
   setAuthModalView,
   setAuthModalCodeMode,
   setAuthModalEmail,
+  selectAuthModal
 } from "./authModalSlice";
