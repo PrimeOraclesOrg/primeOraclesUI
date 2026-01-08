@@ -13,16 +13,12 @@ interface LoginErrors {
   password?: string;
 }
 
-interface LoginFormProps {
-  onForgotPassword: () => void;
-}
-
-export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
-  const [email, setEmail] = useState("");
+export const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
   const [isLoading, setIsLoading] = useState(false);
-  const { isAuthenticated, setAuthentication } = useAuth();
+  const { email, setEmail, setView } = useAuthModal();
+  const { setAuthentication } = useAuth();
 
   const navigate = useNavigate();
   const { close, routeAfterLogin } = useAuthModal();
@@ -77,10 +73,6 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
     [email, password, navigate, close, routeAfterLogin, setAuthentication]
   );
 
-  useEffect(() => {
-    if (isAuthenticated) close();
-  }, [isAuthenticated, close])
-
   return (
     <form className="space-y-5" onSubmit={handleLogin}>
       <AuthInput
@@ -105,7 +97,7 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
         labelRight={
           <button
             type="button"
-            onClick={onForgotPassword}
+            onClick={() => setView("forgot-password")}
             className="text-sm text-primary hover:text-primary/80 transition-colors font-normal"
           >
             Забыли пароль?

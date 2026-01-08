@@ -1,15 +1,13 @@
 import { AuthInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { resetPassword } from "@/services";
 import { forgotPasswordSchema } from "@/utils";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export const ForgotPasswordForm = () => {
-  const { email, setCodeMode, setView, setEmail, close } = useAuthModal();
-  const { isAuthenticated } = useAuth();
+  const { email, setCodeMode, setView, setEmail } = useAuthModal();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -50,10 +48,6 @@ export const ForgotPasswordForm = () => {
     },
     [email, setCodeMode, setView]
   );
-
-  useEffect(() => {
-    if (isAuthenticated) close();
-  }, [isAuthenticated, close]);
 
   return (
     <form className="space-y-5" onSubmit={handleForgotPassword}>

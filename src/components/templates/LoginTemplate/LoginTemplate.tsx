@@ -7,22 +7,20 @@
 
 import { LoginForm } from "@/components/organisms";
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
-interface LoginTemplateProps {
-  onForgotPassword: () => void;
-  onSignUp: () => void;
-}
+export function LoginTemplate() {
+  const { setView } = useAuthModal();
 
-export function LoginTemplate({ onForgotPassword, onSignUp }: LoginTemplateProps) {
   return (
     <AuthLayout title="Добро пожаловать">
-      <LoginForm onForgotPassword={onForgotPassword} />
+      <LoginForm />
       <div className="flex items-center justify-center mt-8 pt-4">
         <p className="text-sm text-muted-foreground">
           Нету аккаунта?{" "}
           <button
             type="button"
-            onClick={onSignUp}
+            onClick={() => setView("register")}
             className="text-primary hover:text-primary/80 transition-colors font-medium"
           >
             Регистрация
