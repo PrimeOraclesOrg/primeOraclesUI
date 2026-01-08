@@ -42,7 +42,7 @@ export const ResetPasswordForm = () => {
       setIsLoading(true);
       try {
         const { error } = await updatePassword(password);
-        if (error) throw error;
+        if (error) throw error.message;
 
         toast({
           title: "Пароль изменён",
@@ -50,10 +50,10 @@ export const ResetPasswordForm = () => {
         });
         await signOut();
         setView("login");
-      } catch {
+      } catch (error) {
         toast({
           title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
+          description: error,
           variant: "destructive",
         });
       } finally {
