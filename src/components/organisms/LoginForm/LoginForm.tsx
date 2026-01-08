@@ -52,7 +52,7 @@ export const LoginForm = () => {
         if (error) {
           toast({
             title: "Ошибка входа",
-            description: "Неверный email или пароль",
+            description: error.message,
             variant: "destructive",
           });
         } else {
