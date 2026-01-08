@@ -1,10 +1,11 @@
 import { AuthInput, PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { signUp } from "@/services";
 import { registerSchema } from "@/utils";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Errors {
   email?: string;
@@ -13,7 +14,8 @@ interface Errors {
 }
 
 export const SignUpForm = () => {
-  const { email, setEmail, setCodeMode, setView } = useAuthModal();
+  const { email, setEmail, setCodeMode, setView, close } = useAuthModal();
+  const { isAuthenticated } = useAuth();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Errors>({});
@@ -68,6 +70,10 @@ export const SignUpForm = () => {
     },
     [email, password, confirmPassword, setCodeMode, setView]
   );
+
+  useEffect(() => {
+    if (isAuthenticated) close();
+  }, [isAuthenticated, close]);
 
   return (
     <form className="space-y-5" onSubmit={handleSignUp}>

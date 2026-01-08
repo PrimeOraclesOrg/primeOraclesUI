@@ -5,7 +5,7 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { signIn } from "@/services";
 import { loginSchema } from "@/utils";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface LoginErrors {
@@ -22,7 +22,7 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
   const [isLoading, setIsLoading] = useState(false);
-  const { setAuthentication } = useAuth();
+  const { isAuthenticated, setAuthentication } = useAuth();
 
   const navigate = useNavigate();
   const { close, routeAfterLogin } = useAuthModal();
@@ -76,6 +76,10 @@ export const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
     },
     [email, password, navigate, close, routeAfterLogin, setAuthentication]
   );
+
+  useEffect(() => {
+    if (isAuthenticated) close();
+  }, [isAuthenticated, close])
 
   return (
     <form className="space-y-5" onSubmit={handleLogin}>
