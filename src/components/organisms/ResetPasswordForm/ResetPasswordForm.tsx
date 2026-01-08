@@ -1,5 +1,6 @@
 import { PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { signOut, updatePassword } from "@/services";
 import { resetPasswordSchema } from "@/utils";
@@ -10,11 +11,8 @@ interface Errors {
   confirmPassword?: string;
 }
 
-interface ResetPasswordForm {
-  goToLogin: () => void;
-}
-
-export const ResetPasswordForm = ({ goToLogin }: ResetPasswordForm) => {
+export const ResetPasswordForm = () => {
+  const { setView } = useAuthModal();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Errors>({});
@@ -51,7 +49,7 @@ export const ResetPasswordForm = ({ goToLogin }: ResetPasswordForm) => {
           description: "Теперь вы можете войти с новым паролем",
         });
         await signOut();
-        goToLogin();
+        setView("login");
       } catch {
         toast({
           title: "Ошибка",
@@ -62,7 +60,7 @@ export const ResetPasswordForm = ({ goToLogin }: ResetPasswordForm) => {
         setIsLoading(false);
       }
     },
-    [password, confirmPassword, goToLogin]
+    [password, confirmPassword, setView]
   );
 
   return (

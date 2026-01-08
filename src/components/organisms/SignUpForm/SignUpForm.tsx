@@ -1,5 +1,6 @@
 import { AuthInput, PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { signUp } from "@/services";
 import { registerSchema } from "@/utils";
@@ -11,12 +12,8 @@ interface Errors {
   confirmPassword?: string;
 }
 
-interface SignUpFormProps {
-  goToConfirmCode: (email: string) => void;
-}
-
-export const SignUpForm = ({ goToConfirmCode }: SignUpFormProps) => {
-  const [email, setEmail] = useState("");
+export const SignUpForm = () => {
+  const { email, setEmail, setCodeMode, setView } = useAuthModal();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Errors>({});
@@ -56,7 +53,8 @@ export const SignUpForm = ({ goToConfirmCode }: SignUpFormProps) => {
             variant: "destructive",
           });
         } else {
-          goToConfirmCode(email);
+          setCodeMode("signup");
+          setView("confirm-code");
         }
       } catch {
         toast({
@@ -68,7 +66,7 @@ export const SignUpForm = ({ goToConfirmCode }: SignUpFormProps) => {
         setIsLoading(false);
       }
     },
-    [email, password, confirmPassword, goToConfirmCode]
+    [email, password, confirmPassword, setCodeMode, setView]
   );
 
   return (

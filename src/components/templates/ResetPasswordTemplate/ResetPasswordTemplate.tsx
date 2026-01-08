@@ -7,20 +7,19 @@
 
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { ResetPasswordForm } from "@/components/organisms/ResetPasswordForm/ResetPasswordForm";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
-interface ResetPasswordTemplateProps {
-  goToLogin: () => void;
-}
+export function ResetPasswordTemplate() {
+  const { setView } = useAuthModal();
 
-export function ResetPasswordTemplate({ goToLogin }: ResetPasswordTemplateProps) {
   return (
     <AuthLayout
       title="Новый пароль"
       subtitle="Введите новый пароль для вашего аккаунта"
       showBackButton
-      onBack={goToLogin}
+      onBack={() => setView("login")}
     >
-      <ResetPasswordForm goToLogin={goToLogin} />
+      <ResetPasswordForm />
     </AuthLayout>
   );
 }

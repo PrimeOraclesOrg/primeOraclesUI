@@ -10,27 +10,18 @@ import { ConfirmCodeForm } from "@/components/organisms/ConfirmCodeForm/ConfirmC
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "@/hooks/useToast";
 import { resendSignUpOtp, resetPassword } from "@/services";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
-interface ConfirmCodeTemplateProps {
-  email: string;
-  mode: "signup" | "recovery";
-  goToResetPassword: () => void;
-  onBack: () => void;
-}
-
-export function ConfirmCodeTemplate({
-  email,
-  mode,
-  goToResetPassword,
-  onBack,
-}: ConfirmCodeTemplateProps) {
+export function ConfirmCodeTemplate() {
+  const { codeMode, email, setView } = useAuthModal();
   const [isResending, setIsResending] = useState(false);
   const [resendTimer, setResendTimer] = useState(60);
 
   const handleResendCode = useCallback(async () => {
     setIsResending(true);
     try {
-      const { error } = (mode === 'signup')? await resendSignUpOtp(email) : await resetPassword(email);
+      const { error } =
+        codeMode === "signup" ? await resendSignUpOtp(email) : await resetPassword(email);
       if (error) throw error;
       setResendTimer(60);
       toast({
@@ -46,7 +37,7 @@ export function ConfirmCodeTemplate({
     } finally {
       setIsResending(false);
     }
-  }, [email, mode]);
+  }, [email, codeMode]);
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -55,6 +46,11 @@ export function ConfirmCodeTemplate({
     }
   }, [resendTimer]);
 
+  const onBack = () => {
+    if (codeMode === 'recovery') setView('forgot-password');
+    if (codeMode === 'signup') setView('register');
+  }
+
   return (
     <AuthLayout
       title="Подтвердите код"
@@ -62,7 +58,7 @@ export function ConfirmCodeTemplate({
       showBackButton
       onBack={onBack}
     >
-      <ConfirmCodeForm mode={mode} email={email} goToResetPassword={goToResetPassword} />
+      <ConfirmCodeForm />
 
       {/* Resend section */}
       <div className="text-center mt-8 pt-4 space-y-2">

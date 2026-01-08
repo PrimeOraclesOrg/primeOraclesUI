@@ -5,23 +5,14 @@ import { toast } from "@/hooks/useToast";
 import { signOut, verifyOtp } from "@/services";
 import { verificationCodeSchema } from "@/utils";
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-interface ConfirmCodeFormProps {
-  email: string;
-  mode: "signup" | "recovery";
-  goToResetPassword: () => void;
-}
-
-export const ConfirmCodeForm = ({ email, mode, goToResetPassword }: ConfirmCodeFormProps) => {
+export const ConfirmCodeForm = () => {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { setView } = useAuthModal();
+  const { setView, codeMode, email } = useAuthModal();
 
-  const navigate = useNavigate();
-
-  const buttonText = mode === "signup" ? "Подтвердить" : "Восстановить пароль";
+  const buttonText = codeMode === "signup" ? "Подтвердить" : "Восстановить пароль";
   const loadingText = "Проверка...";
 
   const handleConfirmCode = useCallback(
@@ -40,7 +31,7 @@ export const ConfirmCodeForm = ({ email, mode, goToResetPassword }: ConfirmCodeF
 
       setIsLoading(true);
       try {
-        const { error } = await verifyOtp({ email, code, type: mode });
+        const { error } = await verifyOtp({ email, code, type: codeMode });
 
         if (error) {
           toast({
@@ -49,15 +40,15 @@ export const ConfirmCodeForm = ({ email, mode, goToResetPassword }: ConfirmCodeF
             variant: "destructive",
           });
         } else {
-          if (mode === "signup") {
+          if (codeMode === "signup") {
             toast({
               title: "Успешно",
               description: "Регистрация завершена. Теперь вы можете войти в свой аккаунт",
             });
-            signOut();
+            await signOut();
             setView("login");
           }
-          if (mode === "recovery") goToResetPassword();
+          if (codeMode === "recovery") setView("reset-password");
         }
       } catch {
         toast({
@@ -69,7 +60,7 @@ export const ConfirmCodeForm = ({ email, mode, goToResetPassword }: ConfirmCodeF
         setIsLoading(false);
       }
     },
-    [email, code, mode, goToResetPassword, setView]
+    [email, code, setView, codeMode]
   );
 
   return (

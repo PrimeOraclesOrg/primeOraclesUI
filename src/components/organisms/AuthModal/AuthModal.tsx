@@ -16,14 +16,14 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { AuthView } from "@/store";
 
 export const AuthModal = () => {
-  const { isOpen } = useAuthModal();
-  const { view, setView } = useAuthModal();
-  const [codeMode, setCodeMode] = useState<"signup" | "recovery">("signup");
-  const [email, setEmail] = useState("");
+  const { isOpen, view, setView, codeMode, setCodeMode, email, setEmail } = useAuthModal();
 
-  const goToStep = useCallback((newStep: AuthView) => {
-    setView(newStep);
-  }, [setView]);
+  const goToStep = useCallback(
+    (newStep: AuthView) => {
+      setView(newStep);
+    },
+    [setView]
+  );
 
   const goToConfirmCode = (codeMode: "signup" | "recovery", email: string) => {
     setCodeMode(codeMode);
@@ -31,41 +31,23 @@ export const AuthModal = () => {
     goToStep("confirm-code");
   };
 
-  if (isOpen) return (
-    <>
-      {view === "login" && (
-        <LoginTemplate
-          onForgotPassword={() => goToStep("forgot-password")}
-          onSignUp={() => goToStep("register")}
-        />
-      )}
+  if (isOpen)
+    return (
+      <>
+        {view === "login" && (
+          <LoginTemplate
+            onForgotPassword={() => goToStep("forgot-password")}
+            onSignUp={() => goToStep("register")}
+          />
+        )}
 
-      {view === "register" && (
-        <SignUpTemplate
-          onBack={() => goToStep("login")}
-          goToConfirmCode={(email: string) => goToConfirmCode("signup", email)}
-        />
-      )}
+        {view === "register" && <SignUpTemplate />}
 
-      {view === "forgot-password" && (
-        <ForgotPasswordTemplate
-          onBack={() => goToStep("login")}
-          goToConfirmCode={(email: string) => goToConfirmCode("recovery", email)}
-        />
-      )}
+        {view === "forgot-password" && <ForgotPasswordTemplate />}
 
-      {view === "confirm-code" && (
-        <ConfirmCodeTemplate
-          email={email}
-          goToResetPassword={() => goToStep("reset-password")}
-          mode={codeMode}
-          onBack={() =>
-            codeMode === "signup" ? goToStep("register") : goToStep("forgot-password")
-          }
-        />
-      )}
+        {view === "confirm-code" && <ConfirmCodeTemplate />}
 
-      {view === "reset-password" && <ResetPasswordTemplate goToLogin={() => goToStep("login")} />}
-    </>
-  );
-}
+        {view === "reset-password" && <ResetPasswordTemplate />}
+      </>
+    );
+};

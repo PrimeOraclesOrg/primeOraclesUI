@@ -1,16 +1,13 @@
 import { AuthInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { resetPassword } from "@/services";
 import { forgotPasswordSchema } from "@/utils";
 import { useCallback, useState } from "react";
 
-interface ForgotPasswordFormProps {
-  goToConfirmCode: (email: string) => void;
-}
-
-export const ForgotPasswordForm = ({ goToConfirmCode }: ForgotPasswordFormProps) => {
-  const [email, setEmail] = useState("");
+export const ForgotPasswordForm = () => {
+  const { email, setCodeMode, setView, setEmail } = useAuthModal();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -36,7 +33,8 @@ export const ForgotPasswordForm = ({ goToConfirmCode }: ForgotPasswordFormProps)
             variant: "destructive",
           });
         } else {
-          goToConfirmCode(email);
+          setCodeMode("recovery");
+          setView("confirm-code");
         }
       } catch {
         toast({
@@ -48,7 +46,7 @@ export const ForgotPasswordForm = ({ goToConfirmCode }: ForgotPasswordFormProps)
         setIsLoading(false);
       }
     },
-    [email, goToConfirmCode]
+    [email, setCodeMode, setView]
   );
 
   return (

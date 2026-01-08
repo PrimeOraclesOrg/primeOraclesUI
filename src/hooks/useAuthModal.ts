@@ -1,8 +1,11 @@
 import {
+  AuthCodeMode,
   AuthView,
   closeAuthModal,
   openAuthModal,
   selectAuthModal,
+  setAuthModalCodeMode,
+  setAuthModalEmail,
   setAuthModalView,
   useAppDispatch,
   useAppSelector,
@@ -28,10 +31,26 @@ export const useAuthModal = () => {
     [dispatch]
   );
 
+  const setCodeMode = useCallback(
+    (mode: AuthCodeMode) => {
+      dispatch(setAuthModalCodeMode(mode));
+    },
+    [dispatch]
+  );
+
+  const setEmail = useCallback(
+    (email: string) => {
+      dispatch(setAuthModalEmail(email));
+    },
+    [dispatch]
+  );
+
   return {
     ...authModalState,
     open,
     close,
     setView,
+    setCodeMode,
+    setEmail,
   };
 };

@@ -7,16 +7,15 @@
 
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { SignUpForm } from "@/components/organisms";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
-interface RegisterTemplateProps {
-  onBack: () => void;
-  goToConfirmCode: (email: string) => void;
-}
+export function SignUpTemplate() {
+  const { setView } = useAuthModal();
+  const onBack = () => setView("login");
 
-export function SignUpTemplate({ onBack, goToConfirmCode }: RegisterTemplateProps) {
   return (
     <AuthLayout title="Создать аккаунт" showBackButton onBack={onBack}>
-      <SignUpForm goToConfirmCode={goToConfirmCode} />
+      <SignUpForm />
 
       {/* Footer */}
       <div className="text-center mt-8 pt-4">
