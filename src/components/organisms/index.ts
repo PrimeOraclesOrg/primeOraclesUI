@@ -4,3 +4,5 @@ export { LoginForm } from './LoginForm/LoginForm';
 export { SignUpForm } from './SignUpForm/SignUpForm';
 export { ForgotPasswordForm } from './ForgotPasswordForm/ForgotPasswordForm';
 export { AuthModal } from './AuthModal/AuthModal';
+export { CreateProductForm } from './CreateProductForm/CreateProductForm';
+export { ProductPreview } from './ProductPreview/ProductPreview';

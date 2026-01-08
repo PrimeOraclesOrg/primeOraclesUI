@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useGetRewardsQuery } from "@/store";
 import { RewardsTemplate } from "@/components/templates";
 
 export default function Rewards() {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [category, setCategory] = useState("all");
   const [type, setType] = useState("all");
@@ -20,7 +22,7 @@ export default function Rewards() {
       onTypeChange={setType}
       onPageChange={setCurrentPage}
       onInfoClick={() => {}}
-      onCreateClick={() => {}}
+      onCreateClick={() => navigate("/create-product")}
     />
   );
 }

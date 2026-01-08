@@ -7,6 +7,7 @@ import {
   Bell,
   Briefcase,
   ShoppingCart,
+  PlusCircle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -37,4 +38,5 @@ export const workspaceItems: NavItem[] = [
     ]
   },
   { icon: ShoppingCart, label: "Мои покупки", href: "/purchases" },
+  { icon: PlusCircle, label: "Создать продукт", href: "/create-product" },
 ];

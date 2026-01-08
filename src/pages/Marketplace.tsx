@@ -25,7 +25,7 @@ export default function Marketplace() {
       onCategoryChange={setActiveCategory}
       onPageChange={setCurrentPage}
       onProductClick={(id) => navigate(`/product/${id}`)}
-      onCreateClick={() => {}}
+      onCreateClick={() => navigate("/create-product")}
     />
   );
 }
