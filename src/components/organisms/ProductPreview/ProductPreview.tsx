@@ -1,5 +1,11 @@
-import { Monitor, Smartphone, Check, Image } from "lucide-react";
+import { Monitor, Smartphone, Check, Image, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import type { CreateProductFormData } from "@/types/createProduct";
 
@@ -13,6 +19,9 @@ interface ProductPreviewProps {
 
 export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps) {
   const hasMedia = !!data.mediaUrl;
+  const mockRating = 4.5;
+  const mockReviewCount = 128;
+  const mockMemberCount = 1247;
   
   return (
     <div className="h-full flex flex-col">
@@ -64,21 +73,22 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
         {/* Preview Content */}
         <div 
           className={cn(
-            "p-4 overflow-auto",
+            "p-6 overflow-auto",
             mode === "mobile" ? "max-w-[375px] mx-auto" : ""
           )}
           style={{ maxHeight: "calc(100vh - 280px)" }}
         >
+          {/* Product Header - Similar to ProductDetailTemplate */}
           <div className={cn(
-            "flex gap-6",
+            "flex gap-8 mb-8",
             mode === "mobile" ? "flex-col" : "flex-row"
           )}>
             {/* Product Image */}
             <div className={cn(
               "flex-shrink-0",
-              mode === "mobile" ? "w-full" : "w-48"
+              mode === "mobile" ? "w-full" : "w-72"
             )}>
-              <div className="aspect-[4/3] rounded-lg overflow-hidden bg-secondary flex items-center justify-center">
+              <div className="aspect-[4/3] rounded-xl overflow-hidden bg-secondary flex items-center justify-center">
                 {hasMedia ? (
                   <img
                     src={data.mediaUrl}
@@ -87,8 +97,8 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
                   />
                 ) : (
                   <div className="text-center text-muted-foreground">
-                    <Image className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <span className="text-xs">Изображение</span>
+                    <Image className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                    <span className="text-sm">Изображение продукта</span>
                   </div>
                 )}
               </div>
@@ -96,56 +106,114 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
 
             {/* Product Info */}
             <div className="flex-1 min-w-0">
-              <div className="text-xs text-primary mb-1">{data.category}</div>
-              <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-2">
+              {/* Author */}
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                  <span className="text-sm font-medium">A</span>
+                </div>
+                <span className="text-foreground font-medium">Автор продукта</span>
+              </div>
+
+              {/* Category */}
+              <div className="text-xs text-primary uppercase tracking-wider mb-2">
+                {data.category}
+              </div>
+
+              {/* Title */}
+              <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2">
                 {data.name || "Название продукта"}
               </h3>
-              <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+
+              {/* Rating */}
+              <div className="flex items-center gap-2 mb-4">
+                <div className="flex">
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star
+                      key={i}
+                      className={cn(
+                        "w-4 h-4",
+                        i < Math.floor(mockRating) 
+                          ? "fill-primary text-primary" 
+                          : "fill-muted text-muted"
+                      )}
+                    />
+                  ))}
+                </div>
+                <span className="text-primary text-sm">({mockReviewCount})</span>
+              </div>
+
+              {/* Description */}
+              <p className="text-sm text-muted-foreground mb-6 line-clamp-3">
                 {data.description || "Описание продукта будет отображаться здесь..."}
               </p>
               
-              {/* Price */}
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-xl font-bold text-primary">
-                  €{data.price.toFixed(2)}
-                </span>
-                <Button size="sm" className="gold-gradient text-primary-foreground">
-                  Купить
+              {/* Price & CTA */}
+              <div className="flex flex-col gap-3">
+                <Button className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full px-8">
+                  Купить за €{data.price.toFixed(2)}
                 </Button>
+                <span className="text-sm text-muted-foreground text-center">
+                  Присоединяйтесь к {mockMemberCount} участнику
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Advantages */}
+          {/* Advantages Section */}
           {data.advantages.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-border">
-              <h4 className="text-sm font-semibold text-foreground mb-3">Преимущества</h4>
-              <div className="space-y-2">
+            <div className="mb-8">
+              <h4 className="text-lg font-bold text-foreground mb-4">Преимущества</h4>
+              <div className="grid gap-3">
                 {data.advantages.map((adv) => (
-                  <div key={adv.id} className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">{adv.text || "Преимущество"}</span>
+                  <div 
+                    key={adv.id} 
+                    className="flex items-start gap-3 surface-card p-4 rounded-lg"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-4 h-4 text-primary" />
+                    </div>
+                    <span className="text-sm text-foreground">
+                      {adv.text || "Преимущество"}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* FAQ */}
+          {/* FAQ Section - Similar to ProductDetailTemplate */}
           {data.faq.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-border">
-              <h4 className="text-sm font-semibold text-foreground mb-3">Часто задаваемые вопросы</h4>
-              <div className="space-y-3">
+            <div className="mb-8">
+              <h4 className="text-lg font-bold text-foreground mb-4 text-center">
+                Часто задаваемые вопросы
+              </h4>
+              <Accordion type="single" collapsible className="max-w-2xl mx-auto">
                 {data.faq.map((item) => (
-                  <div key={item.id} className="bg-secondary/30 rounded-lg p-3">
-                    <div className="text-sm font-medium text-foreground mb-1">
+                  <AccordionItem 
+                    key={item.id} 
+                    value={item.id} 
+                    className="border-border"
+                  >
+                    <AccordionTrigger className="text-foreground hover:text-primary text-left">
                       {item.question || "Вопрос"}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground">
                       {item.answer || "Ответ"}
-                    </div>
-                  </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 ))}
+              </Accordion>
+            </div>
+          )}
+
+          {/* Instructions Preview */}
+          {data.instructions && (
+            <div className="mb-8">
+              <h4 className="text-lg font-bold text-foreground mb-4">Инструкции</h4>
+              <div className="surface-card p-4 rounded-lg">
+                <p className="text-sm text-muted-foreground whitespace-pre-wrap line-clamp-6">
+                  {data.instructions}
+                </p>
               </div>
             </div>
           )}

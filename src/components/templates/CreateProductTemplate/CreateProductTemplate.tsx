@@ -1,60 +1,38 @@
+import { useState } from "react";
 import { ChevronLeft } from "lucide-react";
+import { FormikProps } from "formik";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { CreateProductForm } from "@/components/organisms/CreateProductForm/CreateProductForm";
 import { ProductPreview } from "@/components/organisms/ProductPreview/ProductPreview";
-import type { CreateProductFormData, ProductCategory } from "@/types/createProduct";
-
-interface FormErrors {
-  name?: string;
-  description?: string;
-  advantages?: Record<string, string>;
-  faq?: Record<string, { question?: string; answer?: string }>;
-  instructions?: string;
-  price?: string;
-}
+import type { CreateProductFormData } from "@/types/createProduct";
 
 type PreviewMode = "desktop" | "mobile";
 
 interface CreateProductTemplateProps {
-  formData: CreateProductFormData;
-  errors: FormErrors;
+  formik: FormikProps<CreateProductFormData>;
   previewMode: PreviewMode;
-  isSubmitting: boolean;
   onBackClick: () => void;
-  onFieldChange: <K extends keyof CreateProductFormData>(
-    field: K,
-    value: CreateProductFormData[K]
-  ) => void;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
   onAddAdvantage: () => void;
-  onUpdateAdvantage: (id: string, text: string) => void;
   onRemoveAdvantage: (id: string) => void;
   onAddFaq: () => void;
-  onUpdateFaq: (id: string, field: "question" | "answer", value: string) => void;
   onRemoveFaq: (id: string) => void;
-  onPreviewModeChange: (mode: PreviewMode) => void;
-  onSubmit: () => void;
 }
 
 export function CreateProductTemplate({
-  formData,
-  errors,
-  previewMode,
-  isSubmitting,
+  formik,
+  previewMode: initialPreviewMode,
   onBackClick,
-  onFieldChange,
   onMediaUpload,
   onMediaRemove,
   onAddAdvantage,
-  onUpdateAdvantage,
   onRemoveAdvantage,
   onAddFaq,
-  onUpdateFaq,
   onRemoveFaq,
-  onPreviewModeChange,
-  onSubmit,
 }: CreateProductTemplateProps) {
+  const [previewMode, setPreviewMode] = useState<PreviewMode>(initialPreviewMode);
+
   return (
     <MainLayout>
       <div className="h-full flex flex-col">
@@ -78,19 +56,14 @@ export function CreateProductTemplate({
                 Создать продукт
               </h1>
               <CreateProductForm
-                data={formData}
-                errors={errors}
-                onFieldChange={onFieldChange}
+                formik={formik}
                 onMediaUpload={onMediaUpload}
                 onMediaRemove={onMediaRemove}
                 onAddAdvantage={onAddAdvantage}
-                onUpdateAdvantage={onUpdateAdvantage}
                 onRemoveAdvantage={onRemoveAdvantage}
                 onAddFaq={onAddFaq}
-                onUpdateFaq={onUpdateFaq}
                 onRemoveFaq={onRemoveFaq}
-                onSubmit={onSubmit}
-                isSubmitting={isSubmitting}
+                isSubmitting={formik.isSubmitting}
               />
             </div>
           </div>
@@ -99,9 +72,9 @@ export function CreateProductTemplate({
           <div className="hidden lg:flex lg:w-1/2 border-l border-border p-6 bg-secondary/30">
             <div className="w-full">
               <ProductPreview
-                data={formData}
+                data={formik.values}
                 mode={previewMode}
-                onModeChange={onPreviewModeChange}
+                onModeChange={setPreviewMode}
               />
             </div>
           </div>
