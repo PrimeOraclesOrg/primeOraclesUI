@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { FormikProps } from "formik";
 import { Plus, Trash2, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,108 +12,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FormSection, FormField } from "@/components/atoms";
 import {
   PRODUCT_CATEGORIES,
   type CreateProductFormData,
   type ProductCategory,
-  type ProductAdvantage,
-  type ProductFAQItem,
 } from "@/types/createProduct";
 
-interface FormErrors {
-  name?: string;
-  description?: string;
-  advantages?: Record<string, string>;
-  faq?: Record<string, { question?: string; answer?: string }>;
-  instructions?: string;
-  price?: string;
-}
-
 interface CreateProductFormProps {
-  data: CreateProductFormData;
-  errors: FormErrors;
-  onFieldChange: <K extends keyof CreateProductFormData>(
-    field: K,
-    value: CreateProductFormData[K]
-  ) => void;
+  formik: FormikProps<CreateProductFormData>;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
   onAddAdvantage: () => void;
-  onUpdateAdvantage: (id: string, text: string) => void;
   onRemoveAdvantage: (id: string) => void;
   onAddFaq: () => void;
-  onUpdateFaq: (id: string, field: "question" | "answer", value: string) => void;
   onRemoveFaq: (id: string) => void;
-  onSubmit: () => void;
   isSubmitting: boolean;
 }
 
-// Form Section Component
-function FormSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="surface-card p-5 space-y-4">
-      <h3 className="text-base font-semibold text-foreground">{title}</h3>
-      {children}
-    </div>
-  );
-}
-
-// Field with error display
-function FormField({
-  label,
-  error,
-  required,
-  charCount,
-  maxChars,
-  children,
-}: {
-  label: string;
-  error?: string;
-  required?: boolean;
-  charCount?: number;
-  maxChars?: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <Label className="text-sm text-muted-foreground">
-          {label}
-          {required && <span className="text-destructive ml-1">*</span>}
-        </Label>
-        {maxChars !== undefined && charCount !== undefined && (
-          <span className="text-xs text-muted-foreground">
-            {charCount}/{maxChars}
-          </span>
-        )}
-      </div>
-      {children}
-      {error && (
-        <p className="text-xs text-destructive">{error}</p>
-      )}
-    </div>
-  );
-}
-
 export function CreateProductForm({
-  data,
-  errors,
-  onFieldChange,
+  formik,
   onMediaUpload,
   onMediaRemove,
   onAddAdvantage,
-  onUpdateAdvantage,
   onRemoveAdvantage,
   onAddFaq,
-  onUpdateFaq,
   onRemoveFaq,
-  onSubmit,
   isSubmitting,
 }: CreateProductFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -124,13 +49,56 @@ export function CreateProductForm({
     }
   };
 
+  const { values, errors, touched, handleChange, handleBlur, setFieldValue, handleSubmit } = formik;
+
+  // Helper to get nested error
+  const getAdvantageError = (index: number): string | undefined => {
+    const advErrors = errors.advantages;
+    if (Array.isArray(advErrors) && advErrors[index]) {
+      const err = advErrors[index];
+      if (typeof err === "object" && err !== null && "text" in err) {
+        return (err as { text?: string }).text;
+      }
+    }
+    return undefined;
+  };
+
+  const getFaqError = (index: number, field: "question" | "answer"): string | undefined => {
+    const faqErrors = errors.faq;
+    if (Array.isArray(faqErrors) && faqErrors[index]) {
+      const err = faqErrors[index];
+      if (typeof err === "object" && err !== null && field in err) {
+        return (err as Record<string, string>)[field];
+      }
+    }
+    return undefined;
+  };
+
+  const isAdvTouched = (index: number): boolean => {
+    const advTouched = touched.advantages;
+    if (Array.isArray(advTouched) && advTouched[index]) {
+      const t = advTouched[index];
+      return typeof t === "object" && t !== null && (t as { text?: boolean }).text === true;
+    }
+    return false;
+  };
+
+  const isFaqTouched = (index: number, field: "question" | "answer"): boolean => {
+    const faqTouched = touched.faq;
+    if (Array.isArray(faqTouched) && faqTouched[index]) {
+      const t = faqTouched[index];
+      return typeof t === "object" && t !== null && (t as Record<string, boolean>)[field] === true;
+    }
+    return false;
+  };
+
   return (
-    <div className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {/* Category Section */}
       <FormSection title="Категория">
         <Select
-          value={data.category}
-          onValueChange={(value) => onFieldChange("category", value as ProductCategory)}
+          value={values.category}
+          onValueChange={(value) => setFieldValue("category", value as ProductCategory)}
         >
           <SelectTrigger className="w-full bg-background border-border">
             <SelectValue placeholder="Выберите категорию" />
@@ -149,14 +117,16 @@ export function CreateProductForm({
       <FormSection title="Детали">
         <FormField
           label="Название"
-          error={errors.name}
+          error={touched.name ? errors.name : undefined}
           required
-          charCount={data.name.length}
+          charCount={values.name.length}
           maxChars={100}
         >
           <Input
-            value={data.name}
-            onChange={(e) => onFieldChange("name", e.target.value)}
+            name="name"
+            value={values.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
             placeholder="Введите название продукта"
             className="bg-background border-border"
             maxLength={100}
@@ -165,14 +135,16 @@ export function CreateProductForm({
 
         <FormField
           label="Описание"
-          error={errors.description}
+          error={touched.description ? errors.description : undefined}
           required
-          charCount={data.description.length}
+          charCount={values.description.length}
           maxChars={1000}
         >
           <Textarea
-            value={data.description}
-            onChange={(e) => onFieldChange("description", e.target.value)}
+            name="description"
+            value={values.description}
+            onChange={handleChange}
+            onBlur={handleBlur}
             placeholder="Опишите ваш продукт..."
             className="bg-background border-border min-h-[120px] resize-none"
             maxLength={1000}
@@ -183,14 +155,15 @@ export function CreateProductForm({
         <div className="space-y-2">
           <Label className="text-sm text-muted-foreground">Медиа</Label>
           <div className="flex gap-3">
-            {data.mediaUrl ? (
+            {values.mediaUrl ? (
               <div className="relative w-40 h-28 rounded-lg overflow-hidden border border-border group">
                 <img
-                  src={data.mediaUrl}
+                  src={values.mediaUrl}
                   alt="Media preview"
                   className="w-full h-full object-cover"
                 />
                 <button
+                  type="button"
                   onClick={onMediaRemove}
                   className="absolute top-2 right-2 p-1 bg-card/80 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
                 >
@@ -203,6 +176,7 @@ export function CreateProductForm({
             ) : null}
             
             <button
+              type="button"
               onClick={() => fileInputRef.current?.click()}
               className="w-40 h-28 rounded-lg border border-dashed border-border bg-secondary/30 flex flex-col items-center justify-center gap-2 hover:border-primary/50 transition-colors"
             >
@@ -225,23 +199,26 @@ export function CreateProductForm({
       {/* Advantages Section */}
       <FormSection title="Преимущества">
         <div className="space-y-3">
-          {data.advantages.map((adv, idx) => (
+          {values.advantages.map((adv, idx) => (
             <div key={adv.id} className="flex items-start gap-2">
               <div className="flex-1">
                 <FormField
                   label={`Преимущество ${idx + 1}`}
-                  error={errors.advantages?.[adv.id]}
+                  error={isAdvTouched(idx) ? getAdvantageError(idx) : undefined}
                   required
                 >
                   <div className="flex gap-2">
                     <Input
+                      name={`advantages.${idx}.text`}
                       value={adv.text}
-                      onChange={(e) => onUpdateAdvantage(adv.id, e.target.value)}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                       placeholder="Введите преимущество"
                       className="bg-background border-border flex-1"
                       maxLength={100}
                     />
                     <Button
+                      type="button"
                       variant="ghost"
                       size="icon"
                       onClick={() => onRemoveAdvantage(adv.id)}
@@ -255,8 +232,9 @@ export function CreateProductForm({
             </div>
           ))}
           
-          {data.advantages.length < 5 && (
+          {values.advantages.length < 5 && (
             <Button
+              type="button"
               variant="outline"
               size="sm"
               onClick={onAddAdvantage}
@@ -272,11 +250,12 @@ export function CreateProductForm({
       {/* FAQ Section */}
       <FormSection title="Часто задаваемые вопросы">
         <div className="space-y-4">
-          {data.faq.map((item, idx) => (
+          {values.faq.map((item, idx) => (
             <div key={item.id} className="bg-secondary/30 rounded-lg p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-foreground">Вопрос {idx + 1}</span>
                 <Button
+                  type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => onRemoveFaq(item.id)}
@@ -288,12 +267,14 @@ export function CreateProductForm({
               
               <FormField
                 label="Вопрос"
-                error={errors.faq?.[item.id]?.question}
+                error={isFaqTouched(idx, "question") ? getFaqError(idx, "question") : undefined}
                 required
               >
                 <Input
+                  name={`faq.${idx}.question`}
                   value={item.question}
-                  onChange={(e) => onUpdateFaq(item.id, "question", e.target.value)}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="Введите вопрос"
                   className="bg-background border-border"
                   maxLength={100}
@@ -302,12 +283,14 @@ export function CreateProductForm({
               
               <FormField
                 label="Ответ"
-                error={errors.faq?.[item.id]?.answer}
+                error={isFaqTouched(idx, "answer") ? getFaqError(idx, "answer") : undefined}
                 required
               >
                 <Textarea
+                  name={`faq.${idx}.answer`}
                   value={item.answer}
-                  onChange={(e) => onUpdateFaq(item.id, "answer", e.target.value)}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="Введите ответ"
                   className="bg-background border-border min-h-[80px] resize-none"
                   maxLength={300}
@@ -316,8 +299,9 @@ export function CreateProductForm({
             </div>
           ))}
           
-          {data.faq.length < 5 && (
+          {values.faq.length < 5 && (
             <Button
+              type="button"
               variant="outline"
               size="sm"
               onClick={onAddFaq}
@@ -334,14 +318,16 @@ export function CreateProductForm({
       <FormSection title="Инструкции">
         <FormField
           label="Инструкции по использованию"
-          error={errors.instructions}
+          error={touched.instructions ? errors.instructions : undefined}
           required
-          charCount={data.instructions.length}
+          charCount={values.instructions.length}
           maxChars={1000}
         >
           <Textarea
-            value={data.instructions}
-            onChange={(e) => onFieldChange("instructions", e.target.value)}
+            name="instructions"
+            value={values.instructions}
+            onChange={handleChange}
+            onBlur={handleBlur}
             placeholder="Опишите как пользоваться вашим продуктом..."
             className="bg-background border-border min-h-[120px] resize-none"
             maxLength={1000}
@@ -353,17 +339,19 @@ export function CreateProductForm({
       <FormSection title="Стоимость">
         <FormField
           label="Цена (€)"
-          error={errors.price}
+          error={touched.price ? errors.price : undefined}
           required
         >
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
             <Input
+              name="price"
               type="number"
               min={4}
               step={0.01}
-              value={data.price}
-              onChange={(e) => onFieldChange("price", parseFloat(e.target.value) || 0)}
+              value={values.price}
+              onChange={handleChange}
+              onBlur={handleBlur}
               className="bg-background border-border pl-8"
             />
           </div>
@@ -372,12 +360,12 @@ export function CreateProductForm({
 
       {/* Submit Button */}
       <Button
-        onClick={onSubmit}
+        type="submit"
         disabled={isSubmitting}
         className="w-full gold-gradient text-primary-foreground hover:opacity-90 transition-opacity h-12 text-base"
       >
         {isSubmitting ? "Сохранение..." : "Продолжить"}
       </Button>
-    </div>
+    </form>
   );
 }
