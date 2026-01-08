@@ -1,7 +1,8 @@
 import { CodeInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
-import { verifyOtp } from "@/services";
+import { signOut, verifyOtp } from "@/services";
 import { verificationCodeSchema } from "@/utils";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +17,7 @@ export const ConfirmCodeForm = ({ email, mode, goToResetPassword }: ConfirmCodeF
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { setView } = useAuthModal();
 
   const navigate = useNavigate();
 
@@ -50,9 +52,10 @@ export const ConfirmCodeForm = ({ email, mode, goToResetPassword }: ConfirmCodeF
           if (mode === "signup") {
             toast({
               title: "Успешно",
-              description: "Регистрация завершена",
+              description: "Регистрация завершена. Теперь вы можете войти в свой аккаунт",
             });
-            navigate("/");
+            signOut();
+            setView("login");
           }
           if (mode === "recovery") goToResetPassword();
         }
@@ -66,7 +69,7 @@ export const ConfirmCodeForm = ({ email, mode, goToResetPassword }: ConfirmCodeF
         setIsLoading(false);
       }
     },
-    [email, code, mode, navigate, goToResetPassword]
+    [email, code, mode, goToResetPassword, setView]
   );
 
   return (

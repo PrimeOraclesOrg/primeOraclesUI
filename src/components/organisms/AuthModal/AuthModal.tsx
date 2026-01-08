@@ -13,18 +13,17 @@ import { ConfirmCodeTemplate } from "@/components/templates/ConfirmCodeTemplate/
 import { ResetPasswordTemplate } from "@/components/templates/ResetPasswordTemplate/ResetPasswordTemplate";
 import { SignUpTemplate } from "@/components/templates";
 import { useAuthModal } from "@/hooks/useAuthModal";
-
-type AuthStep = "login" | "register" | "forgot-password" | "confirm-code" | "reset-password";
+import { AuthView } from "@/store";
 
 export const AuthModal = () => {
   const { isOpen } = useAuthModal();
-  const [step, setStep] = useState<AuthStep>("login");
+  const { view, setView } = useAuthModal();
   const [codeMode, setCodeMode] = useState<"signup" | "recovery">("signup");
   const [email, setEmail] = useState("");
 
-  const goToStep = useCallback((newStep: AuthStep) => {
-    setStep(newStep);
-  }, []);
+  const goToStep = useCallback((newStep: AuthView) => {
+    setView(newStep);
+  }, [setView]);
 
   const goToConfirmCode = (codeMode: "signup" | "recovery", email: string) => {
     setCodeMode(codeMode);
@@ -34,28 +33,28 @@ export const AuthModal = () => {
 
   if (isOpen) return (
     <>
-      {step === "login" && (
+      {view === "login" && (
         <LoginTemplate
           onForgotPassword={() => goToStep("forgot-password")}
           onSignUp={() => goToStep("register")}
         />
       )}
 
-      {step === "register" && (
+      {view === "register" && (
         <SignUpTemplate
           onBack={() => goToStep("login")}
           goToConfirmCode={(email: string) => goToConfirmCode("signup", email)}
         />
       )}
 
-      {step === "forgot-password" && (
+      {view === "forgot-password" && (
         <ForgotPasswordTemplate
           onBack={() => goToStep("login")}
           goToConfirmCode={(email: string) => goToConfirmCode("recovery", email)}
         />
       )}
 
-      {step === "confirm-code" && (
+      {view === "confirm-code" && (
         <ConfirmCodeTemplate
           email={email}
           goToResetPassword={() => goToStep("reset-password")}
@@ -66,7 +65,7 @@ export const AuthModal = () => {
         />
       )}
 
-      {step === "reset-password" && <ResetPasswordTemplate goToLogin={() => goToStep("login")} />}
+      {view === "reset-password" && <ResetPasswordTemplate goToLogin={() => goToStep("login")} />}
     </>
   );
 }

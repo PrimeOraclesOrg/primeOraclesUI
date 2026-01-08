@@ -17,14 +17,7 @@ export function LoginTemplate({ onForgotPassword, onSignUp }: LoginTemplateProps
   return (
     <AuthLayout title="Добро пожаловать">
       <LoginForm onForgotPassword={onForgotPassword} />
-      <div className="flex items-center justify-between mt-8 pt-4">
-        <button
-          type="button"
-          onClick={() => window.history.back()}
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
-        >
-          ← Назад
-        </button>
+      <div className="flex items-center justify-center mt-8 pt-4">
         <p className="text-sm text-muted-foreground">
           Нету аккаунта?{" "}
           <button

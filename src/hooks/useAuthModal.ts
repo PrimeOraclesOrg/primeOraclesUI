@@ -1,4 +1,12 @@
-import { closeAuthModal, openAuthModal, selectAuthModal, useAppDispatch, useAppSelector } from "@/store";
+import {
+  AuthView,
+  closeAuthModal,
+  openAuthModal,
+  selectAuthModal,
+  setAuthModalView,
+  useAppDispatch,
+  useAppSelector,
+} from "@/store";
 import { useCallback } from "react";
 
 export const useAuthModal = () => {
@@ -13,9 +21,17 @@ export const useAuthModal = () => {
     dispatch(closeAuthModal());
   }, [dispatch]);
 
+  const setView = useCallback(
+    (view: AuthView) => {
+      dispatch(setAuthModalView(view));
+    },
+    [dispatch]
+  );
+
   return {
     ...authModalState,
     open,
     close,
+    setView,
   };
 };
