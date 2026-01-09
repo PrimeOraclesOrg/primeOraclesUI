@@ -7,11 +7,11 @@
  */
 
 import type { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
 import { ArrowLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import authHero from "@/assets/auth-hero.jpg";
 import { useAuthModal } from "@/hooks/useAuthModal";
+import { useTranslation } from "react-i18next";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -29,6 +29,7 @@ export function AuthLayout({
   subtitle,
 }: AuthLayoutProps) {
   const { close } = useAuthModal();
+  const { t } = useTranslation();
 
   const handleClose = () => {
     close();
@@ -55,6 +56,7 @@ export function AuthLayout({
         <div className="absolute bottom-6 left-6 right-6">
           <p className="text-white/70 text-sm">
             Prime Oracles • Digital Marketplace
+            {t('status:uwu')}
           </p>
         </div>
       </div>
