@@ -25,26 +25,17 @@ export const ForgotPasswordForm = () => {
 
       setIsLoading(true);
       const { error } = await resetPassword(email);
-      try {
-        if (error) {
-          toast({
-            title: "Ошибка",
-            description: error.message,
-            variant: "destructive",
-          });
-        } else {
-          setCodeMode("recovery");
-          setView("confirm-code");
-        }
-      } catch {
+      if (error) {
         toast({
           title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
+          description: error.code,
           variant: "destructive",
         });
-      } finally {
-        setIsLoading(false);
+      } else {
+        setCodeMode("recovery");
+        setView("confirm-code");
       }
+      setIsLoading(false);
     },
     [email, setCodeMode, setView]
   );

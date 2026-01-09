@@ -49,7 +49,7 @@ export const SignUpForm = () => {
         if (error) {
           toast({
             title: "Ошибка регистрации",
-            description: error.message,
+            description: error.code,
             variant: "destructive",
           });
         } else {

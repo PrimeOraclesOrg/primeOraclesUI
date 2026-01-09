@@ -40,25 +40,22 @@ export const ResetPasswordForm = () => {
       }
 
       setIsLoading(true);
-      try {
-        const { error } = await updatePassword(password);
-        if (error) throw error.message;
-
+      const { error } = await updatePassword(password);
+      if (error) {
+        toast({
+          title: "Ошибка",
+          description: error.code,
+          variant: "destructive",
+        });
+      } else {
         toast({
           title: "Пароль изменён",
           description: "Теперь вы можете войти с новым паролем",
         });
         await signOut();
         setView("login");
-      } catch (error) {
-        toast({
-          title: "Ошибка",
-          description: error,
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     },
     [password, confirmPassword, setView]
   );

@@ -36,7 +36,7 @@ export const ConfirmCodeForm = () => {
         if (error) {
           toast({
             title: "Ошибка подтверждения",
-            description: error.message,
+            description: error.code,
             variant: "destructive",
           });
         } else {

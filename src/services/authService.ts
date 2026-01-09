@@ -5,7 +5,7 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { setIsAuthenticated, store } from "@/store";
+import { setAuthEmail, setIsAuthenticated, store } from "@/store";
 import { supabase } from "@/utils";
 import { EmailOtpType, Session, User } from "@supabase/supabase-js";
 
@@ -78,6 +78,11 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
     password: credentials.password,
   });
 
+  if (!error && data) {
+    store.dispatch(setIsAuthenticated(true));
+    store.dispatch(setAuthEmail(data.user.email));
+  }
+
   return {
     data,
     error,
@@ -90,6 +95,7 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
 export async function signOut(): Promise<AuthResult<null>> {
   const { error } = await supabase.auth.signOut();
 
+  store.dispatch(setAuthEmail(""));
   store.dispatch(setIsAuthenticated(false));
 
   return {

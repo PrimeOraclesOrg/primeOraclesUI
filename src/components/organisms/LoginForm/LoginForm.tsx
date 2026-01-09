@@ -1,11 +1,10 @@
 import { AuthInput, PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { signIn } from "@/services";
 import { loginSchema } from "@/utils";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface LoginErrors {
@@ -18,7 +17,6 @@ export const LoginForm = () => {
   const [errors, setErrors] = useState<LoginErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const { email, setEmail, setView } = useAuthModal();
-  const { setAuthentication } = useAuth();
 
   const navigate = useNavigate();
   const { close, routeAfterLogin } = useAuthModal();
@@ -52,11 +50,10 @@ export const LoginForm = () => {
         if (error) {
           toast({
             title: "Ошибка входа",
-            description: error.message,
+            description: error.code,
             variant: "destructive",
           });
         } else {
-          setAuthentication(true);
           close();
           if (routeAfterLogin) navigate(routeAfterLogin);
         }
@@ -70,7 +67,7 @@ export const LoginForm = () => {
         setIsLoading(false);
       }
     },
-    [email, password, navigate, close, routeAfterLogin, setAuthentication]
+    [email, password, navigate, close, routeAfterLogin]
   );
 
   return (

@@ -14,10 +14,21 @@ import { SignUpTemplate } from "@/components/templates";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { getCurrentUser } from "@/services";
 
 export const AuthModal = () => {
   const { isOpen, view, close } = useAuthModal();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, setAuthentication, setEmail } = useAuth();
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await getCurrentUser();
+      if (!error && data) {
+          setAuthentication(true);
+          setEmail(data.email);
+      }
+    })();
+;  }, [setEmail, setAuthentication])
 
   useEffect(() => {
     if (["login", "register", "forgot-password"].includes(view) && isAuthenticated) close();
