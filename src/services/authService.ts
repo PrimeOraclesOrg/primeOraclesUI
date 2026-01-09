@@ -5,6 +5,7 @@
  * Prepared for Supabase Auth integration.
  */
 
+import { i18n } from "@/lib/i18n";
 import { setAuthEmail, setIsAuthenticated, store } from "@/store";
 import { supabase } from "@/utils";
 import { EmailOtpType, Session, User } from "@supabase/supabase-js";

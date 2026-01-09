@@ -5,6 +5,7 @@ import { toast } from "@/hooks/useToast";
 import { signOut, updatePassword } from "@/services";
 import { resetPasswordSchema } from "@/utils";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Errors {
   password?: string;
@@ -17,6 +18,7 @@ export const ResetPasswordForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handleResetPassword = useCallback(
     async (e: React.FormEvent) => {
@@ -44,7 +46,7 @@ export const ResetPasswordForm = () => {
       if (error) {
         toast({
           title: "Ошибка",
-          description: error.code,
+          description: t(`status:${error.code}`),
           variant: "destructive",
         });
       } else {
@@ -57,7 +59,7 @@ export const ResetPasswordForm = () => {
       }
       setIsLoading(false);
     },
-    [password, confirmPassword, setView]
+    [password, confirmPassword, setView, t]
   );
 
   return (

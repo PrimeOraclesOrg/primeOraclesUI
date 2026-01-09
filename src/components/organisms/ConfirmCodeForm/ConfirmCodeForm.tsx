@@ -5,12 +5,14 @@ import { toast } from "@/hooks/useToast";
 import { signOut, verifyOtp } from "@/services";
 import { verificationCodeSchema } from "@/utils";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const ConfirmCodeForm = () => {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { setView, codeMode, email } = useAuthModal();
+  const { t } = useTranslation();
 
   const buttonText = codeMode === "signup" ? "Подтвердить" : "Восстановить пароль";
   const loadingText = "Проверка...";
@@ -36,7 +38,7 @@ export const ConfirmCodeForm = () => {
         if (error) {
           toast({
             title: "Ошибка подтверждения",
-            description: error.code,
+            description: t(`status:${error.code}`),
             variant: "destructive",
           });
         } else {
@@ -60,7 +62,7 @@ export const ConfirmCodeForm = () => {
         setIsLoading(false);
       }
     },
-    [email, code, setView, codeMode]
+    [email, code, setView, codeMode, t]
   );
 
   return (

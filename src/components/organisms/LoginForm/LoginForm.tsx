@@ -4,7 +4,9 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { signIn } from "@/services";
 import { loginSchema } from "@/utils";
+import { AuthError } from "@supabase/supabase-js";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 interface LoginErrors {
@@ -20,6 +22,7 @@ export const LoginForm = () => {
 
   const navigate = useNavigate();
   const { close, routeAfterLogin } = useAuthModal();
+  const { t } = useTranslation('status');
 
   const handleLogin = useCallback(
     async (e: React.FormEvent) => {
@@ -50,7 +53,7 @@ export const LoginForm = () => {
         if (error) {
           toast({
             title: "Ошибка входа",
-            description: error.code,
+            description: t(`status:${error.code}`),
             variant: "destructive",
           });
         } else {
@@ -67,7 +70,7 @@ export const LoginForm = () => {
         setIsLoading(false);
       }
     },
-    [email, password, navigate, close, routeAfterLogin]
+    [email, password, navigate, close, routeAfterLogin, t]
   );
 
   return (

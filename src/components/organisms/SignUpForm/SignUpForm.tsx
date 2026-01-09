@@ -5,6 +5,7 @@ import { toast } from "@/hooks/useToast";
 import { signUp } from "@/services";
 import { registerSchema } from "@/utils";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Errors {
   email?: string;
@@ -18,6 +19,7 @@ export const SignUpForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handleSignUp = useCallback(
     async (e: React.FormEvent) => {
@@ -49,7 +51,7 @@ export const SignUpForm = () => {
         if (error) {
           toast({
             title: "Ошибка регистрации",
-            description: error.code,
+            description: t(`status:${error.code}`),
             variant: "destructive",
           });
         } else {
@@ -66,7 +68,7 @@ export const SignUpForm = () => {
         setIsLoading(false);
       }
     },
-    [email, password, confirmPassword, setCodeMode, setView]
+    [email, password, confirmPassword, setCodeMode, setView, t]
   );
 
   return (
