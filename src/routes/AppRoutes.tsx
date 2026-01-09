@@ -7,6 +7,7 @@ import Marketplace from "@/pages/Marketplace";
 import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
+import CreateProduct from "@/pages/CreateProduct";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 
@@ -20,6 +21,7 @@ export function AppRoutes() {
       <Route path="/learning/:id" element={<LearningDetail />} />
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/rewards" element={<Rewards />} />
+      <Route path="/create-product" element={<CreateProduct />} />
 
       {/* Protected routes - require authentication */}
       <Route
