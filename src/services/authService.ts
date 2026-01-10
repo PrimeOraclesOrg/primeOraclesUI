@@ -53,16 +53,6 @@ export interface AuthResult<T> {
  * Sign up a new user with email and password
  */
 export async function signUp(credentials: SignUpCredentials): Promise<AuthResult<UserAndSession>> {
-  {
-    const { error, data } = await checkIfUserExists(credentials.email);
-    if (error) {
-      return {
-        data: null,
-        error,
-      };
-    }
-  }
-
   const { data, error } = await supabase.auth.signUp({
     email: credentials.email,
     password: credentials.password,
@@ -203,24 +193,6 @@ export async function verifyOtp({
 
 export async function resendSignUpOtp(email: string): Promise<AuthResult<UserAndSession>> {
   const { data, error } = await supabase.auth.resend({ email, type: "signup" });
-
-  return {
-    data,
-    error,
-  };
-}
-
-export async function checkIfUserExists(email: string) {
-  const { data, error } = await supabase.functions.invoke("signup_email_check", {
-    body: { email },
-  });
-
-  if (error instanceof FunctionsHttpError) {
-    return {
-      data,
-      error: await error?.context?.json(),
-    };
-  }
 
   return {
     data,

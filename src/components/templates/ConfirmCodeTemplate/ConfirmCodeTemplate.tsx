@@ -47,9 +47,9 @@ export function ConfirmCodeTemplate() {
   }, [resendTimer]);
 
   const onBack = () => {
-    if (codeMode === 'recovery') setView('forgot-password');
-    if (codeMode === 'signup') setView('register');
-  }
+    if (codeMode === "recovery") setView("forgot-password");
+    if (codeMode === "signup") setView("register");
+  };
 
   return (
     <AuthLayout
@@ -76,6 +76,14 @@ export function ConfirmCodeTemplate() {
             className="text-primary hover:text-primary/80 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isResending ? "Отправка..." : "Отправить снова"}
+          </button>
+        </p>
+        <p className="text-sm text-muted-foreground">
+          <button
+            type="button"
+            className="text-primary hover:text-primary/80 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Что делать если код не приходит?
           </button>
         </p>
       </div>
