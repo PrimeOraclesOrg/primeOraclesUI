@@ -5,11 +5,13 @@ import { toast } from "@/hooks/useToast";
 import { resetPassword } from "@/services";
 import { forgotPasswordSchema } from "@/utils";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const ForgotPasswordForm = () => {
   const { email, setCodeMode, setView, setEmail } = useAuthModal();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { t } = useTranslation();
 
   const handleForgotPassword = useCallback(
     async (e: React.FormEvent) => {
@@ -28,7 +30,7 @@ export const ForgotPasswordForm = () => {
       if (error) {
         toast({
           title: "Ошибка",
-          description: error.code,
+          description: t(`status:${error.code}`),
           variant: "destructive",
         });
       } else {
@@ -37,7 +39,7 @@ export const ForgotPasswordForm = () => {
       }
       setIsLoading(false);
     },
-    [email, setCodeMode, setView]
+    [email, setCodeMode, setView, t]
   );
 
   return (
