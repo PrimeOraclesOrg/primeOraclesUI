@@ -4,7 +4,6 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { toast } from "@/hooks/useToast";
 import { signIn } from "@/services";
 import { loginSchema } from "@/utils";
-import { AuthError } from "@supabase/supabase-js";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
