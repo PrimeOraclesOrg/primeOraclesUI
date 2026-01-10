@@ -174,16 +174,14 @@ export function CreateProductForm({
                 </div>
               </div>
             ) : null}
-            
+
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
               className="w-40 h-28 rounded-lg border border-dashed border-border bg-secondary/30 flex flex-col items-center justify-center gap-2 hover:border-primary/50 transition-colors"
             >
               <Image className="w-6 h-6 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">
-                Добавьте своё изображение
-              </span>
+              <span className="text-xs text-muted-foreground">Добавьте своё изображение</span>
             </button>
           </div>
           <input
@@ -231,7 +229,7 @@ export function CreateProductForm({
               </div>
             </div>
           ))}
-          
+
           {values.advantages.length < 5 && (
             <Button
               type="button"
@@ -264,7 +262,7 @@ export function CreateProductForm({
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <FormField
                 label="Вопрос"
                 error={isFaqTouched(idx, "question") ? getFaqError(idx, "question") : undefined}
@@ -280,7 +278,7 @@ export function CreateProductForm({
                   maxLength={100}
                 />
               </FormField>
-              
+
               <FormField
                 label="Ответ"
                 error={isFaqTouched(idx, "answer") ? getFaqError(idx, "answer") : undefined}
@@ -298,7 +296,7 @@ export function CreateProductForm({
               </FormField>
             </div>
           ))}
-          
+
           {values.faq.length < 5 && (
             <Button
               type="button"
@@ -317,7 +315,7 @@ export function CreateProductForm({
       {/* Instructions Section */}
       <FormSection title="Инструкции">
         <FormField
-          label="Инструкции по использованию"
+          label="Внимание! Инструкция по использованию не отображается в описании продукта. Данная информация будет отправлена пользователю после покупки продукта"
           error={touched.instructions ? errors.instructions : undefined}
           required
           charCount={values.instructions.length}
@@ -337,13 +335,11 @@ export function CreateProductForm({
 
       {/* Price Section */}
       <FormSection title="Стоимость">
-        <FormField
-          label="Цена (€)"
-          error={touched.price ? errors.price : undefined}
-          required
-        >
+        <FormField label="Цена (€)" error={touched.price ? errors.price : undefined} required>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+              €
+            </span>
             <Input
               name="price"
               type="number"
