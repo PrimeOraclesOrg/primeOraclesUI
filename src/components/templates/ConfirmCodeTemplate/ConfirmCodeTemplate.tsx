@@ -11,33 +11,33 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "@/hooks/useToast";
 import { resendSignUpOtp, resetPassword } from "@/services";
 import { useAuthModal } from "@/hooks/useAuthModal";
+import { useTranslation } from "react-i18next";
 
 export function ConfirmCodeTemplate() {
   const { codeMode, email, setView } = useAuthModal();
   const [isResending, setIsResending] = useState(false);
   const [resendTimer, setResendTimer] = useState(60);
+  const { t } = useTranslation();
 
   const handleResendCode = useCallback(async () => {
     setIsResending(true);
-    try {
-      const { error } =
-        codeMode === "signup" ? await resendSignUpOtp(email) : await resetPassword(email);
-      if (error) throw error;
+    const { error } =
+      codeMode === "signup" ? await resendSignUpOtp(email) : await resetPassword(email);
+    if (error) {
+      toast({
+        title: "Ошибка",
+        description: t(`status:${error.code}`),
+        variant: "destructive",
+      });
+    } else {
       setResendTimer(60);
       toast({
         title: "Код отправлен",
         description: "Проверьте вашу почту",
       });
-    } catch {
-      toast({
-        title: "Ошибка",
-        description: "Не удалось отправить код",
-        variant: "destructive",
-      });
-    } finally {
-      setIsResending(false);
     }
-  }, [email, codeMode]);
+    setIsResending(false);
+  }, [email, codeMode, t]);
 
   useEffect(() => {
     if (resendTimer > 0) {
