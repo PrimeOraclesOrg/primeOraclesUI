@@ -16,6 +16,8 @@ import { usePopup } from "@/hooks/usePopup";
 import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 function HelpPopupContent() {
+  const { codeMode } = useAuthModal();
+
   return (
     <>
       <DialogHeader>
@@ -26,9 +28,9 @@ function HelpPopupContent() {
       <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground mt-4">
         <li>Проверьте спам</li>
         <li>Проверьте правильно ли вы ввели э-почту</li>
-        <li>
+        {(codeMode === 'signup') && <li>
           Возможно аккаунт с такой почтой уже зарегистрирован, попробуйте войти
-        </li>
+        </li>}
       </ul>
     </>
   );
