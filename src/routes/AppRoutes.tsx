@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute/ProtectedRoute";
-import { PublicRoute } from "@/components/shared/PublicRoute/PublicRoute";
 import Home from "@/pages/Home";
 import Rewards from "@/pages/Rewards";
 import Marketplace from "@/pages/Marketplace";
