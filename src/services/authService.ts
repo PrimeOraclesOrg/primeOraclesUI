@@ -7,7 +7,7 @@
 
 import { setAuthEmail, setIsAuthenticated, store } from "@/store";
 import { supabase } from "@/utils";
-import { EmailOtpType, FunctionsHttpError, Session, User } from "@supabase/supabase-js";
+import { EmailOtpType, Session, User } from "@supabase/supabase-js";
 
 export interface SignUpCredentials {
   email: string;
