@@ -26,11 +26,12 @@ function HelpPopupContent() {
         </DialogTitle>
       </DialogHeader>
       <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground mt-4">
-        <li>Проверьте спам</li>
+        <li>Попробуйте отправить код снова</li>
+        <li>Проверьте папку спам</li>
         <li>Проверьте правильно ли вы ввели э-почту</li>
-        {(codeMode === 'signup') && <li>
-          Возможно аккаунт с такой почтой уже зарегистрирован, попробуйте войти
-        </li>}
+        {codeMode === "signup" && (
+          <li>Почта может быть уже зарегестрирована, попробуйте войти в систему</li>
+        )}
       </ul>
     </>
   );
