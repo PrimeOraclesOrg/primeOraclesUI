@@ -12,12 +12,34 @@ import { toast } from "@/hooks/useToast";
 import { resendSignUpOtp, resetPassword } from "@/services";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useTranslation } from "react-i18next";
+import { usePopup } from "@/hooks/usePopup";
+import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
+function HelpPopupContent() {
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle className="text-lg font-semibold">
+          Если сообщение не пришло в течении 2-3 минут:
+        </DialogTitle>
+      </DialogHeader>
+      <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground mt-4">
+        <li>Проверьте спам</li>
+        <li>Проверьте правильно ли вы ввели э-почту</li>
+        <li>
+          Возможно аккаунт с такой почтой уже зарегистрирован, попробуйте войти
+        </li>
+      </ul>
+    </>
+  );
+}
 
 export function ConfirmCodeTemplate() {
   const { codeMode, email, setView } = useAuthModal();
   const [isResending, setIsResending] = useState(false);
   const [resendTimer, setResendTimer] = useState(60);
   const { t } = useTranslation();
+  const { openPopup } = usePopup();
 
   const handleResendCode = useCallback(async () => {
     setIsResending(true);
@@ -51,6 +73,10 @@ export function ConfirmCodeTemplate() {
     if (codeMode === "signup") setView("register");
   };
 
+  const handleHelpClick = () => {
+    openPopup(<HelpPopupContent />);
+  };
+
   return (
     <AuthLayout
       title="Подтвердите код"
@@ -81,6 +107,7 @@ export function ConfirmCodeTemplate() {
         <p className="text-sm text-muted-foreground">
           <button
             type="button"
+            onClick={handleHelpClick}
             className="text-primary hover:text-primary/80 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Что делать если код не приходит?
