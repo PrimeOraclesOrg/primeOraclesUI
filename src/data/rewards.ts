@@ -120,37 +120,20 @@ export const mockRewards: Reward[] = [
   },
 ];
 
-// Featured rewards for home page
-export const featuredRewards: Reward[] = [
+export const homeRewardsPreview: Reward[] = [
   {
-    logo: "С",
-    name: "Стив Хоук",
-    rate: "$2.50/1K",
-    description: "Делайте нарезки с моего подкаста.",
-    paidAmount: "1,395.5$",
-    totalAmount: "3,000$",
-    progress: 43,
+    logo: "U",
+    name: "Unblox Game",
+    rate: "$3.50/1K",
+    description: "Получайте деньги за просмотры вирусного конт...",
+    paidAmount: "43,795.5$",
+    totalAmount: "50,000$",
+    progress: 88,
     category: "Личный бренд",
-    type: "Клип",
-    views: "213,023",
-    socialNetworks: ["instagram", "youtube", "tiktok", "vk"],
+    type: "UGS",
+    views: "12,513,023",
+    socialNetworks: ["instagram", "youtube", "tiktok"],
   },
-  {
-    logo: "А",
-    name: "Александр Соколов...",
-    rate: "$2.00/1K",
-    description: "Создавайте мотивационные ролики с участ...",
-    paidAmount: "6,795.5$",
-    totalAmount: "10,000$",
-    progress: 78,
-    category: "Личный бренд",
-    type: "Клип",
-    views: "1,513,023",
-    socialNetworks: ["instagram", "youtube"],
-  },
-];
-
-export const bottomRewards: Reward[] = [
   {
     logo: "E",
     name: "Eleps",
@@ -166,7 +149,7 @@ export const bottomRewards: Reward[] = [
   },
   {
     logo: "А",
-    name: "Александр Соколов...",
+    name: "Александр Соколов",
     rate: "$2.00/1K",
     description: "Создавайте мотивационные ролики с участ...",
     paidAmount: "6,795.5$",
@@ -191,17 +174,3 @@ export const bottomRewards: Reward[] = [
     socialNetworks: ["instagram", "youtube"],
   },
 ];
-
-export const sideReward: Reward = {
-  logo: "U",
-  name: "Unblox Game",
-  rate: "$3.50/1K",
-  description: "Получайте деньги за просмотры вирусного конт...",
-  paidAmount: "43,795.5$",
-  totalAmount: "50,000$",
-  progress: 88,
-  category: "Личный бренд",
-  type: "UGS",
-  views: "12,513,023",
-  socialNetworks: ["instagram", "youtube", "tiktok"],
-};

@@ -7,3 +7,6 @@ export { RewardCard } from "./RewardCard/RewardCard";
 export { AuthInput } from "./AuthInput/AuthInput";
 export { CodeInput } from "./CodeInput/CodeInput";
 export { PasswordInput } from "./PasswordInput/PasswordInput";
+export { FAQAccordion } from "./FAQAccordion/FAQAccordion";
+export { RatingDistribution } from "./RatingDistribution";
+export { ReviewList } from "./ReviewList";

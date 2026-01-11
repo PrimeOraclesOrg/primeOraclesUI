@@ -5,7 +5,13 @@ import productWealth from "@/assets/product-wealth.jpg";
 import productTradingBot from "@/assets/product-trading-bot.jpg";
 import productSoftware from "@/assets/product-software.jpg";
 
-export const productCategories = ["Все", "Софты/боты", "Сообщества", "Обучения", "Цифровые материалы"];
+export const productCategories = [
+  "Все",
+  "Софты/боты",
+  "Сообщества",
+  "Обучения",
+  "Цифровые материалы",
+];
 
 export const mockProducts: Product[] = [
   {
@@ -121,5 +127,15 @@ export const homePageProducts: Product[] = [
     reviewCount: 19,
     price: 10.0,
     category: "Софт",
+  },
+  {
+    id: "5",
+    title: "№1 комьюнити по торговле криптовалютой",
+    image: productWealth,
+    price: "free",
+    author: { name: "Wealth Group Credit Card Pay" },
+    rating: 4.95,
+    reviewCount: 421,
+    category: "Сообщества",
   },
 ];

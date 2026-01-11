@@ -54,7 +54,11 @@ export function RewardsTemplate({
               <Info className="w-4 h-4" />
               <span className="hidden sm:inline">Подробнее</span>
             </Button>
-            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={onCreateClick}>
+            <Button
+              size="sm"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              onClick={onCreateClick}
+            >
               <span className="hidden sm:inline">Создать компанию</span>
               <span className="sm:hidden">Создать</span>
             </Button>
@@ -68,7 +72,9 @@ export function RewardsTemplate({
           </span>
           <div className="flex flex-wrap items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">Категории:</span>
+              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">
+                Категории:
+              </span>
               <Select value={category} onValueChange={onCategoryChange}>
                 <SelectTrigger className="w-[80px] md:w-[100px] h-8 bg-card border-border text-xs md:text-sm">
                   <SelectValue placeholder="Все" />
@@ -82,7 +88,9 @@ export function RewardsTemplate({
               </Select>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">Тип:</span>
+              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">
+                Тип:
+              </span>
               <Select value={type} onValueChange={onTypeChange}>
                 <SelectTrigger className="w-[80px] md:w-[100px] h-8 bg-card border-border text-xs md:text-sm">
                   <SelectValue placeholder="Все" />
@@ -95,7 +103,9 @@ export function RewardsTemplate({
               </Select>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">Сортировка:</span>
+              <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">
+                Сортировка:
+              </span>
               <Select defaultValue="popularity">
                 <SelectTrigger className="w-[100px] md:w-[140px] h-8 bg-card border-border text-xs md:text-sm">
                   <SelectValue placeholder="Популярности" />
@@ -113,16 +123,12 @@ export function RewardsTemplate({
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {rewards.map((reward, index) => (
-            <RewardCard key={index} {...reward} />
+            <RewardCard key={index} reward={reward} />
           ))}
         </div>
 
         {/* Pagination */}
-        <Pagination 
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
       </div>
     </MainLayout>
   );
