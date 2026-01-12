@@ -301,7 +301,7 @@ export const ProfileSetupForm = () => {
 
       <Button
         type="submit"
-        className="w-full h-12 text-base font-medium bg-secondary hover:bg-secondary/80 text-foreground transition-colors rounded-lg mt-6"
+        className="w-full h-12 text-base font-medium rounded-lg mt-6"
         disabled={isLoading}
       >
         {isLoading ? "Сохранение..." : "Сохранить"}

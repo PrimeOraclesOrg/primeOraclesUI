@@ -40,7 +40,7 @@ export function AuthLayout({
   };
 
   return (
-    <div className="min-h-screen w-full bg-background flex fixed left-0 top-0 z-20">
+    <div className="h-screen w-full bg-background flex fixed left-0 top-0 z-20">
       {/* Left side - Hero Image (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <img
@@ -59,7 +59,7 @@ export function AuthLayout({
       </div>
 
       {/* Right side - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col min-h-screen bg-background">
+      <div className="w-full lg:w-1/2 flex flex-col min-h-screen bg-background overflow-auto">
         {/* Header with close button */}
         <header className="flex items-center justify-between p-4 sm:p-6">
           {showBackButton ? (
