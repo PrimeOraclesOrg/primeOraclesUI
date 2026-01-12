@@ -77,6 +77,45 @@ export const verificationCodeSchema = z
   .regex(/^\d+$/, "Код должен содержать только цифры");
 
 /**
+ * URL schema for social links (optional)
+ */
+const optionalUrlSchema = z
+  .string()
+  .refine(
+    (val) => val === "" || /^https?:\/\/.+/.test(val),
+    "Неверный формат ссылки"
+  )
+  .optional()
+  .or(z.literal(""));
+
+/**
+ * Profile setup form schema
+ */
+export const profileSetupSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Имя обязательно")
+    .max(50, "Имя не должно превышать 50 символов"),
+  username: z
+    .string()
+    .trim()
+    .min(1, "Username обязателен")
+    .min(3, "Username должен содержать минимум 3 символа")
+    .max(30, "Username не должен превышать 30 символов")
+    .regex(/^[a-zA-Z0-9_]+$/, "Username может содержать только буквы, цифры и _"),
+  description: z
+    .string()
+    .max(250, "Описание не должно превышать 250 символов")
+    .optional()
+    .or(z.literal("")),
+  youtubeUrl: optionalUrlSchema,
+  instagramUrl: optionalUrlSchema,
+  tiktokUrl: optionalUrlSchema,
+  avatar: z.string().optional(),
+});
+
+/**
  * User profile validation schema
  */
 export const userProfileSchema = z.object({
@@ -98,3 +137,4 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+export type ProfileSetupFormData = z.infer<typeof profileSetupSchema>;

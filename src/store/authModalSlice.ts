@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type AuthView = "login" | "register" | "forgot-password" | "confirm-code" | "reset-password";
+export type AuthView = "login" | "register" | "forgot-password" | "confirm-code" | "reset-password" | "profile-setup";
 export type AuthCodeMode = "signup" | "recovery";
 
 interface AuthModalState {

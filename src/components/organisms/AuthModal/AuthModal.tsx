@@ -2,7 +2,7 @@
  * Auth Page
  *
  * Unified authentication page with single-page flow.
- * Handles: login, register, forgot password, confirm code, reset password
+ * Handles: login, register, forgot password, confirm code, reset password, profile setup
  * All steps are managed within this single page without routing.
  */
 
@@ -10,6 +10,7 @@ import { LoginTemplate } from "@/components/templates/LoginTemplate/LoginTemplat
 import { ForgotPasswordTemplate } from "@/components/templates/ForgotPasswordTemplate/ForgotPasswordTemplate";
 import { ConfirmCodeTemplate } from "@/components/templates/ConfirmCodeTemplate/ConfirmCodeTemplate";
 import { ResetPasswordTemplate } from "@/components/templates/ResetPasswordTemplate/ResetPasswordTemplate";
+import { ProfileSetupTemplate } from "@/components/templates/ProfileSetupTemplate/ProfileSetupTemplate";
 import { SignUpTemplate } from "@/components/templates";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useEffect } from "react";
@@ -46,6 +47,8 @@ export const AuthModal = () => {
         {view === "confirm-code" && <ConfirmCodeTemplate />}
 
         {view === "reset-password" && <ResetPasswordTemplate />}
+
+        {view === "profile-setup" && <ProfileSetupTemplate />}
       </>
     );
 };
