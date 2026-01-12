@@ -71,7 +71,6 @@ export async function updateUserProfile(
   //   .select()
   //   .single();
 
-  console.log("updateUserProfile called:", userId, updates);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -89,7 +88,6 @@ export async function updateCurrentUserProfile(
   // if (!user) return { data: null, error: { message: "Not authenticated" } };
   // return updateUserProfile(user.id, updates);
 
-  console.log("updateCurrentUserProfile called:", updates);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -114,7 +112,6 @@ export async function uploadAvatar(
   //   .getPublicUrl(fileName);
   // return { data: publicUrl, error: null };
 
-  console.log("uploadAvatar called:", userId, file.name);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -128,7 +125,6 @@ export async function deleteUserAccount(userId: string): Promise<ServiceResult<n
   // TODO: Replace with Supabase RPC for secure deletion
   // const { error } = await supabase.rpc('delete_user_account', { user_id: userId });
 
-  console.log("deleteUserAccount called:", userId);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -147,7 +143,6 @@ export async function checkUsernameAvailability(username: string): Promise<Servi
   //   .maybeSingle();
   // return { data: !data, error };
 
-  console.log("checkUsernameAvailability called:", username);
   return {
     data: true,
     error: null,

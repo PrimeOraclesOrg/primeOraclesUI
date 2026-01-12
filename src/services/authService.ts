@@ -62,7 +62,6 @@ export async function signUp(credentials: SignUpCredentials): Promise<AuthResult
     },
   });
 
-  console.log("signUp called with:", credentials.email);
   return {
     data,
     error,
@@ -142,7 +141,6 @@ export async function resetPassword(email: string): Promise<AuthResult<null>> {
     redirectTo: `${window.location.origin}/reset-password`,
   });
 
-  console.log("resetPassword called for:", email);
   return {
     data: null,
     error,
@@ -173,9 +171,8 @@ export function onAuthStateChange(
   // const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
   // return () => subscription.unsubscribe();
 
-  console.log("onAuthStateChange subscription created");
   return () => {
-    console.log("onAuthStateChange subscription removed");
+    
   };
 }
 

@@ -29,8 +29,6 @@ export const ConfirmCodeForm = () => {
         return;
       }
 
-      console.log(result.data);
-
       setIsLoading(true);
       try {
         const { error } = await verifyOtp({ email, code, type: codeMode });
