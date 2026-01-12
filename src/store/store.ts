@@ -10,7 +10,7 @@ export const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     toast: toastReducer,
     authModal: authModalReducer,
-    auth: authReducer
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
 });

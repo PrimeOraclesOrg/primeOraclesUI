@@ -24,11 +24,11 @@ export const AuthModal = () => {
     (async () => {
       const { data, error } = await getCurrentUser();
       if (!error && data) {
-          setAuthentication(true);
-          setEmail(data.email);
+        setAuthentication(true);
+        setEmail(data.email);
       }
     })();
-;  }, [setEmail, setAuthentication])
+  }, [setEmail, setAuthentication]);
 
   useEffect(() => {
     if (["login", "register", "forgot-password"].includes(view) && isAuthenticated) close();

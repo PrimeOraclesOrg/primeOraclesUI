@@ -16,9 +16,12 @@ export const useAuthModal = () => {
   const dispatch = useAppDispatch();
   const authModalState = useAppSelector(selectAuthModal);
 
-  const open = useCallback((view?: AuthView) => {
-    dispatch(openAuthModal(view));
-  }, [dispatch]);
+  const open = useCallback(
+    (view?: AuthView) => {
+      dispatch(openAuthModal(view));
+    },
+    [dispatch]
+  );
 
   const close = useCallback(() => {
     dispatch(closeAuthModal());

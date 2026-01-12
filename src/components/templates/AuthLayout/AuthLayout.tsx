@@ -43,18 +43,12 @@ export function AuthLayout({
     <div className="min-h-screen w-full bg-background flex fixed left-0 top-0 z-20">
       {/* Left side - Hero Image (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <img
-          src={authHero}
-          alt="Welcome"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <img src={authHero} alt="Welcome" className="absolute inset-0 w-full h-full object-cover" />
         {/* Subtle overlay for text contrast */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
         {/* Bottom text */}
         <div className="absolute bottom-6 left-6 right-6">
-          <p className="text-white/70 text-sm">
-            Prime Oracles • Digital Marketplace
-          </p>
+          <p className="text-white/70 text-sm">Prime Oracles • Digital Marketplace</p>
         </div>
       </div>
 
@@ -95,11 +89,7 @@ export function AuthLayout({
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-light text-foreground italic tracking-wide">
                   {title}
                 </h1>
-                {subtitle && (
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    {subtitle}
-                  </p>
-                )}
+                {subtitle && <p className="mt-3 text-sm text-muted-foreground">{subtitle}</p>}
               </div>
             )}
 

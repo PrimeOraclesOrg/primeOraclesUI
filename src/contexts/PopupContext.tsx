@@ -30,10 +30,7 @@ export function PopupProvider({ children }: PopupProviderProps) {
     setPopup(null);
   }, []);
 
-  const value = useMemo(
-    () => ({ popup, openPopup, closePopup }),
-    [popup, openPopup, closePopup]
-  );
+  const value = useMemo(() => ({ popup, openPopup, closePopup }), [popup, openPopup, closePopup]);
 
   return <PopupContext.Provider value={value}>{children}</PopupContext.Provider>;
 }

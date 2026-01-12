@@ -21,7 +21,7 @@ export const LoginForm = () => {
 
   const navigate = useNavigate();
   const { close, routeAfterLogin } = useAuthModal();
-  const { t } = useTranslation('status');
+  const { t } = useTranslation("status");
 
   const handleLogin = useCallback(
     async (e: React.FormEvent) => {

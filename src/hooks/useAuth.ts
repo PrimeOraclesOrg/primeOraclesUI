@@ -28,6 +28,6 @@ export const useAuth = () => {
   return {
     ...authState,
     setAuthentication,
-    setEmail
+    setEmail,
   };
 };
