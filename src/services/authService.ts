@@ -29,15 +29,10 @@ export interface VerifyOtpCredentials {
   type: EmailOtpType;
 }
 
-export type UserAndSession =
-  | {
-      user: User;
-      session: Session | null;
-    }
-  | {
-      user: null;
-      session: null;
-    };
+export type UserAndSession = {
+  user: User | null;
+  session: Session | null;
+};
 
 export interface AuthError {
   message: string;
@@ -171,9 +166,7 @@ export function onAuthStateChange(
   // const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
   // return () => subscription.unsubscribe();
 
-  return () => {
-    
-  };
+  return () => {};
 }
 
 export async function verifyOtp({
