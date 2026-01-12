@@ -19,6 +19,11 @@ export default function Settings() {
     setSocialLinks(newLinks);
   };
 
+  const onLogout = () => {
+    signOut();
+    navigate("/");
+  };
+
   return (
     <SettingsTemplate
       activeTab={activeTab}
@@ -33,10 +38,7 @@ export default function Settings() {
       onDescriptionChange={setDescription}
       onSocialLinkChange={handleSocialLinkChange}
       onSaveBasic={() => {}}
-      onLogout={() => {
-        signOut();
-        navigate("/");
-      }}
+      onLogout={onLogout}
     />
   );
 }
