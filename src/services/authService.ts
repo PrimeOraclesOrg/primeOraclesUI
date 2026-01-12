@@ -199,3 +199,32 @@ export async function resendSignUpOtp(email: string): Promise<AuthResult<UserAnd
     error,
   };
 }
+
+/**
+ * Profile data for completing user profile
+ */
+export interface ProfileData {
+  name: string;
+  username: string;
+  description?: string;
+  youtubeUrl?: string;
+  instagramUrl?: string;
+  tiktokUrl?: string;
+  avatar?: string;
+}
+
+/**
+ * Complete user profile after registration (mock implementation)
+ */
+export async function completeProfile(data: ProfileData): Promise<AuthResult<null>> {
+  console.log("completeProfile called with:", data);
+
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Mock success response
+  return {
+    data: null,
+    error: null,
+  };
+}

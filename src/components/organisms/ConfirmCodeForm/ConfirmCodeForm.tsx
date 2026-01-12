@@ -43,12 +43,7 @@ export const ConfirmCodeForm = () => {
           });
         } else {
           if (codeMode === "signup") {
-            toast({
-              title: "Успешно",
-              description: "Регистрация завершена. Теперь вы можете войти в свой аккаунт",
-            });
-            await signOut();
-            setView("login");
+            setView("profile-setup");
           }
           if (codeMode === "recovery") setView("reset-password");
         }
