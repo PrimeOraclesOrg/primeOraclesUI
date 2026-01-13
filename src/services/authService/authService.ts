@@ -5,7 +5,6 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { store } from "@/store";
 import { supabase } from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
