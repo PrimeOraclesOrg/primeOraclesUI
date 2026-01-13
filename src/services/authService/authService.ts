@@ -5,7 +5,7 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { setAuthEmail, setIsAuthenticated, store } from "@/store";
+import { store } from "@/store";
 import { supabase } from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
@@ -44,11 +44,6 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
     password: credentials.password,
   });
 
-  if (!error && data) {
-    store.dispatch(setIsAuthenticated(true));
-    store.dispatch(setAuthEmail(data.user.email));
-  }
-
   return {
     data,
     error,
@@ -60,9 +55,6 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
  */
 export async function signOut(): Promise<AuthResult<null>> {
   const { error } = await supabase.auth.signOut();
-
-  store.dispatch(setAuthEmail(""));
-  store.dispatch(setIsAuthenticated(false));
 
   return {
     data: null,
@@ -134,11 +126,8 @@ export async function updatePassword(newPassword: string): Promise<AuthResult<{ 
 export function onAuthStateChange(
   callback: (event: string, session: Session | null) => void
 ): () => void {
-  // TODO: Replace with Supabase auth
-  // const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
-  // return () => subscription.unsubscribe();
-
-  return () => {};
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
+  return () => subscription.unsubscribe();
 }
 
 export async function verifyOtp({

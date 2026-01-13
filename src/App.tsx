@@ -7,22 +7,26 @@ import { ErrorBoundary, PopupRenderer } from "@/components/shared";
 import { PopupProvider } from "@/contexts";
 import { store } from "@/store";
 import { AppRoutes } from "@/routes";
+import { useAuthListener } from "./hooks/useAuthListener";
 
-const App = () => (
-  <ErrorBoundary>
-    <Provider store={store}>
-      <PopupProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <PopupRenderer />
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <AppRoutes />
-          </BrowserRouter>
-        </TooltipProvider>
-      </PopupProvider>
-    </Provider>
-  </ErrorBoundary>
-);
+const App = () => {
+  useAuthListener();
+  return (
+    <ErrorBoundary>
+      <Provider store={store}>
+        <PopupProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <PopupRenderer />
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <AppRoutes />
+            </BrowserRouter>
+          </TooltipProvider>
+        </PopupProvider>
+      </Provider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
