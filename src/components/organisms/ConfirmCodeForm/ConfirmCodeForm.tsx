@@ -1,70 +1,30 @@
 import { CodeInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { toast } from "@/hooks/useToast";
-import { signOut, verifyOtp } from "@/services";
-import { verificationCodeSchema } from "@/utils";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { AuthCodeMode } from "@/store";
+import { FormEvent } from "react";
 
-export const ConfirmCodeForm = () => {
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const { setView, codeMode, email } = useAuthModal();
-  const { t } = useTranslation();
+interface ConfirmCodeFormProps {
+  codeMode: AuthCodeMode;
+  code: string;
+  setCode: (code: string) => void;
+  onConfirmCode: (event: FormEvent) => void;
+  error: string;
+  isLoading: boolean;
+}
 
+export const ConfirmCodeForm = ({
+  codeMode,
+  code,
+  setCode,
+  onConfirmCode,
+  error,
+  isLoading,
+}: ConfirmCodeFormProps) => {
   const buttonText = codeMode === "signup" ? "Подтвердить" : "Восстановить пароль";
   const loadingText = "Проверка...";
 
-  const handleConfirmCode = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setError("");
-
-      const result = verificationCodeSchema.safeParse(code);
-
-      if (!result.success) {
-        setError(result.error.errors[0]?.message);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const { error } = await verifyOtp({ email, code, type: codeMode });
-
-        if (error) {
-          toast({
-            title: "Ошибка подтверждения",
-            description: t(`status:${error.code}`),
-            variant: "destructive",
-          });
-        } else {
-          if (codeMode === "signup") {
-            toast({
-              title: "Успешно",
-              description: "Регистрация завершена. Теперь вы можете войти в свой аккаунт",
-            });
-            await signOut();
-            setView("login");
-          }
-          if (codeMode === "recovery") setView("reset-password");
-        }
-      } catch {
-        toast({
-          title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [email, code, setView, codeMode, t]
-  );
-
   return (
-    <form className="space-y-6" onSubmit={handleConfirmCode}>
+    <form className="space-y-6" onSubmit={onConfirmCode}>
       <CodeInput length={8} value={code} onChange={setCode} error={error} disabled={isLoading} />
 
       <Button

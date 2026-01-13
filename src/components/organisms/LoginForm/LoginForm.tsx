@@ -1,79 +1,31 @@
 import { AuthInput, PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { toast } from "@/hooks/useToast";
-import { signIn } from "@/services";
-import { loginSchema } from "@/utils";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { LoginErrors } from "@/pages/Login";
+import { FormEvent } from "react";
 
-interface LoginErrors {
-  email?: string;
-  password?: string;
+interface LoginFormProps {
+  onLogin: (event: FormEvent<Element>) => void;
+  email: string;
+  setEmail: (email: string) => void;
+  isLoading: boolean;
+  password: string;
+  setPassword: (password: string) => void;
+  errors: LoginErrors;
+  toForgotPassword: () => void;
 }
 
-export const LoginForm = () => {
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<LoginErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const { email, setEmail, setView } = useAuthModal();
-
-  const navigate = useNavigate();
-  const { close, routeAfterLogin } = useAuthModal();
-  const { t } = useTranslation("status");
-
-  const handleLogin = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setErrors({});
-
-      const result = loginSchema.safeParse({
-        email: email,
-        password: password,
-      });
-
-      if (!result.success) {
-        const fieldErrors: LoginErrors = {};
-        result.error.errors.forEach((err) => {
-          const field = err.path[0] as keyof LoginErrors;
-          fieldErrors[field] = err.message;
-        });
-        setErrors(fieldErrors);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const { error } = await signIn({
-          email: email,
-          password: password,
-        });
-        if (error) {
-          toast({
-            title: "Ошибка входа",
-            description: t(`status:${error.code}`),
-            variant: "destructive",
-          });
-        } else {
-          close();
-          if (routeAfterLogin) navigate(routeAfterLogin);
-        }
-      } catch {
-        toast({
-          title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [email, password, navigate, close, routeAfterLogin, t]
-  );
-
+export const LoginForm = ({
+  email,
+  onLogin,
+  setEmail,
+  isLoading,
+  password,
+  setPassword,
+  errors,
+  toForgotPassword,
+}: LoginFormProps) => {
   return (
-    <form className="space-y-5" onSubmit={handleLogin}>
+    <form className="space-y-5" onSubmit={onLogin}>
       <AuthInput
         label="Э-почта"
         type="email"
@@ -96,7 +48,7 @@ export const LoginForm = () => {
         labelRight={
           <button
             type="button"
-            onClick={() => setView("forgot-password")}
+            onClick={toForgotPassword}
             className="text-sm text-primary hover:text-primary/80 transition-colors font-normal"
           >
             Забыли пароль?

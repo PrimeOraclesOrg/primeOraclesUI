@@ -7,15 +7,29 @@
 
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { SignUpForm } from "@/components/organisms";
-import { useAuthModal } from "@/hooks/useAuthModal";
+import { FormEvent } from "react";
 
-export function SignUpTemplate() {
-  const { setView } = useAuthModal();
-  const onBack = () => setView("login");
+interface SignUpTemplateProps {
+  onBack: () => void;
+  email: string;
+  setEmail: (email: string) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (confirmPassword: string) => void;
+  errors: {
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  };
+  isLoading: boolean;
+  onSignUp: (event: FormEvent) => void;
+}
 
+export function SignUpTemplate({ onBack, ...props }: SignUpTemplateProps) {
   return (
     <AuthLayout title="Создать аккаунт" showBackButton onBack={onBack}>
-      <SignUpForm />
+      <SignUpForm {...props} />
 
       {/* Footer */}
       <div className="text-center mt-8 pt-4">

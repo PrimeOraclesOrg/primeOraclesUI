@@ -1,69 +1,28 @@
 import { PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { toast } from "@/hooks/useToast";
-import { signOut, updatePassword } from "@/services";
-import { resetPasswordSchema } from "@/utils";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { FormEvent } from "react";
 
-interface Errors {
-  password?: string;
-  confirmPassword?: string;
+interface ResetPasswordFormProps {
+  onChangePassword: (event: FormEvent) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (confirmPassword: string) => void;
+  errors: { password?: string; confirmPassword?: string };
+  isLoading: boolean;
 }
 
-export const ResetPasswordForm = () => {
-  const { setView } = useAuthModal();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState<Errors>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const { t } = useTranslation();
-
-  const handleResetPassword = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setErrors({});
-
-      const result = resetPasswordSchema.safeParse({
-        password,
-        confirmPassword,
-      });
-
-      if (!result.success) {
-        const fieldErrors: Errors = {};
-        result.error.errors.forEach((err) => {
-          const field = err.path[0] as string;
-          if (field === "password") fieldErrors.password = err.message;
-          if (field === "confirmPassword") fieldErrors.confirmPassword = err.message;
-        });
-        setErrors(fieldErrors);
-        return;
-      }
-
-      setIsLoading(true);
-      const { error } = await updatePassword(password);
-      if (error) {
-        toast({
-          title: "Ошибка",
-          description: t(`status:${error.code}`),
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Пароль изменён",
-          description: "Теперь вы можете войти с новым паролем",
-        });
-        await signOut();
-        setView("login");
-      }
-      setIsLoading(false);
-    },
-    [password, confirmPassword, setView, t]
-  );
-
+export const ResetPasswordForm = ({
+  onChangePassword,
+  confirmPassword,
+  password,
+  setConfirmPassword,
+  setPassword,
+  errors,
+  isLoading,
+}: ResetPasswordFormProps) => {
   return (
-    <form className="space-y-5" onSubmit={handleResetPassword}>
+    <form className="space-y-5" onSubmit={onChangePassword}>
       <PasswordInput
         label="Новый пароль"
         placeholder="Введите новый пароль"

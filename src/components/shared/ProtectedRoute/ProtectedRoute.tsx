@@ -6,10 +6,9 @@
  */
 
 import { useEffect, useState } from "react";
-import { getCurrentUser } from "@/services/authService";
+import { getCurrentUser } from "@/services/authService/authService";
 import { Loader } from "@/components/atoms/Loader/Loader";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 interface ProtectedRouteProps {
@@ -19,10 +18,6 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const [isLoading, setIsLoading] = useState(true);
   const { isAuthenticated, setAuthentication } = useAuth();
-  const [authModalWasOpened, setAuthModalWasOpened] = useState(false);
-  const { open, isOpen } = useAuthModal();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -39,30 +34,17 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     checkAuth();
   }, [setAuthentication]);
 
-  useEffect(() => {
-    if (!isAuthenticated && !isLoading) {
-      open();
-      setAuthModalWasOpened(true);
-    }
-  }, [isLoading, isAuthenticated, open]);
+  return (
+    <>
+      {isLoading && (
+        <div className="min-h-screen w-full bg-background flex items-center justify-center">
+          <Loader size="lg" />
+        </div>
+      )}
 
-  useEffect(() => {
-    if (!isAuthenticated && !isOpen && authModalWasOpened) {
-      navigate("/");
-    }
-  }, [isOpen, authModalWasOpened, isAuthenticated, navigate]);
+      {!isAuthenticated && <Navigate to={"/login"} />}
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen w-full bg-background flex items-center justify-center">
-        <Loader size="lg" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return;
-  }
-
-  return <>{children}</>;
+      {isAuthenticated && children}
+    </>
+  );
 }

@@ -1,49 +1,24 @@
 import { AuthInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { toast } from "@/hooks/useToast";
-import { resetPassword } from "@/services";
-import { forgotPasswordSchema } from "@/utils";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { FormEvent } from "react";
 
-export const ForgotPasswordForm = () => {
-  const { email, setCodeMode, setView, setEmail } = useAuthModal();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const { t } = useTranslation();
+interface FogotPasswordFormProps {
+  onForgotPassword: (event: FormEvent) => void;
+  email: string;
+  setEmail: (email: string) => void;
+  error: string;
+  isLoading: boolean;
+}
 
-  const handleForgotPassword = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setError("");
-
-      const result = forgotPasswordSchema.safeParse({ email: email });
-
-      if (!result.success) {
-        setError(result.error.errors[0]?.message);
-        return;
-      }
-
-      setIsLoading(true);
-      const { error } = await resetPassword(email);
-      if (error) {
-        toast({
-          title: "Ошибка",
-          description: t(`status:${error.code}`),
-          variant: "destructive",
-        });
-      } else {
-        setCodeMode("recovery");
-        setView("confirm-code");
-      }
-      setIsLoading(false);
-    },
-    [email, setCodeMode, setView, t]
-  );
-
+export const ForgotPasswordForm = ({
+  email,
+  setEmail,
+  error,
+  isLoading,
+  onForgotPassword,
+}: FogotPasswordFormProps) => {
   return (
-    <form className="space-y-5" onSubmit={handleForgotPassword}>
+    <form className="space-y-5" onSubmit={onForgotPassword}>
       <AuthInput
         label="Э-почта"
         type="email"

@@ -9,6 +9,9 @@ import ProductDetail from "@/pages/ProductDetail";
 import CreateProduct from "@/pages/CreateProduct";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
+import Login from "@/pages/Login";
+import SignUp from "@/pages/SignUp";
+import ResetPassword from "@/pages/ResetPassword";
 
 export function AppRoutes() {
   return (
@@ -21,6 +24,11 @@ export function AppRoutes() {
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/rewards" element={<Rewards />} />
       <Route path="/create-product" element={<CreateProduct />} />
+
+      {/* Auth routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/sign-up" element={<SignUp />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Protected routes - require authentication */}
       <Route

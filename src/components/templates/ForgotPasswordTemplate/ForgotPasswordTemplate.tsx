@@ -7,13 +7,18 @@
 
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { ForgotPasswordForm } from "@/components/organisms";
-import { useAuthModal } from "@/hooks/useAuthModal";
+import { FormEvent } from "react";
 
-export function ForgotPasswordTemplate() {
-  const { setView } = useAuthModal();
+interface ForgotPasswordTemplateProps {
+  onForgotPassword: (event: FormEvent) => void;
+  email: string;
+  setEmail: (email: string) => void;
+  error: string;
+  isLoading: boolean;
+  onBack: () => void;
+}
 
-  const onBack = () => setView("login");
-
+export function ForgotPasswordTemplate({ onBack, ...props }: ForgotPasswordTemplateProps) {
   return (
     <AuthLayout
       title="Восстановление пароля"
@@ -21,7 +26,7 @@ export function ForgotPasswordTemplate() {
       showBackButton
       onBack={onBack}
     >
-      <ForgotPasswordForm />
+      <ForgotPasswordForm {...props} />
 
       {/* Footer */}
       <div className="text-center mt-8 pt-4">

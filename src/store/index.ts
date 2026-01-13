@@ -23,6 +23,4 @@ export {
 
 export type { ToasterToast } from "./toastSlice";
 
-export * from "./authModalSlice";
-
 export * from "./authSlice";

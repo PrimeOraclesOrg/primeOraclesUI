@@ -1,78 +1,36 @@
 import { AuthInput, PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { toast } from "@/hooks/useToast";
-import { signUp } from "@/services";
-import { registerSchema } from "@/utils";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { FormEvent } from "react";
 
-interface Errors {
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
+interface SignUpFormProps {
+  onSignUp: (event: FormEvent) => void;
+  email: string;
+  setEmail: (email: string) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (confirmPassword: string) => void;
+  errors: {
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  };
+  isLoading: boolean;
 }
 
-export const SignUpForm = () => {
-  const { email, setEmail, setCodeMode, setView } = useAuthModal();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState<Errors>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const { t } = useTranslation();
-
-  const handleSignUp = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setErrors({});
-
-      const result = registerSchema.safeParse({
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword,
-      });
-
-      if (!result.success) {
-        const fieldErrors: Errors = {};
-        result.error.errors.forEach((err) => {
-          const field = err.path[0] as keyof Errors;
-          fieldErrors[field] = err.message;
-        });
-        setErrors(fieldErrors);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const { error } = await signUp({
-          email: email,
-          password: password,
-        });
-        if (error) {
-          toast({
-            title: "Ошибка регистрации",
-            description: t(`status:${error.code}`),
-            variant: "destructive",
-          });
-        } else {
-          setCodeMode("signup");
-          setView("confirm-code");
-        }
-      } catch {
-        toast({
-          title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [email, password, confirmPassword, setCodeMode, setView, t]
-  );
-
+export const SignUpForm = ({
+  onSignUp,
+  confirmPassword,
+  email,
+  password,
+  setConfirmPassword,
+  setEmail,
+  setPassword,
+  errors,
+  isLoading,
+}: SignUpFormProps) => {
   return (
-    <form className="space-y-5" onSubmit={handleSignUp}>
+    <form className="space-y-5" onSubmit={onSignUp}>
       <AuthInput
         label="Э-почта"
         type="email"

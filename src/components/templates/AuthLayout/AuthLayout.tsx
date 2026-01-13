@@ -10,12 +10,12 @@ import type { ReactNode } from "react";
 import { ArrowLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import authHero from "@/assets/auth-hero.jpg";
-import { useAuthModal } from "@/hooks/useAuthModal";
 
 interface AuthLayoutProps {
   children: ReactNode;
   showBackButton?: boolean;
   onBack?: () => void;
+  onClose?: () => void;
   title?: string;
   subtitle?: string;
 }
@@ -24,14 +24,10 @@ export function AuthLayout({
   children,
   showBackButton = false,
   onBack,
+  onClose,
   title,
   subtitle,
 }: AuthLayoutProps) {
-  const { close } = useAuthModal();
-
-  const handleClose = () => {
-    close();
-  };
 
   const handleBack = () => {
     if (onBack) {
@@ -69,15 +65,15 @@ export function AuthLayout({
           ) : (
             <div />
           )}
-          <Button
+          {onClose && <Button
             variant="ghost"
             size="icon"
-            onClick={handleClose}
+            onClick={onClose}
             className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-full"
             aria-label="Закрыть"
           >
             <X className="h-5 w-5" />
-          </Button>
+          </Button>}
         </header>
 
         {/* Main content */}

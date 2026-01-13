@@ -6,7 +6,7 @@
 
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { getSession } from "@/services/authService";
+import { getSession } from "@/services/authService/authService";
 import { Loader } from "@/components/atoms/Loader/Loader";
 
 interface PublicRouteProps {
