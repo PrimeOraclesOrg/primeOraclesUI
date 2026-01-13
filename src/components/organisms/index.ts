@@ -5,4 +5,4 @@ export { SignUpForm } from "./SignUpForm/SignUpForm";
 export { ForgotPasswordForm } from "./ForgotPasswordForm/ForgotPasswordForm";
 export { CreateProductForm } from "./CreateProductForm/CreateProductForm";
 export { ProductPreview } from "./ProductPreview/ProductPreview";
-export { ConfirmCodeHelpPopupContent } from './ConfirmCodeHelpPopupContent/ConfirmCodeHelpPopupContent';
+export { ConfirmCodeHelpPopupContent } from "./ConfirmCodeHelpPopupContent/ConfirmCodeHelpPopupContent";

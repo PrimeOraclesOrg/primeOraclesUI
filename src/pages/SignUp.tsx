@@ -151,6 +151,9 @@ export default function SignUp() {
   }, [resendTimer]);
 
   const onBack = () => {
+    setPassword("");
+    setConfirmPassword("");
+    setCode("");
     setStep("sign-up");
   };
 

@@ -8,7 +8,7 @@
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "@/services/authService/authService";
 import { Loader } from "@/components/atoms/Loader/Loader";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 interface ProtectedRouteProps {
