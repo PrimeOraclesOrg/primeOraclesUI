@@ -6,7 +6,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetProductDetailsQuery(id || "1");
-  
+
   const product = data?.product;
   const reviews = data?.reviews ?? [];
   const faqs = data?.faqs ?? [];

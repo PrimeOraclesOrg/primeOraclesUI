@@ -1,6 +1,6 @@
 /**
  * Products Service
- * 
+ *
  * Data access layer for products. Currently uses mock data.
  * When Supabase is integrated, this will use the Supabase client.
  */

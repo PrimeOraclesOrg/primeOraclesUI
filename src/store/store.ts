@@ -8,8 +8,7 @@ export const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     toast: toastReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(baseApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
 });
 
 // Enable refetchOnFocus/refetchOnReconnect behaviors

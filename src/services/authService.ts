@@ -1,6 +1,6 @@
 /**
  * Auth Service
- * 
+ *
  * Authentication logic for the application.
  * Prepared for Supabase Auth integration.
  */

@@ -1,6 +1,14 @@
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { StatusBadge } from "@/components/atoms";
-import { Settings as SettingsIcon, Shield, Wallet, FileText, LogOut, Pencil, Check } from "lucide-react";
+import {
+  Settings as SettingsIcon,
+  Shield,
+  Wallet,
+  FileText,
+  LogOut,
+  Pencil,
+  Check,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,7 +48,11 @@ function BasicSettings({
       <div>
         <label className="text-sm text-muted-foreground mb-2 block">Имя</label>
         <div className="relative">
-          <Input value={name} onChange={(e) => onNameChange(e.target.value)} className="bg-card border-border pr-10" />
+          <Input
+            value={name}
+            onChange={(e) => onNameChange(e.target.value)}
+            className="bg-card border-border pr-10"
+          />
           <Pencil className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         </div>
       </div>
@@ -59,11 +71,21 @@ function BasicSettings({
       </div>
 
       <div>
-        <label className="text-sm text-muted-foreground mb-3 block">Добавьте ссылки на ваши аккаунты</label>
+        <label className="text-sm text-muted-foreground mb-3 block">
+          Добавьте ссылки на ваши аккаунты
+        </label>
         <div className="space-y-2">
           {socialLinks.map((link, index) => (
-            <div key={link.platform} className="flex items-center gap-3 bg-card border border-border rounded-lg px-4 py-3">
-              <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm", link.color)}>
+            <div
+              key={link.platform}
+              className="flex items-center gap-3 bg-card border border-border rounded-lg px-4 py-3"
+            >
+              <div
+                className={cn(
+                  "w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm",
+                  link.color
+                )}
+              >
                 {link.icon}
               </div>
               <Input
@@ -76,7 +98,10 @@ function BasicSettings({
         </div>
       </div>
 
-      <Button onClick={onSave} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-6">
+      <Button
+        onClick={onSave}
+        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-6"
+      >
         Сохранить
       </Button>
     </div>
@@ -97,10 +122,15 @@ function SecuritySettings() {
           </div>
           <div>
             <p className="font-medium">Двухфакторная аутентификация ( Рекомендуется )</p>
-            <p className="text-sm text-muted-foreground">Получите код через приложение-аутентификатор.</p>
+            <p className="text-sm text-muted-foreground">
+              Получите код через приложение-аутентификатор.
+            </p>
           </div>
         </div>
-        <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+        <Button
+          variant="outline"
+          className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+        >
           Подключить 2FA
         </Button>
       </div>
@@ -110,7 +140,10 @@ function SecuritySettings() {
           <p className="font-medium">Пароль</p>
           <p className="text-sm text-muted-foreground">Вы можете изменить пароль в любой момент</p>
         </div>
-        <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+        <Button
+          variant="outline"
+          className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+        >
           Изменить пароль
         </Button>
       </div>
@@ -134,8 +167,12 @@ function BalanceSettings({ balance, transactions }: BalanceSettingsProps) {
       <div className="h-px bg-border" />
 
       <div className="flex gap-4">
-        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8">Пополнить</Button>
-        <Button variant="outline" className="border-border hover:bg-accent px-8">Вывести</Button>
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8">
+          Пополнить
+        </Button>
+        <Button variant="outline" className="border-border hover:bg-accent px-8">
+          Вывести
+        </Button>
       </div>
 
       <div>
@@ -149,7 +186,9 @@ function BalanceSettings({ balance, transactions }: BalanceSettingsProps) {
           {transactions.map((tx) => (
             <div key={tx.id} className="grid grid-cols-3 py-3 border-b border-border items-center">
               <span>$ {tx.amount.toFixed(2)}</span>
-              <span><StatusBadge status={tx.status} type="transaction" /></span>
+              <span>
+                <StatusBadge status={tx.status} type="transaction" />
+              </span>
               <div className="text-sm">
                 <p>{tx.method}</p>
                 <p className="text-muted-foreground text-xs truncate">{tx.address}</p>
@@ -160,7 +199,8 @@ function BalanceSettings({ balance, transactions }: BalanceSettingsProps) {
       </div>
 
       <p className="text-xs text-muted-foreground text-center mt-8">
-        * Prime Oracles — технологическая компания, а не банк. Платежные услуги предоставляются партнёрами Prime Oracles. Балансы Prime Oracles не застрахованы
+        * Prime Oracles — технологическая компания, а не банк. Платежные услуги предоставляются
+        партнёрами Prime Oracles. Балансы Prime Oracles не застрахованы
       </p>
     </div>
   );
@@ -184,7 +224,9 @@ function OrderHistory({ orders }: OrderHistoryProps) {
         {orders.map((order) => (
           <div key={order.id} className="grid grid-cols-4 py-3 border-b border-border items-center">
             <span>{order.title}</span>
-            <span><StatusBadge status={order.status} type="order" /></span>
+            <span>
+              <StatusBadge status={order.status} type="order" />
+            </span>
             <span className="text-muted-foreground">{order.type}</span>
             <span>$ {order.amount.toFixed(2)}</span>
           </div>
@@ -291,7 +333,11 @@ export function SettingsTemplate({
             </nav>
 
             {/* Logout button */}
-            <Button variant="outline" className="w-full mt-6 lg:mt-8 border-primary/50 text-primary hover:bg-primary/10" onClick={onLogout}>
+            <Button
+              variant="outline"
+              className="w-full mt-6 lg:mt-8 border-primary/50 text-primary hover:bg-primary/10"
+              onClick={onLogout}
+            >
               <LogOut className="w-4 h-4 mr-2" />
               Выход
             </Button>

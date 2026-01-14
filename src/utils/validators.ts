@@ -8,9 +8,7 @@ export const emailSchema = z.string().email("Неверный формат email
 /**
  * Password validation schema (minimum 8 characters)
  */
-export const passwordSchema = z
-  .string()
-  .min(8, "Пароль должен содержать минимум 8 символов");
+export const passwordSchema = z.string().min(8, "Пароль должен содержать минимум 8 символов");
 
 /**
  * User profile validation schema

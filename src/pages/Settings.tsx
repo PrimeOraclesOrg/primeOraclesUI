@@ -22,7 +22,7 @@ export default function Settings() {
       name={name}
       description={description}
       socialLinks={socialLinks}
-      balance={22.00}
+      balance={22.0}
       transactions={mockTransactions}
       orders={mockOrders}
       onTabChange={setActiveTab}

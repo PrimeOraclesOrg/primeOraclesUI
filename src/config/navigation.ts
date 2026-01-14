@@ -27,14 +27,14 @@ export const mainNavItems: NavItem[] = [
 ];
 
 export const workspaceItems: NavItem[] = [
-  { 
-    icon: Briefcase, 
-    label: "Рабочее пространство", 
+  {
+    icon: Briefcase,
+    label: "Рабочее пространство",
     href: "/workspace",
     children: [
       { label: "Маркетплейс", href: "/workspace/marketplace" },
       { label: "Награда за контент", href: "/workspace/rewards" },
-    ]
+    ],
   },
   { icon: ShoppingCart, label: "Мои покупки", href: "/purchases" },
 ];
