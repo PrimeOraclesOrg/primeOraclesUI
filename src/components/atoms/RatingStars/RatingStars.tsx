@@ -8,12 +8,12 @@ interface RatingStarsProps {
   size?: "sm" | "md" | "lg";
 }
 
-export function RatingStars({ 
-  rating, 
-  maxRating = 5, 
-  showNumber = true, 
+export function RatingStars({
+  rating,
+  maxRating = 5,
+  showNumber = true,
   reviewCount,
-  size = "sm" 
+  size = "sm",
 }: RatingStarsProps) {
   const sizeClasses = {
     sm: "w-3 h-3",
@@ -34,10 +34,10 @@ export function RatingStars({
           <Star
             key={i}
             className={`${sizeClasses[size]} ${
-              i < Math.floor(rating) 
-                ? "fill-primary text-primary" 
-                : i < rating 
-                  ? "fill-primary/50 text-primary" 
+              i < Math.floor(rating)
+                ? "fill-primary text-primary"
+                : i < rating
+                  ? "fill-primary/50 text-primary"
                   : "fill-muted text-muted"
             }`}
           />

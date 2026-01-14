@@ -38,7 +38,7 @@ export function MarketplaceTemplate({
           <div className="flex-1">
             <SearchBar value={searchQuery} onChange={onSearchChange} />
           </div>
-          <Button 
+          <Button
             onClick={onCreateClick}
             className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity px-4 md:px-6 whitespace-nowrap"
           >
@@ -73,25 +73,18 @@ export function MarketplaceTemplate({
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
           {products.map((product, index) => (
-            <div 
+            <div
               key={`${product.id}-${index}`}
               className="animate-fade-in"
               style={{ animationDelay: `${index * 50}ms` }}
             >
-              <ProductCard
-                product={product}
-                onClick={() => onProductClick(product.id)}
-              />
+              <ProductCard product={product} onClick={() => onProductClick(product.id)} />
             </div>
           ))}
         </div>
 
         {/* Pagination */}
-        <Pagination 
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
       </div>
     </MainLayout>
   );

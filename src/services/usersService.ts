@@ -1,6 +1,6 @@
 /**
  * Users Service
- * 
+ *
  * User profile and data management.
  * Prepared for Supabase integration.
  */
@@ -36,7 +36,8 @@ export async function fetchUserProfile(userId: string): Promise<ServiceResult<Us
     data: {
       name: "Lesha Maisak",
       username: "Leshamais",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
       description: "",
       socialLinks: mockSocialLinks,
     },
@@ -99,10 +100,7 @@ export async function updateCurrentUserProfile(
 /**
  * Upload user avatar
  */
-export async function uploadAvatar(
-  userId: string,
-  file: File
-): Promise<ServiceResult<string>> {
+export async function uploadAvatar(userId: string, file: File): Promise<ServiceResult<string>> {
   // TODO: Replace with Supabase storage
   // const fileName = `${userId}/${Date.now()}-${file.name}`;
   // const { data, error } = await supabase.storage

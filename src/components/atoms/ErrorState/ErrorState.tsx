@@ -7,10 +7,10 @@ interface ErrorStateProps {
   onRetry?: () => void;
 }
 
-export function ErrorState({ 
-  title = "Что-то пошло не так", 
+export function ErrorState({
+  title = "Что-то пошло не так",
   message = "Произошла непредвиденная ошибка. Попробуйте позже.",
-  onRetry
+  onRetry,
 }: ErrorStateProps) {
   return (
     <div className="flex min-h-[200px] flex-col items-center justify-center gap-4 p-8">
