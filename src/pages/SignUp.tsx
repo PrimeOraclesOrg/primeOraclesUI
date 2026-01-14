@@ -13,14 +13,17 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type Step = "sign-up" | "confirm-code";
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation("status");
   const { openPopup } = usePopup();
+
+  const beforeLogin = location.state?.beforeLogin || "/";
 
   const [step, setStep] = useState<Step>("sign-up");
   const [userEmail, setUserEmail] = useState("");
@@ -118,20 +121,28 @@ export default function SignUp() {
     setStep("sign-up");
   };
 
+  const handleCloseClick = () => navigate(beforeLogin, { replace: true });
+
+  const navigateWithState = (to: string) => {
+    navigate(to, { state: location.state });
+  };
+
   return (
     <>
       {step === "sign-up" && (
         <SignUpTemplate
+          onClose={handleCloseClick}
           register={signUpForm.register}
           onSubmit={signUpForm.handleSubmit(onSignUpSubmit)}
           errors={signUpForm.formState.errors}
           isSubmitting={signUpForm.formState.isSubmitting}
-          onBack={() => navigate("/login")}
+          onBack={() => navigateWithState("/login")}
         />
       )}
 
       {step === "confirm-code" && (
         <ConfirmCodeTemplate
+          onClose={handleCloseClick}
           onReset={() => confirmForm.reset()}
           email={userEmail}
           control={confirmForm.control}

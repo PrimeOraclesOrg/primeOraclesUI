@@ -16,6 +16,7 @@ interface ConfirmCodeTemplateProps {
   onHelpClick: () => void;
   codeMode: "signup" | "recovery";
   onReset: () => void;
+  onClose: () => void;
 }
 
 export function ConfirmCodeTemplate({
@@ -30,7 +31,8 @@ export function ConfirmCodeTemplate({
   errors,
   isSubmitting,
   codeMode,
-  onReset
+  onReset,
+  onClose,
 }: ConfirmCodeTemplateProps) {
   return (
     <AuthLayout
@@ -38,6 +40,7 @@ export function ConfirmCodeTemplate({
       subtitle={`На ваш адрес ${email} отправлен код`}
       showBackButton
       onBack={onBack}
+      onClose={onClose}
     >
       <ConfirmCodeForm
         onSubmit={onSubmit}

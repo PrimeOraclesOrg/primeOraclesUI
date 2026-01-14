@@ -9,10 +9,12 @@ interface ResetPasswordTemplateProps {
   errors: FieldErrors<ResetPasswordFormData>;
   isSubmitting: boolean;
   onBack: () => void;
+  onClose: () => void;
 }
 
 export function ResetPasswordTemplate({
   onBack,
+  onClose,
   onSubmit,
   register,
   errors,
@@ -24,6 +26,7 @@ export function ResetPasswordTemplate({
       subtitle="Введите новый пароль для вашего аккаунта"
       showBackButton
       onBack={onBack}
+      onClose={onClose}
     >
       <ResetPasswordForm
         onSubmit={onSubmit}

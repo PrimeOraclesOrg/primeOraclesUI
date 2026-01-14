@@ -19,14 +19,17 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type Step = "email-input" | "confirm-code" | "password-change";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation("status");
   const { openPopup } = usePopup();
+
+  const beforeLogin = location.state?.beforeLogin || "/";
 
   const [step, setStep] = useState<Step>("email-input");
   const [userEmail, setUserEmail] = useState("");
@@ -136,20 +139,28 @@ export default function ResetPassword() {
     setStep("email-input");
   };
 
+  const handleCloseClick = () => navigate(beforeLogin, { replace: true });
+
+  const navigateWithState = (to: string) => {
+    navigate(to, { state: location.state });
+  };
+
   return (
     <>
       {step === "email-input" && (
         <ForgotPasswordTemplate
+          onClose={handleCloseClick}
           register={emailForm.register}
           onSubmit={emailForm.handleSubmit(onEmailSubmit)}
           errors={emailForm.formState.errors}
           isSubmitting={emailForm.formState.isSubmitting}
-          onBack={() => navigate("/login")}
+          onBack={() => navigateWithState("/login")}
         />
       )}
 
       {step === "confirm-code" && (
         <ConfirmCodeTemplate
+          onClose={handleCloseClick}
           onReset={() => confirmForm.reset()}
           email={userEmail}
           control={confirmForm.control}
@@ -167,6 +178,7 @@ export default function ResetPassword() {
 
       {step === "password-change" && (
         <ResetPasswordTemplate
+          onClose={handleCloseClick}
           register={passwordForm.register}
           onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
           errors={passwordForm.formState.errors}
