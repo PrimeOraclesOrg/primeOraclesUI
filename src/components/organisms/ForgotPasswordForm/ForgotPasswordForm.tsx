@@ -1,41 +1,39 @@
 import { AuthInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { FormEvent } from "react";
+import { ForgotPasswordFormData } from "@/utils";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
-interface FogotPasswordFormProps {
-  onForgotPassword: (event: FormEvent) => void;
-  email: string;
-  setEmail: (email: string) => void;
-  error: string;
-  isLoading: boolean;
+interface ForgotPasswordFormProps {
+  onSubmit: () => void;
+  register: UseFormRegister<ForgotPasswordFormData>;
+  errors: FieldErrors<ForgotPasswordFormData>;
+  isSubmitting: boolean;
 }
 
 export const ForgotPasswordForm = ({
-  email,
-  setEmail,
-  error,
-  isLoading,
-  onForgotPassword,
-}: FogotPasswordFormProps) => {
+  register,
+  errors,
+  isSubmitting,
+  onSubmit,
+}: ForgotPasswordFormProps) => {
   return (
-    <form className="space-y-5" onSubmit={onForgotPassword}>
+    <form className="space-y-5" onSubmit={onSubmit}>
       <AuthInput
         label="Э-почта"
         type="email"
         placeholder="Э-почта"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        error={error}
+        {...register("email")}
+        error={errors.email?.message}
         autoComplete="email"
-        disabled={isLoading}
+        disabled={isSubmitting}
       />
 
       <Button
         type="submit"
         className="w-full h-12 text-base font-medium bg-secondary hover:bg-secondary/80 text-foreground transition-colors rounded-lg mt-6"
-        disabled={isLoading}
+        disabled={isSubmitting}
       >
-        {isLoading ? "Отправка..." : "Восстановить пароль"}
+        {isSubmitting ? "Отправка..." : "Восстановить пароль"}
       </Button>
     </form>
   );

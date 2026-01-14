@@ -10,8 +10,8 @@ export interface SignUpCredentials {
 }
 
 export interface SignInCredentials {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 }
 
 export interface VerifyOtpCredentials {

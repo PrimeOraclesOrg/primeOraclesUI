@@ -1,35 +1,40 @@
-/**
- * LoginTemplate
- *
- * Presentational component for the login step.
- * Uses split-screen AuthLayout with modern minimal design.
- */
-
 import { LoginForm } from "@/components/organisms";
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
-import { LoginErrors } from "@/pages/Login";
-import { FormEvent } from "react";
+import { LoginFormData } from "@/utils";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 interface LoginTemplateProps {
-  onLogin: (event: FormEvent<Element>) => void;
-  email: string;
-  setEmail: (email: string) => void;
-  password: string;
-  setPassword: (password: string) => void;
-  errors: LoginErrors;
+  onSubmit: () => void;
+  register: UseFormRegister<LoginFormData>;
+  errors: FieldErrors<LoginFormData>;
+  isSubmitting: boolean;
   toForgotPassword: () => void;
-  isLoading: boolean;
   toSignUp: () => void;
   onClose?: () => void;
 }
 
-export function LoginTemplate({ toSignUp, onClose, ...props }: LoginTemplateProps) {
+export function LoginTemplate({
+  toSignUp,
+  onClose,
+  onSubmit,
+  register,
+  errors,
+  isSubmitting,
+  toForgotPassword,
+}: LoginTemplateProps) {
   return (
     <AuthLayout title="Добро пожаловать" onClose={onClose}>
-      <LoginForm {...props} />
+      <LoginForm
+        onSubmit={onSubmit}
+        register={register}
+        errors={errors}
+        isSubmitting={isSubmitting}
+        toForgotPassword={toForgotPassword}
+      />
+
       <div className="flex items-center justify-center mt-8 pt-4">
         <p className="text-sm text-muted-foreground">
-          Нету аккаунта?{" "}
+          Нет аккаунта?{" "}
           <button
             type="button"
             onClick={toSignUp}

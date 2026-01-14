@@ -6,12 +6,12 @@ export const useAuthListener = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChange((_event, session) => {
       if (session?.user) {
-          store.dispatch(setUser(session.user))
+        store.dispatch(setUser(session.user));
       } else {
-          store.dispatch(clearUser())
-         };
+        store.dispatch(clearUser());
+      }
     });
 
-    return () => unsubscribe()
+    return () => unsubscribe();
   }, []);
 };

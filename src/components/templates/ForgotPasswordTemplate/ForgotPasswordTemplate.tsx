@@ -7,18 +7,24 @@
 
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { ForgotPasswordForm } from "@/components/organisms";
-import { FormEvent } from "react";
+import { ForgotPasswordFormData } from "@/utils";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 interface ForgotPasswordTemplateProps {
-  onForgotPassword: (event: FormEvent) => void;
-  email: string;
-  setEmail: (email: string) => void;
-  error: string;
-  isLoading: boolean;
+  onSubmit: () => void;
+  register: UseFormRegister<ForgotPasswordFormData>;
+  errors: FieldErrors<ForgotPasswordFormData>;
+  isSubmitting: boolean;
   onBack: () => void;
 }
 
-export function ForgotPasswordTemplate({ onBack, ...props }: ForgotPasswordTemplateProps) {
+export function ForgotPasswordTemplate({
+  onBack,
+  onSubmit,
+  register,
+  errors,
+  isSubmitting,
+}: ForgotPasswordTemplateProps) {
   return (
     <AuthLayout
       title="Восстановление пароля"
@@ -26,7 +32,12 @@ export function ForgotPasswordTemplate({ onBack, ...props }: ForgotPasswordTempl
       showBackButton
       onBack={onBack}
     >
-      <ForgotPasswordForm {...props} />
+      <ForgotPasswordForm
+        onSubmit={onSubmit}
+        register={register}
+        errors={errors}
+        isSubmitting={isSubmitting}
+      />
 
       {/* Footer */}
       <div className="text-center mt-8 pt-4">

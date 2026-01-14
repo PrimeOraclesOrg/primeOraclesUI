@@ -7,104 +7,102 @@ import {
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
 import { resetPassword, signOut, updatePassword, verifyOtp } from "@/services";
-import { forgotPasswordSchema, resetPasswordSchema, verificationCodeSchema } from "@/utils";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  ForgotPasswordFormData,
+  forgotPasswordSchema,
+  ResetPasswordFormData,
+  resetPasswordSchema,
+  VerificationCodeFormData,
+  verificationCodeSchema,
+} from "@/utils";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 type Step = "email-input" | "confirm-code" | "password-change";
 
-interface Errors {
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  confirmCode?: string;
-}
-
 export default function ResetPassword() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation("status");
   const { openPopup } = usePopup();
 
-  const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isResending, setIsResending] = useState(false);
-  const [resendTimer, setResendTimer] = useState(0);
-  const [errors, setErrors] = useState<Errors>({});
-  const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<Step>("email-input");
+  const [userEmail, setUserEmail] = useState("");
+  const [resendTimer, setResendTimer] = useState(0);
+  const [isResending, setIsResending] = useState(false);
 
-  const handleForgotPassword = useCallback(
-    async (event: FormEvent) => {
-      event.preventDefault();
-      setErrors({});
+  const emailForm = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: { email: "" },
+  });
 
-      const result = forgotPasswordSchema.safeParse({ email: email });
+  const confirmForm = useForm<VerificationCodeFormData>({
+    resolver: zodResolver(verificationCodeSchema),
+    defaultValues: { code: "" },
+  });
 
-      if (!result.success) {
-        setErrors({ email: result.error.errors[0]?.message });
-        return;
-      }
+  const passwordForm = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: { password: "", confirmPassword: "" },
+  });
 
-      setIsLoading(true);
-      const { error } = await resetPassword(email);
-      if (error) {
-        toast({
-          title: "Ошибка",
-          description: t(`status:${error.code}`),
-          variant: "destructive",
-        });
-      } else {
-        setStep("confirm-code");
-      }
-      setIsLoading(false);
-    },
-    [email, t]
-  );
+  const onEmailSubmit = async (data: ForgotPasswordFormData) => {
+    const { error } = await resetPassword(data.email);
+    if (error) {
+      toast({
+        title: "Ошибка",
+        description: t(`status:${error.code}`),
+        variant: "destructive",
+      });
+      return;
+    }
+    setUserEmail(data.email);
+    setStep("confirm-code");
+    setResendTimer(60);
+  };
 
-  const handleConfirmCode = useCallback(
-    async (event: FormEvent) => {
-      event.preventDefault();
-      setErrors({});
+  const onConfirmSubmit = async (data: VerificationCodeFormData) => {
+    const { error } = await verifyOtp({
+      email: userEmail,
+      code: data.code,
+      type: "recovery",
+    });
 
-      const result = verificationCodeSchema.safeParse(code);
+    if (error) {
+      toast({
+        title: "Ошибка подтверждения",
+        description: t(`status:${error.code}`),
+        variant: "destructive",
+      });
+      return;
+    }
+    setStep("password-change");
+  };
 
-      if (!result.success) {
-        setErrors({ confirmCode: result.error.errors[0]?.message });
-        return;
-      }
+  const onPasswordSubmit = async (data: ResetPasswordFormData) => {
+    const { error } = await updatePassword(data.password);
+    if (error) {
+      toast({
+        title: "Ошибка",
+        description: t(`status:${error.code}`),
+        variant: "destructive",
+      });
+      return;
+    }
 
-      setIsLoading(true);
-      try {
-        const { error } = await verifyOtp({ email, code, type: "recovery" });
+    toast({
+      title: "Пароль изменён",
+      description: "Теперь вы можете войти с новым паролем",
+    });
+    await signOut();
+    navigate("/login");
+  };
 
-        if (error) {
-          toast({
-            title: "Ошибка подтверждения",
-            description: t(`status:${error.code}`),
-            variant: "destructive",
-          });
-        } else {
-          setStep("password-change");
-        }
-      } catch {
-        toast({
-          title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [email, code, t]
-  );
-
-  const handleResendCode = useCallback(async () => {
+  const handleResendCode = async () => {
     setIsResending(true);
-    const { error } = await resetPassword(email);
+    const { error } = await resetPassword(userEmail);
     if (error) {
       toast({
         title: "Ошибка",
@@ -119,11 +117,11 @@ export default function ResetPassword() {
       });
     }
     setIsResending(false);
-  }, [email, t]);
+  };
 
   useEffect(() => {
     if (resendTimer > 0) {
-      const timer = setTimeout(() => setResendTimer((t) => t - 1), 1000);
+      const timer = setTimeout(() => setResendTimer((prev) => prev - 1), 1000);
       return () => clearTimeout(timer);
     }
   }, [resendTimer]);
@@ -132,95 +130,48 @@ export default function ResetPassword() {
     openPopup(<ConfirmCodeHelpPopupContent codeMode="recovery" />);
   };
 
-  const handleChangePassword = useCallback(
-    async (event: FormEvent) => {
-      event.preventDefault();
-      setErrors({});
-
-      const result = resetPasswordSchema.safeParse({
-        password,
-        confirmPassword,
-      });
-
-      if (!result.success) {
-        const fieldErrors: Errors = {};
-        result.error.errors.forEach((err) => {
-          const field = err.path[0] as string;
-          if (field === "password") fieldErrors.password = err.message;
-          if (field === "confirmPassword") fieldErrors.confirmPassword = err.message;
-        });
-        setErrors(fieldErrors);
-        return;
-      }
-
-      setIsLoading(true);
-      const { error } = await updatePassword(password);
-      if (error) {
-        toast({
-          title: "Ошибка",
-          description: t(`status:${error.code}`),
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Пароль изменён",
-          description: "Теперь вы можете войти с новым паролем",
-        });
-        await signOut();
-        navigate("/login");
-      }
-      setIsLoading(false);
-    },
-    [password, confirmPassword, t, navigate]
-  );
-
-  function goToEmailInput() {
-    setPassword("");
-    setConfirmPassword("");
-    setCode("");
+  const goToEmailInput = () => {
+    confirmForm.reset();
+    passwordForm.reset();
     setStep("email-input");
-  }
+  };
 
   return (
     <>
       {step === "email-input" && (
         <ForgotPasswordTemplate
-          email={email}
-          setEmail={setEmail}
-          error={errors.email}
-          isLoading={isLoading}
-          onForgotPassword={handleForgotPassword}
+          register={emailForm.register}
+          onSubmit={emailForm.handleSubmit(onEmailSubmit)}
+          errors={emailForm.formState.errors}
+          isSubmitting={emailForm.formState.isSubmitting}
           onBack={() => navigate("/login")}
         />
       )}
 
       {step === "confirm-code" && (
         <ConfirmCodeTemplate
-          code={code}
-          codeMode="recovery"
-          email={email}
-          error={errors.confirmCode}
-          isLoading={isLoading}
+          onReset={() => confirmForm.reset()}
+          email={userEmail}
+          control={confirmForm.control}
+          onSubmit={confirmForm.handleSubmit(onConfirmSubmit)}
+          errors={confirmForm.formState.errors}
+          isSubmitting={confirmForm.formState.isSubmitting}
           isResending={isResending}
-          onBack={goToEmailInput}
-          onConfirmCode={handleConfirmCode}
-          onHelpClick={handleHelpClick}
-          onResendCode={handleResendCode}
           resendTimer={resendTimer}
-          setCode={setCode}
+          onResendCode={handleResendCode}
+          onHelpClick={handleHelpClick}
+          onBack={goToEmailInput}
+          codeMode="recovery"
         />
       )}
 
       {step === "password-change" && (
         <ResetPasswordTemplate
+          register={passwordForm.register}
+          onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
+          errors={passwordForm.formState.errors}
+          isSubmitting={passwordForm.formState.isSubmitting}
           onBack={goToEmailInput}
-          errors={errors}
-          password={password}
-          setPassword={setPassword}
-          confirmPassword={confirmPassword}
-          setConfirmPassword={setConfirmPassword}
-          isLoading={isLoading}
-          onChangePassword={handleChangePassword}
         />
       )}
     </>

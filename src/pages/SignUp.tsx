@@ -3,130 +3,89 @@ import { ConfirmCodeTemplate, SignUpTemplate } from "@/components/templates";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
 import { resendSignUpOtp, signOut, signUp, verifyOtp } from "@/services";
-import { registerSchema, verificationCodeSchema } from "@/utils";
-import { useCallback, useEffect, useState } from "react";
+import {
+  RegisterFormData,
+  registerSchema,
+  VerificationCodeFormData,
+  verificationCodeSchema,
+} from "@/utils";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-interface Errors {
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  confirmCode?: string;
-}
-
-type Step = "sign-up" | "confirm-code" | "profile-setup";
+type Step = "sign-up" | "confirm-code";
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation("status");
   const { openPopup } = usePopup();
 
-  const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState<Errors>({});
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [code, setCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isResending, setIsResending] = useState(false);
-  const [resendTimer, setResendTimer] = useState(0);
   const [step, setStep] = useState<Step>("sign-up");
+  const [userEmail, setUserEmail] = useState("");
+  const [resendTimer, setResendTimer] = useState(0);
+  const [isResending, setIsResending] = useState(false);
 
-  const handleSignUp = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setErrors({});
+  const signUpForm = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: { email: "", password: "", confirmPassword: "" },
+  });
 
-      const result = registerSchema.safeParse({
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword,
+  const confirmForm = useForm<VerificationCodeFormData>({
+    resolver: zodResolver(verificationCodeSchema),
+    defaultValues: { code: "" },
+  });
+
+  const onSignUpSubmit = async (data: RegisterFormData) => {
+    const { error } = await signUp({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (error) {
+      toast({
+        title: "Ошибка регистрации",
+        description: t(`status:${error.code}`),
+        variant: "destructive",
       });
+      return;
+    }
 
-      if (!result.success) {
-        const fieldErrors: Errors = {};
-        result.error.errors.forEach((err) => {
-          const field = err.path[0] as keyof Errors;
-          fieldErrors[field] = err.message;
-        });
-        setErrors(fieldErrors);
-        return;
-      }
+    setUserEmail(data.email);
+    setStep("confirm-code");
+    setResendTimer(60);
+  };
 
-      setIsLoading(true);
-      try {
-        const { error } = await signUp({
-          email: email,
-          password: password,
-        });
-        if (error) {
-          toast({
-            title: "Ошибка регистрации",
-            description: t(`status:${error.code}`),
-            variant: "destructive",
-          });
-        } else {
-          setStep("confirm-code");
-        }
-      } catch {
-        toast({
-          title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [email, t, confirmPassword, password]
-  );
+  const onConfirmSubmit = async (data: VerificationCodeFormData) => {
+    const { error } = await verifyOtp({
+      email: userEmail,
+      code: data.code,
+      type: "signup",
+    });
 
-  const handleConfirmCode = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setErrors({});
+    if (error) {
+      toast({
+        title: "Ошибка подтверждения",
+        description: t(`status:${error.code}`),
+        variant: "destructive",
+      });
+      return;
+    }
 
-      const result = verificationCodeSchema.safeParse(code);
+    toast({
+      title: "Успешно",
+      description: "Регистрация завершена. Теперь вы можете войти в свой аккаунт",
+    });
 
-      if (!result.success) {
-        setErrors({ confirmCode: result.error.errors[0]?.message });
-        return;
-      }
+    await signOut();
+    navigate("/login");
+  };
 
-      setIsLoading(true);
-      try {
-        const { error } = await verifyOtp({ email, code, type: "signup" });
-
-        if (error) {
-          toast({
-            title: "Ошибка подтверждения",
-            description: t(`status:${error.code}`),
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Успешно",
-            description: "Регистрация завершена. Теперь вы можете войти в свой аккаунт",
-          });
-          await signOut();
-          navigate("/login");
-        }
-      } catch {
-        toast({
-          title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [email, code, t, navigate]
-  );
-
-  const handleResendCode = useCallback(async () => {
+  const handleResendCode = async () => {
     setIsResending(true);
-    const { error } = await resendSignUpOtp(email);
+    const { error } = await resendSignUpOtp(userEmail);
+
     if (error) {
       toast({
         title: "Ошибка",
@@ -141,57 +100,50 @@ export default function SignUp() {
       });
     }
     setIsResending(false);
-  }, [email, t]);
+  };
 
   useEffect(() => {
     if (resendTimer > 0) {
-      const timer = setTimeout(() => setResendTimer((t) => t - 1), 1000);
+      const timer = setTimeout(() => setResendTimer((prev) => prev - 1), 1000);
       return () => clearTimeout(timer);
     }
   }, [resendTimer]);
 
-  const onBack = () => {
-    setPassword("");
-    setConfirmPassword("");
-    setCode("");
-    setStep("sign-up");
-  };
-
   const handleHelpClick = () => {
     openPopup(<ConfirmCodeHelpPopupContent codeMode="sign-up" />);
+  };
+
+  const onBackToSignUp = () => {
+    confirmForm.reset();
+    setStep("sign-up");
   };
 
   return (
     <>
       {step === "sign-up" && (
         <SignUpTemplate
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          confirmPassword={confirmPassword}
-          setConfirmPassword={setConfirmPassword}
-          errors={errors}
-          isLoading={isLoading}
+          register={signUpForm.register}
+          onSubmit={signUpForm.handleSubmit(onSignUpSubmit)}
+          errors={signUpForm.formState.errors}
+          isSubmitting={signUpForm.formState.isSubmitting}
           onBack={() => navigate("/login")}
-          onSignUp={handleSignUp}
         />
       )}
 
       {step === "confirm-code" && (
         <ConfirmCodeTemplate
-          email={email}
-          code={code}
-          setCode={setCode}
-          codeMode="signup"
-          error={errors.confirmCode}
-          isLoading={isLoading}
+          onReset={() => confirmForm.reset()}
+          email={userEmail}
+          control={confirmForm.control}
+          onSubmit={confirmForm.handleSubmit(onConfirmSubmit)}
+          errors={confirmForm.formState.errors}
+          isSubmitting={confirmForm.formState.isSubmitting}
           isResending={isResending}
-          onBack={onBack}
-          onConfirmCode={handleConfirmCode}
-          onHelpClick={handleHelpClick}
-          onResendCode={handleResendCode}
           resendTimer={resendTimer}
+          onResendCode={handleResendCode}
+          onHelpClick={handleHelpClick}
+          onBack={onBackToSignUp}
+          codeMode="signup"
         />
       )}
     </>

@@ -1,12 +1,9 @@
-import {
-  selectAuth,
-  useAppSelector,
-} from "@/store";
+import { selectAuthUser, useAppSelector } from "@/store";
 
 export const useAuth = () => {
-  const authState = useAppSelector(selectAuth);
+  const user = useAppSelector(selectAuthUser);
 
   return {
-    ...authState
+    user,
   };
 };

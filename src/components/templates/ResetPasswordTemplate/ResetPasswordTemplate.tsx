@@ -1,26 +1,23 @@
-/**
- * ResetPasswordTemplate
- *
- * Presentational component for the reset password step.
- * Uses split-screen AuthLayout with modern minimal design.
- */
-
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { ResetPasswordForm } from "@/components/organisms/ResetPasswordForm/ResetPasswordForm";
-import { FormEvent } from "react";
+import { ResetPasswordFormData } from "@/utils";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 interface ResetPasswordTemplateProps {
+  onSubmit: () => void;
+  register: UseFormRegister<ResetPasswordFormData>;
+  errors: FieldErrors<ResetPasswordFormData>;
+  isSubmitting: boolean;
   onBack: () => void;
-  password: string;
-  setPassword: (password: string) => void;
-  confirmPassword: string;
-  setConfirmPassword: (confirmPassword: string) => void;
-  errors: { password?: string; confirmPassword?: string };
-  isLoading: boolean;
-  onChangePassword: (event: FormEvent) => void;
 }
 
-export function ResetPasswordTemplate({ onBack, ...props }: ResetPasswordTemplateProps) {
+export function ResetPasswordTemplate({
+  onBack,
+  onSubmit,
+  register,
+  errors,
+  isSubmitting,
+}: ResetPasswordTemplateProps) {
   return (
     <AuthLayout
       title="Новый пароль"
@@ -28,7 +25,12 @@ export function ResetPasswordTemplate({ onBack, ...props }: ResetPasswordTemplat
       showBackButton
       onBack={onBack}
     >
-      <ResetPasswordForm {...props} />
+      <ResetPasswordForm
+        onSubmit={onSubmit}
+        register={register}
+        errors={errors}
+        isSubmitting={isSubmitting}
+      />
     </AuthLayout>
   );
 }
