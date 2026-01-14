@@ -5,11 +5,14 @@ import { LoginFormData, loginSchema } from "@/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation("status");
+
+  const from = location.state?.from?.pathname || '/';
 
   const {
     register,
@@ -32,7 +35,7 @@ export default function Login() {
       return;
     }
 
-    navigate("/");
+    navigate(from);
   };
 
   return (

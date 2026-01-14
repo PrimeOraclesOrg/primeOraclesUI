@@ -5,7 +5,7 @@
  * Redirects to login page if user is not authenticated.
  */
 
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 interface ProtectedRouteProps {
@@ -14,10 +14,11 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user } = useAuth();
+  const location = useLocation();
 
   return (
     <>
-      {!user && <Navigate to={"/login"} />}
+      {!user && <Navigate to={"/login"} state={{ from: location }} replace />}
 
       {user && children}
     </>

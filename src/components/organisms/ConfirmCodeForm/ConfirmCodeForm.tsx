@@ -38,6 +38,14 @@ export const ConfirmCodeForm = ({
           />
         )}
       />
+         <p className="text-sm text-muted-foreground">
+          <button
+            type="reset"
+            className="text-primary hover:text-primary/80 font-medium transition-colors"
+          >
+            Очистить поле
+          </button>
+        </p>
 
       <Button
         type="submit"
@@ -45,14 +53,6 @@ export const ConfirmCodeForm = ({
         disabled={isSubmitting}
       >
         {isSubmitting ? loadingText : buttonText}
-      </Button>
-      <Button
-        type="reset"
-        size="sm"
-        className="px-16 text-base font-medium bg-secondary hover:bg-secondary/80 text-foreground transition-colors rounded-lg"
-        disabled={isSubmitting}
-      >
-        Очистить поле
       </Button>
     </form>
   );
