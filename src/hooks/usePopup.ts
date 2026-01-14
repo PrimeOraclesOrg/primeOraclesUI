@@ -5,7 +5,7 @@
  */
 
 import { useContext } from "react";
-import { PopupContext } from "@/contexts/PopupContext";
+import { PopupContext } from "@/contexts/PopupContext/PopupContext";
 
 export function usePopup() {
   const context = useContext(PopupContext);

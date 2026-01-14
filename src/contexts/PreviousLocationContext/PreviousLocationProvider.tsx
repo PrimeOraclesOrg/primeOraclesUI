@@ -1,7 +1,6 @@
-import { createContext, ReactNode, useContext, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { useLocation } from "react-router-dom";
-
-const PreviousLocationContext = createContext(null);
+import { PreviousLocationContext } from "./PreviousLocationContext";
 
 interface PreviousLocationProviderProps {
   children?: ReactNode;
@@ -19,5 +18,3 @@ export const PreviousLocationProvider = ({ children }: PreviousLocationProviderP
     <PreviousLocationContext.Provider value={previous}>{children}</PreviousLocationContext.Provider>
   );
 };
-
-export const usePreviousLocation = () => useContext(PreviousLocationContext);

@@ -1,2 +1,2 @@
-export { PopupContext, PopupProvider } from "./PopupContext";
-export { PreviousLocationProvider, usePreviousLocation } from './PreviousLocationContext';
+export * from "./PreviousLocationContext";
+export * from "./PopupContext";
