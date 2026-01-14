@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { Plus, Trash2, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,18 +15,20 @@ import {
 import { FormSection, FormField } from "@/components/atoms";
 import {
   PRODUCT_CATEGORIES,
-  type CreateProductFormData,
+  CATEGORY_DISPLAY_NAMES,
   type ProductCategory,
 } from "@/types/createProduct";
+import { CreateProductFormData } from "@/utils/validators/createProduct";
+import { isValidDecimalDraft, normalizeDecimalInput, roundToTwoDecimals } from "@/utils";
 
 interface CreateProductFormProps {
   formik: FormikProps<CreateProductFormData>;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
   onAddAdvantage: () => void;
-  onRemoveAdvantage: (id: string) => void;
+  onRemoveAdvantage: (position: number) => void;
   onAddFaq: () => void;
-  onRemoveFaq: (id: string) => void;
+  onRemoveFaq: (position: number) => void;
   isSubmitting: boolean;
 }
 
@@ -41,6 +43,55 @@ export function CreateProductForm({
   isSubmitting,
 }: CreateProductFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { values, errors, touched, handleChange, handleBlur, setFieldValue, handleSubmit } = formik;
+  const [priceInput, setPriceInput] = useState<string>(() => {
+    if (values.price === 0) return "";
+
+    const rounded = roundToTwoDecimals(values.price);
+    return rounded.toFixed(2);
+  });
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+
+    if (!isValidDecimalDraft(raw)) return;
+
+    setPriceInput(raw);
+
+    const normalized = normalizeDecimalInput(raw);
+    if (normalized.trim() === "") {
+      setFieldValue("price", 0);
+      return;
+    }
+
+    if (normalized.endsWith(".")) return;
+
+    const parsed = Number(normalized);
+    if (!Number.isNaN(parsed)) {
+      const rounded = roundToTwoDecimals(parsed);
+      setFieldValue("price", rounded);
+    }
+  };
+
+  const handlePriceBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    const normalized = normalizeDecimalInput(raw).trim();
+
+    if (normalized === "" || normalized === ".") {
+      setPriceInput("");
+      setFieldValue("price", 0);
+    } else {
+      const parsed = Number(normalized);
+      if (!Number.isNaN(parsed)) {
+        const rounded = roundToTwoDecimals(parsed);
+        const display = rounded.toFixed(2);
+        setPriceInput(display);
+        setFieldValue("price", rounded);
+      }
+    }
+
+    handleBlur(e);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -49,15 +100,12 @@ export function CreateProductForm({
     }
   };
 
-  const { values, errors, touched, handleChange, handleBlur, setFieldValue, handleSubmit } = formik;
-
-  // Helper to get nested error
   const getAdvantageError = (index: number): string | undefined => {
     const advErrors = errors.advantages;
     if (Array.isArray(advErrors) && advErrors[index]) {
       const err = advErrors[index];
-      if (typeof err === "object" && err !== null && "text" in err) {
-        return (err as { text?: string }).text;
+      if (typeof err === "object" && err !== null && "description" in err) {
+        return (err as { description?: string }).description;
       }
     }
     return undefined;
@@ -78,7 +126,9 @@ export function CreateProductForm({
     const advTouched = touched.advantages;
     if (Array.isArray(advTouched) && advTouched[index]) {
       const t = advTouched[index];
-      return typeof t === "object" && t !== null && (t as { text?: boolean }).text === true;
+      return (
+        typeof t === "object" && t !== null && (t as { description?: boolean }).description === true
+      );
     }
     return false;
   };
@@ -106,7 +156,7 @@ export function CreateProductForm({
           <SelectContent>
             {PRODUCT_CATEGORIES.map((cat) => (
               <SelectItem key={cat} value={cat}>
-                {cat}
+                {CATEGORY_DISPLAY_NAMES[cat]}
               </SelectItem>
             ))}
           </SelectContent>
@@ -117,14 +167,14 @@ export function CreateProductForm({
       <FormSection title="Детали">
         <FormField
           label="Название"
-          error={touched.name ? errors.name : undefined}
+          error={touched.title ? errors.title : undefined}
           required
-          charCount={values.name.length}
+          charCount={values.title.length}
           maxChars={100}
         >
           <Input
-            name="name"
-            value={values.name}
+            name="title"
+            value={values.title}
             onChange={handleChange}
             onBlur={handleBlur}
             placeholder="Введите название продукта"
@@ -198,7 +248,7 @@ export function CreateProductForm({
       <FormSection title="Преимущества">
         <div className="space-y-3">
           {values.advantages.map((adv, idx) => (
-            <div key={adv.id} className="flex items-start gap-2">
+            <div key={adv.position} className="flex items-start gap-2">
               <div className="flex-1">
                 <FormField
                   label={`Преимущество ${idx + 1}`}
@@ -207,8 +257,8 @@ export function CreateProductForm({
                 >
                   <div className="flex gap-2">
                     <Input
-                      name={`advantages.${idx}.text`}
-                      value={adv.text}
+                      name={`advantages.${idx}.description`}
+                      value={adv.description}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       placeholder="Введите преимущество"
@@ -219,7 +269,7 @@ export function CreateProductForm({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      onClick={() => onRemoveAdvantage(adv.id)}
+                      onClick={() => onRemoveAdvantage(adv.position)}
                       className="text-muted-foreground hover:text-destructive"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -249,14 +299,14 @@ export function CreateProductForm({
       <FormSection title="Часто задаваемые вопросы">
         <div className="space-y-4">
           {values.faq.map((item, idx) => (
-            <div key={item.id} className="bg-secondary/30 rounded-lg p-4 space-y-3">
+            <div key={item.position} className="bg-secondary/30 rounded-lg p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-foreground">Вопрос {idx + 1}</span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => onRemoveFaq(item.id)}
+                  onClick={() => onRemoveFaq(item.position)}
                   className="text-muted-foreground hover:text-destructive h-8"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -342,12 +392,13 @@ export function CreateProductForm({
             </span>
             <Input
               name="price"
-              type="number"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
               min={4}
-              step={0.01}
-              value={values.price}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              value={priceInput}
+              onChange={handlePriceChange}
+              onBlur={handlePriceBlur}
               className="bg-background border-border pl-8"
             />
           </div>

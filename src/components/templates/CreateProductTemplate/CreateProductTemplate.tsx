@@ -4,7 +4,7 @@ import { FormikProps } from "formik";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { CreateProductForm } from "@/components/organisms/CreateProductForm/CreateProductForm";
 import { ProductPreview } from "@/components/organisms/ProductPreview/ProductPreview";
-import type { CreateProductFormData } from "@/types/createProduct";
+import { CreateProductFormData } from "@/utils/validators/createProduct";
 
 type PreviewMode = "desktop" | "mobile";
 
@@ -15,9 +15,9 @@ interface CreateProductTemplateProps {
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
   onAddAdvantage: () => void;
-  onRemoveAdvantage: (id: string) => void;
+  onRemoveAdvantage: (position: number) => void;
   onAddFaq: () => void;
-  onRemoveFaq: (id: string) => void;
+  onRemoveFaq: (position: number) => void;
 }
 
 export function CreateProductTemplate({

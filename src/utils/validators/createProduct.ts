@@ -9,7 +9,7 @@ export const productCategorySchema = z.enum(PRODUCT_CATEGORIES, {
   errorMap: () => ({ message: "Выберите категорию" }),
 });
 
-export const productNameSchema = z
+export const productTitleSchema = z
   .string()
   .trim()
   .min(10, "Название должно содержать минимум 10 символов")
@@ -45,29 +45,27 @@ export const productInstructionsSchema = z
   .min(10, "Инструкции должны содержать минимум 10 символов")
   .max(1000, "Инструкции не могут превышать 1000 символов");
 
-export const productPriceSchema = z
-  .number()
-  .min(4, "Минимальная цена 4€");
+export const productPriceSchema = z.number().min(4, "Минимальная цена 4€");
 
 export const createProductSchema = z.object({
   category: productCategorySchema,
-  name: productNameSchema,
+  title: productTitleSchema,
   description: productDescriptionSchema,
   mediaUrl: z.string().optional(),
   advantages: z
     .array(
       z.object({
-        id: z.string(),
-        text: productAdvantageSchema,
+        description: productAdvantageSchema,
+        position: z.number(),
       })
     )
     .max(5, "Максимум 5 преимуществ"),
   faq: z
     .array(
       z.object({
-        id: z.string(),
         question: productFaqQuestionSchema,
         answer: productFaqAnswerSchema,
+        position: z.number(),
       })
     )
     .max(5, "Максимум 5 вопросов"),
@@ -75,4 +73,35 @@ export const createProductSchema = z.object({
   price: productPriceSchema,
 });
 
-export type CreateProductFormSchema = z.infer<typeof createProductSchema>;
+export const validateCreateProductData = (values: CreateProductFormData) => {
+  const result = createProductSchema.safeParse(values);
+  if (result.success) {
+    return {};
+  }
+
+  const errors: Record<string, unknown> = {};
+
+  result.error.errors.forEach((err) => {
+    const path = err.path;
+
+    if (path.length === 1) {
+      errors[path[0] as string] = err.message;
+    } else if (path[0] === "advantages" && typeof path[1] === "number") {
+      if (!errors.advantages) errors.advantages = [];
+      (errors.advantages as Record<string, string>[])[path[1]] = {
+        ...(errors.advantages as Record<string, string>[])[path[1]],
+        [path[2] as string]: err.message,
+      };
+    } else if (path[0] === "faq" && typeof path[1] === "number") {
+      if (!errors.faq) errors.faq = [];
+      (errors.faq as Record<string, string>[])[path[1]] = {
+        ...(errors.faq as Record<string, string>[])[path[1]],
+        [path[2] as string]: err.message,
+      };
+    }
+  });
+
+  return errors;
+};
+
+export type CreateProductFormData = z.infer<typeof createProductSchema>;

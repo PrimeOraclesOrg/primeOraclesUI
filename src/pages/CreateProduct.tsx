@@ -4,48 +4,18 @@ import { useFormik } from "formik";
 import { CreateProductTemplate } from "@/components/templates/CreateProductTemplate/CreateProductTemplate";
 import {
   DEFAULT_FORM_DATA,
-  type CreateProductFormData,
   type ProductAdvantage,
   type ProductFAQItem,
 } from "@/types/createProduct";
-import { createProductSchema } from "@/utils/createProductValidators";
+import {
+  CreateProductFormData,
+  validateCreateProductData,
+} from "@/utils/validators/createProduct";
 import { useToast } from "@/hooks/useToast";
-
-function generateId(): string {
-  return Math.random().toString(36).substring(2, 9);
-}
-
-// Custom validation function using Zod
-const validateWithZod = (values: CreateProductFormData) => {
-  const result = createProductSchema.safeParse(values);
-  if (result.success) {
-    return {};
-  }
-
-  const errors: Record<string, unknown> = {};
-  
-  result.error.errors.forEach((err) => {
-    const path = err.path;
-    
-    if (path.length === 1) {
-      errors[path[0] as string] = err.message;
-    } else if (path[0] === "advantages" && typeof path[1] === "number") {
-      if (!errors.advantages) errors.advantages = [];
-      (errors.advantages as Record<string, string>[])[path[1]] = {
-        ...(errors.advantages as Record<string, string>[])[path[1]],
-        [path[2] as string]: err.message,
-      };
-    } else if (path[0] === "faq" && typeof path[1] === "number") {
-      if (!errors.faq) errors.faq = [];
-      (errors.faq as Record<string, string>[])[path[1]] = {
-        ...(errors.faq as Record<string, string>[])[path[1]],
-        [path[2] as string]: err.message,
-      };
-    }
-  });
-
-  return errors;
-};
+import {
+  createProduct,
+  checkProductTitleAvailability,
+} from "@/services/productsService/productsService";
 
 export default function CreateProduct() {
   const navigate = useNavigate();
@@ -53,21 +23,33 @@ export default function CreateProduct() {
 
   const formik = useFormik<CreateProductFormData>({
     initialValues: DEFAULT_FORM_DATA,
-    validate: validateWithZod,
-    onSubmit: async (_, { setSubmitting }) => {
+    validate: validateCreateProductData,
+    onSubmit: async (values, { setSubmitting }) => {
       try {
-        // TODO: Submit to backend via productsService when Supabase is integrated
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        
+        await checkProductTitleAvailability(values.title);
+
+        await createProduct({
+          title: values.title,
+          category: values.category,
+          description: values.description,
+          advantages: values.advantages,
+          faq: values.faq,
+          instructions: values.instructions,
+          price: values.price,
+          isActive: true,
+        });
+
         toast({
           title: "Продукт создан",
           description: "Ваш продукт успешно создан!",
         });
         navigate("/marketplace");
-      } catch {
+      } catch (error) {
+        console.error("Error creating product:", error);
+        const errorMessage = error instanceof Error ? error.message : "Не удалось создать продукт";
         toast({
           title: "Ошибка",
-          description: "Не удалось создать продукт",
+          description: errorMessage,
           variant: "destructive",
         });
       } finally {
@@ -82,10 +64,13 @@ export default function CreateProduct() {
   }, [navigate]);
 
   // Handle media upload
-  const handleMediaUpload = useCallback((file: File) => {
-    const url = URL.createObjectURL(file);
-    formik.setFieldValue("mediaUrl", url);
-  }, [formik]);
+  const handleMediaUpload = useCallback(
+    (file: File) => {
+      const url = URL.createObjectURL(file);
+      formik.setFieldValue("mediaUrl", url);
+    },
+    [formik]
+  );
 
   // Handle media remove
   const handleMediaRemove = useCallback(() => {
@@ -95,30 +80,38 @@ export default function CreateProduct() {
   // Advantages handlers
   const handleAddAdvantage = useCallback(() => {
     if (formik.values.advantages.length >= 5) return;
-    const newAdvantage: ProductAdvantage = { id: generateId(), text: "" };
+    const newPosition = formik.values.advantages.length + 1;
+    const newAdvantage: ProductAdvantage = { description: "", position: newPosition };
     formik.setFieldValue("advantages", [...formik.values.advantages, newAdvantage]);
   }, [formik]);
 
-  const handleRemoveAdvantage = useCallback((id: string) => {
-    formik.setFieldValue(
-      "advantages",
-      formik.values.advantages.filter((adv) => adv.id !== id)
-    );
-  }, [formik]);
+  const handleRemoveAdvantage = useCallback(
+    (position: number) => {
+      const updated = formik.values.advantages
+        .filter((adv) => adv.position !== position)
+        .map((adv, index) => ({ ...adv, position: index + 1 }));
+      formik.setFieldValue("advantages", updated);
+    },
+    [formik]
+  );
 
   // FAQ handlers
   const handleAddFaq = useCallback(() => {
     if (formik.values.faq.length >= 5) return;
-    const newFaq: ProductFAQItem = { id: generateId(), question: "", answer: "" };
+    const newPosition = formik.values.faq.length + 1;
+    const newFaq: ProductFAQItem = { question: "", answer: "", position: newPosition };
     formik.setFieldValue("faq", [...formik.values.faq, newFaq]);
   }, [formik]);
 
-  const handleRemoveFaq = useCallback((id: string) => {
-    formik.setFieldValue(
-      "faq",
-      formik.values.faq.filter((item) => item.id !== id)
-    );
-  }, [formik]);
+  const handleRemoveFaq = useCallback(
+    (position: number) => {
+      const updated = formik.values.faq
+        .filter((item) => item.position !== position)
+        .map((item, index) => ({ ...item, position: index + 1 }));
+      formik.setFieldValue("faq", updated);
+    },
+    [formik]
+  );
 
   return (
     <CreateProductTemplate
