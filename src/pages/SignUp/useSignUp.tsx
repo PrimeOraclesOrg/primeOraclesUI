@@ -1,5 +1,4 @@
 import { ConfirmCodeHelpPopupContent } from "@/components/organisms";
-import { ConfirmCodeTemplate, SignUpTemplate } from "@/components/templates";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
 import { resendSignUpOtp, signOut, signUp, verifyOtp } from "@/services";
@@ -9,15 +8,15 @@ import {
   VerificationCodeFormData,
   verificationCodeSchema,
 } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
 type Step = "sign-up" | "confirm-code";
 
-export default function SignUp() {
+export const useSignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("status");
@@ -82,7 +81,7 @@ export default function SignUp() {
     });
 
     await signOut();
-    navigate("/login");
+    navigate("/login", { state: location.state });
   };
 
   const handleResendCode = async () => {
@@ -127,36 +126,19 @@ export default function SignUp() {
     navigate(to, { state: location.state });
   };
 
-  return (
-    <>
-      {step === "sign-up" && (
-        <SignUpTemplate
-          onClose={handleCloseClick}
-          register={signUpForm.register}
-          onSubmit={signUpForm.handleSubmit(onSignUpSubmit)}
-          errors={signUpForm.formState.errors}
-          isSubmitting={signUpForm.formState.isSubmitting}
-          onBack={() => navigateWithState("/login")}
-        />
-      )}
-
-      {step === "confirm-code" && (
-        <ConfirmCodeTemplate
-          onClose={handleCloseClick}
-          onReset={() => confirmForm.reset()}
-          email={userEmail}
-          control={confirmForm.control}
-          onSubmit={confirmForm.handleSubmit(onConfirmSubmit)}
-          errors={confirmForm.formState.errors}
-          isSubmitting={confirmForm.formState.isSubmitting}
-          isResending={isResending}
-          resendTimer={resendTimer}
-          onResendCode={handleResendCode}
-          onHelpClick={handleHelpClick}
-          onBack={onBackToSignUp}
-          codeMode="signup"
-        />
-      )}
-    </>
-  );
-}
+  return {
+    step,
+    handleCloseClick,
+    signUpForm,
+    onSignUpSubmit,
+    navigateWithState,
+    confirmForm,
+    userEmail,
+    onConfirmSubmit,
+    isResending,
+    resendTimer,
+    handleResendCode,
+    handleHelpClick,
+    onBackToSignUp,
+  };
+};
