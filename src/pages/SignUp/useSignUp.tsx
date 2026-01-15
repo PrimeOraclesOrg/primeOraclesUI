@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
-type Step = "sign-up" | "confirm-code";
+type Step = "sign-up" | "confirm-code" | "profile-setup";
 
 export const useSignUp = () => {
   const navigate = useNavigate();
@@ -77,11 +77,10 @@ export const useSignUp = () => {
 
     toast({
       title: "Успешно",
-      description: "Регистрация завершена. Теперь вы можете войти в свой аккаунт",
+      description: "Успешная регистрация. Теперь заполните ваш профиль",
     });
 
-    await signOut();
-    navigate("/login", { state: location.state });
+    setStep("profile-setup");
   };
 
   const handleResendCode = async () => {
