@@ -12,6 +12,7 @@ import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp/SignUp";
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
+import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 
 export function AppRoutes() {
   return (
@@ -29,6 +30,7 @@ export function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/profile-setup" element={<ProfileSetup />} />
 
       {/* Protected routes - require authentication */}
       <Route

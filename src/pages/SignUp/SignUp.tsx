@@ -11,8 +11,6 @@ export default function SignUp() {
     confirmForm,
     userEmail,
     onConfirmSubmit,
-    profileSetupForm,
-    onProfileSetupSubmit,
     isResending,
     resendTimer,
     handleResendCode,
@@ -48,17 +46,6 @@ export default function SignUp() {
           onHelpClick={handleHelpClick}
           onBack={onBackToSignUp}
           codeMode="signup"
-        />
-      )}
-
-      {step === "profile-setup" && (
-        <ProfileSetupTemplate
-          register={profileSetupForm.register}
-          onSubmit={profileSetupForm.handleSubmit(onProfileSetupSubmit)}
-          errors={profileSetupForm.formState.errors}
-          isSubmitting={profileSetupForm.formState.isSubmitting}
-          setValue={profileSetupForm.setValue}
-          watch={profileSetupForm.watch}
         />
       )}
     </>

@@ -1,10 +1,8 @@
 import { ConfirmCodeHelpPopupContent } from "@/components/organisms";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
-import { completeProfile, resendSignUpOtp, signOut, signUp, verifyOtp } from "@/services";
+import { resendSignUpOtp, signUp, verifyOtp } from "@/services";
 import {
-  ProfileSetupFormData,
-  profileSetupSchema,
   RegisterFormData,
   registerSchema,
   VerificationCodeFormData,
@@ -16,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
-type Step = "sign-up" | "confirm-code" | "profile-setup";
+type Step = "sign-up" | "confirm-code";
 
 export const useSignUp = () => {
   const navigate = useNavigate();
@@ -39,19 +37,6 @@ export const useSignUp = () => {
   const confirmForm = useForm<VerificationCodeFormData>({
     resolver: zodResolver(verificationCodeSchema),
     defaultValues: { code: "" },
-  });
-
-  const profileSetupForm = useForm<ProfileSetupFormData>({
-    resolver: zodResolver(profileSetupSchema),
-    defaultValues: {
-      avatar: "",
-      description: "",
-      instagramUrl: "",
-      name: "",
-      tiktokUrl: "",
-      username: "",
-      youtubeUrl: "",
-    },
   });
 
   const onSignUpSubmit = async (data: RegisterFormData) => {
@@ -95,34 +80,7 @@ export const useSignUp = () => {
       description: "Успешная регистрация. Теперь заполните ваш профиль",
     });
 
-    setStep("profile-setup");
-  };
-
-  const onProfileSetupSubmit = async (data: ProfileSetupFormData) => {
-    const { error } = await completeProfile({
-      name: data.name,
-      username: data.username,
-      description: data.description,
-      youtubeUrl: data.youtubeUrl,
-      instagramUrl: data.instagramUrl,
-      tiktokUrl: data.tiktokUrl,
-      avatar: data.avatar,
-    });
-
-    if (error) {
-      toast({
-        title: "Ошибка сохранения",
-        description: t(`status:${error.code}`) || error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Успешно",
-        description: "Профиль успешно сохранён, теперь можете войти",
-      });
-      await signOut();
-      navigate("/login", { state: location.state, replace: true });
-    }
+    navigate("/profile-setup", { state: location.state, replace: true });
   };
 
   const handleResendCode = async () => {
@@ -176,8 +134,6 @@ export const useSignUp = () => {
     confirmForm,
     userEmail,
     onConfirmSubmit,
-    profileSetupForm,
-    onProfileSetupSubmit,
     isResending,
     resendTimer,
     handleResendCode,
