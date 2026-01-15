@@ -14,10 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/utils/helpers";
 import type { SocialLink, Transaction, Order } from "@/types";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { resetPassword } from "@/services";
-import { toast } from "@/hooks/useToast";
-import { useAuth } from "@/hooks/useAuth";
 
 type SettingsTab = "basic" | "security" | "balance" | "history";
 
@@ -113,23 +109,6 @@ function BasicSettings({
 }
 
 function SecuritySettings() {
-  const { open, setCodeMode, setEmail } = useAuthModal();
-  const { email } = useAuth();
-
-  const openChangePasswordModal = async () => {
-    const { error } = await resetPassword(email);
-    if (error) {
-      toast({
-        title: "Ошибка",
-        description: error.code,
-        variant: "destructive",
-      });
-    } else {
-      setEmail(email);
-      setCodeMode("recovery");
-      open("confirm-code");
-    }
-  };
   return (
     <div className="space-y-6">
       <p className="text-sm text-muted-foreground">
@@ -164,7 +143,6 @@ function SecuritySettings() {
         <Button
           variant="outline"
           className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-          onClick={openChangePasswordModal}
         >
           Изменить пароль
         </Button>

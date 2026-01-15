@@ -23,6 +23,6 @@ export {
 
 export type { ToasterToast } from "./toastSlice";
 
-export * from "./authModalSlice";
+export { authReducer, authSlice, clearUser, setUser } from "./authSlice";
 
-export * from './authSlice';
+export * from "./selectors";

@@ -5,49 +5,15 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { setAuthEmail, setIsAuthenticated, store } from "@/store";
 import { supabase } from "@/utils";
-import { EmailOtpType, Session, User } from "@supabase/supabase-js";
-
-export interface SignUpCredentials {
-  email: string;
-  password: string;
-  metadata?: {
-    firstName?: string;
-    lastName?: string;
-  };
-}
-
-export interface SignInCredentials {
-  email: string;
-  password: string;
-}
-
-export interface VerifyOtpCredentials {
-  email: string;
-  code: string;
-  type: EmailOtpType;
-}
-
-export type UserAndSession =
-  | {
-      user: User;
-      session: Session | null;
-    }
-  | {
-      user: null;
-      session: null;
-    };
-
-export interface AuthError {
-  message: string;
-  code?: string;
-}
-
-export interface AuthResult<T> {
-  data: T | null;
-  error: AuthError | null;
-}
+import { Session, User } from "@supabase/supabase-js";
+import {
+  AuthResult,
+  SignInCredentials,
+  SignUpCredentials,
+  UserAndSession,
+  VerifyOtpCredentials,
+} from "./types";
 
 /**
  * Sign up a new user with email and password
@@ -62,7 +28,6 @@ export async function signUp(credentials: SignUpCredentials): Promise<AuthResult
     },
   });
 
-  console.log("signUp called with:", credentials.email);
   return {
     data,
     error,
@@ -78,11 +43,6 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
     password: credentials.password,
   });
 
-  if (!error && data) {
-    store.dispatch(setIsAuthenticated(true));
-    store.dispatch(setAuthEmail(data.user.email));
-  }
-
   return {
     data,
     error,
@@ -94,9 +54,6 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
  */
 export async function signOut(): Promise<AuthResult<null>> {
   const { error } = await supabase.auth.signOut();
-
-  store.dispatch(setAuthEmail(""));
-  store.dispatch(setIsAuthenticated(false));
 
   return {
     data: null,
@@ -142,7 +99,6 @@ export async function resetPassword(email: string): Promise<AuthResult<null>> {
     redirectTo: `${window.location.origin}/reset-password`,
   });
 
-  console.log("resetPassword called for:", email);
   return {
     data: null,
     error,
@@ -169,14 +125,8 @@ export async function updatePassword(newPassword: string): Promise<AuthResult<{ 
 export function onAuthStateChange(
   callback: (event: string, session: Session | null) => void
 ): () => void {
-  // TODO: Replace with Supabase auth
-  // const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
-  // return () => subscription.unsubscribe();
-
-  console.log("onAuthStateChange subscription created");
-  return () => {
-    console.log("onAuthStateChange subscription removed");
-  };
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
+  return () => subscription.unsubscribe();
 }
 
 export async function verifyOtp({

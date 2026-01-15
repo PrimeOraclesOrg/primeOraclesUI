@@ -7,21 +7,40 @@
 
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { ForgotPasswordForm } from "@/components/organisms";
-import { useAuthModal } from "@/hooks/useAuthModal";
+import { ForgotPasswordFormData } from "@/utils";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
-export function ForgotPasswordTemplate() {
-  const { setView } = useAuthModal();
+interface ForgotPasswordTemplateProps {
+  onSubmit: () => void;
+  register: UseFormRegister<ForgotPasswordFormData>;
+  errors: FieldErrors<ForgotPasswordFormData>;
+  isSubmitting: boolean;
+  onBack: () => void;
+  onClose: () => void;
+}
 
-  const onBack = () => setView("login");
-
+export function ForgotPasswordTemplate({
+  onBack,
+  onClose,
+  onSubmit,
+  register,
+  errors,
+  isSubmitting,
+}: ForgotPasswordTemplateProps) {
   return (
     <AuthLayout
       title="Восстановление пароля"
       subtitle="Введите э-почту, и мы отправим вам код для восстановления"
       showBackButton
       onBack={onBack}
+      onClose={onClose}
     >
-      <ForgotPasswordForm />
+      <ForgotPasswordForm
+        onSubmit={onSubmit}
+        register={register}
+        errors={errors}
+        isSubmitting={isSubmitting}
+      />
 
       {/* Footer */}
       <div className="text-center mt-8 pt-4">

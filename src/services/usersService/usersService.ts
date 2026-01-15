@@ -1,24 +1,13 @@
 /**
  * Users Service
- * 
+ *
  * User profile and data management.
  * Prepared for Supabase integration.
  */
 
-import type { UserProfile, SocialLink } from "@/types";
+import type { UserProfile } from "@/types";
 import { mockSocialLinks } from "@/data/transactions";
-
-export interface UserProfileUpdate {
-  name?: string;
-  description?: string;
-  avatar?: string;
-  socialLinks?: SocialLink[];
-}
-
-export interface ServiceResult<T> {
-  data: T | null;
-  error: { message: string } | null;
-}
+import { ServiceResult, UserProfileUpdate } from "./types";
 
 /**
  * Get user profile by user ID
@@ -36,7 +25,8 @@ export async function fetchUserProfile(userId: string): Promise<ServiceResult<Us
     data: {
       name: "Lesha Maisak",
       username: "Leshamais",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
+      avatar:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
       description: "",
       socialLinks: mockSocialLinks,
     },
@@ -71,7 +61,6 @@ export async function updateUserProfile(
   //   .select()
   //   .single();
 
-  console.log("updateUserProfile called:", userId, updates);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -89,7 +78,6 @@ export async function updateCurrentUserProfile(
   // if (!user) return { data: null, error: { message: "Not authenticated" } };
   // return updateUserProfile(user.id, updates);
 
-  console.log("updateCurrentUserProfile called:", updates);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -99,10 +87,7 @@ export async function updateCurrentUserProfile(
 /**
  * Upload user avatar
  */
-export async function uploadAvatar(
-  userId: string,
-  file: File
-): Promise<ServiceResult<string>> {
+export async function uploadAvatar(userId: string, file: File): Promise<ServiceResult<string>> {
   // TODO: Replace with Supabase storage
   // const fileName = `${userId}/${Date.now()}-${file.name}`;
   // const { data, error } = await supabase.storage
@@ -114,7 +99,6 @@ export async function uploadAvatar(
   //   .getPublicUrl(fileName);
   // return { data: publicUrl, error: null };
 
-  console.log("uploadAvatar called:", userId, file.name);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -128,7 +112,6 @@ export async function deleteUserAccount(userId: string): Promise<ServiceResult<n
   // TODO: Replace with Supabase RPC for secure deletion
   // const { error } = await supabase.rpc('delete_user_account', { user_id: userId });
 
-  console.log("deleteUserAccount called:", userId);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -147,7 +130,6 @@ export async function checkUsernameAvailability(username: string): Promise<Servi
   //   .maybeSingle();
   // return { data: !data, error };
 
-  console.log("checkUsernameAvailability called:", username);
   return {
     data: true,
     error: null,

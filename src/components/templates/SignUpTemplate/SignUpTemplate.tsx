@@ -1,5 +1,5 @@
 /**
- * RegisterTemplate
+ * SignUpTemplate
  *
  * Presentational component for the registration step.
  * Uses split-screen AuthLayout with modern minimal design.
@@ -7,15 +7,34 @@
 
 import { AuthLayout } from "@/components/templates/AuthLayout/AuthLayout";
 import { SignUpForm } from "@/components/organisms";
-import { useAuthModal } from "@/hooks/useAuthModal";
+import { RegisterFormData } from "@/utils";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
 
-export function SignUpTemplate() {
-  const { setView } = useAuthModal();
-  const onBack = () => setView("login");
+interface SignUpTemplateProps {
+  onSubmit: () => void;
+  register: UseFormRegister<RegisterFormData>;
+  errors: FieldErrors<RegisterFormData>;
+  isSubmitting: boolean;
+  onBack: () => void;
+  onClose: () => void;
+}
 
+export function SignUpTemplate({
+  onBack,
+  onSubmit,
+  register,
+  errors,
+  isSubmitting,
+  onClose,
+}: SignUpTemplateProps) {
   return (
-    <AuthLayout title="Создать аккаунт" showBackButton onBack={onBack}>
-      <SignUpForm />
+    <AuthLayout title="Создать аккаунт" showBackButton onBack={onBack} onClose={onClose}>
+      <SignUpForm
+        onSubmit={onSubmit}
+        register={register}
+        errors={errors}
+        isSubmitting={isSubmitting}
+      />
 
       {/* Footer */}
       <div className="text-center mt-8 pt-4">

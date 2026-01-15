@@ -1,33 +1,9 @@
-import {
-  selectAuth,
-  setAuthEmail,
-  setIsAuthenticated,
-  useAppDispatch,
-  useAppSelector,
-} from "@/store";
-import { useCallback } from "react";
+import { selectAuthUser, useAppSelector } from "@/store";
 
 export const useAuth = () => {
-  const dispatch = useAppDispatch();
-  const authState = useAppSelector(selectAuth);
-
-  const setAuthentication = useCallback(
-    (isAuthorized: boolean) => {
-      dispatch(setIsAuthenticated(isAuthorized));
-    },
-    [dispatch]
-  );
-
-  const setEmail = useCallback(
-    (email: string) => {
-      dispatch(setAuthEmail(email));
-    },
-    [dispatch]
-  );
+  const user = useAppSelector(selectAuthUser);
 
   return {
-    ...authState,
-    setAuthentication,
-    setEmail
+    user,
   };
 };

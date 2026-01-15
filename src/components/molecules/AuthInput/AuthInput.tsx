@@ -23,10 +23,7 @@ export const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
     return (
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label
-            htmlFor={inputId}
-            className="text-foreground text-sm font-normal"
-          >
+          <Label htmlFor={inputId} className="text-foreground text-sm font-normal">
             {label}
           </Label>
           {labelRight}
@@ -36,15 +33,12 @@ export const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
           ref={ref}
           className={cn(
             "bg-secondary/30 border-border/50 h-12 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg",
-            error &&
-              "border-destructive focus:border-destructive",
+            error && "border-destructive focus:border-destructive",
             className
           )}
           {...props}
         />
-        {error && (
-          <p className="text-destructive text-sm animate-fade-in">{error}</p>
-        )}
+        {error && <p className="text-destructive text-sm animate-fade-in">{error}</p>}
       </div>
     );
   }

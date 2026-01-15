@@ -12,8 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface PasswordInputProps
-  extends Omit<React.ComponentProps<"input">, "type"> {
+interface PasswordInputProps extends Omit<React.ComponentProps<"input">, "type"> {
   label: string;
   error?: string;
   labelRight?: React.ReactNode;
@@ -33,10 +32,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     return (
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label
-            htmlFor={inputId}
-            className="text-foreground text-sm font-normal"
-          >
+          <Label htmlFor={inputId} className="text-foreground text-sm font-normal">
             {label}
           </Label>
           {labelRight}
@@ -64,16 +60,10 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             tabIndex={-1}
             aria-label={isVisible ? "Скрыть пароль" : "Показать пароль"}
           >
-            {isVisible ? (
-              <EyeOff className="h-5 w-5" />
-            ) : (
-              <Eye className="h-5 w-5" />
-            )}
+            {isVisible ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
           </Button>
         </div>
-        {error && (
-          <p className="text-destructive text-sm animate-fade-in">{error}</p>
-        )}
+        {error && <p className="text-destructive text-sm animate-fade-in">{error}</p>}
       </div>
     );
   }

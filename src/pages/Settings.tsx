@@ -19,13 +19,18 @@ export default function Settings() {
     setSocialLinks(newLinks);
   };
 
+  const onLogout = () => {
+    signOut();
+    navigate("/");
+  };
+
   return (
     <SettingsTemplate
       activeTab={activeTab}
       name={name}
       description={description}
       socialLinks={socialLinks}
-      balance={22.00}
+      balance={22.0}
       transactions={mockTransactions}
       orders={mockOrders}
       onTabChange={setActiveTab}
@@ -33,7 +38,7 @@ export default function Settings() {
       onDescriptionChange={setDescription}
       onSocialLinkChange={handleSocialLinkChange}
       onSaveBasic={() => {}}
-      onLogout={() => { signOut(); navigate('/') }}
+      onLogout={onLogout}
     />
   );
 }

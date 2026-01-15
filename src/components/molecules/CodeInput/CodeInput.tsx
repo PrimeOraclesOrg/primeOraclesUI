@@ -1,6 +1,6 @@
 /**
  * CodeInput Component
- * 
+ *
  * 8-digit verification code input.
  */
 
@@ -68,7 +68,7 @@ export function CodeInput({
       e.preventDefault();
       const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, length);
       onChange(pasted);
-      
+
       // Focus last filled input or first empty
       const focusIndex = Math.min(pasted.length, length - 1);
       inputRefs.current[focusIndex]?.focus();
@@ -108,11 +108,7 @@ export function CodeInput({
           />
         ))}
       </div>
-      {error && (
-        <p className="text-destructive text-sm text-center animate-fade-in">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-destructive text-sm text-center animate-fade-in">{error}</p>}
     </div>
   );
 }

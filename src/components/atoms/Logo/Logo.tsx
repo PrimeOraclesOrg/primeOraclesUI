@@ -1,6 +1,6 @@
 /**
  * Logo Component
- * 
+ *
  * Brand logo for Prime Oracles platform.
  */
 

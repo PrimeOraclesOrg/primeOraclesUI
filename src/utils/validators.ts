@@ -22,9 +22,7 @@ export const passwordSchema = z
 /**
  * Confirm password schema (for registration/reset)
  */
-export const confirmPasswordSchema = z
-  .string()
-  .min(1, "Подтверждение пароля обязательно");
+export const confirmPasswordSchema = z.string().min(1, "Подтверждение пароля обязательно");
 
 /**
  * Login form schema
@@ -71,10 +69,12 @@ export const resetPasswordSchema = z
 /**
  * Verification code schema
  */
-export const verificationCodeSchema = z
-  .string()
-  .length(8, "Код должен содержать 8 символов")
-  .regex(/^\d+$/, "Код должен содержать только цифры");
+export const verificationCodeSchema = z.object({
+  code: z
+    .string()
+    .length(8, "Код должен содержать 8 символов")
+    .regex(/^\d+$/, "Код должен содержать только цифры"),
+});
 
 /**
  * URL schema for social links (optional)
@@ -138,3 +138,4 @@ export type RegisterFormData = z.infer<typeof registerSchema>;
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 export type ProfileSetupFormData = z.infer<typeof profileSetupSchema>;
+export type VerificationCodeFormData = z.infer<typeof verificationCodeSchema>;

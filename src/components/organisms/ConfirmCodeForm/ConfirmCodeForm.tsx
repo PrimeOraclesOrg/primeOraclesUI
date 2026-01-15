@@ -1,75 +1,58 @@
 import { CodeInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { useAuthModal } from "@/hooks/useAuthModal";
-import { toast } from "@/hooks/useToast";
-import { signOut, verifyOtp } from "@/services";
-import { verificationCodeSchema } from "@/utils";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { VerificationCodeFormData } from "@/utils";
+import { FieldErrors, Control, Controller } from "react-hook-form";
 
-export const ConfirmCodeForm = () => {
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const { setView, codeMode, email } = useAuthModal();
-  const { t } = useTranslation();
+interface ConfirmCodeFormProps {
+  codeMode: "signup" | "recovery";
+  onSubmit: () => void;
+  errors: FieldErrors<VerificationCodeFormData>;
+  isSubmitting: boolean;
+  control: Control<VerificationCodeFormData>;
+  onReset: () => void;
+}
 
+export const ConfirmCodeForm = ({
+  codeMode,
+  onSubmit,
+  errors,
+  isSubmitting,
+  control,
+  onReset,
+}: ConfirmCodeFormProps) => {
   const buttonText = codeMode === "signup" ? "Подтвердить" : "Восстановить пароль";
   const loadingText = "Проверка...";
 
-  const handleConfirmCode = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setError("");
-
-      const result = verificationCodeSchema.safeParse(code);
-
-      if (!result.success) {
-        setError(result.error.errors[0]?.message);
-        return;
-      }
-
-      console.log(result.data);
-
-      setIsLoading(true);
-      try {
-        const { error } = await verifyOtp({ email, code, type: codeMode });
-
-        if (error) {
-          toast({
-            title: "Ошибка подтверждения",
-            description: t(`status:${error.code}`),
-            variant: "destructive",
-          });
-        } else {
-          if (codeMode === "signup") {
-            setView("profile-setup");
-          }
-          if (codeMode === "recovery") setView("reset-password");
-        }
-      } catch {
-        toast({
-          title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [email, code, setView, codeMode, t]
-  );
-
   return (
-    <form className="space-y-6" onSubmit={handleConfirmCode}>
-      <CodeInput length={8} value={code} onChange={setCode} error={error} disabled={isLoading} />
+    <form className="space-y-6 flex flex-col items-center" onSubmit={onSubmit} onReset={onReset}>
+      <Controller
+        name="code"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <CodeInput
+            length={8}
+            value={value}
+            onChange={onChange}
+            error={errors.code?.message}
+            disabled={isSubmitting}
+          />
+        )}
+      />
+      <p className="text-sm text-muted-foreground">
+        <button
+          type="reset"
+          className="text-primary hover:text-primary/80 font-medium transition-colors"
+        >
+          Очистить поле
+        </button>
+      </p>
 
       <Button
         type="submit"
         className="w-full h-12 text-base font-medium bg-secondary hover:bg-secondary/80 text-foreground transition-colors rounded-lg"
-        disabled={isLoading || code.length !== 8}
+        disabled={isSubmitting}
       >
-        {isLoading ? loadingText : buttonText}
+        {isSubmitting ? loadingText : buttonText}
       </Button>
     </form>
   );

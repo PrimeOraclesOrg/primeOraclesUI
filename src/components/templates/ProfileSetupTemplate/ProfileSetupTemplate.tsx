@@ -15,9 +15,3 @@ export const ProfileSetupTemplate = () => {
     </AuthLayout>
   );
 };
-    {/* <div className="flex items-center justify-center fixed w-full h-full left-0 top-0">
-      <div className="border border-accent rounded-md p-4 max-h-[90%] max-w-[720px] w-full overflow-auto">
-        <h1>Заполните профиль</h1>
-        
-      </div>
-    </div> */}
