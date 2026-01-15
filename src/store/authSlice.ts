@@ -3,9 +3,12 @@ import { User } from "@supabase/supabase-js";
 
 export interface AuthState {
   user?: User;
+  isAuthFetching: boolean;
 }
 
-const initialState: AuthState = {};
+const initialState: AuthState = {
+  isAuthFetching: true,
+};
 
 export const authSlice = createSlice({
   name: "auth",
@@ -13,9 +16,11 @@ export const authSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
+      state.isAuthFetching = false;
     },
     clearUser: (state) => {
       state.user = null;
+      state.isAuthFetching = false;
     },
   },
 });
