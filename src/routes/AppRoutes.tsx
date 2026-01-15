@@ -11,7 +11,7 @@ import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp";
-import ResetPassword from "@/pages/ResetPassword";
+import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 
 export function AppRoutes() {
   return (
