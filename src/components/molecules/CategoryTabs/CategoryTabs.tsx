@@ -15,8 +15,8 @@ export function CategoryTabs({ categories, activeCategory, onCategoryChange }: C
           onClick={() => onCategoryChange(category)}
           className={cn(
             "text-sm font-medium transition-colors relative pb-3 -mb-3",
-            activeCategory === category 
-              ? "text-primary" 
+            activeCategory === category
+              ? "text-primary"
               : "text-muted-foreground hover:text-foreground"
           )}
         >

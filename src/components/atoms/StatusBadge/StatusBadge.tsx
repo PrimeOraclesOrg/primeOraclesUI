@@ -33,17 +33,15 @@ const orderLabels: Record<OrderStatus, string> = {
 };
 
 export function StatusBadge({ status, type }: StatusBadgeProps) {
-  const styles = type === "transaction" 
-    ? transactionStyles[status as TransactionStatus] 
-    : orderStyles[status as OrderStatus];
-  
-  const label = type === "transaction" 
-    ? transactionLabels[status as TransactionStatus] 
-    : orderLabels[status as OrderStatus];
+  const styles =
+    type === "transaction"
+      ? transactionStyles[status as TransactionStatus]
+      : orderStyles[status as OrderStatus];
 
-  return (
-    <span className={cn("px-3 py-1 rounded-full border text-xs", styles)}>
-      {label}
-    </span>
-  );
+  const label =
+    type === "transaction"
+      ? transactionLabels[status as TransactionStatus]
+      : orderLabels[status as OrderStatus];
+
+  return <span className={cn("px-3 py-1 rounded-full border text-xs", styles)}>{label}</span>;
 }

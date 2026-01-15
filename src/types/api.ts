@@ -1,12 +1,12 @@
-import type { 
-  Product, 
-  ProductDetails, 
-  Reward, 
-  LearningItem, 
+import type {
+  Product,
+  ProductDetails,
+  Reward,
+  LearningItem,
   LessonDetails,
   Review,
   FAQ,
-  RatingDistributionItem 
+  RatingDistributionItem,
 } from "./models";
 
 // ========================================

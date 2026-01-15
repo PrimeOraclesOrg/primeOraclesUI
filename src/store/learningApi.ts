@@ -42,7 +42,4 @@ export const learningApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetLearningItemsQuery,
-  useGetLessonDetailsQuery,
-} = learningApi;
+export const { useGetLearningItemsQuery, useGetLessonDetailsQuery } = learningApi;

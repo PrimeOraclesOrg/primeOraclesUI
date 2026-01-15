@@ -13,13 +13,5 @@ const sizeClasses = {
 };
 
 export function Loader({ size = "md", className }: LoaderProps) {
-  return (
-    <Loader2 
-      className={cn(
-        "animate-spin text-primary", 
-        sizeClasses[size],
-        className
-      )} 
-    />
-  );
+  return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size], className)} />;
 }
