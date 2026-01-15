@@ -7,3 +7,4 @@ export { Logo } from "./Logo/Logo";
 export { FormSection } from "./FormSection/FormSection";
 export { FormField } from "./FormField/FormField";
 export { BrandLogo } from "./BrandLogo";
+export { LoadingScreen } from './LoadingScreen/LoadingScreen';
