@@ -9,12 +9,10 @@ import { AuthInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/hooks/useToast";
-import { completeProfile } from "@/services";
-import { profileSetupSchema, ProfileSetupFormData } from "@/utils";
 import { cn } from "@/lib/utils";
+import { ProfileSetupFormData } from "@/utils";
 import { ImagePlus, Youtube, Instagram } from "lucide-react";
-import { useCallback, useState } from "react";
+import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 
 // TikTok icon component (not available in lucide-react)
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -37,115 +35,51 @@ const AVATAR_OPTIONS = [
   "https://api.dicebear.com/7.x/adventurer/svg?seed=dog&backgroundColor=f97316",
 ];
 
-interface ProfileSetupErrors {
-  name?: string;
-  username?: string;
-  description?: string;
-  youtubeUrl?: string;
-  instagramUrl?: string;
-  tiktokUrl?: string;
-  avatar?: string;
+interface ProfileSetupFormProps {
+  onSubmit: () => void;
+  register: UseFormRegister<ProfileSetupFormData>;
+  errors: FieldErrors<ProfileSetupFormData>;
+  isSubmitting: boolean;
+  watch: UseFormWatch<ProfileSetupFormData>;
+  setValue: UseFormSetValue<ProfileSetupFormData>;
 }
 
-export const ProfileSetupForm = () => {
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [description, setDescription] = useState("");
-  const [youtubeUrl, setYoutubeUrl] = useState("");
-  const [instagramUrl, setInstagramUrl] = useState("");
-  const [tiktokUrl, setTiktokUrl] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [errors, setErrors] = useState<ProfileSetupErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setErrors({});
-
-      const formData: ProfileSetupFormData = {
-        name,
-        username,
-        description,
-        youtubeUrl,
-        instagramUrl,
-        tiktokUrl,
-        avatar,
-      };
-
-      const result = profileSetupSchema.safeParse(formData);
-
-      if (!result.success) {
-        const fieldErrors: ProfileSetupErrors = {};
-        result.error.errors.forEach((err) => {
-          const field = err.path[0] as keyof ProfileSetupErrors;
-          fieldErrors[field] = err.message;
-        });
-        setErrors(fieldErrors);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const { error } = await completeProfile({
-          name: result.data.name,
-          username: result.data.username,
-          description: result.data.description,
-          youtubeUrl: result.data.youtubeUrl,
-          instagramUrl: result.data.instagramUrl,
-          tiktokUrl: result.data.tiktokUrl,
-          avatar: result.data.avatar,
-        });
-
-        if (error) {
-          toast({
-            title: "Ошибка сохранения",
-            description: error.message,
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Успешно",
-            description: "Профиль успешно сохранён",
-          });
-          /* Close */
-        }
-      } catch {
-        toast({
-          title: "Ошибка",
-          description: "Произошла ошибка. Попробуйте позже.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [name, username, description, youtubeUrl, instagramUrl, tiktokUrl, avatar]
-  );
+export const ProfileSetupForm = ({
+  errors,
+  isSubmitting,
+  onSubmit,
+  register,
+  watch,
+  setValue,
+}: ProfileSetupFormProps) => {
+  const nameValue = watch("name") || "";
+  const descriptionValue = watch("description") || "";
+  const selectedAvatar = watch("avatar");
 
   return (
-    <form className="space-y-5" onSubmit={handleSubmit}>
+    <form className="space-y-5" onSubmit={onSubmit}>
       {/* Name field with counter */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="name" className="text-foreground text-sm font-normal">
             Имя
           </Label>
-          <span className="text-muted-foreground text-xs">{name.length}/50</span>
+          <span className="text-muted-foreground text-xs">{nameValue.length}/50</span>
         </div>
         <input
           id="name"
           type="text"
           placeholder="Введите ваше имя"
-          value={name}
-          onChange={(e) => setName(e.target.value.slice(0, 50))}
-          disabled={isLoading}
+          {...register("name")}
+          disabled={isSubmitting}
           className={cn(
             "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
             errors.name && "border-destructive focus:border-destructive"
           )}
         />
-        {errors.name && <p className="text-destructive text-sm animate-fade-in">{errors.name}</p>}
+        {errors.name && (
+          <p className="text-destructive text-sm animate-fade-in">{errors.name?.message}</p>
+        )}
       </div>
 
       {/* Username field */}
@@ -153,10 +87,9 @@ export const ProfileSetupForm = () => {
         label="Username"
         type="text"
         placeholder="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        error={errors.username}
-        disabled={isLoading}
+        {...register("username")}
+        error={errors.username?.message}
+        disabled={isSubmitting}
       />
 
       {/* Description field with counter */}
@@ -166,14 +99,13 @@ export const ProfileSetupForm = () => {
             Описание{" "}
             <span className="text-muted-foreground font-normal">- необязательное поле</span>
           </Label>
-          <span className="text-muted-foreground text-xs">{description.length}/250</span>
+          <span className="text-muted-foreground text-xs">{descriptionValue.length}/250</span>
         </div>
         <Textarea
           id="description"
           placeholder="Описание"
-          value={description}
-          onChange={(e) => setDescription(e.target.value.slice(0, 250))}
-          disabled={isLoading}
+          {...register("description")}
+          disabled={isSubmitting}
           rows={3}
           className={cn(
             "bg-secondary/30 border-border/50 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg resize-none",
@@ -181,7 +113,7 @@ export const ProfileSetupForm = () => {
           )}
         />
         {errors.description && (
-          <p className="text-destructive text-sm animate-fade-in">{errors.description}</p>
+          <p className="text-destructive text-sm animate-fade-in">{errors.description?.message}</p>
         )}
       </div>
 
@@ -198,9 +130,8 @@ export const ProfileSetupForm = () => {
           <input
             type="text"
             placeholder="https://www.youtube.com/@username"
-            value={youtubeUrl}
-            onChange={(e) => setYoutubeUrl(e.target.value)}
-            disabled={isLoading}
+            {...register("youtubeUrl")}
+            disabled={isSubmitting}
             className={cn(
               "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
               errors.youtubeUrl && "border-destructive focus:border-destructive"
@@ -208,7 +139,7 @@ export const ProfileSetupForm = () => {
           />
         </div>
         {errors.youtubeUrl && (
-          <p className="text-destructive text-sm animate-fade-in">{errors.youtubeUrl}</p>
+          <p className="text-destructive text-sm animate-fade-in">{errors.youtubeUrl?.message}</p>
         )}
 
         {/* Instagram */}
@@ -217,9 +148,8 @@ export const ProfileSetupForm = () => {
           <input
             type="text"
             placeholder="https://www.instagram.com/@username"
-            value={instagramUrl}
-            onChange={(e) => setInstagramUrl(e.target.value)}
-            disabled={isLoading}
+            {...register("instagramUrl")}
+            disabled={isSubmitting}
             className={cn(
               "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
               errors.instagramUrl && "border-destructive focus:border-destructive"
@@ -227,7 +157,7 @@ export const ProfileSetupForm = () => {
           />
         </div>
         {errors.instagramUrl && (
-          <p className="text-destructive text-sm animate-fade-in">{errors.instagramUrl}</p>
+          <p className="text-destructive text-sm animate-fade-in">{errors.instagramUrl?.message}</p>
         )}
 
         {/* TikTok */}
@@ -236,9 +166,8 @@ export const ProfileSetupForm = () => {
           <input
             type="text"
             placeholder="https://www.tiktok.com/@username"
-            value={tiktokUrl}
-            onChange={(e) => setTiktokUrl(e.target.value)}
-            disabled={isLoading}
+            {...register("tiktokUrl")}
+            disabled={isSubmitting}
             className={cn(
               "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
               errors.tiktokUrl && "border-destructive focus:border-destructive"
@@ -246,7 +175,7 @@ export const ProfileSetupForm = () => {
           />
         </div>
         {errors.tiktokUrl && (
-          <p className="text-destructive text-sm animate-fade-in">{errors.tiktokUrl}</p>
+          <p className="text-destructive text-sm animate-fade-in">{errors.tiktokUrl?.message}</p>
         )}
       </div>
 
@@ -257,12 +186,12 @@ export const ProfileSetupForm = () => {
           {/* Upload button */}
           <button
             type="button"
-            disabled={isLoading}
+            disabled={isSubmitting}
             className={cn(
               "w-12 h-12 rounded-full border-2 border-dashed border-border/50 flex items-center justify-center text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors",
-              avatar === "upload" && "border-primary text-primary"
+              selectedAvatar === "upload" && "border-primary text-primary"
             )}
-            onClick={() => setAvatar("upload")}
+            onClick={() => setValue("avatar", "upload")}
           >
             <ImagePlus className="h-5 w-5" />
           </button>
@@ -272,14 +201,14 @@ export const ProfileSetupForm = () => {
             <button
               key={index}
               type="button"
-              disabled={isLoading}
+              disabled={isSubmitting}
               className={cn(
                 "w-12 h-12 rounded-full overflow-hidden border-2 transition-colors",
-                avatar === avatarUrl
+                selectedAvatar === avatarUrl
                   ? "border-primary"
                   : "border-transparent hover:border-primary/50"
               )}
-              onClick={() => setAvatar(avatarUrl)}
+              onClick={() => setValue("avatar", avatarUrl)}
             >
               <img
                 src={avatarUrl}
@@ -294,9 +223,9 @@ export const ProfileSetupForm = () => {
       <Button
         type="submit"
         className="w-full h-12 text-base font-medium rounded-lg mt-6"
-        disabled={isLoading}
+        disabled={isSubmitting}
       >
-        {isLoading ? "Сохранение..." : "Сохранить"}
+        {isSubmitting ? "Сохранение..." : "Сохранить"}
       </Button>
     </form>
   );

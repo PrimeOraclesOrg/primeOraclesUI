@@ -1,8 +1,10 @@
 import { ConfirmCodeHelpPopupContent } from "@/components/organisms";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
-import { resendSignUpOtp, signOut, signUp, verifyOtp } from "@/services";
+import { completeProfile, resendSignUpOtp, signOut, signUp, verifyOtp } from "@/services";
 import {
+  ProfileSetupFormData,
+  profileSetupSchema,
   RegisterFormData,
   registerSchema,
   VerificationCodeFormData,
@@ -37,6 +39,19 @@ export const useSignUp = () => {
   const confirmForm = useForm<VerificationCodeFormData>({
     resolver: zodResolver(verificationCodeSchema),
     defaultValues: { code: "" },
+  });
+
+  const profileSetupForm = useForm<ProfileSetupFormData>({
+    resolver: zodResolver(profileSetupSchema),
+    defaultValues: {
+      avatar: "",
+      description: "",
+      instagramUrl: "",
+      name: "",
+      tiktokUrl: "",
+      username: "",
+      youtubeUrl: "",
+    },
   });
 
   const onSignUpSubmit = async (data: RegisterFormData) => {
@@ -83,6 +98,33 @@ export const useSignUp = () => {
     setStep("profile-setup");
   };
 
+  const onProfileSetupSubmit = async (data: ProfileSetupFormData) => {
+    const { error } = await completeProfile({
+      name: data.name,
+      username: data.username,
+      description: data.description,
+      youtubeUrl: data.youtubeUrl,
+      instagramUrl: data.instagramUrl,
+      tiktokUrl: data.tiktokUrl,
+      avatar: data.avatar,
+    });
+
+    if (error) {
+      toast({
+        title: "Ошибка сохранения",
+        description: t(`status:${error.code}`) || error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Успешно",
+        description: "Профиль успешно сохранён, теперь можете войти",
+      });
+      await signOut();
+      navigate("/login", { state: location.state, replace: true });
+    }
+  };
+
   const handleResendCode = async () => {
     setIsResending(true);
     const { error } = await resendSignUpOtp(userEmail);
@@ -122,7 +164,7 @@ export const useSignUp = () => {
   const handleCloseClick = () => navigate(beforeLogin, { replace: true });
 
   const navigateWithState = (to: string) => {
-    navigate(to, { state: location.state });
+    navigate(to, { state: location.state, replace: true });
   };
 
   return {
@@ -134,6 +176,8 @@ export const useSignUp = () => {
     confirmForm,
     userEmail,
     onConfirmSubmit,
+    profileSetupForm,
+    onProfileSetupSubmit,
     isResending,
     resendTimer,
     handleResendCode,
