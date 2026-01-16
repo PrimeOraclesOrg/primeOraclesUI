@@ -13,6 +13,7 @@ import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp/SignUp";
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
+import { AuthRoute } from "@/components/shared";
 
 export function AppRoutes() {
   return (
@@ -27,9 +28,30 @@ export function AppRoutes() {
       <Route path="/create-product" element={<CreateProduct />} />
 
       {/* Auth routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/sign-up" element={<SignUp />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route
+        path="/login"
+        element={
+          <AuthRoute>
+            <Login />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/sign-up"
+        element={
+          <AuthRoute>
+            <SignUp />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <AuthRoute>
+            <ResetPassword />
+          </AuthRoute>
+        }
+      />
       <Route path="/profile-setup" element={<ProfileSetup />} />
 
       {/* Protected routes - require authentication */}

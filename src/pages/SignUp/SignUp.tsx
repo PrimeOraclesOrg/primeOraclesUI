@@ -5,10 +5,10 @@ export default function SignUp() {
   const {
     step,
     handleCloseClick,
-    signUpForm,
+    registerFormForm,
     onSignUpSubmit,
     navigateWithState,
-    confirmForm,
+    verificationCodeForm,
     userEmail,
     onConfirmSubmit,
     isResending,
@@ -23,10 +23,10 @@ export default function SignUp() {
       {step === "sign-up" && (
         <SignUpTemplate
           onClose={handleCloseClick}
-          register={signUpForm.register}
-          onSubmit={signUpForm.handleSubmit(onSignUpSubmit)}
-          errors={signUpForm.formState.errors}
-          isSubmitting={signUpForm.formState.isSubmitting}
+          register={registerFormForm.register}
+          onSubmit={registerFormForm.handleSubmit(onSignUpSubmit)}
+          errors={registerFormForm.formState.errors}
+          isSubmitting={registerFormForm.formState.isSubmitting}
           onBack={() => navigateWithState("/login")}
         />
       )}
@@ -34,12 +34,12 @@ export default function SignUp() {
       {step === "confirm-code" && (
         <ConfirmCodeTemplate
           onClose={handleCloseClick}
-          onReset={() => confirmForm.reset()}
+          onReset={() => verificationCodeForm.reset()}
           email={userEmail}
-          control={confirmForm.control}
-          onSubmit={confirmForm.handleSubmit(onConfirmSubmit)}
-          errors={confirmForm.formState.errors}
-          isSubmitting={confirmForm.formState.isSubmitting}
+          control={verificationCodeForm.control}
+          onSubmit={verificationCodeForm.handleSubmit(onConfirmSubmit)}
+          errors={verificationCodeForm.formState.errors}
+          isSubmitting={verificationCodeForm.formState.isSubmitting}
           isResending={isResending}
           resendTimer={resendTimer}
           onResendCode={handleResendCode}

@@ -15,7 +15,6 @@ export const emailSchema = z
  */
 export const passwordSchema = z
   .string()
-  .min(1, "Пароль обязателен")
   .min(8, "Пароль должен содержать минимум 8 символов")
   .max(128, "Пароль слишком длинный");
 
@@ -81,10 +80,7 @@ export const verificationCodeSchema = z.object({
  */
 const optionalUrlSchema = z
   .string()
-  .refine(
-    (val) => val === "" || /^https?:\/\/.+/.test(val),
-    "Неверный формат ссылки"
-  )
+  .refine((val) => val === "" || /^https?:\/\/.+/.test(val), "Неверный формат ссылки")
   .optional()
   .or(z.literal(""));
 
@@ -92,11 +88,7 @@ const optionalUrlSchema = z
  * Profile setup form schema
  */
 export const profileSetupSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "Имя обязательно")
-    .max(50, "Имя не должно превышать 50 символов"),
+  name: z.string().trim().min(1, "Имя обязательно").max(50, "Имя не должно превышать 50 символов"),
   username: z
     .string()
     .trim()

@@ -31,17 +31,17 @@ export const useResetPassword = () => {
   const [resendTimer, setResendTimer] = useState(0);
   const [isResending, setIsResending] = useState(false);
 
-  const emailForm = useForm<ForgotPasswordFormData>({
+  const forgotPasswordForm = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
   });
 
-  const confirmForm = useForm<VerificationCodeFormData>({
+  const verificationCodeForm = useForm<VerificationCodeFormData>({
     resolver: zodResolver(verificationCodeSchema),
     defaultValues: { code: "" },
   });
 
-  const passwordForm = useForm<ResetPasswordFormData>({
+  const resetPasswordForm = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { password: "", confirmPassword: "" },
   });
@@ -60,7 +60,11 @@ export const useResetPassword = () => {
   const onConfirmSubmit = async (data: VerificationCodeFormData) => {
     const { error } = await verifyOtp({ email: userEmail, code: data.code, type: "recovery" });
     if (error) {
-      toast({ title: "Ошибка подтверждения", description: t(`status:${error.code}`), variant: "destructive" });
+      toast({
+        title: "Ошибка подтверждения",
+        description: t(`status:${error.code}`),
+        variant: "destructive",
+      });
       return;
     }
     setStep("password-change");
@@ -101,8 +105,8 @@ export const useResetPassword = () => {
   };
 
   const goToEmailInput = () => {
-    confirmForm.reset();
-    passwordForm.reset();
+    verificationCodeForm.reset();
+    resetPasswordForm.reset();
     setStep("email-input");
   };
 
@@ -115,18 +119,16 @@ export const useResetPassword = () => {
     userEmail,
     resendTimer,
     isResending,
-    emailForm,
-    confirmForm,
-    passwordForm,
-    handlers: {
-      onEmailSubmit,
-      onConfirmSubmit,
-      onPasswordSubmit,
-      handleResendCode,
-      handleHelpClick,
-      goToEmailInput,
-      handleCloseClick,
-      navigateToLogin,
-    }
+    forgotPasswordForm,
+    verificationCodeForm,
+    resetPasswordForm,
+    onEmailSubmit,
+    onConfirmSubmit,
+    onPasswordSubmit,
+    handleResendCode,
+    handleHelpClick,
+    goToEmailInput,
+    handleCloseClick,
+    navigateToLogin,
   };
 };

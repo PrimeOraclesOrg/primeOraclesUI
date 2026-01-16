@@ -4,7 +4,11 @@ import learningIntro from "@/assets/learning-intro.jpg";
 import learningCrypto from "@/assets/learning-crypto.jpg";
 import learningTrust from "@/assets/learning-trust.jpg";
 
-export const learningCategories = ["Старт на Prime Oracles", "Создание контента", "Продажа и упаковка"];
+export const learningCategories = [
+  "Старт на Prime Oracles",
+  "Создание контента",
+  "Продажа и упаковка",
+];
 
 export const mockLearningItems: LearningItem[] = [
   {

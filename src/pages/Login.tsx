@@ -15,11 +15,7 @@ export default function Login() {
   const afterLogin = location.state?.afterLogin || "/";
   const beforeLogin = location.state?.beforeLogin || "/";
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
+  const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
@@ -39,16 +35,16 @@ export default function Login() {
     navigate(afterLogin);
   };
 
-  const navigateWithState = (to: string)  => {
-    navigate(to, { state: location.state, replace: true })
-  }
+  const navigateWithState = (to: string) => {
+    navigate(to, { state: location.state, replace: true });
+  };
 
   return (
     <LoginTemplate
-      register={register}
-      onSubmit={handleSubmit(onSubmit)}
-      errors={errors}
-      isSubmitting={isSubmitting}
+      register={loginForm.register}
+      onSubmit={loginForm.handleSubmit(onSubmit)}
+      errors={loginForm.formState.errors}
+      isSubmitting={loginForm.formState.isSubmitting}
       toForgotPassword={() => navigateWithState("/reset-password")}
       toSignUp={() => navigateWithState("/sign-up")}
       onClose={() => navigate(beforeLogin, { replace: true })}
