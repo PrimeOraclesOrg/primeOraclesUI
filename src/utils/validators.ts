@@ -15,7 +15,6 @@ export const emailSchema = z
  */
 export const passwordSchema = z
   .string()
-  .min(1, "Пароль обязателен")
   .min(8, "Пароль должен содержать минимум 8 символов")
   .max(128, "Пароль слишком длинный");
 

@@ -16,10 +16,12 @@ interface ForgotPasswordTemplateProps {
   errors: FieldErrors<ForgotPasswordFormData>;
   isSubmitting: boolean;
   onBack: () => void;
+  onClose: () => void;
 }
 
 export function ForgotPasswordTemplate({
   onBack,
+  onClose,
   onSubmit,
   register,
   errors,
@@ -31,6 +33,7 @@ export function ForgotPasswordTemplate({
       subtitle="Введите э-почту, и мы отправим вам код для восстановления"
       showBackButton
       onBack={onBack}
+      onClose={onClose}
     >
       <ForgotPasswordForm
         onSubmit={onSubmit}

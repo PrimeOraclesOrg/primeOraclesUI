@@ -12,13 +12,10 @@ export default function Login() {
   const location = useLocation();
   const { t } = useTranslation("status");
 
-  const from = location.state?.from?.pathname || '/';
+  const afterLogin = location.state?.afterLogin || "/";
+  const beforeLogin = location.state?.beforeLogin || "/";
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
+  const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
@@ -35,18 +32,22 @@ export default function Login() {
       return;
     }
 
-    navigate(from);
+    navigate(afterLogin);
+  };
+
+  const navigateWithState = (to: string) => {
+    navigate(to, { state: location.state, replace: true });
   };
 
   return (
     <LoginTemplate
-      register={register}
-      onSubmit={handleSubmit(onSubmit)}
-      errors={errors}
-      isSubmitting={isSubmitting}
-      toForgotPassword={() => navigate("/reset-password")}
-      toSignUp={() => navigate("/sign-up")}
-      onClose={() => navigate("/")}
+      register={loginForm.register}
+      onSubmit={loginForm.handleSubmit(onSubmit)}
+      errors={loginForm.formState.errors}
+      isSubmitting={loginForm.formState.isSubmitting}
+      toForgotPassword={() => navigateWithState("/reset-password")}
+      toSignUp={() => navigateWithState("/sign-up")}
+      onClose={() => navigate(beforeLogin, { replace: true })}
     />
   );
 }

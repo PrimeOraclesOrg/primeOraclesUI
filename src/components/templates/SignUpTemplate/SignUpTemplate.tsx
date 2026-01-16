@@ -16,6 +16,7 @@ interface SignUpTemplateProps {
   errors: FieldErrors<RegisterFormData>;
   isSubmitting: boolean;
   onBack: () => void;
+  onClose: () => void;
 }
 
 export function SignUpTemplate({
@@ -24,9 +25,10 @@ export function SignUpTemplate({
   register,
   errors,
   isSubmitting,
+  onClose,
 }: SignUpTemplateProps) {
   return (
-    <AuthLayout title="Создать аккаунт" showBackButton onBack={onBack}>
+    <AuthLayout title="Создать аккаунт" showBackButton onBack={onBack} onClose={onClose}>
       <SignUpForm
         onSubmit={onSubmit}
         register={register}

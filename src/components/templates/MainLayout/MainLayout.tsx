@@ -12,9 +12,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         <Sidebar />
       </div>
       <MobileHeader />
-      <main className="lg:ml-64 min-h-screen pt-[57px] lg:pt-0">
-        {children}
-      </main>
+      <main className="lg:ml-64 min-h-screen pt-[57px] lg:pt-0">{children}</main>
     </div>
   );
 }

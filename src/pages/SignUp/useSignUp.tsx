@@ -1,5 +1,4 @@
 import { ConfirmCodeHelpPopupContent } from "@/components/organisms";
-import { ConfirmCodeTemplate, SignUpTemplate } from "@/components/templates";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
 import { resendSignUpOtp, signOut, signUp, verifyOtp } from "@/services";
@@ -9,30 +8,33 @@ import {
   VerificationCodeFormData,
   verificationCodeSchema,
 } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type Step = "sign-up" | "confirm-code";
 
-export default function SignUp() {
+export const useSignUp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation("status");
   const { openPopup } = usePopup();
+
+  const beforeLogin = location.state?.beforeLogin || "/";
 
   const [step, setStep] = useState<Step>("sign-up");
   const [userEmail, setUserEmail] = useState("");
   const [resendTimer, setResendTimer] = useState(0);
   const [isResending, setIsResending] = useState(false);
 
-  const signUpForm = useForm<RegisterFormData>({
+  const registerFormForm = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: { email: "", password: "", confirmPassword: "" },
   });
 
-  const confirmForm = useForm<VerificationCodeFormData>({
+  const verificationCodeForm = useForm<VerificationCodeFormData>({
     resolver: zodResolver(verificationCodeSchema),
     defaultValues: { code: "" },
   });
@@ -79,7 +81,7 @@ export default function SignUp() {
     });
 
     await signOut();
-    navigate("/login");
+    navigate("/login", { state: location.state });
   };
 
   const handleResendCode = async () => {
@@ -114,38 +116,29 @@ export default function SignUp() {
   };
 
   const onBackToSignUp = () => {
-    confirmForm.reset();
+    verificationCodeForm.reset();
     setStep("sign-up");
   };
 
-  return (
-    <>
-      {step === "sign-up" && (
-        <SignUpTemplate
-          register={signUpForm.register}
-          onSubmit={signUpForm.handleSubmit(onSignUpSubmit)}
-          errors={signUpForm.formState.errors}
-          isSubmitting={signUpForm.formState.isSubmitting}
-          onBack={() => navigate("/login")}
-        />
-      )}
+  const handleCloseClick = () => navigate(beforeLogin, { replace: true });
 
-      {step === "confirm-code" && (
-        <ConfirmCodeTemplate
-          onReset={() => confirmForm.reset()}
-          email={userEmail}
-          control={confirmForm.control}
-          onSubmit={confirmForm.handleSubmit(onConfirmSubmit)}
-          errors={confirmForm.formState.errors}
-          isSubmitting={confirmForm.formState.isSubmitting}
-          isResending={isResending}
-          resendTimer={resendTimer}
-          onResendCode={handleResendCode}
-          onHelpClick={handleHelpClick}
-          onBack={onBackToSignUp}
-          codeMode="signup"
-        />
-      )}
-    </>
-  );
-}
+  const navigateWithState = (to: string) => {
+    navigate(to, { state: location.state });
+  };
+
+  return {
+    step,
+    handleCloseClick,
+    registerFormForm,
+    onSignUpSubmit,
+    navigateWithState,
+    verificationCodeForm,
+    userEmail,
+    onConfirmSubmit,
+    isResending,
+    resendTimer,
+    handleResendCode,
+    handleHelpClick,
+    onBackToSignUp,
+  };
+};

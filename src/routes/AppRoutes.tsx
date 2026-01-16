@@ -10,8 +10,9 @@ import CreateProduct from "@/pages/CreateProduct";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
-import SignUp from "@/pages/SignUp";
-import ResetPassword from "@/pages/ResetPassword";
+import SignUp from "@/pages/SignUp/SignUp";
+import ResetPassword from "@/pages/ResetPassword/ResetPassword";
+import { PublicRoute } from "@/components/shared";
 
 export function AppRoutes() {
   return (
@@ -26,9 +27,30 @@ export function AppRoutes() {
       <Route path="/create-product" element={<CreateProduct />} />
 
       {/* Auth routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/sign-up" element={<SignUp />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/sign-up"
+        element={
+          <PublicRoute>
+            <SignUp />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <PublicRoute>
+            <ResetPassword />
+          </PublicRoute>
+        }
+      />
 
       {/* Protected routes - require authentication */}
       <Route

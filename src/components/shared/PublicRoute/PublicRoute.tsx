@@ -5,25 +5,25 @@
  */
 
 import { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { getSession } from "@/services/authService/authService";
-import { Loader } from "@/components/atoms/Loader/Loader";
+import { Navigate } from "react-router-dom";
+import { getCurrentUser } from "@/services/authService";
+import { usePreviousLocation } from "@/hooks/usePreviousLocation";
+import { LoadingScreen } from "@/components/atoms";
 
 interface PublicRouteProps {
   children: React.ReactNode;
 }
 
 export function PublicRoute({ children }: PublicRouteProps) {
-  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const from = (location.state as { from?: string })?.from || "/";
+  const previousLocation = usePreviousLocation();
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: session } = await getSession();
-        setIsAuthenticated(!!session);
+        const { data: user } = await getCurrentUser();
+        setIsAuthenticated(!!user);
       } catch {
         setIsAuthenticated(false);
       } finally {
@@ -35,15 +35,11 @@ export function PublicRoute({ children }: PublicRouteProps) {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen w-full bg-background flex items-center justify-center">
-        <Loader size="lg" />
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (isAuthenticated) {
-    return <Navigate to={from} replace />;
+    return <Navigate to={previousLocation || "/"} replace />;
   }
 
   return <>{children}</>;
