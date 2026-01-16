@@ -1,7 +1,7 @@
 /**
- * PublicRoute Component
+ * AuthRoute Component
  *
- * Wrapper for auth pages that redirects authenticated users to home.
+ * Wrapper for auth pages that redirects authenticated users to previous location.
  */
 
 import { useEffect, useState } from "react";
@@ -14,7 +14,7 @@ interface PublicRouteProps {
   children: React.ReactNode;
 }
 
-export function PublicRoute({ children }: PublicRouteProps) {
+export function AuthRoute({ children }: PublicRouteProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const previousLocation = usePreviousLocation();

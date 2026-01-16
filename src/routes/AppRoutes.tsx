@@ -12,7 +12,7 @@ import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp/SignUp";
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
-import { PublicRoute } from "@/components/shared";
+import { AuthRoute } from "@/components/shared";
 
 export function AppRoutes() {
   return (
@@ -30,25 +30,25 @@ export function AppRoutes() {
       <Route
         path="/login"
         element={
-          <PublicRoute>
+          <AuthRoute>
             <Login />
-          </PublicRoute>
+          </AuthRoute>
         }
       />
       <Route
         path="/sign-up"
         element={
-          <PublicRoute>
+          <AuthRoute>
             <SignUp />
-          </PublicRoute>
+          </AuthRoute>
         }
       />
       <Route
         path="/reset-password"
         element={
-          <PublicRoute>
+          <AuthRoute>
             <ResetPassword />
-          </PublicRoute>
+          </AuthRoute>
         }
       />
 
