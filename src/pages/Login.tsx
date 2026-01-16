@@ -15,11 +15,7 @@ export default function Login() {
   const afterLogin = location.state?.afterLogin || "/";
   const beforeLogin = location.state?.beforeLogin || "/";
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
+  const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
