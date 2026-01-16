@@ -122,15 +122,13 @@ export const useResetPassword = () => {
     forgotPasswordForm,
     verificationCodeForm,
     resetPasswordForm,
-    handlers: {
-      onEmailSubmit,
-      onConfirmSubmit,
-      onPasswordSubmit,
-      handleResendCode,
-      handleHelpClick,
-      goToEmailInput,
-      handleCloseClick,
-      navigateToLogin,
-    },
+    onEmailSubmit,
+    onConfirmSubmit,
+    onPasswordSubmit,
+    handleResendCode,
+    handleHelpClick,
+    goToEmailInput,
+    handleCloseClick,
+    navigateToLogin,
   };
 };

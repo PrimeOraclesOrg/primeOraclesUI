@@ -14,48 +14,55 @@ export default function ResetPassword() {
     forgotPasswordForm,
     verificationCodeForm,
     resetPasswordForm,
-    handlers,
+    goToEmailInput,
+    handleCloseClick,
+    handleHelpClick,
+    handleResendCode,
+    navigateToLogin,
+    onConfirmSubmit,
+    onEmailSubmit,
+    onPasswordSubmit,
   } = useResetPassword();
 
   return (
     <>
       {step === "email-input" && (
         <ForgotPasswordTemplate
-          onClose={handlers.handleCloseClick}
+          onClose={handleCloseClick}
           register={forgotPasswordForm.register}
-          onSubmit={forgotPasswordForm.handleSubmit(handlers.onEmailSubmit)}
+          onSubmit={forgotPasswordForm.handleSubmit(onEmailSubmit)}
           errors={forgotPasswordForm.formState.errors}
           isSubmitting={forgotPasswordForm.formState.isSubmitting}
-          onBack={handlers.navigateToLogin}
+          onBack={navigateToLogin}
         />
       )}
 
       {step === "confirm-code" && (
         <ConfirmCodeTemplate
-          onClose={handlers.handleCloseClick}
+          onClose={handleCloseClick}
           onReset={() => verificationCodeForm.reset()}
           email={userEmail}
           control={verificationCodeForm.control}
-          onSubmit={verificationCodeForm.handleSubmit(handlers.onConfirmSubmit)}
+          onSubmit={verificationCodeForm.handleSubmit(onConfirmSubmit)}
           errors={verificationCodeForm.formState.errors}
           isSubmitting={verificationCodeForm.formState.isSubmitting}
           isResending={isResending}
           resendTimer={resendTimer}
-          onResendCode={handlers.handleResendCode}
-          onHelpClick={handlers.handleHelpClick}
-          onBack={handlers.goToEmailInput}
+          onResendCode={handleResendCode}
+          onHelpClick={handleHelpClick}
+          onBack={goToEmailInput}
           codeMode="recovery"
         />
       )}
 
       {step === "password-change" && (
         <ResetPasswordTemplate
-          onClose={handlers.handleCloseClick}
+          onClose={handleCloseClick}
           register={resetPasswordForm.register}
-          onSubmit={resetPasswordForm.handleSubmit(handlers.onPasswordSubmit)}
+          onSubmit={resetPasswordForm.handleSubmit(onPasswordSubmit)}
           errors={resetPasswordForm.formState.errors}
           isSubmitting={resetPasswordForm.formState.isSubmitting}
-          onBack={handlers.goToEmailInput}
+          onBack={goToEmailInput}
         />
       )}
     </>
