@@ -9,7 +9,6 @@ import { Navigate, useLocation } from "react-router-dom";
 import { usePreviousLocation } from "@/hooks/usePreviousLocation";
 import { LoadingScreen } from "@/components/atoms";
 import { selectAuthIsFetching, selectAuthUser, useAppSelector } from "@/store";
-import { useEffect } from "react";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
