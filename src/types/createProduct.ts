@@ -30,15 +30,12 @@ export interface ProductFAQItem {
   position: number;
 }
 
-export interface CreateProductFormRequestBody extends CreateProductFormData {
-  isActive?: boolean;
-}
-
 export const DEFAULT_FORM_DATA: CreateProductFormData = {
   category: PRODUCT_CATEGORIES[0],
   title: "",
   description: "",
   mediaUrl: undefined,
+  isActive: true,
   advantages: [],
   faq: [],
   instructions: "",

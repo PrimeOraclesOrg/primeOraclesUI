@@ -52,6 +52,7 @@ export const createProductSchema = z.object({
   title: productTitleSchema,
   description: productDescriptionSchema,
   mediaUrl: z.string().optional(),
+  isActive: z.boolean(),
   advantages: z
     .array(
       z.object({

@@ -10,7 +10,7 @@ import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from 
 import type { Product } from "@/types";
 import { supabase } from "@/utils";
 import { ProductDetailsResult, ProductsFilter, ProductsResult } from "./types";
-import { CreateProductFormRequestBody } from "@/types/createProduct";
+import { CreateProductFormData } from "@/utils/validators/createProduct";
 
 /**
  * Fetch products with optional filtering
@@ -103,7 +103,7 @@ export async function checkProductTitleAvailability(title: string): Promise<void
 /**
  * Create a new product
  */
-export async function createProduct(productData: CreateProductFormRequestBody): Promise<string> {
+export async function createProduct(productData: CreateProductFormData): Promise<string> {
   const { data, error } = await supabase.rpc("app_create_product", {
     p_title: productData.title,
     p_category: productData.category,
@@ -112,7 +112,7 @@ export async function createProduct(productData: CreateProductFormRequestBody): 
     p_instructions: productData.instructions,
     p_advantages: productData.advantages,
     p_faq: productData.faq,
-    p_is_active: productData?.isActive ?? true,
+    p_is_active: productData.isActive,
   });
 
   if (error) {

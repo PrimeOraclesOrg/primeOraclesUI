@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft } from "lucide-react";
-import { FormikProps } from "formik";
+import { UseFormReturn } from "react-hook-form";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { CreateProductForm } from "@/components/organisms/CreateProductForm/CreateProductForm";
 import { ProductPreview } from "@/components/organisms/ProductPreview/ProductPreview";
@@ -9,7 +9,7 @@ import { CreateProductFormData } from "@/utils/validators/createProduct";
 type PreviewMode = "desktop" | "mobile";
 
 interface CreateProductTemplateProps {
-  formik: FormikProps<CreateProductFormData>;
+  form: UseFormReturn<CreateProductFormData>;
   previewMode: PreviewMode;
   onBackClick: () => void;
   onMediaUpload: (file: File) => void;
@@ -18,10 +18,11 @@ interface CreateProductTemplateProps {
   onRemoveAdvantage: (position: number) => void;
   onAddFaq: () => void;
   onRemoveFaq: (position: number) => void;
+  onSubmit: () => void;
 }
 
 export function CreateProductTemplate({
-  formik,
+  form,
   previewMode: initialPreviewMode,
   onBackClick,
   onMediaUpload,
@@ -30,6 +31,7 @@ export function CreateProductTemplate({
   onRemoveAdvantage,
   onAddFaq,
   onRemoveFaq,
+  onSubmit,
 }: CreateProductTemplateProps) {
   const [previewMode, setPreviewMode] = useState<PreviewMode>(initialPreviewMode);
 
@@ -53,14 +55,14 @@ export function CreateProductTemplate({
           <div className="w-full overflow-auto p-4 md:p-6">
             <h1 className="text-2xl font-bold text-foreground mb-6">Создать продукт</h1>
             <CreateProductForm
-              formik={formik}
+              form={form}
               onMediaUpload={onMediaUpload}
               onMediaRemove={onMediaRemove}
               onAddAdvantage={onAddAdvantage}
               onRemoveAdvantage={onRemoveAdvantage}
               onAddFaq={onAddFaq}
               onRemoveFaq={onRemoveFaq}
-              isSubmitting={formik.isSubmitting}
+              onSubmit={onSubmit}
             />
           </div>
 
@@ -68,7 +70,7 @@ export function CreateProductTemplate({
           <div className="hidden w-full lg:flex border-l border-border p-6 bg-secondary/30">
             <div className="w-full">
               <ProductPreview
-                data={formik.values}
+                data={form.watch()}
                 mode={previewMode}
                 onModeChange={setPreviewMode}
               />
