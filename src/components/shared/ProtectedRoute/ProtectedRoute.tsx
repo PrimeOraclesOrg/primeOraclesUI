@@ -20,22 +20,20 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
   const previousLocation = usePreviousLocation();
 
-  return (
-    <>
-      {isAuthFetching && <LoadingScreen />}
+  if (isAuthFetching) {
+    return <LoadingScreen />;
+  }
 
-      {!user && !isAuthFetching && (
-        <Navigate
-          to={"/login"}
-          state={{
-            afterLogin: location.pathname,
-            beforeLogin: previousLocation,
-          }}
-          replace
-        />
-      )}
+  if (!user && !isAuthFetching) {
+    <Navigate
+      to={"/login"}
+      state={{
+        afterLogin: location.pathname,
+        beforeLogin: previousLocation,
+      }}
+      replace
+    />;
+  }
 
-      {user && children}
-    </>
-  );
+  return <>{children}</>;
 }
