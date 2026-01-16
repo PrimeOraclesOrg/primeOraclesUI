@@ -29,12 +29,12 @@ export const useSignUp = () => {
   const [resendTimer, setResendTimer] = useState(0);
   const [isResending, setIsResending] = useState(false);
 
-  const signUpForm = useForm<RegisterFormData>({
+  const registerFormForm = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: { email: "", password: "", confirmPassword: "" },
   });
 
-  const confirmForm = useForm<VerificationCodeFormData>({
+  const verificationCodeForm = useForm<VerificationCodeFormData>({
     resolver: zodResolver(verificationCodeSchema),
     defaultValues: { code: "" },
   });
