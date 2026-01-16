@@ -60,7 +60,11 @@ export const useResetPassword = () => {
   const onConfirmSubmit = async (data: VerificationCodeFormData) => {
     const { error } = await verifyOtp({ email: userEmail, code: data.code, type: "recovery" });
     if (error) {
-      toast({ title: "Ошибка подтверждения", description: t(`status:${error.code}`), variant: "destructive" });
+      toast({
+        title: "Ошибка подтверждения",
+        description: t(`status:${error.code}`),
+        variant: "destructive",
+      });
       return;
     }
     setStep("password-change");
@@ -101,8 +105,8 @@ export const useResetPassword = () => {
   };
 
   const goToEmailInput = () => {
-    confirmForm.reset();
-    passwordForm.reset();
+    verificationCodeForm.reset();
+    resetPasswordForm.reset();
     setStep("email-input");
   };
 
@@ -115,9 +119,9 @@ export const useResetPassword = () => {
     userEmail,
     resendTimer,
     isResending,
-    emailForm,
-    confirmForm,
-    passwordForm,
+    forgotPasswordForm,
+    verificationCodeForm,
+    resetPasswordForm,
     handlers: {
       onEmailSubmit,
       onConfirmSubmit,
@@ -127,6 +131,6 @@ export const useResetPassword = () => {
       goToEmailInput,
       handleCloseClick,
       navigateToLogin,
-    }
+    },
   };
 };

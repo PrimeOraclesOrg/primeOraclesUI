@@ -116,7 +116,7 @@ export const useSignUp = () => {
   };
 
   const onBackToSignUp = () => {
-    confirmForm.reset();
+    verificationCodeForm.reset();
     setStep("sign-up");
   };
 
@@ -129,10 +129,10 @@ export const useSignUp = () => {
   return {
     step,
     handleCloseClick,
-    signUpForm,
+    registerFormForm,
     onSignUpSubmit,
     navigateWithState,
-    confirmForm,
+    verificationCodeForm,
     userEmail,
     onConfirmSubmit,
     isResending,
