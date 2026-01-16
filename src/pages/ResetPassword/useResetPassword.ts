@@ -31,17 +31,17 @@ export const useResetPassword = () => {
   const [resendTimer, setResendTimer] = useState(0);
   const [isResending, setIsResending] = useState(false);
 
-  const emailForm = useForm<ForgotPasswordFormData>({
+  const forgotPasswordForm = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
   });
 
-  const confirmForm = useForm<VerificationCodeFormData>({
+  const verificationCodeForm = useForm<VerificationCodeFormData>({
     resolver: zodResolver(verificationCodeSchema),
     defaultValues: { code: "" },
   });
 
-  const passwordForm = useForm<ResetPasswordFormData>({
+  const resetPasswordForm = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { password: "", confirmPassword: "" },
   });
