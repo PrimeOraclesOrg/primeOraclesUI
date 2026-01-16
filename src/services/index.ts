@@ -1,3 +1,3 @@
-export * from "./productsService";
-export * from "./authService";
-export * from "./usersService";
+export * from "./productsService/productsService";
+export * from "./authService/authService";
+export * from "./usersService/usersService";

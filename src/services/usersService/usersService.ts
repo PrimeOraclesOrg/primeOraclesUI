@@ -5,20 +5,9 @@
  * Prepared for Supabase integration.
  */
 
-import type { UserProfile, SocialLink } from "@/types";
+import type { UserProfile } from "@/types";
 import { mockSocialLinks } from "@/data/transactions";
-
-export interface UserProfileUpdate {
-  name?: string;
-  description?: string;
-  avatar?: string;
-  socialLinks?: SocialLink[];
-}
-
-export interface ServiceResult<T> {
-  data: T | null;
-  error: { message: string } | null;
-}
+import { ServiceResult, UserProfileUpdate } from "./types";
 
 /**
  * Get user profile by user ID
@@ -72,7 +61,6 @@ export async function updateUserProfile(
   //   .select()
   //   .single();
 
-  console.log("updateUserProfile called:", userId, updates);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -90,7 +78,6 @@ export async function updateCurrentUserProfile(
   // if (!user) return { data: null, error: { message: "Not authenticated" } };
   // return updateUserProfile(user.id, updates);
 
-  console.log("updateCurrentUserProfile called:", updates);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -112,7 +99,6 @@ export async function uploadAvatar(userId: string, file: File): Promise<ServiceR
   //   .getPublicUrl(fileName);
   // return { data: publicUrl, error: null };
 
-  console.log("uploadAvatar called:", userId, file.name);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -126,7 +112,6 @@ export async function deleteUserAccount(userId: string): Promise<ServiceResult<n
   // TODO: Replace with Supabase RPC for secure deletion
   // const { error } = await supabase.rpc('delete_user_account', { user_id: userId });
 
-  console.log("deleteUserAccount called:", userId);
   return {
     data: null,
     error: { message: "Not implemented - requires Supabase integration" },
@@ -145,7 +130,6 @@ export async function checkUsernameAvailability(username: string): Promise<Servi
   //   .maybeSingle();
   // return { data: !data, error };
 
-  console.log("checkUsernameAvailability called:", username);
   return {
     data: true,
     error: null,

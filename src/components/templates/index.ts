@@ -1,4 +1,5 @@
 export { MainLayout } from "./MainLayout/MainLayout";
+export { AuthLayout } from "./AuthLayout/AuthLayout";
 export { MarketplaceTemplate } from "./MarketplaceTemplate/MarketplaceTemplate";
 export { RewardsTemplate } from "./RewardsTemplate/RewardsTemplate";
 export { LearningTemplate } from "./LearningTemplate/LearningTemplate";
@@ -6,3 +7,9 @@ export { LearningDetailTemplate } from "./LearningDetailTemplate/LearningDetailT
 export { ProductDetailTemplate } from "./ProductDetailTemplate/ProductDetailTemplate";
 export { HomeTemplate } from "./HomeTemplate/HomeTemplate";
 export { SettingsTemplate } from "./SettingsTemplate/SettingsTemplate";
+export { LoginTemplate } from "./LoginTemplate/LoginTemplate";
+export { SignUpTemplate } from "./SignUpTemplate/SignUpTemplate";
+export { ConfirmCodeTemplate } from "./ConfirmCodeTemplate/ConfirmCodeTemplate";
+export { ForgotPasswordTemplate } from "./ForgotPasswordTemplate/ForgotPasswordTemplate";
+export { ResetPasswordTemplate } from "./ResetPasswordTemplate/ResetPasswordTemplate";
+export { CreateProductTemplate } from "./CreateProductTemplate/CreateProductTemplate";

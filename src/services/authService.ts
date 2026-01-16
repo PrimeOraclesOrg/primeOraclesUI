@@ -5,8 +5,6 @@
  * Prepared for Supabase Auth integration.
  */
 
-import type { UserProfile } from "@/types";
-
 export interface AuthUser {
   id: string;
   email: string;

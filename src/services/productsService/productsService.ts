@@ -7,27 +7,8 @@
 
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
-import type { Product, ProductDetails, Review, FAQ, RatingDistributionItem } from "@/types";
-
-export interface ProductsFilter {
-  category?: string;
-  searchQuery?: string;
-  limit?: number;
-  offset?: number;
-}
-
-export interface ProductsResult {
-  products: Product[];
-  categories: string[];
-  total: number;
-}
-
-export interface ProductDetailsResult {
-  product: ProductDetails;
-  reviews: Review[];
-  faqs: FAQ[];
-  ratingDistribution: RatingDistributionItem[];
-}
+import type { Product } from "@/types";
+import { ProductDetailsResult, ProductsFilter, ProductsResult } from "./types";
 
 /**
  * Fetch products with optional filtering
