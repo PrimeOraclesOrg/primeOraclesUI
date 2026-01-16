@@ -23,16 +23,14 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 
 // Predefined avatar options
 const AVATAR_OPTIONS = [
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=cat&backgroundColor=10b981",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=monkey&backgroundColor=f97316",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=owl&backgroundColor=eab308",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=fox&backgroundColor=f97316",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=panda&backgroundColor=3b82f6",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=tiger&backgroundColor=ef4444",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=lion&backgroundColor=eab308",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=koala&backgroundColor=a855f7",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=hamster&backgroundColor=22c55e",
-  "https://api.dicebear.com/7.x/adventurer/svg?seed=dog&backgroundColor=f97316",
+  "/img/profile_pictures/1.avif",
+  "/img/profile_pictures/2.avif",
+  "/img/profile_pictures/3.avif",
+  "/img/profile_pictures/4.avif",
+  "/img/profile_pictures/5.avif",
+  "/img/profile_pictures/6.avif",
+  "/img/profile_pictures/7.avif",
+  "/img/profile_pictures/8.avif",
 ];
 
 interface ProfileSetupFormProps {
@@ -182,13 +180,13 @@ export const ProfileSetupForm = ({
       {/* Avatar selection */}
       <div className="space-y-3">
         <Label className="text-foreground text-sm font-normal">Добавьте аватара</Label>
-        <div className="grid grid-cols-6 gap-3">
+        <div className="grid grid-cols-5 gap-3">
           {/* Upload button */}
           <button
             type="button"
             disabled={isSubmitting}
             className={cn(
-              "w-12 h-12 rounded-full border-2 border-dashed border-border/50 flex items-center justify-center text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors",
+              "w-20 h-20 rounded-full border-2 border-dashed border-border/50 flex items-center justify-center text-muted-foreground hover:border-primary/50 hover:text-primary transition-colors",
               selectedAvatar === "upload" && "border-primary text-primary"
             )}
             onClick={() => setValue("avatar", "upload")}
@@ -203,7 +201,7 @@ export const ProfileSetupForm = ({
               type="button"
               disabled={isSubmitting}
               className={cn(
-                "w-12 h-12 rounded-full overflow-hidden border-2 transition-colors",
+                "w-20 h-20 rounded-full overflow-hidden border-2 transition-colors",
                 selectedAvatar === avatarUrl
                   ? "border-primary"
                   : "border-transparent hover:border-primary/50"
