@@ -6,7 +6,6 @@
  */
 
 import { useCallback, useRef } from "react";
-import { AuthInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -210,7 +209,9 @@ export const ProfileSetupForm = ({
 
         {/* Avatar selection */}
         <div className="space-y-3">
-          <Label className="text-foreground text-sm font-normal">Добавьте ваш аватар</Label>
+          <Label className="text-foreground text-sm font-normal">
+            Добавьте или выбирите ваш аватар
+          </Label>
           <div className="grid grid-cols-[repeat(auto-fit,80px)] gap-3 justify-center">
             {/* Upload button */}
             <button
@@ -248,7 +249,7 @@ export const ProfileSetupForm = ({
                 >
                   <ImagePlus className={cn("h-5 w-5", selectedAvatar && "text-white")} />
                   <span className={cn("text-[10px] mt-1", selectedAvatar && "text-white")}>
-                    Добавьте
+                    Добавить
                   </span>
                 </div>
               )}

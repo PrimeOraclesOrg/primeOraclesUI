@@ -23,6 +23,7 @@ export const useProfileSetup = () => {
       username: "",
       youtubeUrl: "",
     },
+    mode: "onBlur",
   });
 
   const onProfileSetupSubmit = async (data: ProfileSetupFormData) => {
