@@ -189,7 +189,7 @@ export const ProfileSetupForm = ({
         {/* Avatar selection */}
         <div className="space-y-3">
           <Label className="text-foreground text-sm font-normal">Добавьте аватара</Label>
-          <div className="grid grid-cols-5 gap-3">
+          <div className="grid grid-cols-[repeat(auto-fit,80px)] gap-3 justify-center">
             {/* Upload button */}
             <button
               type="button"
