@@ -91,8 +91,8 @@ const optionalUrlSchema = z
  */
 
 export const profileSetupMaxLenghtLimits = {
-  name: 120,
-  username: 64,
+  name: 60,
+  username: 32,
   description: 500,
 };
 
