@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getCroppedImg } from "@/utils";
+import { DialogDescription } from "@radix-ui/react-dialog";
 import { MutableRefObject, useCallback, useState } from "react";
 import Cropper, { Area, Size } from "react-easy-crop";
 
@@ -82,6 +83,7 @@ export const ImageCrop = ({
         <DialogContent className="sm:max-w-md bg-background border-secondary">
           <DialogHeader>
             <DialogTitle className="text-foreground">Обрезать изображение</DialogTitle>
+            <p className="text-muted-foreground text-sm">(Масштабирование колесиком мыши)</p>
           </DialogHeader>
 
           <div className="relative w-full h-72 bg-secondary/30 rounded-lg overflow-hidden">
