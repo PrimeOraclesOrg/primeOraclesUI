@@ -1,10 +1,10 @@
 export const PREPAIRED_AVATARS = [
-  "/img/profile_pictures/1.avif",
-  "/img/profile_pictures/2.avif",
-  "/img/profile_pictures/3.avif",
-  "/img/profile_pictures/4.avif",
-  "/img/profile_pictures/5.avif",
-  "/img/profile_pictures/6.avif",
-  "/img/profile_pictures/7.avif",
-  "/img/profile_pictures/8.avif",
+  "https://ooglglelvfkjzfxrcsjg.supabase.co/storage/v1/object/public/default_avatars/avatar1.png",
+  "https://ooglglelvfkjzfxrcsjg.supabase.co/storage/v1/object/public/default_avatars/avatar2.png",
+  "https://ooglglelvfkjzfxrcsjg.supabase.co/storage/v1/object/public/default_avatars/avatar3.png",
+  "https://ooglglelvfkjzfxrcsjg.supabase.co/storage/v1/object/public/default_avatars/avatar4.png",
+  "https://ooglglelvfkjzfxrcsjg.supabase.co/storage/v1/object/public/default_avatars/avatar5.png",
+  "https://ooglglelvfkjzfxrcsjg.supabase.co/storage/v1/object/public/default_avatars/avatar6.png",
+  "https://ooglglelvfkjzfxrcsjg.supabase.co/storage/v1/object/public/default_avatars/avatar7.png",
+  "https://ooglglelvfkjzfxrcsjg.supabase.co/storage/v1/object/public/default_avatars/avatar8.png",
 ];
