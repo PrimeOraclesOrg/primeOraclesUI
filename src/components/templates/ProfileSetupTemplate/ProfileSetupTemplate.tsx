@@ -17,6 +17,7 @@ interface ProfileSetupTemplateProps {
   isSubmitting: boolean;
   watch: UseFormWatch<ProfileSetupFormData>;
   setValue: UseFormSetValue<ProfileSetupFormData>;
+  prepairedAvatars: Array<string>;
 }
 
 export const ProfileSetupTemplate = ({
@@ -26,6 +27,7 @@ export const ProfileSetupTemplate = ({
   isSubmitting,
   setValue,
   watch,
+  prepairedAvatars,
 }: ProfileSetupTemplateProps) => {
   return (
     <AuthLayout title="Заполните профиль">
@@ -36,6 +38,7 @@ export const ProfileSetupTemplate = ({
         isSubmitting={isSubmitting}
         setValue={setValue}
         watch={watch}
+        prepairedAvatars={prepairedAvatars}
       />
     </AuthLayout>
   );

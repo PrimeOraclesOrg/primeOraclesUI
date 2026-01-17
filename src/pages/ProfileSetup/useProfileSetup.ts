@@ -1,3 +1,4 @@
+import { PREPAIRED_AVATARS } from "@/data";
 import { toast } from "@/hooks/useToast";
 import { completeProfile, signOut } from "@/services";
 import { ProfileSetupFormData, profileSetupSchema } from "@/utils";
@@ -14,7 +15,7 @@ export const useProfileSetup = () => {
   const profileSetupForm = useForm<ProfileSetupFormData>({
     resolver: zodResolver(profileSetupSchema),
     defaultValues: {
-      avatar: "",
+      avatar: PREPAIRED_AVATARS[0],
       description: "",
       instagramUrl: "",
       name: "",

@@ -5,23 +5,16 @@
  * Includes name, username, description, social links, and avatar selection.
  */
 
-import { useState, useCallback, useRef } from "react";
-import Cropper, { Area } from "react-easy-crop";
+import { useCallback, useRef } from "react";
 import { AuthInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { ProfileSetupFormData } from "@/utils";
-import { getCroppedImg } from "@/utils/cropImage";
 import { ImagePlus, Youtube, Instagram, Check } from "lucide-react";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { ImageCrop } from "../ImageCrop/ImageCrop";
 
 // TikTok icon component (not available in lucide-react)
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -30,18 +23,6 @@ const TikTokIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// Predefined avatar options
-const AVATAR_OPTIONS = [
-  "/img/profile_pictures/1.avif",
-  "/img/profile_pictures/2.avif",
-  "/img/profile_pictures/3.avif",
-  "/img/profile_pictures/4.avif",
-  "/img/profile_pictures/5.avif",
-  "/img/profile_pictures/6.avif",
-  "/img/profile_pictures/7.avif",
-  "/img/profile_pictures/8.avif",
-];
-
 interface ProfileSetupFormProps {
   onSubmit: () => void;
   register: UseFormRegister<ProfileSetupFormData>;
@@ -49,6 +30,7 @@ interface ProfileSetupFormProps {
   isSubmitting: boolean;
   watch: UseFormWatch<ProfileSetupFormData>;
   setValue: UseFormSetValue<ProfileSetupFormData>;
+  prepairedAvatars: Array<string>;
 }
 
 export const ProfileSetupForm = ({
@@ -58,69 +40,23 @@ export const ProfileSetupForm = ({
   register,
   watch,
   setValue,
+  prepairedAvatars,
 }: ProfileSetupFormProps) => {
   const nameValue = watch("name") || "";
   const descriptionValue = watch("description") || "";
   const selectedAvatar = watch("avatar");
 
-  // Cropper state
-  const [isCropDialogOpen, setIsCropDialogOpen] = useState(false);
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [uploadedAvatar, setUploadedAvatar] = useState<string | null>(null);
-  
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
-
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImageSrc(reader.result as string);
-        setIsCropDialogOpen(true);
-        setCrop({ x: 0, y: 0 });
-        setZoom(1);
-      });
-      reader.readAsDataURL(file);
-    }
-    // Reset input so same file can be selected again
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  }, []);
 
   const handleUploadClick = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
 
-  const handleCropCancel = useCallback(() => {
-    setIsCropDialogOpen(false);
-    setImageSrc(null);
-  }, []);
-
-  const handleCropApply = useCallback(async () => {
-    if (imageSrc && croppedAreaPixels) {
-      try {
-        const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
-        setUploadedAvatar(croppedImage);
-        setValue("avatar", croppedImage);
-        setIsCropDialogOpen(false);
-        setImageSrc(null);
-      } catch (error) {
-        console.error("Error cropping image:", error);
-      }
-    }
-  }, [imageSrc, croppedAreaPixels, setValue]);
-
-  // Check if avatar is uploaded custom image (base64)
   const isUploadedAvatar = selectedAvatar?.startsWith("data:image");
-  const isUploadSelected = isUploadedAvatar || selectedAvatar === "upload";
+
+  const setUploadedAvatar = (avatar: string) => {
+    setValue("avatar", avatar);
+  };
 
   return (
     <>
@@ -180,7 +116,9 @@ export const ProfileSetupForm = ({
             )}
           />
           {errors.description && (
-            <p className="text-destructive text-sm animate-fade-in">{errors.description?.message}</p>
+            <p className="text-destructive text-sm animate-fade-in">
+              {errors.description?.message}
+            </p>
           )}
         </div>
 
@@ -224,7 +162,9 @@ export const ProfileSetupForm = ({
             />
           </div>
           {errors.instagramUrl && (
-            <p className="text-destructive text-sm animate-fade-in">{errors.instagramUrl?.message}</p>
+            <p className="text-destructive text-sm animate-fade-in">
+              {errors.instagramUrl?.message}
+            </p>
           )}
 
           {/* TikTok */}
@@ -250,51 +190,42 @@ export const ProfileSetupForm = ({
         <div className="space-y-3">
           <Label className="text-foreground text-sm font-normal">Добавьте аватара</Label>
           <div className="grid grid-cols-5 gap-3">
-            {/* Hidden file input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-
             {/* Upload button */}
             <button
               type="button"
               disabled={isSubmitting}
               className={cn(
                 "w-20 h-20 rounded-full border-2 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:border-accent/50 hover:text-accent transition-colors relative overflow-hidden",
-                isUploadSelected
-                  ? "border-accent border-solid"
-                  : "border-border/50"
+                isUploadedAvatar ? "border-accent border-solid" : "border-border/50"
               )}
               onClick={handleUploadClick}
             >
               {/* Uploaded image background */}
-              {uploadedAvatar && (
+              {isUploadedAvatar && (
                 <img
-                  src={uploadedAvatar}
+                  src={selectedAvatar}
                   alt="Uploaded avatar"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               )}
-              
+
               {/* Overlay for selected uploaded avatar */}
-              {isUploadSelected && uploadedAvatar && (
+              {isUploadedAvatar && selectedAvatar && (
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                   <Check className="h-6 w-6 text-white" />
                 </div>
               )}
-              
+
               {/* Default content when no uploaded image or not selected with image */}
-              {(!uploadedAvatar || !isUploadSelected) && (
-                <div className={cn(
-                  "flex flex-col items-center justify-center z-10",
-                  uploadedAvatar && "bg-black/50 absolute inset-0"
-                )}>
-                  <ImagePlus className={cn("h-5 w-5", uploadedAvatar && "text-white")} />
-                  <span className={cn("text-[10px] mt-1", uploadedAvatar && "text-white")}>
+              {(!selectedAvatar || !isUploadedAvatar) && (
+                <div
+                  className={cn(
+                    "flex flex-col items-center justify-center z-10",
+                    selectedAvatar && "bg-black/50 absolute inset-0"
+                  )}
+                >
+                  <ImagePlus className={cn("h-5 w-5", selectedAvatar && "text-white")} />
+                  <span className={cn("text-[10px] mt-1", selectedAvatar && "text-white")}>
                     Добавьте
                   </span>
                 </div>
@@ -302,7 +233,7 @@ export const ProfileSetupForm = ({
             </button>
 
             {/* Predefined avatars */}
-            {AVATAR_OPTIONS.map((avatarUrl, index) => {
+            {prepairedAvatars.map((avatarUrl, index) => {
               const isSelected = selectedAvatar === avatarUrl;
               return (
                 <button
@@ -311,9 +242,7 @@ export const ProfileSetupForm = ({
                   disabled={isSubmitting}
                   className={cn(
                     "w-20 h-20 rounded-full overflow-hidden border-2 transition-colors relative",
-                    isSelected
-                      ? "border-accent"
-                      : "border-transparent hover:border-accent/50"
+                    isSelected ? "border-accent" : "border-transparent hover:border-accent/50"
                   )}
                   onClick={() => setValue("avatar", avatarUrl)}
                 >
@@ -343,51 +272,11 @@ export const ProfileSetupForm = ({
         </Button>
       </form>
 
-      {/* Image Cropper Dialog */}
-      <Dialog open={isCropDialogOpen} onOpenChange={setIsCropDialogOpen}>
-        <DialogContent className="sm:max-w-md bg-background border-secondary">
-          <DialogHeader>
-            <DialogTitle className="text-foreground">Обрезать изображение</DialogTitle>
-          </DialogHeader>
-          
-          <div className="relative w-full h-72 bg-secondary/30 rounded-lg overflow-hidden">
-            {imageSrc && (
-              <Cropper
-                image={imageSrc}
-                crop={crop}
-                zoom={zoom}
-                aspect={1}
-                cropShape="round"
-                showGrid={false}
-                onCropChange={setCrop}
-                onZoomChange={setZoom}
-                onCropComplete={onCropComplete}
-                classes={{
-                  containerClassName: "rounded-lg",
-                }}
-              />
-            )}
-          </div>
-
-          <div className="flex justify-center gap-3 mt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCropCancel}
-              className="px-8"
-            >
-              Отмена
-            </Button>
-            <Button
-              type="button"
-              onClick={handleCropApply}
-              className="px-8"
-            >
-              Применить
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ImageCrop
+        fileInputRef={fileInputRef}
+        setUploadedImage={setUploadedAvatar}
+        cropShape="round"
+      />
     </>
   );
 };
