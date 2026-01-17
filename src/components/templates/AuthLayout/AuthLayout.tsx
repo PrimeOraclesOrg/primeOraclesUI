@@ -28,7 +28,6 @@ export function AuthLayout({
   title,
   subtitle,
 }: AuthLayoutProps) {
-
   const handleBack = () => {
     if (onBack) {
       onBack();
@@ -65,20 +64,22 @@ export function AuthLayout({
           ) : (
             <div />
           )}
-          {onClose && <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-full"
-            aria-label="Закрыть"
-          >
-            <X className="h-5 w-5" />
-          </Button>}
+          {onClose && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-full"
+              aria-label="Закрыть"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          )}
         </header>
 
         {/* Main content */}
         <main className="flex-1 flex items-center justify-center px-6 sm:px-8 lg:px-12 pb-8">
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-lg">
             {/* Title */}
             {title && (
               <div className="text-center mb-8">
