@@ -80,7 +80,9 @@ export const verificationCodeSchema = z.object({
  */
 const optionalUrlSchema = z
   .string()
-  .refine((val) => val === "" || /^https?:\/\/.+/.test(val), "Неверный формат ссылки")
+  .max(2048, "Ссылка не должена превышать 2048 символов")
+  .regex(/^https:\/\/[^\s<>"{}|\\^`[\]]+$/, "Не верный формат ссылки")
+  /* .refine((val) => val === "" || /^https?:\/\/.+/.test(val), "Неверный формат ссылки") */
   .optional()
   .or(z.literal(""));
 
@@ -88,23 +90,29 @@ const optionalUrlSchema = z
  * Profile setup form schema
  */
 export const profileSetupSchema = z.object({
-  name: z.string().trim().min(1, "Имя обязательно").max(50, "Имя не должно превышать 50 символов"),
+  name: z
+    .string()
+    .trim()
+    .min(1, "Имя обязательно")
+    .min(3, "Имя должено содержать минимум 3 символа")
+    .max(120, "Имя не должно превышать 120 символов"),
   username: z
     .string()
     .trim()
     .min(1, "Username обязателен")
     .min(3, "Username должен содержать минимум 3 символа")
-    .max(30, "Username не должен превышать 30 символов")
-    .regex(/^[a-zA-Z0-9_]+$/, "Username может содержать только буквы, цифры и _"),
+    .max(64, "Username не должен превышать 64 символов")
+    .regex(/^[a-zA-Z0-9]+$/, "Username может содержать только буквы, цифры"),
   description: z
     .string()
-    .max(250, "Описание не должно превышать 250 символов")
+    .min(3, "Описание должено содержать минимум 3 символа")
+    .max(500, "Описание не должно превышать 500 символов")
     .optional()
     .or(z.literal("")),
   youtubeUrl: optionalUrlSchema,
   instagramUrl: optionalUrlSchema,
   tiktokUrl: optionalUrlSchema,
-  avatar: z.string().optional(),
+  avatar: z.string(),
 });
 
 /**
