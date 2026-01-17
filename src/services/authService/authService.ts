@@ -125,7 +125,9 @@ export async function updatePassword(newPassword: string): Promise<AuthResult<{ 
 export function onAuthStateChange(
   callback: (event: string, session: Session | null) => void
 ): () => void {
-  const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange(callback);
   return () => subscription.unsubscribe();
 }
 
@@ -161,6 +163,8 @@ export interface ProfileData {
   instagramUrl?: string;
   tiktokUrl?: string;
   avatar?: string;
+  selectedAvatar?: string;
+  uploadedAvatar?: string;
 }
 
 /**

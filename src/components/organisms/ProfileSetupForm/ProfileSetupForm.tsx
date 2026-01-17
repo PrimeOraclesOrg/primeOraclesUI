@@ -14,6 +14,8 @@ import { ProfileSetupFormData, profileSetupMaxLenghtLimits } from "@/utils";
 import { ImagePlus, Youtube, Instagram, Check } from "lucide-react";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { ImageCrop } from "../ImageCrop/ImageCrop";
+import { PREPAIRED_AVATARS } from "@/data";
+import { uploadAvatar } from "@/services";
 
 // TikTok icon component (not available in lucide-react)
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -44,7 +46,8 @@ export const ProfileSetupForm = ({
   const nameValue = watch("name") || "";
   const usernameValue = watch("username") || "";
   const descriptionValue = watch("description") || "";
-  const selectedAvatar = watch("avatar");
+  const selectedAvatar = watch("selectedAvatar");
+  const uploadedAvatar = watch("uploadedAvatar");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -52,10 +55,11 @@ export const ProfileSetupForm = ({
     fileInputRef.current?.click();
   }, []);
 
-  const isUploadedAvatar = selectedAvatar?.startsWith("data:image");
+  const isUploadedAvatar = selectedAvatar === "uploaded";
 
   const setUploadedAvatar = (avatar: string) => {
-    setValue("avatar", avatar);
+    setValue("selectedAvatar", "uploaded");
+    setValue("uploadedAvatar", avatar);
   };
 
   return (
@@ -226,7 +230,7 @@ export const ProfileSetupForm = ({
               {/* Uploaded image background */}
               {isUploadedAvatar && (
                 <img
-                  src={selectedAvatar}
+                  src={uploadedAvatar}
                   alt="Uploaded avatar"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -257,7 +261,7 @@ export const ProfileSetupForm = ({
 
             {/* Predefined avatars */}
             {prepairedAvatars.map((avatarUrl, index) => {
-              const isSelected = selectedAvatar === avatarUrl;
+              const isSelected = selectedAvatar === `${index + 1}`;
               return (
                 <button
                   key={index}
@@ -267,7 +271,7 @@ export const ProfileSetupForm = ({
                     "w-20 h-20 rounded-full overflow-hidden outline outline-3 transition-colors relative",
                     isSelected ? "outline-accent" : "outline-transparent hover:outline-accent/50"
                   )}
-                  onClick={() => setValue("avatar", avatarUrl)}
+                  onClick={() => setValue("selectedAvatar", `${index + 1}`)}
                 >
                   <img
                     src={avatarUrl}

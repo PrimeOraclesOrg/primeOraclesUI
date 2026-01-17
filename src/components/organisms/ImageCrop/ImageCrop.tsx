@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getCroppedImg } from "@/utils";
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { MutableRefObject, useCallback, useState } from "react";
 import Cropper, { Area, Size } from "react-easy-crop";
 
