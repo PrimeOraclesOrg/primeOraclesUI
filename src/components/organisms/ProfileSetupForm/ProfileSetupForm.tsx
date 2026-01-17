@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { ProfileSetupFormData } from "@/utils";
+import { ProfileSetupFormData, profileSetupMaxLenghtLimits } from "@/utils";
 import { ImagePlus, Youtube, Instagram, Check } from "lucide-react";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { ImageCrop } from "../ImageCrop/ImageCrop";
@@ -43,6 +43,7 @@ export const ProfileSetupForm = ({
   prepairedAvatars,
 }: ProfileSetupFormProps) => {
   const nameValue = watch("name") || "";
+  const usernameValue = watch("username") || "";
   const descriptionValue = watch("description") || "";
   const selectedAvatar = watch("avatar");
 
@@ -67,7 +68,9 @@ export const ProfileSetupForm = ({
             <Label htmlFor="name" className="text-foreground text-sm font-normal">
               Имя
             </Label>
-            <span className="text-muted-foreground text-xs">{nameValue.length}/50</span>
+            <span className="text-muted-foreground text-xs">
+              {nameValue.length}/{profileSetupMaxLenghtLimits.name}
+            </span>
           </div>
           <input
             id="name"
@@ -86,14 +89,30 @@ export const ProfileSetupForm = ({
         </div>
 
         {/* Username field */}
-        <AuthInput
-          label="Username"
-          type="text"
-          placeholder="username"
-          {...register("username")}
-          error={errors.username?.message}
-          disabled={isSubmitting}
-        />
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="username" className="text-foreground text-sm font-normal">
+              Никнейм
+            </Label>
+            <span className="text-muted-foreground text-xs">
+              {usernameValue.length}/{profileSetupMaxLenghtLimits.username}
+            </span>
+          </div>
+          <input
+            id="username"
+            type="text"
+            placeholder="Введите ваш никнейм"
+            {...register("username")}
+            disabled={isSubmitting}
+            className={cn(
+              "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+              errors.username && "border-destructive focus:border-destructive"
+            )}
+          />
+          {errors.username && (
+            <p className="text-destructive text-sm animate-fade-in">{errors.username?.message}</p>
+          )}
+        </div>
 
         {/* Description field with counter */}
         <div className="space-y-2">
@@ -102,7 +121,9 @@ export const ProfileSetupForm = ({
               Описание{" "}
               <span className="text-muted-foreground font-normal">- необязательное поле</span>
             </Label>
-            <span className="text-muted-foreground text-xs">{descriptionValue.length}/250</span>
+            <span className="text-muted-foreground text-xs">
+              {descriptionValue.length}/{profileSetupMaxLenghtLimits.description}
+            </span>
           </div>
           <Textarea
             id="description"

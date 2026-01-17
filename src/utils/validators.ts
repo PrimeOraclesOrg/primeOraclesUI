@@ -89,24 +89,31 @@ const optionalUrlSchema = z
 /**
  * Profile setup form schema
  */
+
+export const profileSetupMaxLenghtLimits = {
+  name: 120,
+  username: 64,
+  description: 500,
+};
+
 export const profileSetupSchema = z.object({
   name: z
     .string()
     .trim()
     .min(1, "Имя обязательно")
     .min(3, "Имя должено содержать минимум 3 символа")
-    .max(120, "Имя не должно превышать 120 символов"),
+    .max(profileSetupMaxLenghtLimits.name, "Имя не должно превышать 120 символов"),
   username: z
     .string()
     .trim()
-    .min(1, "Username обязателен")
-    .min(3, "Username должен содержать минимум 3 символа")
-    .max(64, "Username не должен превышать 64 символов")
+    .min(1, "Никнейм обязателен")
+    .min(3, "Никнейм должен содержать минимум 3 символа")
+    .max(profileSetupMaxLenghtLimits.username, "Никнейм не должен превышать 64 символов")
     .regex(/^[a-zA-Z0-9]+$/, "Username может содержать только буквы, цифры"),
   description: z
     .string()
     .min(3, "Описание должено содержать минимум 3 символа")
-    .max(500, "Описание не должно превышать 500 символов")
+    .max(profileSetupMaxLenghtLimits.description, "Описание не должно превышать 500 символов")
     .optional()
     .or(z.literal("")),
   youtubeUrl: optionalUrlSchema,
