@@ -104,6 +104,7 @@ export const ProfileSetupForm = ({
             placeholder="Введите ваш никнейм"
             {...register("username")}
             disabled={isSubmitting}
+            spellCheck={false}
             className={cn(
               "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
               errors.username && "border-destructive focus:border-destructive"
@@ -209,15 +210,15 @@ export const ProfileSetupForm = ({
 
         {/* Avatar selection */}
         <div className="space-y-3">
-          <Label className="text-foreground text-sm font-normal">Добавьте аватара</Label>
+          <Label className="text-foreground text-sm font-normal">Добавьте ваш аватар</Label>
           <div className="grid grid-cols-[repeat(auto-fit,80px)] gap-3 justify-center">
             {/* Upload button */}
             <button
               type="button"
               disabled={isSubmitting}
               className={cn(
-                "w-20 h-20 rounded-full border-2 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:border-accent/50 hover:text-accent transition-colors relative overflow-hidden",
-                isUploadedAvatar ? "border-accent border-solid" : "border-border/50"
+                "w-20 h-20 rounded-full outline outline-3 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:border-accent/50 hover:text-accent transition-colors relative overflow-hidden",
+                isUploadedAvatar ? "outline-accent" : "outline-transparent hover:outline-accent/50"
               )}
               onClick={handleUploadClick}
             >
@@ -262,8 +263,8 @@ export const ProfileSetupForm = ({
                   type="button"
                   disabled={isSubmitting}
                   className={cn(
-                    "w-20 h-20 rounded-full overflow-hidden border-2 transition-colors relative",
-                    isSelected ? "border-accent" : "border-transparent hover:border-accent/50"
+                    "w-20 h-20 rounded-full overflow-hidden outline outline-3 transition-colors relative",
+                    isSelected ? "outline-accent" : "outline-transparent hover:outline-accent/50"
                   )}
                   onClick={() => setValue("avatar", avatarUrl)}
                 >
