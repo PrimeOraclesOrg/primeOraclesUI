@@ -79,7 +79,7 @@ export const ProfileSetupForm = ({
             {...register("name")}
             disabled={isSubmitting}
             className={cn(
-              "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+              "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
               errors.name && "border-destructive focus:border-destructive"
             )}
           />
@@ -106,7 +106,7 @@ export const ProfileSetupForm = ({
             disabled={isSubmitting}
             spellCheck={false}
             className={cn(
-              "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+              "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
               errors.username && "border-destructive focus:border-destructive"
             )}
           />
@@ -133,7 +133,7 @@ export const ProfileSetupForm = ({
             disabled={isSubmitting}
             rows={3}
             className={cn(
-              "bg-secondary/30 border-border/50 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg resize-none",
+              "bg-secondary/30 border-2 border-border/50 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg resize-none",
               errors.description && "border-destructive focus:border-destructive"
             )}
           />
@@ -160,7 +160,7 @@ export const ProfileSetupForm = ({
               {...register("youtubeUrl")}
               disabled={isSubmitting}
               className={cn(
-                "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                 errors.youtubeUrl && "border-destructive focus:border-destructive"
               )}
             />
@@ -178,7 +178,7 @@ export const ProfileSetupForm = ({
               {...register("instagramUrl")}
               disabled={isSubmitting}
               className={cn(
-                "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                 errors.instagramUrl && "border-destructive focus:border-destructive"
               )}
             />
@@ -198,7 +198,7 @@ export const ProfileSetupForm = ({
               {...register("tiktokUrl")}
               disabled={isSubmitting}
               className={cn(
-                "flex h-12 w-full rounded-lg border bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                 errors.tiktokUrl && "border-destructive focus:border-destructive"
               )}
             />
@@ -217,7 +217,7 @@ export const ProfileSetupForm = ({
               type="button"
               disabled={isSubmitting}
               className={cn(
-                "w-20 h-20 rounded-full outline outline-3 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:border-accent/50 hover:text-accent transition-colors relative overflow-hidden",
+                "w-20 h-20 rounded-full outline outline-3 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:outline-accent/50 hover:text-accent transition-colors relative overflow-hidden",
                 isUploadedAvatar ? "outline-accent" : "outline-transparent hover:outline-accent/50"
               )}
               onClick={handleUploadClick}
