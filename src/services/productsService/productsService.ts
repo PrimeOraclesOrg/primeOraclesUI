@@ -8,7 +8,9 @@
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
 import type { Product } from "@/types";
+import { PRODUCT_IMAGES_BUCKET, supabase } from "@/utils";
 import { ProductDetailsResult, ProductsFilter, ProductsResult } from "./types";
+import { CreateProductFormData } from "@/utils/validators/createProduct";
 
 /**
  * Fetch products with optional filtering
@@ -76,17 +78,61 @@ export async function fetchProductById(id: string): Promise<ProductDetailsResult
 }
 
 /**
+ * Check if a product title is available
+ */
+export async function checkProductTitleAvailability(title: string): Promise<void> {
+  const { data, error } = await supabase.rpc("app_check_product_title_availability", {
+    p_title: title,
+  });
+
+  if (error) {
+    throw new Error("Ошибка про проверке названия продукта");
+  }
+
+  const response = data as {
+    available: boolean;
+    valid: boolean;
+    error: string | null;
+  } | null;
+
+  if (!response || !response.available) {
+    throw new Error("Продукт с таким названием уже существует");
+  }
+}
+
+/**
  * Create a new product
  */
-export async function createProduct(product: Omit<Product, "id">): Promise<Product> {
-  // TODO: Replace with Supabase insert
-  // const { data, error } = await supabase
-  //   .from('products')
-  //   .insert(product)
-  //   .select()
-  //   .single();
+export async function createProduct(productData: CreateProductFormData): Promise<string> {
+  const { data, error } = await supabase.rpc("app_create_product", {
+    p_title: productData.title,
+    p_category: productData.category,
+    p_description: productData.description,
+    p_price: productData.price.toString(),
+    p_instructions: productData.instructions,
+    p_advantages: productData.advantages,
+    p_faq: productData.faq,
+    p_is_active: productData.isActive,
+  });
 
-  throw new Error("Not implemented - requires Supabase integration");
+  if (error) {
+    throw new Error("Ошибка при создании продукта");
+  }
+
+  return data;
+}
+
+/**
+ * Upload product image to Supabase Storage
+ */
+export async function uploadProductImage(productId: string, file: File) {
+  const { error } = await supabase.storage
+    .from(PRODUCT_IMAGES_BUCKET)
+    .upload(productId, file, { contentType: file.type, upsert: true });
+
+  if (error) {
+    throw new Error("Ошибка при загрузке изображения продукта");
+  }
 }
 
 /**

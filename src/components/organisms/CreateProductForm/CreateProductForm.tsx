@@ -1,10 +1,11 @@
-import { useRef } from "react";
-import { FormikProps } from "formik";
+import { useRef, useState, useEffect } from "react";
+import { UseFormReturn } from "react-hook-form";
 import { Plus, Trash2, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -15,32 +16,103 @@ import {
 import { FormSection, FormField } from "@/components/atoms";
 import {
   PRODUCT_CATEGORIES,
-  type CreateProductFormData,
+  CATEGORY_DISPLAY_NAMES,
   type ProductCategory,
 } from "@/types/createProduct";
+import { CreateProductFormData } from "@/utils/validators/createProduct";
+import { isValidDecimalDraft, normalizeDecimalInput, roundToTwoDecimals } from "@/utils";
 
 interface CreateProductFormProps {
-  formik: FormikProps<CreateProductFormData>;
+  form: UseFormReturn<CreateProductFormData>;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
   onAddAdvantage: () => void;
-  onRemoveAdvantage: (id: string) => void;
+  onRemoveAdvantage: (position: number) => void;
   onAddFaq: () => void;
-  onRemoveFaq: (id: string) => void;
-  isSubmitting: boolean;
+  onRemoveFaq: (position: number) => void;
+  onSubmit: () => void;
 }
 
 export function CreateProductForm({
-  formik,
+  form,
   onMediaUpload,
   onMediaRemove,
   onAddAdvantage,
   onRemoveAdvantage,
   onAddFaq,
   onRemoveFaq,
-  isSubmitting,
+  onSubmit,
 }: CreateProductFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isPriceFocused = useRef(false);
+  const {
+    register,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+  } = form;
+
+  const values = watch();
+  const title = watch("title");
+  const description = watch("description");
+  const instructions = watch("instructions");
+  const price = watch("price");
+  const isActive = watch("isActive");
+  const advantages = watch("advantages");
+  const faq = watch("faq");
+  const mediaUrl = watch("mediaUrl");
+
+  const [priceInput, setPriceInput] = useState<string>(() => {
+    if (price === 0) return "";
+
+    const rounded = roundToTwoDecimals(price);
+    return rounded.toFixed(2);
+  });
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+
+    if (!isValidDecimalDraft(raw)) return;
+
+    setPriceInput(raw);
+
+    const normalized = normalizeDecimalInput(raw);
+    if (normalized.trim() === "") {
+      setValue("price", 0);
+      return;
+    }
+
+    if (normalized.endsWith(".")) return;
+
+    const parsed = Number(normalized);
+    if (!Number.isNaN(parsed)) {
+      const rounded = roundToTwoDecimals(parsed);
+      setValue("price", rounded);
+    }
+  };
+
+  const handlePriceBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    isPriceFocused.current = false;
+    const raw = e.target.value;
+    const normalized = normalizeDecimalInput(raw).trim();
+
+    if (normalized === "" || normalized === ".") {
+      setPriceInput("");
+      setValue("price", 0);
+    } else {
+      const parsed = Number(normalized);
+      if (!Number.isNaN(parsed)) {
+        const rounded = roundToTwoDecimals(parsed);
+        const display = rounded.toFixed(2);
+        setPriceInput(display);
+        setValue("price", rounded);
+      }
+    }
+  };
+
+  const handlePriceFocus = () => {
+    isPriceFocused.current = true;
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -49,56 +121,41 @@ export function CreateProductForm({
     }
   };
 
-  const { values, errors, touched, handleChange, handleBlur, setFieldValue, handleSubmit } = formik;
-
-  // Helper to get nested error
-  const getAdvantageError = (index: number): string | undefined => {
-    const advErrors = errors.advantages;
-    if (Array.isArray(advErrors) && advErrors[index]) {
-      const err = advErrors[index];
-      if (typeof err === "object" && err !== null && "text" in err) {
-        return (err as { text?: string }).text;
-      }
+  const handleMediaRemoveClick = () => {
+    onMediaRemove();
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
     }
-    return undefined;
+  };
+
+  const getAdvantageError = (index: number): string | undefined => {
+    return errors.advantages?.[index]?.description?.message;
   };
 
   const getFaqError = (index: number, field: "question" | "answer"): string | undefined => {
-    const faqErrors = errors.faq;
-    if (Array.isArray(faqErrors) && faqErrors[index]) {
-      const err = faqErrors[index];
-      if (typeof err === "object" && err !== null && field in err) {
-        return (err as Record<string, string>)[field];
-      }
-    }
-    return undefined;
+    return errors.faq?.[index]?.[field]?.message;
   };
 
-  const isAdvTouched = (index: number): boolean => {
-    const advTouched = touched.advantages;
-    if (Array.isArray(advTouched) && advTouched[index]) {
-      const t = advTouched[index];
-      return typeof t === "object" && t !== null && (t as { text?: boolean }).text === true;
+  useEffect(() => {
+    if (isPriceFocused.current) {
+      return;
     }
-    return false;
-  };
 
-  const isFaqTouched = (index: number, field: "question" | "answer"): boolean => {
-    const faqTouched = touched.faq;
-    if (Array.isArray(faqTouched) && faqTouched[index]) {
-      const t = faqTouched[index];
-      return typeof t === "object" && t !== null && (t as Record<string, boolean>)[field] === true;
+    if (price === 0) {
+      setPriceInput("");
+    } else {
+      const rounded = roundToTwoDecimals(price);
+      setPriceInput(rounded.toFixed(2));
     }
-    return false;
-  };
+  }, [price]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={onSubmit} className="space-y-5">
       {/* Category Section */}
       <FormSection title="Категория">
         <Select
           value={values.category}
-          onValueChange={(value) => setFieldValue("category", value as ProductCategory)}
+          onValueChange={(value) => setValue("category", value as ProductCategory)}
         >
           <SelectTrigger className="w-full bg-background border-border">
             <SelectValue placeholder="Выберите категорию" />
@@ -106,27 +163,27 @@ export function CreateProductForm({
           <SelectContent>
             {PRODUCT_CATEGORIES.map((cat) => (
               <SelectItem key={cat} value={cat}>
-                {cat}
+                {CATEGORY_DISPLAY_NAMES[cat]}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
+        {errors.category && (
+          <p className="text-sm text-destructive mt-1">{errors.category.message}</p>
+        )}
       </FormSection>
 
       {/* Details Section */}
       <FormSection title="Детали">
         <FormField
           label="Название"
-          error={touched.name ? errors.name : undefined}
+          error={errors.title?.message}
           required
-          charCount={values.name.length}
+          charCount={title.length}
           maxChars={100}
         >
           <Input
-            name="name"
-            value={values.name}
-            onChange={handleChange}
-            onBlur={handleBlur}
+            {...register("title")}
             placeholder="Введите название продукта"
             className="bg-background border-border"
             maxLength={100}
@@ -135,16 +192,13 @@ export function CreateProductForm({
 
         <FormField
           label="Описание"
-          error={touched.description ? errors.description : undefined}
+          error={errors.description?.message}
           required
-          charCount={values.description.length}
+          charCount={description.length}
           maxChars={1000}
         >
           <Textarea
-            name="description"
-            value={values.description}
-            onChange={handleChange}
-            onBlur={handleBlur}
+            {...register("description")}
             placeholder="Опишите ваш продукт..."
             className="bg-background border-border min-h-[120px] resize-none"
             maxLength={1000}
@@ -155,16 +209,12 @@ export function CreateProductForm({
         <div className="space-y-2">
           <Label className="text-sm text-muted-foreground">Медиа</Label>
           <div className="flex gap-3">
-            {values.mediaUrl ? (
+            {mediaUrl ? (
               <div className="relative w-40 h-28 rounded-lg overflow-hidden border border-border group">
-                <img
-                  src={values.mediaUrl}
-                  alt="Media preview"
-                  className="w-full h-full object-cover"
-                />
+                <img src={mediaUrl} alt="Media preview" className="w-full h-full object-cover" />
                 <button
                   type="button"
-                  onClick={onMediaRemove}
+                  onClick={handleMediaRemoveClick}
                   className="absolute top-2 right-2 p-1 bg-card/80 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <Trash2 className="w-4 h-4 text-destructive" />
@@ -197,20 +247,17 @@ export function CreateProductForm({
       {/* Advantages Section */}
       <FormSection title="Преимущества">
         <div className="space-y-3">
-          {values.advantages.map((adv, idx) => (
-            <div key={adv.id} className="flex items-start gap-2">
+          {advantages.map((adv, idx) => (
+            <div key={adv.position} className="flex items-start gap-2">
               <div className="flex-1">
                 <FormField
                   label={`Преимущество ${idx + 1}`}
-                  error={isAdvTouched(idx) ? getAdvantageError(idx) : undefined}
+                  error={getAdvantageError(idx)}
                   required
                 >
                   <div className="flex gap-2">
                     <Input
-                      name={`advantages.${idx}.text`}
-                      value={adv.text}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
+                      {...register(`advantages.${idx}.description`)}
                       placeholder="Введите преимущество"
                       className="bg-background border-border flex-1"
                       maxLength={100}
@@ -219,7 +266,7 @@ export function CreateProductForm({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      onClick={() => onRemoveAdvantage(adv.id)}
+                      onClick={() => onRemoveAdvantage(adv.position)}
                       className="text-muted-foreground hover:text-destructive"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -230,7 +277,7 @@ export function CreateProductForm({
             </div>
           ))}
 
-          {values.advantages.length < 5 && (
+          {advantages.length < 5 && (
             <Button
               type="button"
               variant="outline"
@@ -248,47 +295,33 @@ export function CreateProductForm({
       {/* FAQ Section */}
       <FormSection title="Часто задаваемые вопросы">
         <div className="space-y-4">
-          {values.faq.map((item, idx) => (
-            <div key={item.id} className="bg-secondary/30 rounded-lg p-4 space-y-3">
+          {faq.map((item, idx) => (
+            <div key={item.position} className="bg-secondary/30 rounded-lg p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-foreground">Вопрос {idx + 1}</span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => onRemoveFaq(item.id)}
+                  onClick={() => onRemoveFaq(item.position)}
                   className="text-muted-foreground hover:text-destructive h-8"
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
 
-              <FormField
-                label="Вопрос"
-                error={isFaqTouched(idx, "question") ? getFaqError(idx, "question") : undefined}
-                required
-              >
+              <FormField label="Вопрос" error={getFaqError(idx, "question")} required>
                 <Input
-                  name={`faq.${idx}.question`}
-                  value={item.question}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  {...register(`faq.${idx}.question`)}
                   placeholder="Введите вопрос"
                   className="bg-background border-border"
                   maxLength={100}
                 />
               </FormField>
 
-              <FormField
-                label="Ответ"
-                error={isFaqTouched(idx, "answer") ? getFaqError(idx, "answer") : undefined}
-                required
-              >
+              <FormField label="Ответ" error={getFaqError(idx, "answer")} required>
                 <Textarea
-                  name={`faq.${idx}.answer`}
-                  value={item.answer}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  {...register(`faq.${idx}.answer`)}
                   placeholder="Введите ответ"
                   className="bg-background border-border min-h-[80px] resize-none"
                   maxLength={300}
@@ -297,7 +330,7 @@ export function CreateProductForm({
             </div>
           ))}
 
-          {values.faq.length < 5 && (
+          {faq.length < 5 && (
             <Button
               type="button"
               variant="outline"
@@ -316,16 +349,13 @@ export function CreateProductForm({
       <FormSection title="Инструкции">
         <FormField
           label="Внимание! Инструкция по использованию не отображается в описании продукта. Данная информация будет отправлена пользователю после покупки продукта"
-          error={touched.instructions ? errors.instructions : undefined}
+          error={errors.instructions?.message}
           required
-          charCount={values.instructions.length}
+          charCount={instructions.length}
           maxChars={1000}
         >
           <Textarea
-            name="instructions"
-            value={values.instructions}
-            onChange={handleChange}
-            onBlur={handleBlur}
+            {...register("instructions")}
             placeholder="Опишите как пользоваться вашим продуктом..."
             className="bg-background border-border min-h-[120px] resize-none"
             maxLength={1000}
@@ -333,21 +363,36 @@ export function CreateProductForm({
         </FormField>
       </FormSection>
 
+      {/* Visibility Section */}
+      <FormSection title="Видимость">
+        <div className="flex items-center justify-between gap-4 rounded-lg border border-border bg-secondary/30 px-4 py-3">
+          <Label htmlFor="product-visibility" className="text-sm text-muted-foreground">
+            Отображать продукт в маркетплейсе
+          </Label>
+          <Switch
+            id="product-visibility"
+            checked={isActive}
+            onCheckedChange={(checked) => setValue("isActive", checked, { shouldDirty: true })}
+          />
+        </div>
+      </FormSection>
+
       {/* Price Section */}
       <FormSection title="Стоимость">
-        <FormField label="Цена (€)" error={touched.price ? errors.price : undefined} required>
+        <FormField label="Цена (€)" error={errors.price?.message} required>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
               €
             </span>
             <Input
-              name="price"
-              type="number"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
               min={4}
-              step={0.01}
-              value={values.price}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              value={priceInput}
+              onChange={handlePriceChange}
+              onFocus={handlePriceFocus}
+              onBlur={handlePriceBlur}
               className="bg-background border-border pl-8"
             />
           </div>

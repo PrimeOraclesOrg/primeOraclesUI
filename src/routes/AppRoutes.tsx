@@ -6,7 +6,7 @@ import Marketplace from "@/pages/Marketplace";
 import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
-import CreateProduct from "@/pages/CreateProduct";
+import CreateProduct from "@/pages/CreateProduct/CreateProduct";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";

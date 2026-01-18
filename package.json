@@ -58,7 +58,6 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
     "eslint-config-prettier": "^10.1.8",
-    "formik": "^2.4.9",
     "i18next": "^25.7.4",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.462.0",
