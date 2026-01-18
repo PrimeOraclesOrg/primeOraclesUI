@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,11 +12,13 @@ import { useToast } from "@/hooks/useToast";
 import {
   createProduct,
   checkProductTitleAvailability,
+  uploadProductImage,
 } from "@/services/productsService/productsService";
 
 export const useCreateProduct = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
 
   const createProductForm = useForm<CreateProductFormData>({
     resolver: zodResolver(createProductSchema),
@@ -27,7 +29,7 @@ export const useCreateProduct = () => {
     try {
       await checkProductTitleAvailability(values.title);
 
-      await createProduct({
+      const productId = await createProduct({
         title: values.title,
         category: values.category,
         description: values.description,
@@ -37,6 +39,10 @@ export const useCreateProduct = () => {
         price: values.price,
         isActive: values.isActive,
       });
+
+      if (mediaFile) {
+        await uploadProductImage(productId, mediaFile);
+      }
 
       toast({
         title: "Продукт создан",
@@ -62,15 +68,56 @@ export const useCreateProduct = () => {
   // Handle media upload
   const handleMediaUpload = useCallback(
     (file: File) => {
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+      const maxSizeBytes = 1024 * 1024;
+
+      if (!allowedTypes.includes(file.type)) {
+        toast({
+          title: "Ошибка",
+          description: "Допустимые форматы: JPEG, PNG, WebP, AVIF.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (file.size > maxSizeBytes) {
+        toast({
+          title: "Ошибка",
+          description: "Файл слишком большой. Максимальный размер: 1MB.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const currentUrl = createProductForm.getValues("mediaUrl");
+      if (currentUrl) {
+        URL.revokeObjectURL(currentUrl);
+      }
+
       const url = URL.createObjectURL(file);
+      setMediaFile(file);
       createProductForm.setValue("mediaUrl", url);
     },
-    [createProductForm]
+    [createProductForm, toast]
   );
 
   // Handle media remove
   const handleMediaRemove = useCallback(() => {
+    const currentUrl = createProductForm.getValues("mediaUrl");
+    if (currentUrl) {
+      URL.revokeObjectURL(currentUrl);
+    }
+    setMediaFile(null);
     createProductForm.setValue("mediaUrl", undefined);
+  }, [createProductForm]);
+
+  useEffect(() => {
+    return () => {
+      const currentUrl = createProductForm.getValues("mediaUrl");
+      if (currentUrl) {
+        URL.revokeObjectURL(currentUrl);
+      }
+    };
   }, [createProductForm]);
 
   // Advantages handlers

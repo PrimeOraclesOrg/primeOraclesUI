@@ -81,7 +81,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
           <div className={cn("flex gap-8 mb-8", mode === "mobile" ? "flex-col" : "flex-row")}>
             {/* Product Image */}
             <div className={cn("flex-shrink-0", mode === "mobile" ? "w-full" : "w-72")}>
-              <div className="aspect-[4/3] rounded-xl overflow-hidden bg-secondary flex items-center justify-center">
+              <div className="aspect-[16/9] rounded-xl overflow-hidden bg-secondary flex items-center justify-center">
                 {hasMedia ? (
                   <img src={data.mediaUrl} alt="Preview" className="w-full h-full object-cover" />
                 ) : (

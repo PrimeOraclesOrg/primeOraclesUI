@@ -121,6 +121,13 @@ export function CreateProductForm({
     }
   };
 
+  const handleMediaRemoveClick = () => {
+    onMediaRemove();
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  };
+
   const getAdvantageError = (index: number): string | undefined => {
     return errors.advantages?.[index]?.description?.message;
   };
@@ -207,7 +214,7 @@ export function CreateProductForm({
                 <img src={mediaUrl} alt="Media preview" className="w-full h-full object-cover" />
                 <button
                   type="button"
-                  onClick={onMediaRemove}
+                  onClick={handleMediaRemoveClick}
                   className="absolute top-2 right-2 p-1 bg-card/80 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <Trash2 className="w-4 h-4 text-destructive" />

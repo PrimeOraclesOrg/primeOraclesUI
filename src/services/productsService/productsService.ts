@@ -8,7 +8,7 @@
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
 import type { Product } from "@/types";
-import { supabase } from "@/utils";
+import { PRODUCT_IMAGES_BUCKET, supabase } from "@/utils";
 import { ProductDetailsResult, ProductsFilter, ProductsResult } from "./types";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 
@@ -120,6 +120,19 @@ export async function createProduct(productData: CreateProductFormData): Promise
   }
 
   return data;
+}
+
+/**
+ * Upload product image to Supabase Storage
+ */
+export async function uploadProductImage(productId: string, file: File) {
+  const { error } = await supabase.storage
+    .from(PRODUCT_IMAGES_BUCKET)
+    .upload(productId, file, { contentType: file.type, upsert: true });
+
+  if (error) {
+    throw new Error("Ошибка при загрузке изображения продукта");
+  }
 }
 
 /**
