@@ -211,7 +211,7 @@ export async function completeProfile({
     if (error)
       return {
         data: null,
-        error: {
+        error: error && {
           code: error.hint || error.code,
           message: error.message,
         },
@@ -229,7 +229,7 @@ export async function completeProfile({
 
     return {
       data: null,
-      error: {
+      error: error && {
         code: error.hint || error.code,
         message: error.message,
       },
