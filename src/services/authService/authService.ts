@@ -19,14 +19,16 @@ import {
  * Sign up a new user with email and password
  */
 export async function signUp(credentials: SignUpCredentials): Promise<AuthResult<UserAndSession>> {
-  const { data, error } = await supabase.auth.signUp({
-    email: credentials.email,
-    password: credentials.password,
-    options: {
-      emailRedirectTo: `${window.location.origin}/`,
-      data: credentials.metadata,
-    },
-  });
+  const { data, error } = await supabase.auth
+    .signUp({
+      email: credentials.email,
+      password: credentials.password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/`,
+        data: credentials.metadata,
+      },
+    })
+    .catch((error) => error);
 
   return {
     data,
@@ -38,10 +40,12 @@ export async function signUp(credentials: SignUpCredentials): Promise<AuthResult
  * Sign in with email and password
  */
 export async function signIn(credentials: SignInCredentials): Promise<AuthResult<UserAndSession>> {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: credentials.email,
-    password: credentials.password,
-  });
+  const { data, error } = await supabase.auth
+    .signInWithPassword({
+      email: credentials.email,
+      password: credentials.password,
+    })
+    .catch((error) => ({ data: null, error }));
 
   return {
     data,
@@ -53,7 +57,7 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
  * Sign out the current user
  */
 export async function signOut(): Promise<AuthResult<null>> {
-  const { error } = await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut().catch((error) => ({ data: null, error }));
 
   return {
     data: null,
@@ -68,7 +72,7 @@ export async function getSession(): Promise<AuthResult<Session>> {
   const {
     data: { session },
     error,
-  } = await supabase.auth.getSession();
+  } = await supabase.auth.getSession().catch((error) => ({ data: null, error }));
 
   return {
     data: session,
@@ -83,7 +87,7 @@ export async function getCurrentUser(): Promise<AuthResult<User>> {
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser().catch((error) => ({ data: null, error }));
 
   return {
     data: user,
@@ -95,9 +99,11 @@ export async function getCurrentUser(): Promise<AuthResult<User>> {
  * Send password reset email
  */
 export async function resetPassword(email: string): Promise<AuthResult<null>> {
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/reset-password`,
-  });
+  const { error } = await supabase.auth
+    .resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    .catch((error) => ({ data: null, error }));
 
   return {
     data: null,
@@ -109,9 +115,11 @@ export async function resetPassword(email: string): Promise<AuthResult<null>> {
  * Update user password
  */
 export async function updatePassword(newPassword: string): Promise<AuthResult<{ user: User }>> {
-  const { data, error } = await supabase.auth.updateUser({
-    password: newPassword,
-  });
+  const { data, error } = await supabase.auth
+    .updateUser({
+      password: newPassword,
+    })
+    .catch((error) => ({ data: null, error }));
 
   return {
     data,
@@ -135,7 +143,9 @@ export async function verifyOtp({
   code,
   ...params
 }: VerifyOtpCredentials): Promise<AuthResult<UserAndSession>> {
-  const { data, error } = await supabase.auth.verifyOtp({ ...params, token: code });
+  const { data, error } = await supabase.auth
+    .verifyOtp({ ...params, token: code })
+    .catch((error) => ({ data: null, error }));
 
   return {
     data,
@@ -230,14 +240,15 @@ export async function completeProfile({
         .from("avatars")
         .upload(user.id, base64ToBlob(uploadedAvatar), {
           contentType: "image/png",
-        });
+        })
+        .catch((error) => ({ data: null, error }));
 
       if (error)
         return {
           data: null,
           error: error && {
-            code: error.name,
-            message: error.message,
+            code: error?.name,
+            message: error?.message,
           },
         };
     }
