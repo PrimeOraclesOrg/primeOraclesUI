@@ -1,4 +1,4 @@
-import { ConfirmCodeTemplate, ProfileSetupTemplate, SignUpTemplate } from "@/components/templates";
+import { ConfirmCodeTemplate, SignUpTemplate } from "@/components/templates";
 import { useSignUp } from "./useSignUp";
 
 export default function SignUp() {
