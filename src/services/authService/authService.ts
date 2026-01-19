@@ -235,7 +235,10 @@ export async function completeProfile({
       if (error)
         return {
           data: null,
-          error,
+          error: error && {
+            code: error.name,
+            message: error.message,
+          },
         };
     }
   }
