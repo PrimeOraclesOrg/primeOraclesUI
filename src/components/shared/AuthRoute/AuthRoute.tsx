@@ -6,9 +6,9 @@
 
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { getCurrentUser } from "@/services/authService";
 import { usePreviousLocation } from "@/hooks/usePreviousLocation";
 import { LoadingScreen } from "@/components/atoms";
+import { getCurrentUser } from "@/services";
 
 interface PublicRouteProps {
   children: React.ReactNode;
