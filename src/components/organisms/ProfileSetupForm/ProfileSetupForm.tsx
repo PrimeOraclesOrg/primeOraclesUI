@@ -14,8 +14,6 @@ import { ProfileSetupFormData, profileSetupMaxLenghtLimits } from "@/utils";
 import { ImagePlus, Youtube, Instagram, Check } from "lucide-react";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { ImageCrop } from "../ImageCrop/ImageCrop";
-import { PREPAIRED_AVATARS } from "@/data";
-import { uploadAvatar } from "@/services";
 
 // TikTok icon component (not available in lucide-react)
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -289,6 +287,11 @@ export const ProfileSetupForm = ({
             })}
           </div>
         </div>
+        <ImageCrop
+          fileInputRef={fileInputRef}
+          setUploadedImage={setUploadedAvatar}
+          cropShape="round"
+        />
 
         <Button
           type="submit"
@@ -298,12 +301,6 @@ export const ProfileSetupForm = ({
           {isSubmitting ? "Сохранение..." : "Сохранить"}
         </Button>
       </form>
-
-      <ImageCrop
-        fileInputRef={fileInputRef}
-        setUploadedImage={setUploadedAvatar}
-        cropShape="round"
-      />
     </>
   );
 };

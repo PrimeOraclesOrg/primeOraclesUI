@@ -162,7 +162,6 @@ export interface ProfileData {
   youtubeUrl?: string;
   instagramUrl?: string;
   tiktokUrl?: string;
-  avatar?: string;
   selectedAvatar?: string;
   uploadedAvatar?: string;
 }
@@ -170,15 +169,70 @@ export interface ProfileData {
 /**
  * Complete user profile after registration (mock implementation)
  */
-export async function completeProfile(data: ProfileData): Promise<AuthResult<null>> {
-  console.log("completeProfile called with:", data);
-
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Mock success response
-  return {
-    data: null,
-    error: null,
+export async function completeProfile({
+  name,
+  username,
+  description,
+  instagramUrl,
+  selectedAvatar,
+  tiktokUrl,
+  uploadedAvatar,
+  youtubeUrl,
+}: ProfileData): Promise<AuthResult<null>> {
+  const getAvatarName = () => {
+    const avatarNumber = Number(selectedAvatar);
+    if (!avatarNumber) return null;
+    return `avatar${avatarNumber}`;
   };
+
+  const getSocialMedias = () => {
+    if (!instagramUrl && !youtubeUrl && !tiktokUrl) return null;
+    return [
+      instagramUrl && {
+        type: "instagram",
+        link: instagramUrl,
+      },
+      youtubeUrl && {
+        type: "youtube",
+        link: youtubeUrl,
+      },
+      tiktokUrl && {
+        type: "tiktok",
+        link: tiktokUrl,
+      },
+    ].filter(Boolean);
+  };
+
+  {
+    const { error } = await supabase.rpc("app_check_username_availability", {
+      p_username: username,
+    });
+
+    if (error)
+      return {
+        data: null,
+        error: {
+          code: error.hint || error.code,
+          message: error.message,
+        },
+      };
+  }
+
+  {
+    const { error } = await supabase.rpc("app_profile_registration_update", {
+      p_username: username,
+      p_name: name,
+      p_bio: description || null,
+      p_default_avatar_name: getAvatarName(),
+      p_social_medias: getSocialMedias(),
+    });
+
+    return {
+      data: null,
+      error: {
+        code: error.hint || error.code,
+        message: error.message,
+      },
+    };
+  }
 }

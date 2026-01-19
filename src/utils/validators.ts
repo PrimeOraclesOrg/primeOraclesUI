@@ -78,11 +78,33 @@ export const verificationCodeSchema = z.object({
 /**
  * URL schema for social links (optional)
  */
-const optionalUrlSchema = z
+const instagramUrlSchema = z
   .string()
   .max(2048, "Ссылка не должена превышать 2048 символов")
-  .regex(/^https:\/\/[^\s<>"{}|\\^`[\]]+$/, "Не верный формат ссылки")
-  /* .refine((val) => val === "" || /^https?:\/\/.+/.test(val), "Неверный формат ссылки") */
+  .regex(
+    /^https:\/\/(?:www\.)?instagram\.com\/(?:p\/[A-Za-z0-9_-]+|reel\/[A-Za-z0-9_-]+|reels\/[A-Za-z0-9_-]+|stories\/[A-Za-z0-9_.]+(?:\/[A-Za-z0-9_-]+)?|[A-Za-z0-9_.]+)\/?(?:\?.*)?$/,
+    "Не верный формат ссылки"
+  )
+  .optional()
+  .or(z.literal(""));
+
+const youtubeUrlSchema = z
+  .string()
+  .max(2048, "Ссылка не должена превышать 2048 символов")
+  .regex(
+    /^https:\/\/(?:(?:www\.)?youtube\.com(?:\/(?:watch\?.*v=[^&\s]+.*|v\/[^\s]+|channel\/[^\s]+|c\/[^\s]+|@[^\s]+|user\/[^\s]+|shorts\/[^\s]+|playlist\?.*list=[^\s]+|embed\/[^\s]+)?)?|youtu\.be\/[^\s]+)$/,
+    "Не верный формат ссылки"
+  )
+  .optional()
+  .or(z.literal(""));
+
+const tiktokUrlSchema = z
+  .string()
+  .max(2048, "Ссылка не должена превышать 2048 символов")
+  .regex(
+    /^https:\/\/(?:(?:www\.|m\.)?tiktok\.com\/(?:@[A-Za-z0-9_.]+(?:\/video\/[0-9]+)?|v\/[0-9]+|embed\/v2\/[0-9]+)|vm\.tiktok\.com\/[A-Za-z0-9]+)\/?(?:\?.*)?$/,
+    "Не верный формат ссылки"
+  )
   .optional()
   .or(z.literal(""));
 
@@ -102,25 +124,34 @@ export const profileSetupSchema = z.object({
     .trim()
     .min(1, "Имя обязательно")
     .min(3, "Имя должено содержать минимум 3 символа")
-    .max(profileSetupMaxLenghtLimits.name, "Имя не должно превышать 120 символов"),
+    .max(
+      profileSetupMaxLenghtLimits.name,
+      `Имя не должно превышать ${profileSetupMaxLenghtLimits.name} символов`
+    ),
   username: z
     .string()
     .trim()
     .min(1, "Никнейм обязателен")
     .min(3, "Никнейм должен содержать минимум 3 символа")
-    .max(profileSetupMaxLenghtLimits.username, "Никнейм не должен превышать 64 символов")
+    .max(
+      profileSetupMaxLenghtLimits.username,
+      `Никнейм не должен превышать ${profileSetupMaxLenghtLimits.username} символов`
+    )
     .regex(/^[a-zA-Z0-9]+$/, "Никнейм может содержать только цифры и английские буквы"),
   description: z
     .string()
     .min(3, "Описание должено содержать минимум 3 символа")
-    .max(profileSetupMaxLenghtLimits.description, "Описание не должно превышать 500 символов")
+    .max(
+      profileSetupMaxLenghtLimits.description,
+      `Описание не должно превышать ${profileSetupMaxLenghtLimits.description} символов`
+    )
     .optional()
     .or(z.literal("")),
-  youtubeUrl: optionalUrlSchema,
-  instagramUrl: optionalUrlSchema,
-  tiktokUrl: optionalUrlSchema,
+  youtubeUrl: youtubeUrlSchema,
+  instagramUrl: instagramUrlSchema,
+  tiktokUrl: tiktokUrlSchema,
   selectedAvatar: z.string(),
-  uploadedAvatar: z.string(),
+  uploadedAvatar: z.string().optional(),
 });
 
 /**
