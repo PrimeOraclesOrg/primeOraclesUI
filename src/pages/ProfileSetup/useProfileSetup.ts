@@ -26,7 +26,6 @@ export const useProfileSetup = () => {
   });
 
   const onProfileSetupSubmit = async (data: ProfileSetupFormData) => {
-    console.log("OwO");
     const { error } = await completeProfile({
       name: data.name,
       username: data.username,

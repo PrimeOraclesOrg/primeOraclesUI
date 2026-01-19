@@ -182,7 +182,7 @@ export async function completeProfile({
   const getAvatarName = () => {
     const avatarNumber = Number(selectedAvatar);
     if (!avatarNumber) return null;
-    return `avatar${avatarNumber}`;
+    return `avatar${avatarNumber}.png`;
   };
 
   const getSocialMedias = () => {
