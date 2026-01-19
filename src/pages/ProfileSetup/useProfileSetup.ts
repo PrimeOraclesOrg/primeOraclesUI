@@ -1,5 +1,5 @@
 import { toast } from "@/hooks/useToast";
-import { completeProfile, signOut } from "@/services";
+import { completeProfile } from "@/services";
 import { ProfileSetupFormData, profileSetupSchema } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
