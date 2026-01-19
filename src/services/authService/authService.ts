@@ -5,7 +5,7 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { supabase } from "@/utils";
+import { base64ToBlob, supabase } from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
   AuthResult,
@@ -179,6 +179,8 @@ export async function completeProfile({
   uploadedAvatar,
   youtubeUrl,
 }: ProfileData): Promise<AuthResult<null>> {
+  console.log(uploadedAvatar);
+
   const getAvatarName = () => {
     const avatarNumber = Number(selectedAvatar);
     if (!avatarNumber) return null;
@@ -203,6 +205,10 @@ export async function completeProfile({
     ].filter(Boolean);
   };
 
+  const { data: user, error: userError } = await getCurrentUser();
+
+  if (userError) return { data: null, error: userError };
+
   {
     const { error } = await supabase.rpc("app_check_username_availability", {
       p_username: username,
@@ -216,6 +222,22 @@ export async function completeProfile({
           message: error.message,
         },
       };
+  }
+
+  {
+    if (!getAvatarName() && uploadedAvatar) {
+      const { error } = await supabase.storage
+        .from("avatars")
+        .upload(user.id, base64ToBlob(uploadedAvatar), {
+          contentType: "image/png",
+        });
+
+      if (error)
+        return {
+          data: null,
+          error,
+        };
+    }
   }
 
   {
