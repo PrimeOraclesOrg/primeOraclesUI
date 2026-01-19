@@ -7,7 +7,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import type { CreateProductFormData } from "@/types/createProduct";
+import { CATEGORY_DISPLAY_NAMES } from "@/types/createProduct";
+import { CreateProductFormData } from "@/utils/validators/createProduct";
 
 type PreviewMode = "desktop" | "mobile";
 
@@ -80,7 +81,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
           <div className={cn("flex gap-8 mb-8", mode === "mobile" ? "flex-col" : "flex-row")}>
             {/* Product Image */}
             <div className={cn("flex-shrink-0", mode === "mobile" ? "w-full" : "w-72")}>
-              <div className="aspect-[4/3] rounded-xl overflow-hidden bg-secondary flex items-center justify-center">
+              <div className="aspect-[16/9] rounded-xl overflow-hidden bg-secondary flex items-center justify-center">
                 {hasMedia ? (
                   <img src={data.mediaUrl} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
@@ -104,12 +105,12 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
 
               {/* Category */}
               <div className="text-xs text-primary uppercase tracking-wider mb-2">
-                {data.category}
+                {CATEGORY_DISPLAY_NAMES[data.category]}
               </div>
 
               {/* Title */}
               <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2">
-                {data.name || "Название продукта"}
+                {data.title || "Название продукта"}
               </h3>
 
               {/* Rating */}
@@ -156,11 +157,16 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
               <h4 className="text-lg font-bold text-foreground mb-4">Преимущества</h4>
               <div className="grid gap-3">
                 {data.advantages.map((adv) => (
-                  <div key={adv.id} className="flex items-start gap-3 surface-card p-4 rounded-lg">
+                  <div
+                    key={adv.position}
+                    className="flex items-start gap-3 surface-card p-4 rounded-lg"
+                  >
                     <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                       <Check className="w-4 h-4 text-primary" />
                     </div>
-                    <span className="text-sm text-foreground">{adv.text || "Преимущество"}</span>
+                    <span className="text-sm text-foreground">
+                      {adv.description || "Преимущество"}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -175,7 +181,11 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
               </h4>
               <Accordion type="single" collapsible className="max-w-2xl mx-auto">
                 {data.faq.map((item) => (
-                  <AccordionItem key={item.id} value={item.id} className="border-border">
+                  <AccordionItem
+                    key={item.position}
+                    value={item.position.toString()}
+                    className="border-border"
+                  >
                     <AccordionTrigger className="text-foreground hover:text-primary text-left">
                       {item.question || "Вопрос"}
                     </AccordionTrigger>
