@@ -46,10 +46,9 @@ export const useProfileSetup = () => {
     } else {
       toast({
         title: "Успешно",
-        description: "Профиль успешно сохранён, теперь можете войти",
+        description: "Профиль успешно сохранён",
       });
-      await signOut();
-      navigate("/login", { state: location.state, replace: true });
+      navigate("/", { replace: true });
     }
   };
 
