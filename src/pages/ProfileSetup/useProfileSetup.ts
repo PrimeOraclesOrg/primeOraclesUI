@@ -8,7 +8,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export const useProfileSetup = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { t } = useTranslation();
 
   const profileSetupForm = useForm<ProfileSetupFormData>({
