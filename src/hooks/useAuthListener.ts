@@ -1,4 +1,4 @@
-import { onAuthStateChange } from "@/services";
+import { getUserProfile, onAuthStateChange } from "@/services";
 import { clearUser, setUser, store } from "@/store";
 import { useEffect } from "react";
 
@@ -11,6 +11,11 @@ export const useAuthListener = () => {
         store.dispatch(clearUser());
       }
     });
+
+    (async () => {
+      const { data: profile, error } = await getUserProfile();
+      console.log("Profile:", profile, error);
+    })();
 
     return () => unsubscribe();
   }, []);
