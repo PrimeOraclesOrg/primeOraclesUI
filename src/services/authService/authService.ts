@@ -14,7 +14,6 @@ import {
   UserAndSession,
   VerifyOtpCredentials,
 } from "./types";
-import { Await } from "react-router-dom";
 
 /**
  * Sign up a new user with email and password
