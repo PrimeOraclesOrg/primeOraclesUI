@@ -13,7 +13,7 @@ export default function ProfileSetup() {
       isSubmitting={profileSetupForm.formState.isSubmitting}
       setValue={profileSetupForm.setValue}
       watch={profileSetupForm.watch}
-      prepairedAvatars={DEFAULT_AVATARS}
+      defaultAvatars={DEFAULT_AVATARS}
     />
   );
 }
