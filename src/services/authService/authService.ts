@@ -189,8 +189,6 @@ export async function completeProfile({
   uploadedAvatar,
   youtubeUrl,
 }: ProfileData): Promise<AuthResult<null>> {
-  console.log(uploadedAvatar);
-
   const getAvatarName = () => {
     const avatarNumber = Number(selectedAvatar);
     if (!avatarNumber) return null;
