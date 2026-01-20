@@ -14,6 +14,7 @@ import {
   UserAndSession,
   VerifyOtpCredentials,
 } from "./types";
+import { Await } from "react-router-dom";
 
 /**
  * Sign up a new user with email and password
@@ -162,6 +163,66 @@ export async function resendSignUpOtp(email: string): Promise<AuthResult<UserAnd
   };
 }
 
+export async function checkUsernameAvailability(username: string) {
+  const { error } = await supabase.rpc("app_check_username_availability", {
+    p_username: username,
+  });
+
+  if (error)
+    return {
+      data: null,
+      error: {
+        code: error.hint || error.code,
+        message: error.message,
+      },
+    };
+}
+
+export async function uploadAvatar(avatarBase64: string, userId: string) {
+  const { error } = await supabase.storage
+    .from("avatars")
+    .upload(userId, base64ToBlob(avatarBase64), {
+      contentType: "image/png",
+    })
+    .catch((error) => ({ data: null, error }));
+
+  if (error)
+    return {
+      data: null,
+      error: {
+        code: error?.name,
+        message: error?.message,
+      },
+    };
+}
+
+export async function profile_registration_update(
+  username: string,
+  name: string,
+  description: string,
+  avatarName: string | null,
+  socialMedias: Array<{
+    type: string;
+    link: string;
+  } | null>
+) {
+  const { error } = await supabase.rpc("app_profile_registration_update", {
+    p_username: username,
+    p_name: name,
+    p_bio: description || null,
+    p_default_avatar_name: avatarName,
+    p_social_medias: socialMedias,
+  });
+
+  return {
+    data: null,
+    error: error && {
+      code: error.hint || error.code,
+      message: error.message,
+    },
+  };
+}
+
 /**
  * Profile data for completing user profile
  */
@@ -171,9 +232,9 @@ export interface ProfileData {
   description?: string;
   youtubeUrl?: string;
   instagramUrl?: string;
-  tiktokUrl?: string;
-  selectedAvatar?: string;
-  uploadedAvatar?: string;
+  tiktokUrl: string;
+  selectedAvatar: string | null;
+  uploadedAvatar: string;
 }
 
 /**
@@ -214,59 +275,22 @@ export async function completeProfile({
   };
 
   const { data: user, error: userError } = await getCurrentUser();
-
   if (userError) return { data: null, error: userError };
 
-  {
-    const { error } = await supabase.rpc("app_check_username_availability", {
-      p_username: username,
-    });
+  const usernameAvailability = await checkUsernameAvailability(username);
+  if (usernameAvailability?.error) return usernameAvailability;
 
-    if (error)
-      return {
-        data: null,
-        error: {
-          code: error.hint || error.code,
-          message: error.message,
-        },
-      };
+  if (!getAvatarName() && uploadedAvatar) {
+    const avatarUploading = await uploadAvatar(uploadedAvatar, user.id);
+    if (avatarUploading?.error) return avatarUploading;
   }
 
-  {
-    if (!getAvatarName() && uploadedAvatar) {
-      const { error } = await supabase.storage
-        .from("avatars")
-        .upload(user.id, base64ToBlob(uploadedAvatar), {
-          contentType: "image/png",
-        })
-        .catch((error) => ({ data: null, error }));
-
-      if (error)
-        return {
-          data: null,
-          error: {
-            code: error?.name,
-            message: error?.message,
-          },
-        };
-    }
-  }
-
-  {
-    const { error } = await supabase.rpc("app_profile_registration_update", {
-      p_username: username,
-      p_name: name,
-      p_bio: description || null,
-      p_default_avatar_name: getAvatarName(),
-      p_social_medias: getSocialMedias(),
-    });
-
-    return {
-      data: null,
-      error: error && {
-        code: error.hint || error.code,
-        message: error.message,
-      },
-    };
-  }
+  const updateProfileRegistration = await profile_registration_update(
+    username,
+    name,
+    description,
+    getAvatarName(),
+    getSocialMedias()
+  );
+  return updateProfileRegistration;
 }
