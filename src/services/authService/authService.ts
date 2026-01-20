@@ -293,3 +293,11 @@ export async function completeProfile({
   );
   return updateProfileRegistration;
 }
+
+export async function getUserProfile() {
+  const { data, error } = await supabase.from("public_profiles_full_view").select("*").single();
+  return {
+    data,
+    error,
+  };
+}
