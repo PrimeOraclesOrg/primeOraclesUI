@@ -35,9 +35,9 @@ export const ProfileSetupForm = ({
   setValue,
   defaultAvatars,
 }: ProfileSetupFormProps) => {
-  const nameValue = watch("name") || "";
-  const usernameValue = watch("username") || "";
-  const descriptionValue = watch("description") || "";
+  const nameValue = watch("name");
+  const usernameValue = watch("username");
+  const descriptionValue = watch("description");
   const selectedAvatar = watch("selectedAvatar");
   const uploadedAvatar = watch("uploadedAvatar");
 
