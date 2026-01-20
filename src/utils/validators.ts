@@ -150,7 +150,7 @@ export const profileSetupSchema = z.object({
   youtubeUrl: youtubeUrlSchema,
   instagramUrl: instagramUrlSchema,
   tiktokUrl: tiktokUrlSchema,
-  selectedAvatar: z.string(),
+  selectedAvatar: z.string().nullable(),
   uploadedAvatar: z.string().optional(),
 });
 

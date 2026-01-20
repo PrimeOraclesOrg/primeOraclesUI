@@ -47,10 +47,8 @@ export const ProfileSetupForm = ({
     fileInputRef.current?.click();
   }, []);
 
-  const isUploadedAvatar = selectedAvatar === "uploaded";
-
   const setUploadedAvatar = (avatar: string) => {
-    setValue("selectedAvatar", "uploaded");
+    setValue("selectedAvatar", null);
     setValue("uploadedAvatar", avatar);
   };
 
@@ -210,12 +208,12 @@ export const ProfileSetupForm = ({
             disabled={isSubmitting}
             className={cn(
               "w-20 h-20 rounded-full outline outline-3 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:outline-accent/50 hover:text-accent transition-colors relative overflow-hidden",
-              isUploadedAvatar ? "outline-accent" : "outline-transparent hover:outline-accent/50"
+              !selectedAvatar ? "outline-accent" : "outline-transparent hover:outline-accent/50"
             )}
             onClick={handleUploadClick}
           >
             {/* Uploaded image background */}
-            {isUploadedAvatar && (
+            {!selectedAvatar && (
               <img
                 src={uploadedAvatar}
                 alt="Uploaded avatar"
@@ -224,14 +222,14 @@ export const ProfileSetupForm = ({
             )}
 
             {/* Overlay for selected uploaded avatar */}
-            {isUploadedAvatar && selectedAvatar && (
+            {!selectedAvatar && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                 <Check className="h-6 w-6 text-white" />
               </div>
             )}
 
             {/* Default content when no uploaded image or not selected with image */}
-            {(!selectedAvatar || !isUploadedAvatar) && (
+            {selectedAvatar && (
               <div
                 className={cn(
                   "flex flex-col items-center justify-center z-10",
