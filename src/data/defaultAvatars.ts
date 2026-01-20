@@ -1,4 +1,4 @@
-export const PREPAIRED_AVATARS = [
+export const DEFAULT_AVATARS = [
   "/img/default_avatars/avatar1.png",
   "/img/default_avatars/avatar2.png",
   "/img/default_avatars/avatar3.png",

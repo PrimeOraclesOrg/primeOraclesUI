@@ -1,6 +1,6 @@
 import { ProfileSetupTemplate } from "@/components/templates";
 import { useProfileSetup } from "./useProfileSetup";
-import { PREPAIRED_AVATARS } from "@/data";
+import { DEFAULT_AVATARS } from "@/data";
 
 export default function ProfileSetup() {
   const { onProfileSetupSubmit, profileSetupForm } = useProfileSetup();
@@ -13,7 +13,7 @@ export default function ProfileSetup() {
       isSubmitting={profileSetupForm.formState.isSubmitting}
       setValue={profileSetupForm.setValue}
       watch={profileSetupForm.watch}
-      prepairedAvatars={PREPAIRED_AVATARS}
+      prepairedAvatars={DEFAULT_AVATARS}
     />
   );
 }

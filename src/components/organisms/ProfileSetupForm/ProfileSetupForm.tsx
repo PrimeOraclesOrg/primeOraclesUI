@@ -23,7 +23,7 @@ interface ProfileSetupFormProps {
   isSubmitting: boolean;
   watch: UseFormWatch<ProfileSetupFormData>;
   setValue: UseFormSetValue<ProfileSetupFormData>;
-  prepairedAvatars: Array<string>;
+  defaultAvatars: Array<string>;
 }
 
 export const ProfileSetupForm = ({
@@ -33,7 +33,7 @@ export const ProfileSetupForm = ({
   register,
   watch,
   setValue,
-  prepairedAvatars,
+  defaultAvatars,
 }: ProfileSetupFormProps) => {
   const nameValue = watch("name") || "";
   const usernameValue = watch("username") || "";
@@ -252,7 +252,7 @@ export const ProfileSetupForm = ({
             </button>
 
             {/* Predefined avatars */}
-            {prepairedAvatars.map((avatarUrl, index) => {
+            {defaultAvatars.map((avatarUrl, index) => {
               const isSelected = selectedAvatar === `${index + 1}`;
               return (
                 <button
