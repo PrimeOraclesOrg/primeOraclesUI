@@ -1,6 +1,6 @@
 import { UserAvatar } from "@/components/molecules/UserAvatar/UserAvatar";
 import { Button } from "@/components/ui/button";
-import { selectAuthProfile, selectAuthUser } from "@/store";
+import { selectAuthProfile } from "@/store";
 import { cn } from "@/utils";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
@@ -9,7 +9,7 @@ interface SidebarProfileProps {
   isActive: (href: string) => boolean;
 }
 
-export const SidebarProfile = ({ isActive }: SidebarProfileProps) => {
+export const MiniProfile = ({ isActive }: SidebarProfileProps) => {
   const profile = useSelector(selectAuthProfile);
 
   return (
@@ -20,8 +20,8 @@ export const SidebarProfile = ({ isActive }: SidebarProfileProps) => {
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group/profile",
             isActive("/profile")
-              ? "text-foreground bg-sidebar-accent"
-              : "text-sidebar-foreground hover:text-foreground hover:bg-sidebar-accent/50"
+              ? "text-sidebar-foreground bg-sidebar-accent"
+              : "text-sidebar-foreground hover:bg-sidebar-accent/50"
           )}
         >
           <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
@@ -31,7 +31,7 @@ export const SidebarProfile = ({ isActive }: SidebarProfileProps) => {
             <span className="text-xs font-medium text-nowrap text-ellipsis overflow-hidden">
               Личный профиль
             </span>
-            <span className="text-md font-medium text-foreground text-nowrap text-ellipsis overflow-hidden group-hover/profile:text-primary">
+            <span className="text-md font-medium text-foreground text-nowrap text-ellipsis overflow-hidden">
               {profile?.name}
             </span>
             <span className="text-xs font-medium text-nowrap text-ellipsis overflow-hidden">
