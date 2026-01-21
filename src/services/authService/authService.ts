@@ -5,7 +5,7 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { base64ToBlob, supabase } from "@/utils";
+import { base64ToBlob, ProfileSetupFormData, supabase } from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
   AuthResult,
@@ -332,21 +332,7 @@ export async function profileRegistrationUpdate(
 }
 
 /**
- * Profile data for completing user profile
- */
-export interface ProfileData {
-  name: string;
-  username: string;
-  description?: string;
-  youtubeUrl?: string;
-  instagramUrl?: string;
-  tiktokUrl: string;
-  selectedAvatar: string | null;
-  uploadedAvatar: string;
-}
-
-/**
- * Complete user profile after registration (mock implementation)
+ * Complete user profile after registration
  */
 export async function completeProfile({
   name,
@@ -357,7 +343,7 @@ export async function completeProfile({
   tiktokUrl,
   uploadedAvatar,
   youtubeUrl,
-}: ProfileData): Promise<AuthResult<null>> {
+}: ProfileSetupFormData): Promise<AuthResult<null>> {
   const getAvatarName = () => {
     const avatarNumber = Number(selectedAvatar);
     if (!avatarNumber) return null;
