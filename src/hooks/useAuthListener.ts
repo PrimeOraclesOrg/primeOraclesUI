@@ -1,10 +1,10 @@
 import { getUserProfile, onAuthStateChange } from "@/services";
-import { clearUser, setUser, store, useAppDispatch } from "@/store";
+import { clearUser, setUser, store } from "@/store";
 import { clearProfile, setProfile } from "@/store/authSlice";
 import { useCallback, useEffect } from "react";
 
 export const useAuthListener = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = store.dispatch;
 
   const fetchUserProfile = useCallback(async () => {
     const { data: profile, error } = await getUserProfile();
@@ -15,14 +15,14 @@ export const useAuthListener = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChange((_event, session) => {
       if (session?.user) {
-        store.dispatch(setUser(session.user));
+        dispatch(setUser(session.user));
       } else {
-        store.dispatch(clearUser());
+        dispatch(clearUser());
       }
     });
 
     fetchUserProfile();
 
     return () => unsubscribe();
-  }, [fetchUserProfile]);
+  }, [fetchUserProfile, dispatch]);
 };
