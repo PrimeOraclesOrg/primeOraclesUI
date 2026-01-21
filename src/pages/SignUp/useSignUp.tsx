@@ -1,7 +1,7 @@
 import { ConfirmCodeHelpPopupContent } from "@/components/organisms";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
-import { resendSignUpOtp, signOut, signUp, verifyOtp } from "@/services";
+import { resendSignUpOtp, signUp, verifyOtp } from "@/services";
 import {
   RegisterFormData,
   registerSchema,
@@ -77,11 +77,10 @@ export const useSignUp = () => {
 
     toast({
       title: "Успешно",
-      description: "Регистрация завершена. Теперь вы можете войти в свой аккаунт",
+      description: "Успешная регистрация. Теперь заполните ваш профиль",
     });
 
-    await signOut();
-    navigate("/login", { state: location.state });
+    navigate("/profile-setup", { state: location.state, replace: true });
   };
 
   const handleResendCode = async () => {
@@ -123,7 +122,7 @@ export const useSignUp = () => {
   const handleCloseClick = () => navigate(beforeLogin, { replace: true });
 
   const navigateWithState = (to: string) => {
-    navigate(to, { state: location.state });
+    navigate(to, { state: location.state, replace: true });
   };
 
   return {

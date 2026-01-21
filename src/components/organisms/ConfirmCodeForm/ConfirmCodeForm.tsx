@@ -18,7 +18,7 @@ export const ConfirmCodeForm = ({
   errors,
   isSubmitting,
   control,
-  onReset
+  onReset,
 }: ConfirmCodeFormProps) => {
   const buttonText = codeMode === "signup" ? "Подтвердить" : "Восстановить пароль";
   const loadingText = "Проверка...";
@@ -38,14 +38,14 @@ export const ConfirmCodeForm = ({
           />
         )}
       />
-         <p className="text-sm text-muted-foreground">
-          <button
-            type="reset"
-            className="text-primary hover:text-primary/80 font-medium transition-colors"
-          >
-            Очистить поле
-          </button>
-        </p>
+      <p className="text-sm text-muted-foreground">
+        <button
+          type="reset"
+          className="text-primary hover:text-primary/80 font-medium transition-colors"
+        >
+          Очистить поле
+        </button>
+      </p>
 
       <Button
         type="submit"

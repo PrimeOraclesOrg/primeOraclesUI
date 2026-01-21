@@ -13,3 +13,4 @@ export { ConfirmCodeTemplate } from "./ConfirmCodeTemplate/ConfirmCodeTemplate";
 export { ForgotPasswordTemplate } from "./ForgotPasswordTemplate/ForgotPasswordTemplate";
 export { ResetPasswordTemplate } from "./ResetPasswordTemplate/ResetPasswordTemplate";
 export { CreateProductTemplate } from "./CreateProductTemplate/CreateProductTemplate";
+export { ProfileSetupTemplate } from "./ProfileSetupTemplate/ProfileSetupTemplate";

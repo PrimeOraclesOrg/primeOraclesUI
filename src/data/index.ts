@@ -3,3 +3,4 @@ export * from "./rewards";
 export * from "./learning";
 export * from "./transactions";
 export * from "./details";
+export { DEFAULT_AVATARS } from "./defaultAvatars";

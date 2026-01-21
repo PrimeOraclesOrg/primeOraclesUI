@@ -28,7 +28,6 @@ export function AuthLayout({
   title,
   subtitle,
 }: AuthLayoutProps) {
-
   const handleBack = () => {
     if (onBack) {
       onBack();
@@ -36,7 +35,7 @@ export function AuthLayout({
   };
 
   return (
-    <div className="min-h-screen w-full bg-background flex fixed left-0 top-0 z-20">
+    <div className="h-screen w-full bg-background flex fixed left-0 top-0 z-20">
       {/* Left side - Hero Image (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <img src={authHero} alt="Welcome" className="absolute inset-0 w-full h-full object-cover" />
@@ -49,7 +48,7 @@ export function AuthLayout({
       </div>
 
       {/* Right side - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col min-h-screen bg-background">
+      <div className="w-full lg:w-1/2 flex flex-col min-h-screen bg-background overflow-auto">
         {/* Header with close button */}
         <header className="flex items-center justify-between p-4 sm:p-6">
           {showBackButton ? (
@@ -65,20 +64,22 @@ export function AuthLayout({
           ) : (
             <div />
           )}
-          {onClose && <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-full"
-            aria-label="Закрыть"
-          >
-            <X className="h-5 w-5" />
-          </Button>}
+          {onClose && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-full"
+              aria-label="Закрыть"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          )}
         </header>
 
         {/* Main content */}
         <main className="flex-1 flex items-center justify-center px-6 sm:px-8 lg:px-12 pb-8">
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-lg">
             {/* Title */}
             {title && (
               <div className="text-center mb-8">

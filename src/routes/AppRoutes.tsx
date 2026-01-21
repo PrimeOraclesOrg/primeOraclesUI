@@ -12,6 +12,7 @@ import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp/SignUp";
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
+import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 import { AuthRoute } from "@/components/shared";
 
 export function AppRoutes() {
@@ -51,6 +52,7 @@ export function AppRoutes() {
           </AuthRoute>
         }
       />
+      <Route path="/profile-setup" element={<ProfileSetup />} />
 
       {/* Protected routes - require authentication */}
       <Route
