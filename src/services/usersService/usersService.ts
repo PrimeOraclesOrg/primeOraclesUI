@@ -25,10 +25,12 @@ export async function fetchUserProfile(userId: string): Promise<ServiceResult<Us
     data: {
       name: "Lesha Maisak",
       username: "Leshamais",
-      avatar:
+      avatar_path:
         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
-      description: "",
-      socialLinks: mockSocialLinks,
+      bio: "",
+      social_medias: mockSocialLinks,
+      is_profile_completed: true,
+      is_verified: true,
     },
     error: null,
   };

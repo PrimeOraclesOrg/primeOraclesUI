@@ -105,18 +105,18 @@ export interface Order {
 export type SocialPlatform = "youtube" | "instagram" | "tiktok";
 
 export interface SocialLink {
-  platform: SocialPlatform;
-  url: string;
-  icon: string;
-  color: string;
+  type: SocialPlatform;
+  link: string;
 }
 
 export interface UserProfile {
-  name: string;
   username: string;
-  avatar?: string;
-  description?: string;
-  socialLinks: SocialLink[];
+  name: string;
+  bio?: string;
+  avatar_path: string;
+  is_verified: boolean;
+  is_profile_completed: boolean;
+  social_medias: SocialLink[];
 }
 
 // ========================================

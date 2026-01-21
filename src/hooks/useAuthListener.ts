@@ -1,5 +1,6 @@
 import { getUserProfile, onAuthStateChange } from "@/services";
 import { clearUser, setUser, store } from "@/store";
+import { clearProfile, setProfile } from "@/store/authSlice";
 import { useEffect } from "react";
 
 export const useAuthListener = () => {
@@ -14,7 +15,8 @@ export const useAuthListener = () => {
 
     (async () => {
       const { data: profile, error } = await getUserProfile();
-      console.log("Profile:", profile, error);
+      if (error) return store.dispatch(clearProfile());
+      if (profile) store.dispatch(setProfile(profile));
     })();
 
     return () => unsubscribe();

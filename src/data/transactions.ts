@@ -2,18 +2,14 @@ import type { Transaction, Order, SocialLink } from "@/types";
 
 export const mockSocialLinks: SocialLink[] = [
   {
-    platform: "youtube",
-    url: "https://www.youtube.com/@LeshaMaisak",
-    icon: "▶",
-    color: "bg-red-600",
+    type: "youtube",
+    link: "https://www.youtube.com/@LeshaMaisak",
   },
   {
-    platform: "instagram",
-    url: "https://www.instagram.com/@Lesha.Im",
-    icon: "◎",
-    color: "bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600",
+    type: "instagram",
+    link: "https://www.instagram.com/@Lesha.Im",
   },
-  { platform: "tiktok", url: "https://www.tiktok.com/@lesha.Im", icon: "♪", color: "bg-black" },
+  { type: "tiktok", link: "https://www.tiktok.com/@lesha.Im" },
 ];
 
 export const mockTransactions: Transaction[] = [

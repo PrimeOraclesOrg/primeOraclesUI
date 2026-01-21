@@ -15,7 +15,7 @@ export default function Settings() {
 
   const handleSocialLinkChange = (index: number, url: string) => {
     const newLinks = [...socialLinks];
-    newLinks[index].url = url;
+    newLinks[index].link = url;
     setSocialLinks(newLinks);
   };
 
