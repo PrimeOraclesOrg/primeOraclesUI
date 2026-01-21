@@ -25,7 +25,6 @@ export function AppRoutes() {
       <Route path="/learning/:id" element={<LearningDetail />} />
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/rewards" element={<Rewards />} />
-      <Route path="/create-product" element={<CreateProduct />} />
 
       {/* Auth routes */}
       <Route
@@ -108,6 +107,15 @@ export function AppRoutes() {
         element={
           <ProtectedRoute>
             <Marketplace />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/create-product"
+        element={
+          <ProtectedRoute>
+            <CreateProduct />
           </ProtectedRoute>
         }
       />
