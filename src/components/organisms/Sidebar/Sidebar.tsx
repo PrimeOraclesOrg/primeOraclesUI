@@ -1,10 +1,15 @@
 import { NavLink as RouterNavLink, useLocation } from "react-router-dom";
 import { cn } from "@/utils/helpers";
-import { User } from "lucide-react";
 import { mainNavItems, workspaceItems } from "@/config/navigation";
+import { useSelector } from "react-redux";
+import { selectAuthProfile } from "@/store";
+import { storageUrlBase } from "@/data";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User } from "lucide-react";
 
 export function Sidebar() {
   const location = useLocation();
+  const profile = useSelector(selectAuthProfile);
 
   const isActive = (href: string) => {
     if (href === "/") return location.pathname === "/";
@@ -97,7 +102,12 @@ export function Sidebar() {
           )}
         >
           <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-            <User className="w-4 h-4" />
+            <Avatar>
+              <AvatarImage src={`${storageUrlBase}/${profile?.avatar_path}`} />
+              <AvatarFallback>
+                <User className="w-4 h-4" />
+              </AvatarFallback>
+            </Avatar>
           </div>
           <span className="text-sm font-medium">Личный профиль</span>
         </RouterNavLink>
