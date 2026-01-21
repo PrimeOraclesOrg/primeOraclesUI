@@ -2,7 +2,7 @@ import { LogoutPopupContent } from "@/components/organisms";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
 import { completeProfile, signOut } from "@/services";
-import { selectAuthIsFetching, selectAuthUser } from "@/store";
+import { selectAuthIsFetching, selectAuthProfile, selectAuthUser } from "@/store";
 import { ProfileSetupFormData, profileSetupSchema } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -17,6 +17,7 @@ export const useProfileSetup = () => {
   const { openPopup, closePopup } = usePopup();
   const isAuthFetching = useSelector(selectAuthIsFetching);
   const user = useSelector(selectAuthUser);
+  const profile = useSelector(selectAuthProfile);
 
   const profileSetupForm = useForm<ProfileSetupFormData>({
     resolver: zodResolver(profileSetupSchema),
@@ -69,7 +70,8 @@ export const useProfileSetup = () => {
 
   useEffect(() => {
     if (!isAuthFetching && !user) navigate("/");
-  }, [isAuthFetching, user, navigate]);
+    if (profile) navigate("/");
+  }, [isAuthFetching, user, navigate, profile]);
 
   return {
     profileSetupForm,
