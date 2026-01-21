@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink as RouterNavLink, useLocation } from "react-router-dom";
+import { Link, NavLink as RouterNavLink, useLocation } from "react-router-dom";
 import { cn } from "@/utils/helpers";
 import { User, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,9 +21,9 @@ export function MobileHeader() {
   return (
     <>
       <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-sidebar border-b border-sidebar-border px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-1">
+        <Link to={"/"} className="flex items-center gap-1">
           <BrandLogo className="text-primary" />
-        </div>
+        </Link>
         <Button
           variant="ghost"
           size="icon"
