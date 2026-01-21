@@ -390,9 +390,19 @@ export async function completeProfile({
 }
 
 export async function getUserProfile() {
-  const { data, error } = await supabase.from("public_profiles_full_view").select("*").single();
-  return {
-    data,
-    error,
-  };
+  try {
+    const { data, error } = await supabase.from("public_profiles_full_view").select("*").single();
+    return {
+      data,
+      error,
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
 }
