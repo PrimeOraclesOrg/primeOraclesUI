@@ -29,15 +29,17 @@ export const authSlice = createSlice({
     setProfile: (state, action: PayloadAction<UserProfile>) => {
       state.profile = action.payload;
       state.isProfileFetching = false;
-      console.log("Profile set");
     },
     clearProfile: (state) => {
       state.profile = null;
       state.isProfileFetching = false;
-      console.log("Profile clear");
+    },
+    authClearAll: (state) => {
+      state.profile = null;
+      state.user = null;
     },
   },
 });
 
 export const authReducer = authSlice.reducer;
-export const { clearUser, setUser, setProfile, clearProfile } = authSlice.actions;
+export const { clearUser, setUser, setProfile, clearProfile, authClearAll } = authSlice.actions;

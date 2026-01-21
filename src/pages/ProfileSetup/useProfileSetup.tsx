@@ -1,16 +1,22 @@
+import { LogoutPopupContent } from "@/components/organisms";
+import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
-import { completeProfile } from "@/services";
-import { store } from "@/store";
-import { setProfile } from "@/store/authSlice";
+import { completeProfile, signOut } from "@/services";
+import { selectAuthIsFetching, selectAuthUser } from "@/store";
 import { ProfileSetupFormData, profileSetupSchema } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const useProfileSetup = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { openPopup, closePopup } = usePopup();
+  const isAuthFetching = useSelector(selectAuthIsFetching);
+  const user = useSelector(selectAuthUser);
 
   const profileSetupForm = useForm<ProfileSetupFormData>({
     resolver: zodResolver(profileSetupSchema),
@@ -53,8 +59,21 @@ export const useProfileSetup = () => {
     }
   };
 
+  const logout = async () => {
+    await signOut();
+    closePopup();
+    navigate("/");
+  };
+
+  const onClose = () => openPopup(<LogoutPopupContent logout={logout} />);
+
+  useEffect(() => {
+    if (!isAuthFetching && !user) navigate("/");
+  }, [isAuthFetching, user, navigate]);
+
   return {
     profileSetupForm,
     onProfileSetupSubmit,
+    onClose,
   };
 };

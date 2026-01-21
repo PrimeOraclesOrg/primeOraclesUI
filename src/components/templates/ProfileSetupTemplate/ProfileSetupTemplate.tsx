@@ -18,6 +18,7 @@ interface ProfileSetupTemplateProps {
   watch: UseFormWatch<ProfileSetupFormData>;
   setValue: UseFormSetValue<ProfileSetupFormData>;
   defaultAvatars: Array<string>;
+  onClose: () => void;
 }
 
 export const ProfileSetupTemplate = ({
@@ -28,9 +29,10 @@ export const ProfileSetupTemplate = ({
   setValue,
   watch,
   defaultAvatars,
+  onClose,
 }: ProfileSetupTemplateProps) => {
   return (
-    <AuthLayout title="Заполните профиль">
+    <AuthLayout title="Заполните профиль" onClose={onClose}>
       <ProfileSetupForm
         errors={errors}
         onSubmit={onSubmit}
