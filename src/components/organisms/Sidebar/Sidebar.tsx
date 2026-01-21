@@ -1,15 +1,9 @@
-import { NavLink as RouterNavLink, useLocation } from "react-router-dom";
-import { cn } from "@/utils/helpers";
-import { mainNavItems, workspaceItems } from "@/config/navigation";
-import { useSelector } from "react-redux";
-import { selectAuthProfile } from "@/store";
-import { storageUrlBase } from "@/data";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { SidebarNavigation } from "./SidebarNavigation";
+import { SidebarProfile } from "./SidebarProfile";
 
 export function Sidebar() {
   const location = useLocation();
-  const profile = useSelector(selectAuthProfile);
 
   const isActive = (href: string) => {
     if (href === "/") return location.pathname === "/";
@@ -28,90 +22,9 @@ export function Sidebar() {
         <span className="text-primary text-lg font-semibold ml-6">Oracles</span>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 overflow-y-auto scrollbar-hide">
-        <ul className="space-y-1">
-          {mainNavItems.map((item) => (
-            <li key={item.href}>
-              <RouterNavLink
-                to={item.href}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
-                  isActive(item.href)
-                    ? "text-foreground bg-sidebar-accent"
-                    : "text-sidebar-foreground hover:text-foreground hover:bg-sidebar-accent/50"
-                )}
-              >
-                <item.icon className="w-5 h-5" />
-                <span className="text-sm font-medium">{item.label}</span>
-              </RouterNavLink>
-            </li>
-          ))}
-        </ul>
+      <SidebarNavigation isActive={isActive} />
 
-        <div className="mt-6 pt-6 border-t border-sidebar-border">
-          <ul className="space-y-1">
-            {workspaceItems.map((item) => (
-              <li key={item.href}>
-                <RouterNavLink
-                  to={item.href}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
-                    isActive(item.href)
-                      ? "text-foreground bg-sidebar-accent"
-                      : "text-sidebar-foreground hover:text-foreground hover:bg-sidebar-accent/50"
-                  )}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="text-sm font-medium">{item.label}</span>
-                </RouterNavLink>
-                {item.children && (
-                  <ul className="ml-8 mt-1 space-y-1">
-                    {item.children.map((child) => (
-                      <li key={child.href}>
-                        <RouterNavLink
-                          to={child.href}
-                          className={cn(
-                            "block px-3 py-1.5 text-sm rounded transition-colors",
-                            isActive(child.href)
-                              ? "text-foreground"
-                              : "text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          {child.label}
-                        </RouterNavLink>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-
-      {/* Profile */}
-      <div className="p-4 border-t border-sidebar-border">
-        <RouterNavLink
-          to="/profile"
-          className={cn(
-            "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
-            isActive("/profile")
-              ? "text-foreground bg-sidebar-accent"
-              : "text-sidebar-foreground hover:text-foreground hover:bg-sidebar-accent/50"
-          )}
-        >
-          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-            <Avatar>
-              <AvatarImage src={`${storageUrlBase}/${profile?.avatar_path}`} />
-              <AvatarFallback>
-                <User className="w-4 h-4" />
-              </AvatarFallback>
-            </Avatar>
-          </div>
-          <span className="text-sm font-medium">Личный профиль</span>
-        </RouterNavLink>
-      </div>
+      <SidebarProfile isActive={isActive} />
     </aside>
   );
 }
