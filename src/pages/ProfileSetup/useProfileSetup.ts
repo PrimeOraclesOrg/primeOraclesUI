@@ -1,5 +1,7 @@
 import { toast } from "@/hooks/useToast";
 import { completeProfile } from "@/services";
+import { store } from "@/store";
+import { setProfile } from "@/store/authSlice";
 import { ProfileSetupFormData, profileSetupSchema } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

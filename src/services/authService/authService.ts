@@ -14,6 +14,8 @@ import {
   UserAndSession,
   VerifyOtpCredentials,
 } from "./types";
+import { store } from "@/store";
+import { setProfile } from "@/store/authSlice";
 
 /**
  * Sign up a new user with email and password
@@ -386,12 +388,36 @@ export async function completeProfile({
     getAvatarName(),
     getSocialMedias()
   );
+
+  const { data: profile, error: profileError } = await getUserProfile();
+  if (profileError) {
+    return {
+      data: null,
+      error: profileError,
+    };
+  }
+
+  store.dispatch(setProfile(profile));
+
   return updateProfileRegistration;
 }
 
 export async function getUserProfile() {
   try {
-    const { data, error } = await supabase.from("public_profiles_full_view").select("*").single();
+    const { data: user, error: userError } = await getCurrentUser();
+
+    if (userError) {
+      return {
+        data: null,
+        error: userError,
+      };
+    }
+
+    const { data, error } = await supabase
+      .from("public_profiles_full_view")
+      .select("*")
+      .eq("id", user.id)
+      .single();
     return {
       data,
       error,
