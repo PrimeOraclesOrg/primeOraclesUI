@@ -18,6 +18,7 @@ interface AuthLayoutProps {
   onClose?: () => void;
   title?: string;
   subtitle?: string;
+  onLogout?: () => void;
 }
 
 export function AuthLayout({
@@ -27,6 +28,7 @@ export function AuthLayout({
   onClose,
   title,
   subtitle,
+  onLogout,
 }: AuthLayoutProps) {
   const handleBack = () => {
     if (onBack) {
@@ -64,17 +66,29 @@ export function AuthLayout({
           ) : (
             <div />
           )}
-          {onClose && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-full"
-              aria-label="Закрыть"
-            >
-              <X className="h-5 w-5" />
-            </Button>
-          )}
+          <div>
+            {onLogout && (
+              <Button
+                variant="outline"
+                onClick={onLogout}
+                className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-md"
+                aria-label="Закрыть"
+              >
+                Выйти
+              </Button>
+            )}
+            {onClose && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+                className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-full"
+                aria-label="Закрыть"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            )}
+          </div>
         </header>
 
         {/* Main content */}

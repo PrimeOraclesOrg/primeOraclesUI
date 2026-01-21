@@ -65,7 +65,7 @@ export const useProfileSetup = () => {
     navigate("/");
   };
 
-  const onClose = () => openPopup(<LogoutPopupContent logout={logout} />);
+  const onLogout = () => openPopup(<LogoutPopupContent logout={logout} />);
 
   useEffect(() => {
     if (!isAuthFetching && !user) navigate("/");
@@ -74,6 +74,6 @@ export const useProfileSetup = () => {
   return {
     profileSetupForm,
     onProfileSetupSubmit,
-    onClose,
+    onLogout,
   };
 };
