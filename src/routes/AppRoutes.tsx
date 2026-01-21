@@ -14,8 +14,11 @@ import SignUp from "@/pages/SignUp/SignUp";
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 import { AuthRoute } from "@/components/shared";
+import { useAuthListener } from "@/hooks/useAuthListener";
 
 export function AppRoutes() {
+  useAuthListener();
+
   return (
     <Routes>
       {/* Public app routes - accessible without auth */}

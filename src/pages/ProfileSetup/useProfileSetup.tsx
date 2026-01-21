@@ -70,7 +70,7 @@ export const useProfileSetup = () => {
 
   useEffect(() => {
     if (!isAuthFetching && !user) navigate("/");
-    if (profile) navigate("/");
+    if (profile?.is_profile_completed) navigate("/");
   }, [isAuthFetching, user, navigate, profile]);
 
   return {
