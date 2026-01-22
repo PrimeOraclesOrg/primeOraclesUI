@@ -1,6 +1,5 @@
 import { getUserProfile, onAuthStateChange } from "@/services";
 import {
-  clearUser,
   selectAuthIsProfileFetching,
   selectAuthProfile,
   selectAuthUser,
