@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/utils/helpers";
 import type { SocialLink, Transaction, Order } from "@/types";
 import { TikTokIcon } from "@/assets/icons";
+import { UserAvatar } from "@/components/molecules/UserAvatar/UserAvatar";
 
 type SettingsTab = "basic" | "security" | "balance" | "history";
 
@@ -247,6 +248,7 @@ function OrderHistory({ orders }: OrderHistoryProps) {
 interface SettingsTemplateProps {
   activeTab: SettingsTab;
   name: string;
+  username: string;
   description: string;
   socialLinks: SocialLink[];
   balance: number;
@@ -263,6 +265,7 @@ interface SettingsTemplateProps {
 export function SettingsTemplate({
   activeTab,
   name,
+  username,
   description,
   socialLinks,
   balance,
@@ -309,15 +312,11 @@ export function SettingsTemplate({
             {/* Profile card */}
             <div className="mb-6 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0">
               <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-muted overflow-hidden lg:mb-3">
-                <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face"
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
+                <UserAvatar />
               </div>
               <div>
                 <h2 className="font-semibold text-lg">{name}</h2>
-                <p className="text-muted-foreground text-sm">@Leshamais</p>
+                <p className="text-muted-foreground text-sm">@{username}</p>
               </div>
             </div>
 

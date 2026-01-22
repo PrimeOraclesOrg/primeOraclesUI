@@ -3,13 +3,13 @@ import { SettingsTemplate } from "@/components/templates";
 import { mockTransactions, mockOrders, mockSocialLinks } from "@/data/transactions";
 import { signOut } from "@/services";
 import { useNavigate } from "react-router-dom";
+import { selectAuthProfile, useAppSelector } from "@/store";
 
 type SettingsTab = "basic" | "security" | "balance" | "history";
 
 export default function Settings() {
+  const profile = useAppSelector(selectAuthProfile);
   const [activeTab, setActiveTab] = useState<SettingsTab>("basic");
-  const [name, setName] = useState("Lesha Maisak");
-  const [description, setDescription] = useState("");
   const [socialLinks, setSocialLinks] = useState(mockSocialLinks);
   const navigate = useNavigate();
 
@@ -27,15 +27,16 @@ export default function Settings() {
   return (
     <SettingsTemplate
       activeTab={activeTab}
-      name={name}
-      description={description}
+      name={profile?.name}
+      username={profile?.username}
+      description={profile?.bio}
       socialLinks={socialLinks}
       balance={22.0}
       transactions={mockTransactions}
       orders={mockOrders}
       onTabChange={setActiveTab}
-      onNameChange={setName}
-      onDescriptionChange={setDescription}
+      onNameChange={() => {}}
+      onDescriptionChange={() => {}}
       onSocialLinkChange={handleSocialLinkChange}
       onSaveBasic={() => {}}
       onLogout={onLogout}
