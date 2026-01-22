@@ -11,3 +11,4 @@ export { FAQAccordion } from "./FAQAccordion/FAQAccordion";
 export { RatingDistribution } from "./RatingDistribution";
 export { ReviewList } from "./ReviewList";
 export { MiniProfile } from "./MiniProfile/MiniProfile";
+export { UserAvatar } from "./UserAvatar/UserAvatar";

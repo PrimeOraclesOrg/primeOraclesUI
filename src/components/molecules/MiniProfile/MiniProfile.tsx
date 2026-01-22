@@ -1,9 +1,9 @@
-import { UserAvatar } from "@/components/molecules/UserAvatar/UserAvatar";
 import { Button } from "@/components/ui/button";
 import { selectAuthProfile } from "@/store";
 import { cn } from "@/utils";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
+import { UserAvatar } from "../UserAvatar/UserAvatar";
 
 interface SidebarProfileProps {
   isActive: (href: string) => boolean;
