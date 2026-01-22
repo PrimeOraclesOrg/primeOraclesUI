@@ -37,6 +37,8 @@ export const authSlice = createSlice({
     authClearAll: (state) => {
       state.profile = null;
       state.user = null;
+      state.isProfileFetching = false;
+      state.isAuthFetching = false;
     },
   },
 });
