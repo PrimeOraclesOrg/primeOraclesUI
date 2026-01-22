@@ -2,7 +2,8 @@ import { LogoutPopupContent } from "@/components/organisms";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
 import { completeProfile, signOut } from "@/services";
-import { selectAuthIsFetching, selectAuthProfile, selectAuthUser } from "@/store";
+import { selectAuthIsFetching, selectAuthProfile, selectAuthUser, useAppDispatch } from "@/store";
+import { setProfile } from "@/store/authSlice";
 import { ProfileSetupFormData, profileSetupSchema } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -18,6 +19,7 @@ export const useProfileSetup = () => {
   const isAuthFetching = useSelector(selectAuthIsFetching);
   const user = useSelector(selectAuthUser);
   const profile = useSelector(selectAuthProfile);
+  const dispatch = useAppDispatch();
 
   const profileSetupForm = useForm<ProfileSetupFormData>({
     resolver: zodResolver(profileSetupSchema),
@@ -34,7 +36,7 @@ export const useProfileSetup = () => {
   });
 
   const onProfileSetupSubmit = async (data: ProfileSetupFormData) => {
-    const { error } = await completeProfile({
+    const { data: profile, error } = await completeProfile({
       name: data.name,
       username: data.username,
       description: data.description,
@@ -56,6 +58,7 @@ export const useProfileSetup = () => {
         title: "Успешно",
         description: "Профиль успешно сохранён",
       });
+      dispatch(setProfile(profile));
       navigate("/", { replace: true });
     }
   };
@@ -69,8 +72,12 @@ export const useProfileSetup = () => {
   const onLogout = () => openPopup(<LogoutPopupContent logout={logout} />);
 
   useEffect(() => {
-    if (!isAuthFetching && !user) navigate("/");
-    if (profile?.is_profile_completed) navigate("/");
+    if (!isAuthFetching && !user) {
+      return navigate("/");
+    }
+    if (profile?.is_profile_completed) {
+      return navigate("/");
+    }
   }, [isAuthFetching, user, navigate, profile]);
 
   return {

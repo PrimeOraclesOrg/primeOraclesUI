@@ -14,8 +14,6 @@ import {
   UserAndSession,
   VerifyOtpCredentials,
 } from "./types";
-import { store } from "@/store";
-import { authClearAll, setProfile } from "@/store/authSlice";
 
 /**
  * Sign up a new user with email and password
@@ -56,9 +54,6 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
       password: credentials.password,
     });
 
-    const { data: profile } = await getUserProfile();
-    store.dispatch(setProfile(profile));
-
     return {
       data,
       error,
@@ -80,7 +75,6 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
 export async function signOut(): Promise<AuthResult<null>> {
   try {
     const { error } = await supabase.auth.signOut();
-    store.dispatch(authClearAll());
 
     return {
       data: null,
@@ -385,7 +379,7 @@ export async function completeProfile({
     if (avatarUploading?.error) return avatarUploading;
   }
 
-  const updateProfileRegistration = await profileRegistrationUpdate(
+  const { error } = await profileRegistrationUpdate(
     username,
     name,
     description,
@@ -393,17 +387,14 @@ export async function completeProfile({
     getSocialMedias()
   );
 
-  const { data: profile, error: profileError } = await getUserProfile();
-  if (profileError) {
+  if (error)
     return {
       data: null,
-      error: profileError,
+      error,
     };
-  }
 
-  store.dispatch(setProfile(profile));
-
-  return updateProfileRegistration;
+  const profile = await getUserProfile();
+  return profile;
 }
 
 export async function getUserProfile() {
