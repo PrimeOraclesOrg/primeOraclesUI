@@ -6,7 +6,7 @@ import { selectAuthIsFetching, selectAuthProfile, selectAuthUser, useAppDispatch
 import { setProfile } from "@/store/authSlice";
 import { ProfileSetupFormData, profileSetupSchema } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
@@ -63,13 +63,16 @@ export const useProfileSetup = () => {
     }
   };
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await signOut();
     closePopup();
     navigate("/");
-  };
+  }, [closePopup, navigate]);
 
-  const onLogout = () => openPopup(<LogoutPopupContent logout={logout} />);
+  const onLogout = useCallback(
+    () => openPopup(<LogoutPopupContent logout={logout} />),
+    [openPopup, logout]
+  );
 
   useEffect(() => {
     if (!isAuthFetching && !user) {
