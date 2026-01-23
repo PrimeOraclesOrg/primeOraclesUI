@@ -19,7 +19,7 @@ export const MiniProfile = ({ isActive }: SidebarProfileProps) => {
           to="/profile"
           className={cn(
             "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group/profile",
-            isActive("/profile")
+            isActive("/profile") || isActive("/settings")
               ? "text-sidebar-foreground bg-sidebar-accent"
               : "text-sidebar-foreground hover:bg-sidebar-accent/50"
           )}
