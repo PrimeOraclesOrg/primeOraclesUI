@@ -7,6 +7,7 @@ import {
 import { mockTransactions, mockOrders } from "@/data/transactions";
 import { useSettings } from "./useSettings";
 import NotFound from "../NotFound";
+import { DEFAULT_AVATARS } from "@/data";
 
 export default function Settings() {
   const { tab, profile, onLogout, onTabChange, onUpdateProfileSubmit, updateProfileForm } =
@@ -26,6 +27,9 @@ export default function Settings() {
           onSubmit={updateProfileForm.handleSubmit(onUpdateProfileSubmit)}
           isSubmitting={updateProfileForm.formState.isSubmitting}
           errors={updateProfileForm.formState.errors}
+          defaultAvatars={DEFAULT_AVATARS}
+          watch={updateProfileForm.watch}
+          setValue={updateProfileForm.setValue}
         />
       )}
       {tab === "security" && (

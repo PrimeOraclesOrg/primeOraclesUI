@@ -1,17 +1,23 @@
 import { TikTokIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/utils";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
-import { Instagram, Pencil, Youtube } from "lucide-react";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { Check, ImagePlus, Instagram, Pencil, Youtube } from "lucide-react";
+import { useCallback, useRef } from "react";
+import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { ImageCrop } from "../ImageCrop/ImageCrop";
 
 interface ProfileUpdateFormProps {
   onSubmit: () => void;
   register: UseFormRegister<UpdateProfileFormData>;
   errors: FieldErrors<UpdateProfileFormData>;
+  watch: UseFormWatch<UpdateProfileFormData>;
+  setValue: UseFormSetValue<UpdateProfileFormData>;
   isSubmitting: boolean;
+  defaultAvatars: Array<string>;
 }
 
 export const ProfileUpdateForm = ({
@@ -19,9 +25,106 @@ export const ProfileUpdateForm = ({
   register,
   errors,
   isSubmitting,
+  defaultAvatars,
+  watch,
+  setValue,
 }: ProfileUpdateFormProps) => {
+  const selectedAvatar = watch("selectedAvatar");
+  const uploadedAvatar = watch("uploadedAvatar");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const setUploadedAvatar = (avatar: string) => {
+    setValue("selectedAvatar", null);
+    setValue("uploadedAvatar", avatar);
+  };
+
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
+      <div className="space-y-3">
+        <label className="text-sm text-muted-foreground mb-2 block">Аватар</label>
+        <div className="grid grid-cols-[repeat(auto-fit,80px)] gap-3 justify-center">
+          {/* Upload button */}
+          <button
+            type="button"
+            disabled={isSubmitting}
+            className={cn(
+              "w-20 h-20 rounded-full outline outline-3 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:outline-accent/50 hover:text-accent transition-colors relative overflow-hidden",
+              !selectedAvatar ? "outline-accent" : "outline-transparent hover:outline-accent/50"
+            )}
+            onClick={handleUploadClick}
+          >
+            {/* Uploaded image background */}
+            {!selectedAvatar && (
+              <img
+                src={uploadedAvatar}
+                alt="Uploaded avatar"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            )}
+
+            {/* Overlay for selected uploaded avatar */}
+            {!selectedAvatar && (
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <Check className="h-6 w-6 text-white" />
+              </div>
+            )}
+
+            {/* Default content when no uploaded image or not selected with image */}
+            {selectedAvatar && (
+              <div
+                className={cn(
+                  "flex flex-col items-center justify-center z-10",
+                  selectedAvatar && "bg-black/50 absolute inset-0"
+                )}
+              >
+                <ImagePlus className={cn("h-5 w-5", selectedAvatar && "text-white")} />
+                <span className={cn("text-[10px] mt-1", selectedAvatar && "text-white")}>
+                  Добавить
+                </span>
+              </div>
+            )}
+          </button>
+
+          {/* Predefined avatars */}
+          {defaultAvatars.map((avatarUrl, index) => {
+            const isSelected = selectedAvatar === `${index + 1}`;
+            return (
+              <button
+                key={index}
+                type="button"
+                disabled={isSubmitting}
+                className={cn(
+                  "w-20 h-20 rounded-full overflow-hidden outline outline-3 transition-colors relative",
+                  isSelected ? "outline-accent" : "outline-transparent hover:outline-accent/50"
+                )}
+                onClick={() => setValue("selectedAvatar", `${index + 1}`)}
+              >
+                <img
+                  src={avatarUrl}
+                  alt={`Avatar ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+                {/* Selection overlay with checkmark */}
+                {isSelected && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <Check className="h-6 w-6 text-white" />
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <ImageCrop
+        fileInputRef={fileInputRef}
+        setUploadedImage={setUploadedAvatar}
+        cropShape="round"
+      />
+
       <div>
         <label className="text-sm text-muted-foreground mb-2 block">Имя</label>
         <div className="relative">

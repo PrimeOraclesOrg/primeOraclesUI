@@ -1,6 +1,6 @@
 import { ProfileUpdateForm } from "@/components/organisms";
 import { SettingsLayout } from "../SettingsLayout/SettingsLayout";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
 import { SettingsTab } from "@/pages/Settings/types";
 
@@ -12,7 +12,10 @@ interface SettingsBasicTemplateProps {
   onSubmit: () => void;
   register: UseFormRegister<UpdateProfileFormData>;
   errors: FieldErrors<UpdateProfileFormData>;
+  watch: UseFormWatch<UpdateProfileFormData>;
+  setValue: UseFormSetValue<UpdateProfileFormData>;
   isSubmitting: boolean;
+  defaultAvatars: Array<string>;
 }
 
 export const SettingsBasicTemplate = ({
@@ -24,6 +27,9 @@ export const SettingsBasicTemplate = ({
   register,
   errors,
   isSubmitting,
+  watch,
+  defaultAvatars,
+  setValue,
 }: SettingsBasicTemplateProps) => {
   return (
     <SettingsLayout
@@ -38,6 +44,9 @@ export const SettingsBasicTemplate = ({
         register={register}
         errors={errors}
         isSubmitting={isSubmitting}
+        watch={watch}
+        defaultAvatars={defaultAvatars}
+        setValue={setValue}
       />
     </SettingsLayout>
   );
