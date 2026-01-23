@@ -1,15 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { storageUrlBase } from "@/data";
-import { selectAuthProfile } from "@/store";
 import { User } from "lucide-react";
-import { useSelector } from "react-redux";
 
-export const UserAvatar = () => {
-  const profile = useSelector(selectAuthProfile);
+interface UserAvatarProps {
+  avatar_path: string;
+}
 
+export const UserAvatar = ({ avatar_path }: UserAvatarProps) => {
   return (
     <Avatar>
-      <AvatarImage src={`${storageUrlBase}/${profile?.avatar_path}`} />
+      <AvatarImage src={`${storageUrlBase}/${avatar_path}`} />
       <AvatarFallback>
         <User className="w-4 h-4" />
       </AvatarFallback>

@@ -25,7 +25,7 @@ export const MiniProfile = ({ isActive }: SidebarProfileProps) => {
           )}
         >
           <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-            <UserAvatar />
+            <UserAvatar avatar_path={profile.avatar_path} />
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-xs font-medium text-nowrap text-ellipsis overflow-hidden">
