@@ -75,10 +75,7 @@ export const useProfileSetup = () => {
   );
 
   useEffect(() => {
-    if (!isAuthFetching && !user) {
-      return navigate("/");
-    }
-    if (profile?.is_profile_completed) {
+    if ((!isAuthFetching && !user) || profile?.is_profile_completed) {
       return navigate("/");
     }
   }, [isAuthFetching, user, navigate, profile]);
