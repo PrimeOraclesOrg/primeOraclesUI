@@ -14,7 +14,7 @@ export const MiniProfile = ({ isActive }: SidebarProfileProps) => {
 
   return (
     <div className="p-4 border-t border-sidebar-border">
-      {profile && (
+      {profile ? (
         <NavLink
           to="/profile"
           className={cn(
@@ -39,9 +39,7 @@ export const MiniProfile = ({ isActive }: SidebarProfileProps) => {
             </span>
           </div>
         </NavLink>
-      )}
-
-      {!profile && (
+      ) : (
         <Button className="w-full" asChild>
           <Link to={"/login"}>Присоеденится</Link>
         </Button>
