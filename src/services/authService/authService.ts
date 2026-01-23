@@ -429,3 +429,41 @@ export async function getUserProfile() {
     };
   }
 }
+
+export async function updateProfile({
+  name,
+  description,
+  instagramUrl,
+  tiktokUrl,
+  youtubeUrl,
+}: UpdateProfileFormData): Promise<AuthResult<null>> {
+  try {
+    const { error } = await supabase.rpc("app_update_profile", {
+      p_name: name,
+      p_bio: description || null,
+      p_default_avatar_name: `avatar1.png`,
+      p_social_medias: getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl }),
+      p_use_custom_avatar: false,
+    });
+
+    if (error)
+      return {
+        data: null,
+        error: error && {
+          code: error.hint || error.code,
+          message: error.message,
+        },
+      };
+
+    const profile = await getUserProfile();
+    return profile;
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
+}

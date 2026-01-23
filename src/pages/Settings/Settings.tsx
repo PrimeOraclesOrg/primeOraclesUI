@@ -6,9 +6,7 @@ import {
 } from "@/components/templates";
 import { mockTransactions, mockOrders } from "@/data/transactions";
 import { useSettings } from "./useSettings";
-import { Navigate } from "react-router-dom";
 import NotFound from "../NotFound";
-import { useEffect } from "react";
 
 export default function Settings() {
   const { tab, profile, onLogout, onTabChange, onUpdateProfileSubmit, updateProfileForm } =
@@ -26,6 +24,7 @@ export default function Settings() {
           onLogout={onLogout}
           register={updateProfileForm.register}
           onSubmit={updateProfileForm.handleSubmit(onUpdateProfileSubmit)}
+          isSubmitting={updateProfileForm.formState.isSubmitting}
           errors={updateProfileForm.formState.errors}
         />
       )}

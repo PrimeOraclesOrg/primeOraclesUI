@@ -12,6 +12,7 @@ interface SettingsBasicTemplateProps {
   onSubmit: () => void;
   register: UseFormRegister<UpdateProfileFormData>;
   errors: FieldErrors<UpdateProfileFormData>;
+  isSubmitting: boolean;
 }
 
 export const SettingsBasicTemplate = ({
@@ -22,6 +23,7 @@ export const SettingsBasicTemplate = ({
   onSubmit,
   register,
   errors,
+  isSubmitting,
 }: SettingsBasicTemplateProps) => {
   return (
     <SettingsLayout
@@ -31,7 +33,12 @@ export const SettingsBasicTemplate = ({
       onLogout={onLogout}
       onTabChange={onTabChange}
     >
-      <ProfileUpdateForm onSubmit={onSubmit} register={register} errors={errors} />
+      <ProfileUpdateForm
+        onSubmit={onSubmit}
+        register={register}
+        errors={errors}
+        isSubmitting={isSubmitting}
+      />
     </SettingsLayout>
   );
 };

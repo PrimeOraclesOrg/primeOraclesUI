@@ -11,15 +11,25 @@ interface ProfileUpdateFormProps {
   onSubmit: () => void;
   register: UseFormRegister<UpdateProfileFormData>;
   errors: FieldErrors<UpdateProfileFormData>;
+  isSubmitting: boolean;
 }
 
-export const ProfileUpdateForm = ({ onSubmit, register, errors }: ProfileUpdateFormProps) => {
+export const ProfileUpdateForm = ({
+  onSubmit,
+  register,
+  errors,
+  isSubmitting,
+}: ProfileUpdateFormProps) => {
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
       <div>
         <label className="text-sm text-muted-foreground mb-2 block">Имя</label>
         <div className="relative">
-          <Input {...register("name")} className="bg-card border-border pr-10" />
+          <Input
+            {...register("name")}
+            disabled={isSubmitting}
+            className="bg-card border-border pr-10"
+          />
           <Pencil className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         </div>
         {errors.name && (
@@ -32,6 +42,7 @@ export const ProfileUpdateForm = ({ onSubmit, register, errors }: ProfileUpdateF
         <div className="relative">
           <Textarea
             {...register("description")}
+            disabled={isSubmitting}
             placeholder="Описание"
             className="bg-card border-border min-h-[100px] pr-10"
           />
@@ -57,6 +68,7 @@ export const ProfileUpdateForm = ({ onSubmit, register, errors }: ProfileUpdateF
             </div>
             <Input
               {...register("youtubeUrl")}
+              disabled={isSubmitting}
               placeholder="https://www.youtube.com/@username"
               className="flex-1 bg-transparent border-0 p-0 h-auto focus-visible:ring-0"
             />
@@ -75,6 +87,7 @@ export const ProfileUpdateForm = ({ onSubmit, register, errors }: ProfileUpdateF
             </div>
             <Input
               {...register("instagramUrl")}
+              disabled={isSubmitting}
               placeholder="https://www.instagram.com/@username"
               className="flex-1 bg-transparent border-0 p-0 h-auto focus-visible:ring-0"
             />
@@ -95,6 +108,7 @@ export const ProfileUpdateForm = ({ onSubmit, register, errors }: ProfileUpdateF
             </div>
             <Input
               {...register("tiktokUrl")}
+              disabled={isSubmitting}
               placeholder="https://www.tiktok.com/@username"
               className="flex-1 bg-transparent border-0 p-0 h-auto focus-visible:ring-0"
             />
@@ -108,8 +122,9 @@ export const ProfileUpdateForm = ({ onSubmit, register, errors }: ProfileUpdateF
       <Button
         type="submit"
         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-6"
+        disabled={isSubmitting}
       >
-        Сохранить
+        {isSubmitting ? "Сохранение..." : "Сохранить"}
       </Button>
     </form>
   );
