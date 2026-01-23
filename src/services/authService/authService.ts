@@ -442,7 +442,7 @@ export async function updateProfile({
       p_name: name,
       p_bio: description || null,
       p_default_avatar_name: `avatar1.png`,
-      p_social_medias: getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl }),
+      p_social_medias: getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl }) || [],
       p_use_custom_avatar: false,
     });
 
