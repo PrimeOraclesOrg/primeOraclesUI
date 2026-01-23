@@ -35,7 +35,7 @@ export function SettingsLayout({
       <div className="p-4 md:p-6 lg:p-8">
         <h1 className="text-xl md:text-2xl font-semibold mb-6 md:mb-8">Настройки Аккаунта</h1>
 
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 lg:items-stretch items-center">
           {/* Left sidebar with profile and tabs */}
           <div className="w-full lg:w-64 shrink-0">
             <div className="sticky top-0">
@@ -82,7 +82,7 @@ export function SettingsLayout({
           </div>
 
           {/* Content area */}
-          <div className="flex-1 max-w-2xl">{children}</div>
+          <div className="flex-1 max-w-2xl w-full">{children}</div>
         </div>
       </div>
     </MainLayout>
