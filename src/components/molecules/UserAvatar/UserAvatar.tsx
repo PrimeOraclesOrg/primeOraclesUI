@@ -4,14 +4,18 @@ import { selectAuthProfile } from "@/store";
 import { User } from "lucide-react";
 import { useSelector } from "react-redux";
 
-export const UserAvatar = () => {
+interface UserAvatarProps {
+  className?: string;
+}
+
+export const UserAvatar = ({ className }: UserAvatarProps) => {
   const profile = useSelector(selectAuthProfile);
 
   return (
-    <Avatar>
+    <Avatar className={className}>
       <AvatarImage src={`${storageUrlBase}/${profile?.avatar_path}`} />
       <AvatarFallback>
-        <User className="w-4 h-4" />
+        <User />
       </AvatarFallback>
     </Avatar>
   );

@@ -7,7 +7,7 @@ import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
 import CreateProduct from "@/pages/CreateProduct/CreateProduct";
-import Settings from "@/pages/Settings";
+import Settings from "@/pages/Settings/Settings";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp/SignUp";
@@ -74,6 +74,14 @@ export function AppRoutes() {
       />
       <Route
         path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/:tab"
         element={
           <ProtectedRoute>
             <Settings />

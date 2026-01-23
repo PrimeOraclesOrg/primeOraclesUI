@@ -78,7 +78,7 @@ export const verificationCodeSchema = z.object({
 /**
  * URL schema for social links (optional)
  */
-const instagramUrlSchema = z
+export const instagramUrlSchema = z
   .string()
   .max(2048, "Ссылка не должена превышать 2048 символов")
   .regex(
@@ -88,7 +88,7 @@ const instagramUrlSchema = z
   .optional()
   .or(z.literal(""));
 
-const youtubeUrlSchema = z
+export const youtubeUrlSchema = z
   .string()
   .max(2048, "Ссылка не должена превышать 2048 символов")
   .regex(
@@ -98,7 +98,7 @@ const youtubeUrlSchema = z
   .optional()
   .or(z.literal(""));
 
-const tiktokUrlSchema = z
+export const tiktokUrlSchema = z
   .string()
   .max(2048, "Ссылка не должена превышать 2048 символов")
   .regex(

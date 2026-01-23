@@ -34,3 +34,9 @@ export interface AuthResult<T> {
   data: T | null;
   error: AuthError | null;
 }
+
+export interface GetSocialMediasArgs {
+  instagramUrl: string;
+  youtubeUrl: string;
+  tiktokUrl: string;
+}

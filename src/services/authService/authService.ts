@@ -9,11 +9,13 @@ import { base64ToBlob, ProfileSetupFormData, supabase } from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
   AuthResult,
+  GetSocialMediasArgs,
   SignInCredentials,
   SignUpCredentials,
   UserAndSession,
   VerifyOtpCredentials,
 } from "./types";
+import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
 
 /**
  * Sign up a new user with email and password
@@ -331,6 +333,24 @@ export async function profileRegistrationUpdate(
   }
 }
 
+const getSocialMedias = ({ instagramUrl, youtubeUrl, tiktokUrl }: GetSocialMediasArgs) => {
+  if (!instagramUrl && !youtubeUrl && !tiktokUrl) return null;
+  return [
+    instagramUrl && {
+      type: "instagram",
+      link: instagramUrl,
+    },
+    youtubeUrl && {
+      type: "youtube",
+      link: youtubeUrl,
+    },
+    tiktokUrl && {
+      type: "tiktok",
+      link: tiktokUrl,
+    },
+  ].filter(Boolean);
+};
+
 /**
  * Complete user profile after registration
  */
@@ -350,24 +370,6 @@ export async function completeProfile({
     return `avatar${avatarNumber}.png`;
   };
 
-  const getSocialMedias = () => {
-    if (!instagramUrl && !youtubeUrl && !tiktokUrl) return null;
-    return [
-      instagramUrl && {
-        type: "instagram",
-        link: instagramUrl,
-      },
-      youtubeUrl && {
-        type: "youtube",
-        link: youtubeUrl,
-      },
-      tiktokUrl && {
-        type: "tiktok",
-        link: tiktokUrl,
-      },
-    ].filter(Boolean);
-  };
-
   const { data: user, error: userError } = await getCurrentUser();
   if (userError) return { data: null, error: userError };
 
@@ -384,7 +386,7 @@ export async function completeProfile({
     name,
     description,
     getAvatarName(),
-    getSocialMedias()
+    getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl })
   );
 
   if (error)
