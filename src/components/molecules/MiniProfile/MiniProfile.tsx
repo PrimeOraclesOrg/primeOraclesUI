@@ -32,10 +32,10 @@ export const MiniProfile = ({ isActive }: SidebarProfileProps) => {
               Личный профиль
             </span>
             <span className="text-md font-medium text-foreground text-nowrap text-ellipsis overflow-hidden">
-              {profile?.name}
+              {profile.name}
             </span>
             <span className="text-xs font-medium text-nowrap text-ellipsis overflow-hidden">
-              @{profile?.username}
+              @{profile.username}
             </span>
           </div>
         </NavLink>
