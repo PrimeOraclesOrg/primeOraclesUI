@@ -12,7 +12,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="w-64 h-screen bg-sidebar border-r border-sidebar-border flex flex-col fixed left-0 top-0">
+    <aside className="w-64 h-screen bg-sidebar border-r border-sidebar-border flex flex-col sticky left-0 top-0">
       {/* Logo */}
       <div className="p-6">
         <div className="flex items-center gap-1">
