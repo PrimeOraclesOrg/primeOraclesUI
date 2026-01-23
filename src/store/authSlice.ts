@@ -3,13 +3,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@supabase/supabase-js";
 
 export interface AuthState {
-  user?: User;
-  profile?: UserProfile;
+  user: User | null;
+  profile: UserProfile | null;
   isAuthFetching: boolean;
   isProfileFetching: boolean;
 }
 
 const initialState: AuthState = {
+  user: null,
+  profile: null,
   isAuthFetching: true,
   isProfileFetching: true,
 };
