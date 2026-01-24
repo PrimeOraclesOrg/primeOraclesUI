@@ -52,7 +52,7 @@ export function CreateProductTemplate({
         {/* Content */}
         <div className="flex-1 overflow-hidden flex">
           {/* Form Column */}
-          <div className="w-full overflow-auto p-4 md:p-6">
+          <div className="w-full lg:w-1/2 overflow-auto p-4 md:p-6">
             <h1 className="text-2xl font-bold text-foreground mb-6">Создать продукт</h1>
             <CreateProductForm
               form={form}
@@ -67,7 +67,7 @@ export function CreateProductTemplate({
           </div>
 
           {/* Preview Column - Hidden on mobile */}
-          <div className="hidden w-full lg:flex border-l border-border p-6 bg-secondary/30">
+          <div className="hidden lg:flex lg:w-1/2 border-l border-border p-6 bg-secondary/30">
             <div className="w-full">
               <ProductPreview
                 data={form.watch()}

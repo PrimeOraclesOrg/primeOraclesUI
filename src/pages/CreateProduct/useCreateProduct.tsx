@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProductFormData, createProductSchema } from "@/utils/validators/createProduct";
 import {
@@ -9,13 +10,10 @@ import {
   type ProductFAQItem,
 } from "@/types/createProduct";
 import { useToast } from "@/hooks/useToast";
-import {
-  createProduct,
-  checkProductTitleAvailability,
-  uploadProductImage,
-} from "@/services/productsService/productsService";
+import { createProduct } from "@/services/productsService/productsService";
 
 export const useCreateProduct = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [mediaFile, setMediaFile] = useState<File | null>(null);
@@ -26,10 +24,8 @@ export const useCreateProduct = () => {
   });
 
   const onSubmit = async (values: CreateProductFormData) => {
-    try {
-      await checkProductTitleAvailability(values.title);
-
-      const productId = await createProduct({
+    const { data, error } = await createProduct(
+      {
         title: values.title,
         category: values.category,
         description: values.description,
@@ -38,25 +34,25 @@ export const useCreateProduct = () => {
         instructions: values.instructions,
         price: values.price,
         isActive: values.isActive,
+      },
+      mediaFile
+    );
+
+    if (error) {
+      toast({
+        title: "Ошибка",
+        description: t(`status:${error.code}`) || error.message,
+        variant: "destructive",
       });
+      return;
+    }
 
-      if (mediaFile) {
-        await uploadProductImage(productId, mediaFile);
-      }
-
+    if (data) {
       toast({
         title: "Продукт создан",
         description: "Ваш продукт успешно создан!",
       });
       navigate("/marketplace");
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Не удалось создать продукт";
-      toast({
-        title: "Ошибка",
-        description: errorMessage,
-        variant: "destructive",
-      });
-      throw error;
     }
   };
 

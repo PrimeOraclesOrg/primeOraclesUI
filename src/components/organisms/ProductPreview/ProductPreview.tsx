@@ -73,10 +73,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
         </div>
 
         {/* Preview Content */}
-        <div
-          className={cn("p-6 overflow-auto", mode === "mobile" ? "max-w-[375px] mx-auto" : "")}
-          // style={{ maxHeight: "calc(100vh - 280px)" }}
-        >
+        <div className={cn("p-6 overflow-auto", mode === "mobile" ? "max-w-[375px] mx-auto" : "")}>
           {/* Product Header - Similar to ProductDetailTemplate */}
           <div className={cn("flex gap-8 mb-8", mode === "mobile" ? "flex-col" : "flex-row")}>
             {/* Product Image */}
@@ -159,12 +156,12 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
                 {data.advantages.map((adv) => (
                   <div
                     key={adv.position}
-                    className="flex items-start gap-3 surface-card p-4 rounded-lg"
+                    className="flex items-start gap-3 surface-card p-4 rounded-lg overflow-hidden"
                   >
                     <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                       <Check className="w-4 h-4 text-primary" />
                     </div>
-                    <span className="text-sm text-foreground">
+                    <span className="text-sm text-foreground line-clamp-2">
                       {adv.description || "Преимущество"}
                     </span>
                   </div>
@@ -186,7 +183,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
                     value={item.position.toString()}
                     className="border-border"
                   >
-                    <AccordionTrigger className="text-foreground hover:text-primary text-left">
+                    <AccordionTrigger className="text-foreground hover:text-primary text-left overflow-hidden">
                       {item.question || "Вопрос"}
                     </AccordionTrigger>
                     <AccordionContent className="text-muted-foreground">

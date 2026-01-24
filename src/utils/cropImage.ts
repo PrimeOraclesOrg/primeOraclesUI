@@ -12,10 +12,7 @@ export interface CropArea {
 /**
  * Creates a circular cropped image and returns it as a base64 data URL
  */
-export async function getCroppedImg(
-  imageSrc: string,
-  pixelCrop: CropArea
-): Promise<string> {
+export async function getCroppedImg(imageSrc: string, pixelCrop: CropArea): Promise<string> {
   const image = await createImage(imageSrc);
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -69,6 +66,42 @@ export async function getCroppedImg(
 
   // Return as base64
   return circularCanvas.toDataURL("image/png");
+}
+
+/**
+ * Creates a rectangular cropped image and returns it as a base64 data URL
+ */
+export async function getRectangularCroppedImg(
+  imageSrc: string,
+  pixelCrop: CropArea
+): Promise<string> {
+  const image = await createImage(imageSrc);
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) {
+    throw new Error("No 2d context");
+  }
+
+  // Set canvas size to the crop size
+  canvas.width = pixelCrop.width;
+  canvas.height = pixelCrop.height;
+
+  // Draw the cropped image
+  ctx.drawImage(
+    image,
+    pixelCrop.x,
+    pixelCrop.y,
+    pixelCrop.width,
+    pixelCrop.height,
+    0,
+    0,
+    pixelCrop.width,
+    pixelCrop.height
+  );
+
+  // Return as base64
+  return canvas.toDataURL("image/png");
 }
 
 function createImage(url: string): Promise<HTMLImageElement> {
