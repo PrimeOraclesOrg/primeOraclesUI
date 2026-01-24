@@ -42,6 +42,13 @@ export const ProfileUpdateForm = ({
     setValue("uploadedAvatar", avatar);
   };
 
+  const unselectAvatar = () => {
+    setValue("selectedAvatar", null);
+    setValue("uploadedAvatar", null);
+  };
+
+  const isUploadedAvatar = !selectedAvatar && uploadedAvatar;
+
   return (
     <form className="space-y-6" onSubmit={onSubmit}>
       <div className="space-y-3">
@@ -53,12 +60,12 @@ export const ProfileUpdateForm = ({
             disabled={isSubmitting}
             className={cn(
               "w-20 h-20 rounded-full outline outline-3 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:outline-accent/50 hover:text-accent transition-colors relative overflow-hidden",
-              !selectedAvatar ? "outline-accent" : "outline-transparent hover:outline-accent/50"
+              isUploadedAvatar ? "outline-accent" : "outline-transparent hover:outline-accent/50"
             )}
             onClick={handleUploadClick}
           >
             {/* Uploaded image background */}
-            {!selectedAvatar && (
+            {isUploadedAvatar && (
               <img
                 src={uploadedAvatar}
                 alt="Uploaded avatar"
@@ -67,22 +74,22 @@ export const ProfileUpdateForm = ({
             )}
 
             {/* Overlay for selected uploaded avatar */}
-            {!selectedAvatar && (
+            {isUploadedAvatar && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                 <Check className="h-6 w-6 text-white" />
               </div>
             )}
 
             {/* Default content when no uploaded image or not selected with image */}
-            {selectedAvatar && (
+            {!isUploadedAvatar && (
               <div
                 className={cn(
                   "flex flex-col items-center justify-center z-10",
-                  selectedAvatar && "bg-black/50 absolute inset-0"
+                  !isUploadedAvatar && "bg-black/50 absolute inset-0"
                 )}
               >
-                <ImagePlus className={cn("h-5 w-5", selectedAvatar && "text-white")} />
-                <span className={cn("text-[10px] mt-1", selectedAvatar && "text-white")}>
+                <ImagePlus className={cn("h-5 w-5", !isUploadedAvatar && "text-white")} />
+                <span className={cn("text-[10px] mt-1", !isUploadedAvatar && "text-white")}>
                   Добавить
                 </span>
               </div>
@@ -118,6 +125,9 @@ export const ProfileUpdateForm = ({
             );
           })}
         </div>
+        {(selectedAvatar || uploadedAvatar) && (
+          <Button onClick={unselectAvatar}>Не менять аватар</Button>
+        )}
       </div>
       <ImageCrop
         fileInputRef={fileInputRef}

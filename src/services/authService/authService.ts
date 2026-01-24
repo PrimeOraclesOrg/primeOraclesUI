@@ -275,6 +275,7 @@ export async function uploadAvatar(avatarBase64: string, userId: string) {
       .from("avatars")
       .upload(userId, base64ToBlob(avatarBase64), {
         contentType: "image/png",
+        upsert: true,
       });
 
     if (error)
@@ -285,6 +286,10 @@ export async function uploadAvatar(avatarBase64: string, userId: string) {
           message: error?.message,
         },
       };
+    return {
+      data: null,
+      error: null,
+    };
   } catch {
     return {
       data: null,
@@ -351,6 +356,12 @@ const getSocialMedias = ({ instagramUrl, youtubeUrl, tiktokUrl }: GetSocialMedia
   ].filter(Boolean);
 };
 
+const getAvatarName = (selectedAvatar: string) => {
+  const avatarNumber = Number(selectedAvatar);
+  if (!avatarNumber) return null;
+  return `avatar${avatarNumber}.png`;
+};
+
 /**
  * Complete user profile after registration
  */
@@ -364,28 +375,22 @@ export async function completeProfile({
   uploadedAvatar,
   youtubeUrl,
 }: ProfileSetupFormData): Promise<AuthResult<null>> {
-  const getAvatarName = () => {
-    const avatarNumber = Number(selectedAvatar);
-    if (!avatarNumber) return null;
-    return `avatar${avatarNumber}.png`;
-  };
-
   const { data: user, error: userError } = await getCurrentUser();
   if (userError) return { data: null, error: userError };
 
   const usernameAvailability = await checkUsernameAvailability(username);
   if (usernameAvailability?.error) return usernameAvailability;
 
-  if (!getAvatarName() && uploadedAvatar) {
+  if (!getAvatarName(selectedAvatar) && uploadedAvatar) {
     const avatarUploading = await uploadAvatar(uploadedAvatar, user.id);
-    if (avatarUploading?.error) return avatarUploading;
+    if (avatarUploading.error) return avatarUploading;
   }
 
   const { error } = await profileRegistrationUpdate(
     username,
     name,
     description,
-    getAvatarName(),
+    getAvatarName(selectedAvatar),
     getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl })
   );
 
@@ -436,22 +441,46 @@ export async function updateProfile({
   instagramUrl,
   tiktokUrl,
   youtubeUrl,
+  selectedAvatar,
+  uploadedAvatar,
 }: UpdateProfileFormData): Promise<AuthResult<null>> {
   try {
+    const { data: session, error: sessionError } = await getSession();
+
+    if (sessionError)
+      return {
+        data: null,
+        error: sessionError,
+      };
+
+    const changeAvatar = Boolean(selectedAvatar || uploadedAvatar);
+    const isUploadedAvatar = Boolean(!selectedAvatar && uploadedAvatar);
+
+    if (isUploadedAvatar) {
+      const { error } = await uploadAvatar(uploadedAvatar, session.user.id);
+      if (error)
+        return {
+          data: null,
+          error,
+        };
+    }
+
     const { error } = await supabase.rpc("app_update_profile", {
       p_name: name,
-      p_bio: description || null,
-      p_default_avatar_name: `avatar1.png`,
+      p_bio: description,
       p_social_medias: getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl }) || [],
-      p_use_custom_avatar: false,
+      p_default_avatar_name: changeAvatar ? getAvatarName(selectedAvatar) : null,
+      p_use_custom_avatar: changeAvatar ? isUploadedAvatar : null,
     });
+
+    console.log("error:", error);
 
     if (error)
       return {
         data: null,
         error: error && {
-          code: error.hint || error.code,
-          message: error.message,
+          code: error?.hint || error?.code,
+          message: error?.message,
         },
       };
 

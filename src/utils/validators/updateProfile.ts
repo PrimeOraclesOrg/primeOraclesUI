@@ -28,8 +28,8 @@ export const updateProfileSchema = z.object({
   youtubeUrl: youtubeUrlSchema,
   instagramUrl: instagramUrlSchema,
   tiktokUrl: tiktokUrlSchema,
-  selectedAvatar: z.string().nullable(),
-  uploadedAvatar: z.string().optional(),
+  selectedAvatar: z.string().nullable().optional(),
+  uploadedAvatar: z.string().nullable().optional(),
 });
 
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;

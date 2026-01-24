@@ -31,8 +31,8 @@ export const useSettings = () => {
   const updateProfileForm = useForm<UpdateProfileFormData>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
-      name: profile?.name,
-      description: profile?.bio,
+      name: profile.name,
+      description: profile.bio || "",
       instagramUrl: getSocialLink("instagram"),
       tiktokUrl: getSocialLink("tiktok"),
       youtubeUrl: getSocialLink("youtube"),
