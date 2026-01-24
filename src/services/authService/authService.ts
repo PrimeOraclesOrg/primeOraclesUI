@@ -467,7 +467,7 @@ export async function updateProfile({
 
     const { error } = await supabase.rpc("app_update_profile", {
       p_name: name,
-      p_bio: description,
+      p_bio: description || null,
       p_social_medias: getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl }) || [],
       p_default_avatar_name: changeAvatar ? getAvatarName(selectedAvatar) : null,
       p_use_custom_avatar: changeAvatar ? isUploadedAvatar : null,
