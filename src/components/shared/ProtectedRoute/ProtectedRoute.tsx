@@ -7,7 +7,6 @@
 
 import { Navigate, useLocation } from "react-router-dom";
 import { usePreviousLocation } from "@/hooks/usePreviousLocation";
-import { LoadingScreen } from "@/components/atoms";
 import { selectAuthIsFetching, selectAuthUser, useAppSelector } from "@/store";
 
 interface ProtectedRouteProps {
@@ -19,10 +18,6 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const isAuthFetching = useAppSelector(selectAuthIsFetching);
   const location = useLocation();
   const previousLocation = usePreviousLocation();
-
-  if (isAuthFetching) {
-    return <LoadingScreen />;
-  }
 
   if (!user && !isAuthFetching) {
     return (

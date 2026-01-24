@@ -15,9 +15,16 @@ import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 import { AuthRoute } from "@/components/shared";
 import { useAuthListener } from "@/hooks/useAuthListener";
+import { selectAuthIsFetching, selectAuthIsProfileFetching, useAppSelector } from "@/store";
+import { LoadingScreen } from "@/components/atoms";
 
 export function AppRoutes() {
   useAuthListener();
+
+  const isAuthFetching = useAppSelector(selectAuthIsFetching);
+  const isProfileFetching = useAppSelector(selectAuthIsProfileFetching);
+
+  if (isAuthFetching || isProfileFetching) return <LoadingScreen />;
 
   return (
     <Routes>

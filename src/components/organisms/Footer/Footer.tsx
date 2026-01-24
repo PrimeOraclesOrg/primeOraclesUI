@@ -1,4 +1,4 @@
-import { BrandLogo } from "@/components/atoms";
+import { BrandLogo } from "@/assets/icons";
 import { Instagram, Youtube } from "lucide-react";
 import { Link } from "react-router-dom";
 

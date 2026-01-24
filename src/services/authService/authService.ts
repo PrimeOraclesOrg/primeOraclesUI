@@ -403,7 +403,7 @@ export async function completeProfile({
 
 export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
   try {
-    const { data: user, error: userError } = await getCurrentUser();
+    const { data: session, error: userError } = await getSession();
 
     if (userError) {
       return {
@@ -415,7 +415,7 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
     const { data, error } = await supabase
       .from("public_profiles_full_view")
       .select("*")
-      .eq("id", user.id)
+      .eq("id", session?.user?.id)
       .single();
     return {
       data,

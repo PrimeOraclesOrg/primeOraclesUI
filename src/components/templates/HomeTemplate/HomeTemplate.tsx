@@ -3,7 +3,7 @@ import { RewardCard, ProductCard, FAQAccordion } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import type { Reward, Product } from "@/types";
-import { BrandLogo } from "@/components/atoms";
+import { BrandLogo } from "@/assets/icons";
 
 interface HomeTemplateProps {
   rewardsPreview: Reward[];

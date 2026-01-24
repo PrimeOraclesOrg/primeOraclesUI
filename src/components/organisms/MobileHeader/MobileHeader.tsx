@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { NavLink as RouterNavLink, useLocation } from "react-router-dom";
+import { Link, NavLink as RouterNavLink, useLocation } from "react-router-dom";
 import { cn } from "@/utils/helpers";
 import { User, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mainNavItems, workspaceItems } from "@/config/navigation";
+import { BrandLogo } from "@/assets/icons";
+import { MiniProfile } from "@/components/molecules";
 
 export function MobileHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,11 +21,9 @@ export function MobileHeader() {
   return (
     <>
       <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-sidebar border-b border-sidebar-border px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-1">
-          <span className="text-primary text-xl font-bold">❙❙❙</span>
-          <span className="text-primary text-lg font-bold">Prime</span>
-          <span className="text-primary text-lg font-bold">❙❙❙</span>
-        </div>
+        <Link to={"/"} className="flex items-center gap-1">
+          <BrandLogo className="text-primary" />
+        </Link>
         <Button
           variant="ghost"
           size="icon"
@@ -90,23 +90,7 @@ export function MobileHeader() {
             </ul>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-sidebar-border">
-            <RouterNavLink
-              to="/profile"
-              onClick={closeMenu}
-              className={cn(
-                "flex items-center gap-3 px-3 py-3 rounded-lg transition-colors",
-                isActive("/profile")
-                  ? "text-foreground bg-sidebar-accent"
-                  : "text-sidebar-foreground hover:text-foreground hover:bg-sidebar-accent/50"
-              )}
-            >
-              <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                <User className="w-4 h-4" />
-              </div>
-              <span className="text-sm font-medium">Личный профиль</span>
-            </RouterNavLink>
-          </div>
+          <MiniProfile isActive={isActive} />
         </div>
       </nav>
     </>
