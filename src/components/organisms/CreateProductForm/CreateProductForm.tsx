@@ -214,8 +214,7 @@ export function CreateProductForm({
         </FormField>
 
         {/* Media Upload */}
-        <div className="space-y-2">
-          <Label className="text-sm text-muted-foreground">Медиа</Label>
+        <FormField label="Медиа" error={errors.mediaUrl?.message} required>
           <div className="flex gap-3">
             {mediaUrl ? (
               <div className="relative w-40 h-28 rounded-lg overflow-hidden border border-border group">
@@ -223,7 +222,7 @@ export function CreateProductForm({
                 <button
                   type="button"
                   onClick={handleMediaRemoveClick}
-                  className="absolute top-2 right-2 p-1 bg-card/80 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 p-1 bg-card/80 rounded-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
                 >
                   <Trash2 className="w-4 h-4 text-destructive" />
                 </button>
@@ -256,7 +255,7 @@ export function CreateProductForm({
             dialogMaxWidth="sm:max-w-3xl"
             previewHeight="h-[500px]"
           />
-        </div>
+        </FormField>
       </FormSection>
 
       {/* Advantages Section */}
@@ -345,7 +344,7 @@ export function CreateProductForm({
                 error={getFaqError(idx, "answer")}
                 required
                 charCount={item.answer.length}
-                maxChars={100}
+                maxChars={300}
               >
                 <Textarea
                   {...register(`faq.${idx}.answer`)}

@@ -139,7 +139,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
                   disabled
                   className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full px-8"
                 >
-                  Купить за €{data.price.toFixed(2)}
+                  Купить за ${data.price.toFixed(2)}
                 </Button>
                 <span className="text-sm text-muted-foreground text-center">
                   Присоединяйтесь к {mockMemberCount} участнику

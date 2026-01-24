@@ -21,6 +21,7 @@ export const useCreateProduct = () => {
   const createProductForm = useForm<CreateProductFormData>({
     resolver: zodResolver(createProductSchema),
     defaultValues: DEFAULT_FORM_DATA,
+    mode: "onBlur",
   });
 
   const onSubmit = async (values: CreateProductFormData) => {
