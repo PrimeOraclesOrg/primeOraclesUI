@@ -20,7 +20,12 @@ import {
   type ProductCategory,
 } from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import { isValidDecimalDraft, normalizeDecimalInput, roundToTwoDecimals } from "@/utils";
+import {
+  isValidDecimalDraft,
+  normalizeDecimalInput,
+  roundToTwoDecimals,
+  base64ToFile,
+} from "@/utils";
 import { ImageCrop } from "../ImageCrop/ImageCrop";
 
 interface CreateProductFormProps {
@@ -115,34 +120,13 @@ export function CreateProductForm({
     isPriceFocused.current = true;
   };
 
-  // Convert base64 string to File object
-  const base64ToFile = useCallback(
-    (base64String: string, filename: string = "cropped-image.png"): File => {
-      // Remove data URL prefix if present
-      const base64Data = base64String.includes(",") ? base64String.split(",")[1] : base64String;
-
-      // Convert base64 to binary
-      const byteCharacters = atob(base64Data);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-
-      // Create blob and file
-      const blob = new Blob([byteArray], { type: "image/png" });
-      return new File([blob], filename, { type: "image/png" });
-    },
-    []
-  );
-
   // Handle cropped image from ImageCrop
   const handleCroppedImage = useCallback(
     (croppedImageBase64: string) => {
       const file = base64ToFile(croppedImageBase64, "product-image.png");
       onMediaUpload(file);
     },
-    [base64ToFile, onMediaUpload]
+    [onMediaUpload]
   );
 
   const handleMediaRemoveClick = () => {

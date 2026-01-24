@@ -5,4 +5,4 @@ export * from "./cropImage";
 export * from "./numbers";
 export * from "./constants";
 export { supabase } from "./supabase";
-export { base64ToBlob } from "./base64ToBlob";
+export { base64ToBlob, base64ToFile } from "./base64ToBlob";
