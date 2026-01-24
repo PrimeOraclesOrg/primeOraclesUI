@@ -3,13 +3,13 @@ import { storageUrlBase } from "@/data";
 import { User } from "lucide-react";
 
 interface UserAvatarProps {
-  avatar_path: string;
+  avatarPath: string;
 }
 
-export const UserAvatar = ({ avatar_path }: UserAvatarProps) => {
+export const UserAvatar = ({ avatarPath }: UserAvatarProps) => {
   return (
     <Avatar>
-      <AvatarImage src={`${storageUrlBase}/${avatar_path}`} />
+      <AvatarImage src={`${storageUrlBase}/${avatarPath}`} />
       <AvatarFallback>
         <User className="w-4 h-4" />
       </AvatarFallback>
