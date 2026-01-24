@@ -1,5 +1,7 @@
+import { Database } from "./supabase";
 // ========================================
 // Product Models
+
 // ========================================
 export interface Product {
   id: string;
@@ -105,18 +107,8 @@ export interface Order {
 export type SocialPlatform = "youtube" | "instagram" | "tiktok";
 
 export interface SocialLink {
-  platform: SocialPlatform;
-  url: string;
-  icon: string;
-  color: string;
-}
-
-export interface UserProfile {
-  name: string;
-  username: string;
-  avatar?: string;
-  description?: string;
-  socialLinks: SocialLink[];
+  type: SocialPlatform;
+  link: string;
 }
 
 // ========================================
@@ -141,3 +133,5 @@ export interface RatingDistributionItem {
   stars: number;
   percentage: number;
 }
+
+export type FullProfile = Database["public"]["Views"]["public_profiles_full_view"]["Row"];

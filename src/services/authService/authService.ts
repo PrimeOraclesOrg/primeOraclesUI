@@ -14,6 +14,7 @@ import {
   UserAndSession,
   VerifyOtpCredentials,
 } from "./types";
+import { FullProfile } from "@/types";
 
 /**
  * Sign up a new user with email and password
@@ -267,7 +268,10 @@ export async function checkUsernameAvailability(username: string) {
   }
 }
 
-export async function uploadAvatar(avatarBase64: string, userId: string) {
+export async function uploadAvatar(
+  avatarBase64: string,
+  userId: string
+): Promise<AuthResult<null>> {
   try {
     const { error } = await supabase.storage
       .from("avatars")
@@ -343,7 +347,7 @@ export async function completeProfile({
   tiktokUrl,
   uploadedAvatar,
   youtubeUrl,
-}: ProfileSetupFormData): Promise<AuthResult<null>> {
+}: ProfileSetupFormData): Promise<AuthResult<FullProfile>> {
   const getAvatarName = () => {
     const avatarNumber = Number(selectedAvatar);
     if (!avatarNumber) return null;
@@ -379,12 +383,51 @@ export async function completeProfile({
     if (avatarUploading?.error) return avatarUploading;
   }
 
-  const updateProfileRegistration = await profileRegistrationUpdate(
+  const { error } = await profileRegistrationUpdate(
     username,
     name,
     description,
     getAvatarName(),
     getSocialMedias()
   );
-  return updateProfileRegistration;
+
+  if (error)
+    return {
+      data: null,
+      error,
+    };
+
+  const profile = await getUserProfile();
+  return profile;
+}
+
+export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
+  try {
+    const { data: user, error: userError } = await getCurrentUser();
+
+    if (userError) {
+      return {
+        data: null,
+        error: userError,
+      };
+    }
+
+    const { data, error } = await supabase
+      .from("public_profiles_full_view")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+    return {
+      data,
+      error,
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
 }

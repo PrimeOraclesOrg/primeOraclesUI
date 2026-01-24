@@ -14,8 +14,11 @@ import SignUp from "@/pages/SignUp/SignUp";
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 import { AuthRoute } from "@/components/shared";
+import { useAuthListener } from "@/hooks/useAuthListener";
 
 export function AppRoutes() {
+  useAuthListener();
+
   return (
     <Routes>
       {/* Public app routes - accessible without auth */}
@@ -25,7 +28,6 @@ export function AppRoutes() {
       <Route path="/learning/:id" element={<LearningDetail />} />
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/rewards" element={<Rewards />} />
-      <Route path="/create-product" element={<CreateProduct />} />
 
       {/* Auth routes */}
       <Route
@@ -108,6 +110,15 @@ export function AppRoutes() {
         element={
           <ProtectedRoute>
             <Marketplace />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/create-product"
+        element={
+          <ProtectedRoute>
+            <CreateProduct />
           </ProtectedRoute>
         }
       />

@@ -3,7 +3,7 @@ import { useProfileSetup } from "./useProfileSetup";
 import { DEFAULT_AVATARS } from "@/data";
 
 export default function ProfileSetup() {
-  const { onProfileSetupSubmit, profileSetupForm } = useProfileSetup();
+  const { onProfileSetupSubmit, profileSetupForm, onLogout } = useProfileSetup();
 
   return (
     <ProfileSetupTemplate
@@ -14,6 +14,7 @@ export default function ProfileSetup() {
       setValue={profileSetupForm.setValue}
       watch={profileSetupForm.watch}
       defaultAvatars={DEFAULT_AVATARS}
+      onLogout={onLogout}
     />
   );
 }

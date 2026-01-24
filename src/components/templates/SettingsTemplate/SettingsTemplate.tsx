@@ -8,12 +8,15 @@ import {
   LogOut,
   Pencil,
   Check,
+  Instagram,
+  Youtube,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/utils/helpers";
 import type { SocialLink, Transaction, Order } from "@/types";
+import { TikTokIcon } from "@/assets/icons";
 
 type SettingsTab = "basic" | "security" | "balance" | "history";
 
@@ -77,19 +80,24 @@ function BasicSettings({
         <div className="space-y-2">
           {socialLinks.map((link, index) => (
             <div
-              key={link.platform}
+              key={link.type}
               className="flex items-center gap-3 bg-card border border-border rounded-lg px-4 py-3"
             >
               <div
                 className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm",
-                  link.color
+                  link.type === "youtube" && "bg-red-600",
+                  link.type === "instagram" &&
+                    "bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600",
+                  link.type === "tiktok" && "bg-black"
                 )}
               >
-                {link.icon}
+                {link.type === "instagram" && <Instagram />}
+                {link.type === "tiktok" && <TikTokIcon />}
+                {link.type === "youtube" && <Youtube />}
               </div>
               <Input
-                value={link.url}
+                value={link.link}
                 onChange={(e) => onSocialLinkChange(index, e.target.value)}
                 className="flex-1 bg-transparent border-0 p-0 h-auto focus-visible:ring-0"
               />

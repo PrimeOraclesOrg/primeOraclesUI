@@ -79,8 +79,6 @@ export const useSignUp = () => {
       title: "Успешно",
       description: "Успешная регистрация. Теперь заполните ваш профиль",
     });
-
-    navigate("/profile-setup", { state: location.state, replace: true });
   };
 
   const handleResendCode = async () => {

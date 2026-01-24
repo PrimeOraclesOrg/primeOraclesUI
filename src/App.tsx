@@ -7,10 +7,8 @@ import { ErrorBoundary, PopupRenderer } from "@/components/shared";
 import { PopupProvider, PreviousLocationProvider } from "@/contexts";
 import { store } from "@/store";
 import { AppRoutes } from "@/routes";
-import { useAuthListener } from "./hooks/useAuthListener";
 
 const App = () => {
-  useAuthListener();
   return (
     <ErrorBoundary>
       <Provider store={store}>
