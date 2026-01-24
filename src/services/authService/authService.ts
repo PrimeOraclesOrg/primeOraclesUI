@@ -14,6 +14,7 @@ import {
   UserAndSession,
   VerifyOtpCredentials,
 } from "./types";
+import { FullProfile } from "@/types";
 
 /**
  * Sign up a new user with email and password
@@ -267,7 +268,10 @@ export async function checkUsernameAvailability(username: string) {
   }
 }
 
-export async function uploadAvatar(avatarBase64: string, userId: string) {
+export async function uploadAvatar(
+  avatarBase64: string,
+  userId: string
+): Promise<AuthResult<null>> {
   try {
     const { error } = await supabase.storage
       .from("avatars")
@@ -343,7 +347,7 @@ export async function completeProfile({
   tiktokUrl,
   uploadedAvatar,
   youtubeUrl,
-}: ProfileSetupFormData): Promise<AuthResult<null>> {
+}: ProfileSetupFormData): Promise<AuthResult<FullProfile>> {
   const getAvatarName = () => {
     const avatarNumber = Number(selectedAvatar);
     if (!avatarNumber) return null;
@@ -397,7 +401,7 @@ export async function completeProfile({
   return profile;
 }
 
-export async function getUserProfile() {
+export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
   try {
     const { data: session, error: userError } = await getSession();
 

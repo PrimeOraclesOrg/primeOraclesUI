@@ -1,5 +1,7 @@
+import { Database } from "./supabase";
 // ========================================
 // Product Models
+
 // ========================================
 export interface Product {
   id: string;
@@ -109,16 +111,6 @@ export interface SocialLink {
   link: string;
 }
 
-export interface UserProfile {
-  username: string;
-  name: string;
-  bio?: string;
-  avatar_path: string;
-  is_verified: boolean;
-  is_profile_completed: boolean;
-  social_medias: SocialLink[];
-}
-
 // ========================================
 // Review & FAQ Models
 // ========================================
@@ -141,3 +133,5 @@ export interface RatingDistributionItem {
   stars: number;
   percentage: number;
 }
+
+export type FullProfile = Database["public"]["Views"]["public_profiles_full_view"]["Row"];

@@ -5,14 +5,15 @@
  * Prepared for Supabase integration.
  */
 
-import type { UserProfile } from "@/types";
 import { mockSocialLinks } from "@/data/transactions";
 import { ServiceResult, UserProfileUpdate } from "./types";
+import { FullProfile } from "@/types";
+import { Json } from "@/types/supabase";
 
 /**
  * Get user profile by user ID
  */
-export async function fetchUserProfile(userId: string): Promise<ServiceResult<UserProfile>> {
+export async function fetchUserProfile(userId: string): Promise<ServiceResult<FullProfile>> {
   // TODO: Replace with Supabase query
   // const { data, error } = await supabase
   //   .from('profiles')
@@ -23,12 +24,12 @@ export async function fetchUserProfile(userId: string): Promise<ServiceResult<Us
   // Return mock data for now
   return {
     data: {
+      id: "1",
       name: "Lesha Maisak",
       username: "Leshamais",
-      avatar_path:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
+      avatar_path: "default_avatars/avatar1.png",
       bio: "",
-      social_medias: mockSocialLinks,
+      social_medias: mockSocialLinks as unknown as Json,
       is_profile_completed: true,
       is_verified: true,
     },
@@ -39,7 +40,7 @@ export async function fetchUserProfile(userId: string): Promise<ServiceResult<Us
 /**
  * Get current user's profile
  */
-export async function fetchCurrentUserProfile(): Promise<ServiceResult<UserProfile>> {
+export async function fetchCurrentUserProfile(): Promise<ServiceResult<FullProfile>> {
   // TODO: Replace with Supabase query using auth user
   // const { data: { user } } = await supabase.auth.getUser();
   // if (!user) return { data: null, error: { message: "Not authenticated" } };
@@ -54,7 +55,7 @@ export async function fetchCurrentUserProfile(): Promise<ServiceResult<UserProfi
 export async function updateUserProfile(
   userId: string,
   updates: UserProfileUpdate
-): Promise<ServiceResult<UserProfile>> {
+): Promise<ServiceResult<FullProfile>> {
   // TODO: Replace with Supabase update
   // const { data, error } = await supabase
   //   .from('profiles')
@@ -74,7 +75,7 @@ export async function updateUserProfile(
  */
 export async function updateCurrentUserProfile(
   updates: UserProfileUpdate
-): Promise<ServiceResult<UserProfile>> {
+): Promise<ServiceResult<FullProfile>> {
   // TODO: Replace with Supabase query using auth user
   // const { data: { user } } = await supabase.auth.getUser();
   // if (!user) return { data: null, error: { message: "Not authenticated" } };
