@@ -8,10 +8,23 @@ import { mockTransactions, mockOrders } from "@/data/transactions";
 import { useSettings } from "./useSettings";
 import NotFound from "../NotFound";
 import { DEFAULT_AVATARS } from "@/data";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { PasswordUpdatePopupContent } from "@/components/organisms";
 
 export default function Settings() {
-  const { tab, profile, onLogout, onTabChange, onUpdateProfileSubmit, updateProfileForm } =
-    useSettings();
+  const {
+    tab,
+    profile,
+    onLogout,
+    onTabChange,
+    onUpdateProfileSubmit,
+    isChangePasswordDialogOpen,
+    setIsChangePasswordDialogOpen,
+    updateProfileForm,
+    handlePasswordChangeClick,
+    updatePasswordForm,
+    onUpdatePasswordSubmit,
+  } = useSettings();
 
   if (tab && !["basic", "security", "balance", "history"].includes(tab)) return <NotFound />;
 
@@ -33,12 +46,27 @@ export default function Settings() {
         />
       )}
       {tab === "security" && (
-        <SettingsSecurityTemplate
-          name={profile?.name}
-          username={profile?.username}
-          onTabChange={onTabChange}
-          onLogout={onLogout}
-        />
+        <>
+          <SettingsSecurityTemplate
+            name={profile?.name}
+            username={profile?.username}
+            onTabChange={onTabChange}
+            onLogout={onLogout}
+            onPasswordChangeClick={handlePasswordChangeClick}
+          />
+          <Dialog open={isChangePasswordDialogOpen} onOpenChange={setIsChangePasswordDialogOpen}>
+            <DialogContent className="sm:max-w-md bg-background border-secondary">
+              <PasswordUpdatePopupContent
+                errors={updatePasswordForm.formState.errors}
+                control={updatePasswordForm.control}
+                register={updatePasswordForm.register}
+                isSubmitting={updatePasswordForm.formState.isSubmitting}
+                resetField={updatePasswordForm.resetField}
+                onSubmit={updatePasswordForm.handleSubmit(onUpdatePasswordSubmit)}
+              />
+            </DialogContent>
+          </Dialog>
+        </>
       )}
       {tab === "balance" && (
         <SettingsBalanceTemplate

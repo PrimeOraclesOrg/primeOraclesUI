@@ -9,6 +9,8 @@ import { SocialPlatform } from "@/types";
 import { toast } from "@/hooks/useToast";
 import { useTranslation } from "react-i18next";
 import { setProfile } from "@/store/authSlice";
+import { UpdatePasswordFormData, updatePasswordSchema } from "@/utils";
+import { useState } from "react";
 
 export const useSettings = () => {
   const { tab } = useParams();
@@ -16,6 +18,7 @@ export const useSettings = () => {
   const { t } = useTranslation();
   const profile = useAppSelector(selectAuthProfile);
   const dispatch = useAppDispatch();
+  const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);
 
   const onTabChange = (tab: SettingsTab) => navigate(`/settings/${tab}`);
 
@@ -40,6 +43,16 @@ export const useSettings = () => {
     mode: "onBlur",
   });
 
+  const updatePasswordForm = useForm<UpdatePasswordFormData>({
+    resolver: zodResolver(updatePasswordSchema),
+    defaultValues: {
+      code: "",
+      password: "",
+      confirmPassword: "",
+    },
+    mode: "onBlur",
+  });
+
   const onUpdateProfileSubmit = async (data: UpdateProfileFormData) => {
     const { data: profile, error } = await updateProfile(data);
 
@@ -60,12 +73,23 @@ export const useSettings = () => {
     dispatch(setProfile(profile));
   };
 
+  const onUpdatePasswordSubmit = async (data: UpdatePasswordFormData) => {
+    console.log(data);
+  };
+
+  const handlePasswordChangeClick = () => setIsChangePasswordDialogOpen(true);
+
   return {
     profile,
     tab,
     onTabChange,
     onLogout,
     updateProfileForm,
+    isChangePasswordDialogOpen,
+    setIsChangePasswordDialogOpen,
+    updatePasswordForm,
+    onUpdatePasswordSubmit,
     onUpdateProfileSubmit,
+    handlePasswordChangeClick,
   };
 };

@@ -7,6 +7,7 @@ interface SettingsSecurityTemplateProps {
   username: string;
   onLogout: () => void;
   onTabChange: (tab: string) => void;
+  onPasswordChangeClick: () => void;
 }
 
 export const SettingsSecurityTemplate = ({
@@ -14,6 +15,7 @@ export const SettingsSecurityTemplate = ({
   username,
   onLogout,
   onTabChange,
+  onPasswordChangeClick,
 }: SettingsSecurityTemplateProps) => {
   return (
     <SettingsLayout
@@ -58,6 +60,7 @@ export const SettingsSecurityTemplate = ({
           <Button
             variant="outline"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+            onClick={onPasswordChangeClick}
           >
             Изменить пароль
           </Button>
