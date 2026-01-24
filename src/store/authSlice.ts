@@ -1,4 +1,4 @@
-import { FullProfile, UserProfile } from "@/types";
+import { FullProfile } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@supabase/supabase-js";
 
