@@ -31,7 +31,7 @@ export const useAuthListener = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChange((_event, session) => {
       if (session?.user) {
-        if (isUserFetching) {
+        if (isUserFetching || !profile) {
           fetchUserProfile().finally(() => {
             dispatch(setUser(session.user));
           });
@@ -44,7 +44,7 @@ export const useAuthListener = () => {
     });
 
     return () => unsubscribe();
-  }, [fetchUserProfile, dispatch, isUserFetching]);
+  }, [fetchUserProfile, dispatch, isUserFetching, profile]);
 
   useEffect(() => {
     if (isUserFetching || isProfileFetching || !profile) return;
