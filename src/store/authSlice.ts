@@ -1,10 +1,10 @@
-import { UserProfile } from "@/types";
+import { FullProfile, UserProfile } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@supabase/supabase-js";
 
 export interface AuthState {
   user: User | null;
-  profile: UserProfile | null;
+  profile: FullProfile | null;
   isAuthFetching: boolean;
   isProfileFetching: boolean;
 }
@@ -28,7 +28,7 @@ export const authSlice = createSlice({
       state.user = null;
       state.isAuthFetching = false;
     },
-    setProfile: (state, action: PayloadAction<UserProfile>) => {
+    setProfile: (state, action: PayloadAction<FullProfile>) => {
       state.profile = action.payload;
       state.isProfileFetching = false;
     },

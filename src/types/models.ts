@@ -1,5 +1,8 @@
 // ========================================
 // Product Models
+
+import { Database } from "./supabase";
+
 // ========================================
 export interface Product {
   id: string;
@@ -141,3 +144,5 @@ export interface RatingDistributionItem {
   stars: number;
   percentage: number;
 }
+
+export type FullProfile = Database["public"]["Views"]["public_profiles_full_view"]["Row"];
