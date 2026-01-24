@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { getCroppedImg, getRectangularCroppedImg } from "@/utils";
+import { getCroppedImg, getRectangularCroppedImg, cn } from "@/utils";
 import { MutableRefObject, useCallback, useState } from "react";
 import Cropper, { Area, Size } from "react-easy-crop";
 
@@ -91,14 +91,17 @@ export const ImageCrop = ({
       />
 
       <Dialog open={isCropDialogOpen} onOpenChange={setIsCropDialogOpen}>
-        <DialogContent className={`${dialogMaxWidth} bg-background border-secondary`}>
+        <DialogContent className={cn("bg-background border-secondary", dialogMaxWidth)}>
           <DialogHeader>
             <DialogTitle className="text-foreground">Обрезать изображение</DialogTitle>
             <p className="text-muted-foreground text-sm">(Масштабирование колесиком мыши)</p>
           </DialogHeader>
 
           <div
-            className={`relative w-full ${previewHeight} bg-secondary/30 rounded-lg overflow-hidden`}
+            className={cn(
+              "relative w-full bg-secondary/30 rounded-lg overflow-hidden",
+              previewHeight
+            )}
           >
             {imageSrc && (
               <Cropper
