@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { getCroppedImg, getRectangularCroppedImg, cn } from "@/utils";
+import { getCroppedImg, cn } from "@/utils";
 import { MutableRefObject, useCallback, useState } from "react";
 import Cropper, { Area, Size } from "react-easy-crop";
 
@@ -67,10 +67,7 @@ export const ImageCrop = ({
   const handleCropApply = useCallback(async () => {
     if (imageSrc && croppedAreaPixels) {
       try {
-        const croppedImage =
-          cropShape === "round"
-            ? await getCroppedImg(imageSrc, croppedAreaPixels)
-            : await getRectangularCroppedImg(imageSrc, croppedAreaPixels);
+        const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
         setUploadedImage(croppedImage);
         setIsCropDialogOpen(false);
         setImageSrc(null);
@@ -78,7 +75,7 @@ export const ImageCrop = ({
         console.error("Error cropping image:", error);
       }
     }
-  }, [imageSrc, croppedAreaPixels, setUploadedImage, cropShape]);
+  }, [imageSrc, croppedAreaPixels, setUploadedImage]);
 
   return (
     <>
