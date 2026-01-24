@@ -1,7 +1,6 @@
+import { Database } from "./supabase";
 // ========================================
 // Product Models
-
-import { Database } from "./supabase";
 
 // ========================================
 export interface Product {
