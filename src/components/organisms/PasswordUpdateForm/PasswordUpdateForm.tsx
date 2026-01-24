@@ -1,5 +1,6 @@
 import { CodeInput, PasswordInput } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { UpdatePasswordFormData } from "@/utils";
 import {
   Control,
@@ -28,6 +29,9 @@ export const PasswordUpdateForm = ({
 }: PasswordUpdateFormProps) => {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <Label className="text-foreground text-sm font-normal">Код с э-почты</Label>
+      </div>
       <Controller
         name="code"
         control={control}

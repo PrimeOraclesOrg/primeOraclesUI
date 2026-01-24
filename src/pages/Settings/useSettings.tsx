@@ -1,5 +1,5 @@
 import { signOut, updateProfile } from "@/services";
-import { selectAuthProfile, useAppDispatch, useAppSelector } from "@/store";
+import { selectAuthProfile, selectAuthUser, useAppDispatch, useAppSelector } from "@/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { SettingsTab } from "./types";
 import { useForm } from "react-hook-form";
@@ -17,8 +17,11 @@ export const useSettings = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const profile = useAppSelector(selectAuthProfile);
+  const user = useAppSelector(selectAuthUser);
   const dispatch = useAppDispatch();
   const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
+  const [isResending, setIsResending] = useState(false);
 
   const onTabChange = (tab: SettingsTab) => navigate(`/settings/${tab}`);
 
@@ -80,6 +83,7 @@ export const useSettings = () => {
   const handlePasswordChangeClick = () => setIsChangePasswordDialogOpen(true);
 
   return {
+    user,
     profile,
     tab,
     onTabChange,

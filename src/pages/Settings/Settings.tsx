@@ -8,12 +8,12 @@ import { mockTransactions, mockOrders } from "@/data/transactions";
 import { useSettings } from "./useSettings";
 import NotFound from "../NotFound";
 import { DEFAULT_AVATARS } from "@/data";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { PasswordUpdatePopupContent } from "@/components/organisms";
+import { PasswordUpdatePopup } from "@/components/organisms";
 
 export default function Settings() {
   const {
     tab,
+    user,
     profile,
     onLogout,
     onTabChange,
@@ -54,18 +54,21 @@ export default function Settings() {
             onLogout={onLogout}
             onPasswordChangeClick={handlePasswordChangeClick}
           />
-          <Dialog open={isChangePasswordDialogOpen} onOpenChange={setIsChangePasswordDialogOpen}>
-            <DialogContent className="sm:max-w-md bg-background border-secondary">
-              <PasswordUpdatePopupContent
-                errors={updatePasswordForm.formState.errors}
-                control={updatePasswordForm.control}
-                register={updatePasswordForm.register}
-                isSubmitting={updatePasswordForm.formState.isSubmitting}
-                resetField={updatePasswordForm.resetField}
-                onSubmit={updatePasswordForm.handleSubmit(onUpdatePasswordSubmit)}
-              />
-            </DialogContent>
-          </Dialog>
+
+          <PasswordUpdatePopup
+            isChangePasswordDialogOpen={isChangePasswordDialogOpen}
+            setIsChangePasswordDialogOpen={setIsChangePasswordDialogOpen}
+            errors={updatePasswordForm.formState.errors}
+            control={updatePasswordForm.control}
+            register={updatePasswordForm.register}
+            isSubmitting={updatePasswordForm.formState.isSubmitting}
+            resetField={updatePasswordForm.resetField}
+            onSubmit={updatePasswordForm.handleSubmit(onUpdatePasswordSubmit)}
+            email={user.email}
+            isResending={false}
+            onResendCode={() => {}}
+            resendTimer={60}
+          />
         </>
       )}
       {tab === "balance" && (
