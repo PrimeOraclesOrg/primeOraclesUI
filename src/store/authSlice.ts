@@ -27,7 +27,16 @@ export const authSlice = createSlice({
       state.isAuthFetching = false;
     },
     setProfile: (state, action: PayloadAction<UserProfile>) => {
-      state.profile = action.payload;
+      const processAvatarPath = (avatarPath: string) => {
+        /* if user uploads new avatar - browser caches old one, so we update link every time to always have current avatar image  */
+        if (avatarPath.includes("default_avatars")) return avatarPath;
+        return `${avatarPath}?v=${new Date().getTime()}`;
+      };
+
+      state.profile = {
+        ...action.payload,
+        avatar_path: processAvatarPath(action.payload.avatar_path),
+      };
       state.isProfileFetching = false;
     },
     clearProfile: (state) => {
