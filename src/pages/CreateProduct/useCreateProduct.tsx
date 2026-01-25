@@ -93,7 +93,8 @@ export const useCreateProduct = () => {
 
       const url = URL.createObjectURL(file);
       setMediaFile(file);
-      createProductForm.setValue("mediaUrl", url);
+      createProductForm.setValue("mediaUrl", url, { shouldValidate: true });
+      createProductForm.clearErrors("mediaUrl");
     },
     [createProductForm, toast]
   );

@@ -215,6 +215,14 @@ export function CreateProductForm({
 
         {/* Media Upload */}
         <FormField label="Медиа" error={errors.mediaUrl?.message} required>
+          {/* Hidden input for react-hook-form to focus on validation error */}
+          <input
+            {...register("mediaUrl")}
+            type="text"
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden="true"
+          />
           <div className="flex gap-3">
             {mediaUrl ? (
               <div className="relative w-40 h-28 rounded-lg overflow-hidden border border-border group">
