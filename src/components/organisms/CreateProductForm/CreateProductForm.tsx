@@ -6,26 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FormSection, FormField } from "@/components/atoms";
-import {
-  PRODUCT_CATEGORIES,
-  CATEGORY_DISPLAY_NAMES,
-  type ProductCategory,
-} from "@/types/createProduct";
+import { PRODUCT_CATEGORIES, CATEGORY_DISPLAY_NAMES, type ProductCategory } from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import {
-  isValidDecimalDraft,
-  normalizeDecimalInput,
-  roundToTwoDecimals,
-  base64ToFile,
-} from "@/utils";
+import { isValidDecimalDraft, normalizeDecimalInput, roundToTwoDecimals, base64ToFile } from "@/utils";
 import { ImageCrop } from "../ImageCrop/ImageCrop";
 
 interface CreateProductFormProps {
@@ -126,7 +111,7 @@ export function CreateProductForm({
       const file = base64ToFile(croppedImageBase64, "product-image.png");
       onMediaUpload(file);
     },
-    [onMediaUpload]
+    [onMediaUpload],
   );
 
   const handleMediaRemoveClick = () => {
@@ -161,35 +146,26 @@ export function CreateProductForm({
     <form onSubmit={onSubmit} className="space-y-5">
       {/* Category Section */}
       <FormSection title="Категория">
-        <Select
-          value={values.category}
-          onValueChange={(value) => setValue("category", value as ProductCategory)}
-        >
+        <Select value={values.category} onValueChange={(value) => setValue("category", value as ProductCategory)}>
           <SelectTrigger className="w-full bg-background border-border">
             <SelectValue placeholder="Выберите категорию" />
           </SelectTrigger>
           <SelectContent>
+            /*{" "}
             {PRODUCT_CATEGORIES.map((cat) => (
               <SelectItem key={cat} value={cat}>
                 {CATEGORY_DISPLAY_NAMES[cat]}
               </SelectItem>
-            ))}
+            ))}{" "}
+            */
           </SelectContent>
         </Select>
-        {errors.category && (
-          <p className="text-sm text-destructive mt-1">{errors.category.message}</p>
-        )}
+        {errors.category && <p className="text-sm text-destructive mt-1">{errors.category.message}</p>}
       </FormSection>
 
       {/* Details Section */}
       <FormSection title="Детали">
-        <FormField
-          label="Название"
-          error={errors.title?.message}
-          required
-          charCount={title.length}
-          maxChars={100}
-        >
+        <FormField label="Название" error={errors.title?.message} required charCount={title.length} maxChars={100}>
           <Input
             {...register("title")}
             placeholder="Введите название продукта"
@@ -216,13 +192,7 @@ export function CreateProductForm({
         {/* Media Upload */}
         <FormField label="Медиа" error={errors.mediaUrl?.message} required>
           {/* Hidden input for react-hook-form to focus on validation error */}
-          <input
-            {...register("mediaUrl")}
-            type="text"
-            className="sr-only"
-            tabIndex={-1}
-            aria-hidden="true"
-          />
+          <input {...register("mediaUrl")} type="text" className="sr-only" tabIndex={-1} aria-hidden="true" />
           <div className="flex gap-3">
             {mediaUrl ? (
               <div className="relative w-40 h-28 rounded-lg overflow-hidden border border-border group">
@@ -415,9 +385,7 @@ export function CreateProductForm({
       <FormSection title="Стоимость">
         <FormField label="Цена ($)" error={errors.price?.message} required>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-              $
-            </span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
             <Input
               type="text"
               inputMode="decimal"
