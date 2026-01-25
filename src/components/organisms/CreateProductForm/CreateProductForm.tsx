@@ -151,13 +151,11 @@ export function CreateProductForm({
             <SelectValue placeholder="Выберите категорию" />
           </SelectTrigger>
           <SelectContent>
-            /*{" "}
             {PRODUCT_CATEGORIES.map((cat) => (
               <SelectItem key={cat} value={cat}>
                 {CATEGORY_DISPLAY_NAMES[cat]}
               </SelectItem>
-            ))}{" "}
-            */
+            ))}
           </SelectContent>
         </Select>
         {errors.category && <p className="text-sm text-destructive mt-1">{errors.category.message}</p>}
