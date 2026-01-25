@@ -1,3 +1,9 @@
 export * from "./productsService/productsService";
 export * from "./authService/authService";
-export * from "./usersService/usersService";
+export {
+  fetchUserProfile,
+  fetchCurrentUserProfile,
+  updateUserProfile,
+  updateCurrentUserProfile,
+  deleteUserAccount,
+} from "./usersService/usersService";

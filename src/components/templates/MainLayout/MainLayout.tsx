@@ -7,13 +7,13 @@ interface MainLayoutProps {
 
 export function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-hidden">
       <MobileHeader />
       <div className="flex">
         <div className="hidden lg:block">
           <Sidebar />
         </div>
-        <main className="min-h-screen pt-[57px] lg:pt-0 min-w-0">{children}</main>
+        <main className="w-full min-h-screen pt-[57px] lg:pt-0 min-w-0">{children}</main>
       </div>
       <Footer />
     </div>

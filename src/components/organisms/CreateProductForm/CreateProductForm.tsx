@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Plus, Trash2, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,21 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FormSection, FormField } from "@/components/atoms";
-import {
-  PRODUCT_CATEGORIES,
-  CATEGORY_DISPLAY_NAMES,
-  type ProductCategory,
-} from "@/types/createProduct";
+import { PRODUCT_CATEGORIES, CATEGORY_DISPLAY_NAMES, type ProductCategory } from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import { isValidDecimalDraft, normalizeDecimalInput, roundToTwoDecimals } from "@/utils";
+import { isValidDecimalDraft, normalizeDecimalInput, roundToTwoDecimals, base64ToFile } from "@/utils";
+import { ImageCrop } from "../ImageCrop/ImageCrop";
 
 interface CreateProductFormProps {
   form: UseFormReturn<CreateProductFormData>;
@@ -114,17 +105,19 @@ export function CreateProductForm({
     isPriceFocused.current = true;
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
+  // Handle cropped image from ImageCrop
+  const handleCroppedImage = useCallback(
+    (croppedImageBase64: string) => {
+      const file = base64ToFile(croppedImageBase64, "product-image.png");
       onMediaUpload(file);
-    }
-  };
+    },
+    [onMediaUpload],
+  );
 
   const handleMediaRemoveClick = () => {
     onMediaRemove();
     if (fileInputRef.current) {
-      fileInputRef.current.value = null;
+      fileInputRef.current.value = "";
     }
   };
 
@@ -153,10 +146,7 @@ export function CreateProductForm({
     <form onSubmit={onSubmit} className="space-y-5">
       {/* Category Section */}
       <FormSection title="Категория">
-        <Select
-          value={values.category}
-          onValueChange={(value) => setValue("category", value as ProductCategory)}
-        >
+        <Select value={values.category} onValueChange={(value) => setValue("category", value as ProductCategory)}>
           <SelectTrigger className="w-full bg-background border-border">
             <SelectValue placeholder="Выберите категорию" />
           </SelectTrigger>
@@ -168,20 +158,12 @@ export function CreateProductForm({
             ))}
           </SelectContent>
         </Select>
-        {errors.category && (
-          <p className="text-sm text-destructive mt-1">{errors.category.message}</p>
-        )}
+        {errors.category && <p className="text-sm text-destructive mt-1">{errors.category.message}</p>}
       </FormSection>
 
       {/* Details Section */}
       <FormSection title="Детали">
-        <FormField
-          label="Название"
-          error={errors.title?.message}
-          required
-          charCount={title.length}
-          maxChars={100}
-        >
+        <FormField label="Название" error={errors.title?.message} required charCount={title.length} maxChars={100}>
           <Input
             {...register("title")}
             placeholder="Введите название продукта"
@@ -206,8 +188,9 @@ export function CreateProductForm({
         </FormField>
 
         {/* Media Upload */}
-        <div className="space-y-2">
-          <Label className="text-sm text-muted-foreground">Медиа</Label>
+        <FormField label="Медиа" error={errors.mediaUrl?.message} required>
+          {/* Hidden input for react-hook-form to focus on validation error */}
+          <input {...register("mediaUrl")} type="text" className="sr-only" tabIndex={-1} aria-hidden="true" />
           <div className="flex gap-3">
             {mediaUrl ? (
               <div className="relative w-40 h-28 rounded-lg overflow-hidden border border-border group">
@@ -215,65 +198,72 @@ export function CreateProductForm({
                 <button
                   type="button"
                   onClick={handleMediaRemoveClick}
-                  className="absolute top-2 right-2 p-1 bg-card/80 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 p-1 bg-card/80 rounded-md opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
                 >
                   <Trash2 className="w-4 h-4 text-destructive" />
                 </button>
-                <div className="absolute top-2 left-2 px-2 py-0.5 bg-primary/90 rounded text-xs text-primary-foreground">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute top-2 left-2 px-2 py-0.5 bg-primary/90 rounded text-xs text-primary-foreground hover:bg-primary transition-colors cursor-pointer"
+                >
                   Изменить
-                </div>
+                </button>
               </div>
             ) : null}
 
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="w-40 h-28 rounded-lg border border-dashed border-border bg-secondary/30 flex flex-col items-center justify-center gap-2 hover:border-primary/50 transition-colors"
-            >
-              <Image className="w-6 h-6 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Добавьте своё изображение</span>
-            </button>
+            {!mediaUrl && (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="w-40 h-28 rounded-lg border border-dashed border-border bg-secondary/30 flex flex-col items-center justify-center gap-2 hover:border-primary/50 transition-colors"
+              >
+                <Image className="w-6 h-6 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">Добавьте своё изображение</span>
+              </button>
+            )}
           </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="hidden"
+          <ImageCrop
+            fileInputRef={fileInputRef}
+            setUploadedImage={handleCroppedImage}
+            cropShape="rect"
+            aspect={16 / 9}
+            dialogMaxWidth="sm:max-w-3xl"
+            previewHeight="h-[500px]"
           />
-        </div>
+        </FormField>
       </FormSection>
 
       {/* Advantages Section */}
       <FormSection title="Преимущества">
         <div className="space-y-3">
           {advantages.map((adv, idx) => (
-            <div key={adv.position} className="flex items-start gap-2">
+            <div key={adv.position} className="flex items-end gap-2">
               <div className="flex-1">
                 <FormField
                   label={`Преимущество ${idx + 1}`}
                   error={getAdvantageError(idx)}
                   required
+                  charCount={adv.description.length}
+                  maxChars={100}
                 >
-                  <div className="flex gap-2">
-                    <Input
-                      {...register(`advantages.${idx}.description`)}
-                      placeholder="Введите преимущество"
-                      className="bg-background border-border flex-1"
-                      maxLength={100}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onRemoveAdvantage(adv.position)}
-                      className="text-muted-foreground hover:text-destructive"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
+                  <Input
+                    {...register(`advantages.${idx}.description`)}
+                    placeholder="Введите преимущество"
+                    className="bg-background border-border flex-1"
+                    maxLength={100}
+                  />
                 </FormField>
               </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => onRemoveAdvantage(adv.position)}
+                className="text-muted-foreground hover:text-destructive"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
             </div>
           ))}
 
@@ -310,7 +300,13 @@ export function CreateProductForm({
                 </Button>
               </div>
 
-              <FormField label="Вопрос" error={getFaqError(idx, "question")} required>
+              <FormField
+                label="Вопрос"
+                error={getFaqError(idx, "question")}
+                required
+                charCount={item.question.length}
+                maxChars={100}
+              >
                 <Input
                   {...register(`faq.${idx}.question`)}
                   placeholder="Введите вопрос"
@@ -319,7 +315,13 @@ export function CreateProductForm({
                 />
               </FormField>
 
-              <FormField label="Ответ" error={getFaqError(idx, "answer")} required>
+              <FormField
+                label="Ответ"
+                error={getFaqError(idx, "answer")}
+                required
+                charCount={item.answer.length}
+                maxChars={300}
+              >
                 <Textarea
                   {...register(`faq.${idx}.answer`)}
                   placeholder="Введите ответ"
@@ -379,11 +381,9 @@ export function CreateProductForm({
 
       {/* Price Section */}
       <FormSection title="Стоимость">
-        <FormField label="Цена (€)" error={errors.price?.message} required>
+        <FormField label="Цена ($)" error={errors.price?.message} required>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-              €
-            </span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
             <Input
               type="text"
               inputMode="decimal"

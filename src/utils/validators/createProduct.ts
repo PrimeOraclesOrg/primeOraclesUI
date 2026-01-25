@@ -45,13 +45,15 @@ export const productInstructionsSchema = z
   .min(10, "Инструкции должны содержать минимум 10 символов")
   .max(1000, "Инструкции не могут превышать 1000 символов");
 
-export const productPriceSchema = z.number().min(4, "Минимальная цена 4€");
+export const productPriceSchema = z.number().min(4, "Минимальная цена 4$");
 
 export const createProductSchema = z.object({
   category: productCategorySchema,
   title: productTitleSchema,
   description: productDescriptionSchema,
-  mediaUrl: z.string().optional(),
+  mediaUrl: z.union([z.string(), z.undefined()]).refine((val) => val && val.length > 0, {
+    message: "Продукт должен иметь минимум 1 изображение",
+  }),
   isActive: z.boolean(),
   advantages: z
     .array(

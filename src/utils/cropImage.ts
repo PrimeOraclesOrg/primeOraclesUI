@@ -10,12 +10,9 @@ export interface CropArea {
 }
 
 /**
- * Creates a circular cropped image and returns it as a base64 data URL
+ * Creates a rectangular cropped image and returns it as a base64 data URL
  */
-export async function getCroppedImg(
-  imageSrc: string,
-  pixelCrop: CropArea
-): Promise<string> {
+export async function getCroppedImg(imageSrc: string, pixelCrop: CropArea): Promise<string> {
   const image = await createImage(imageSrc);
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -41,34 +38,8 @@ export async function getCroppedImg(
     pixelCrop.height
   );
 
-  // Create a circular mask
-  const circularCanvas = document.createElement("canvas");
-  const circularCtx = circularCanvas.getContext("2d");
-
-  if (!circularCtx) {
-    throw new Error("No 2d context for circular canvas");
-  }
-
-  circularCanvas.width = pixelCrop.width;
-  circularCanvas.height = pixelCrop.height;
-
-  // Draw circular clip
-  circularCtx.beginPath();
-  circularCtx.arc(
-    pixelCrop.width / 2,
-    pixelCrop.height / 2,
-    Math.min(pixelCrop.width, pixelCrop.height) / 2,
-    0,
-    2 * Math.PI
-  );
-  circularCtx.closePath();
-  circularCtx.clip();
-
-  // Draw the image inside the circular clip
-  circularCtx.drawImage(canvas, 0, 0);
-
   // Return as base64
-  return circularCanvas.toDataURL("image/png");
+  return canvas.toDataURL("image/png");
 }
 
 function createImage(url: string): Promise<HTMLImageElement> {

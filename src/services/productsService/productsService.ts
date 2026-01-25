@@ -80,46 +80,95 @@ export async function fetchProductById(id: string): Promise<ProductDetailsResult
 /**
  * Check if a product title is available
  */
-export async function checkProductTitleAvailability(title: string): Promise<void> {
-  const { data, error } = await supabase.rpc("app_check_product_title_availability", {
-    p_title: title,
-  });
+export async function checkProductTitleAvailability(
+  title: string
+): Promise<{ data: null; error: { code: string; message: string } | null }> {
+  try {
+    const { error: availabilityError } = await supabase.rpc(
+      "app_check_product_title_availability",
+      {
+        p_title: title,
+      }
+    );
 
-  if (error) {
-    throw new Error("Ошибка про проверке названия продукта");
-  }
-
-  const response = data as {
-    available: boolean;
-    valid: boolean;
-    error: string | null;
-  } | null;
-
-  if (!response || !response.available) {
-    throw new Error("Продукт с таким названием уже существует");
+    if (availabilityError) {
+      return {
+        data: null,
+        error: {
+          code: availabilityError.hint ?? "unexpected_error",
+          message: availabilityError.message ?? "Unexpected error",
+        },
+      };
+    }
+    return { data: null, error: null };
+  } catch (error) {
+    return { data: null, error: { code: "unexpected_error", message: "Unexpected error" } };
   }
 }
 
 /**
  * Create a new product
  */
-export async function createProduct(productData: CreateProductFormData): Promise<string> {
-  const { data, error } = await supabase.rpc("app_create_product", {
-    p_title: productData.title,
-    p_category: productData.category,
-    p_description: productData.description,
-    p_price: productData.price.toString(),
-    p_instructions: productData.instructions,
-    p_advantages: productData.advantages,
-    p_faq: productData.faq,
-    p_is_active: productData.isActive,
-  });
+export async function createProduct(
+  productData: CreateProductFormData,
+  mediaFile?: File | null
+): Promise<{ data: string | null; error: { code: string; message: string } | null }> {
+  try {
+    // Check title availability
+    const { error: availabilityError } = await checkProductTitleAvailability(productData.title);
+    if (availabilityError) {
+      return { data: null, error: availabilityError };
+    }
 
-  if (error) {
-    throw new Error("Ошибка при создании продукта");
+    // Create the product
+    const { data: productId, error: createError } = await supabase.rpc("app_create_product", {
+      p_title: productData.title,
+      p_category: productData.category,
+      p_description: productData.description,
+      p_price: productData.price.toString(),
+      p_instructions: productData.instructions,
+      p_advantages: productData.advantages,
+      p_faq: productData.faq,
+      p_is_active: productData.isActive,
+    });
+
+    if (createError) {
+      return {
+        data: null,
+        error: {
+          code: createError.hint ?? "unexpected_error",
+          message: createError.message ?? "Unexpected error",
+        },
+      };
+    }
+
+    // Upload image if provided
+    if (mediaFile && productId) {
+      const { error: uploadError } = await supabase.storage
+        .from(PRODUCT_IMAGES_BUCKET)
+        .upload(productId, mediaFile, { contentType: mediaFile.type, upsert: true });
+
+      if (uploadError) {
+        return {
+          data: null,
+          error: {
+            code: "unexpected_error",
+            message: "Unexpected error",
+          },
+        };
+      }
+    }
+
+    return { data: productId, error: null };
+  } catch (error) {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
   }
-
-  return data;
 }
 
 /**
