@@ -585,7 +585,7 @@ export async function updateProfile({
     if (error)
       return {
         data: null,
-        error: error && {
+        error: {
           code: error?.hint || error?.code,
           message: error?.message,
         },
