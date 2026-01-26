@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/utils";
+import { cn, profileSetupMaxLenghtLimits } from "@/utils";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
 import { Check, ImagePlus, Instagram, Pencil, Youtube } from "lucide-react";
 import { useCallback, useRef } from "react";
@@ -18,6 +18,7 @@ interface ProfileUpdateFormProps {
   setValue: UseFormSetValue<UpdateProfileFormData>;
   isSubmitting: boolean;
   defaultAvatars: Array<string>;
+  wasDataChanged: boolean;
 }
 
 export const ProfileUpdateForm = ({
@@ -28,23 +29,39 @@ export const ProfileUpdateForm = ({
   defaultAvatars,
   watch,
   setValue,
+  wasDataChanged,
 }: ProfileUpdateFormProps) => {
   const selectedAvatar = watch("selectedAvatar");
   const uploadedAvatar = watch("uploadedAvatar");
+  const nameValue = watch("name");
+  const descriptionValue = watch("description");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const unSelectAvatar = useCallback(() => {
+    setValue("selectedAvatar", "", { shouldDirty: true });
+    setValue("uploadedAvatar", "", { shouldDirty: true });
+  }, [setValue]);
+
   const handleUploadClick = useCallback(() => {
+    if (uploadedAvatar) {
+      unSelectAvatar();
+      return;
+    }
     fileInputRef.current?.click();
-  }, []);
+  }, [uploadedAvatar, unSelectAvatar]);
 
   const setUploadedAvatar = (avatar: string) => {
-    setValue("selectedAvatar", null);
-    setValue("uploadedAvatar", avatar);
+    setValue("selectedAvatar", "", { shouldDirty: true });
+    setValue("uploadedAvatar", avatar, { shouldDirty: true });
   };
 
-  const unselectAvatar = () => {
-    setValue("selectedAvatar", null);
-    setValue("uploadedAvatar", null);
+  const selectAvatar = (avatar: string) => {
+    if (selectedAvatar === avatar) {
+      unSelectAvatar();
+      return;
+    }
+    setValue("selectedAvatar", avatar, { shouldDirty: true });
+    setValue("uploadedAvatar", "", { shouldDirty: true });
   };
 
   const isUploadedAvatar = !selectedAvatar && uploadedAvatar;
@@ -108,7 +125,7 @@ export const ProfileUpdateForm = ({
                   "w-20 h-20 rounded-full overflow-hidden outline outline-3 transition-colors relative",
                   isSelected ? "outline-accent" : "outline-transparent hover:outline-accent/50"
                 )}
-                onClick={() => setValue("selectedAvatar", `${index + 1}`)}
+                onClick={() => selectAvatar(`${index + 1}`)}
               >
                 <img
                   src={avatarUrl}
@@ -125,9 +142,6 @@ export const ProfileUpdateForm = ({
             );
           })}
         </div>
-        {(selectedAvatar || uploadedAvatar) && (
-          <Button onClick={unselectAvatar}>Не менять аватар</Button>
-        )}
       </div>
       <ImageCrop
         fileInputRef={fileInputRef}
@@ -136,7 +150,12 @@ export const ProfileUpdateForm = ({
       />
 
       <div>
-        <label className="text-sm text-muted-foreground mb-2 block">Имя</label>
+        <div className="flex items-center justify-between">
+          <label className="text-sm text-muted-foreground mb-2 block">Имя</label>
+          <span className="text-muted-foreground text-xs">
+            {nameValue.length}/{profileSetupMaxLenghtLimits.name}
+          </span>
+        </div>
         <div className="relative">
           <Input
             {...register("name")}
@@ -151,7 +170,12 @@ export const ProfileUpdateForm = ({
       </div>
 
       <div>
-        <label className="text-sm text-muted-foreground mb-2 block">Описание</label>
+        <div className="flex items-center justify-between">
+          <label className="text-sm text-muted-foreground mb-2 block">Описание</label>
+          <span className="text-muted-foreground text-xs">
+            {descriptionValue.length}/{profileSetupMaxLenghtLimits.description}
+          </span>
+        </div>
         <div className="relative">
           <Textarea
             {...register("description")}
@@ -235,7 +259,7 @@ export const ProfileUpdateForm = ({
       <Button
         type="submit"
         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-6"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !wasDataChanged}
       >
         {isSubmitting ? "Сохранение..." : "Сохранить"}
       </Button>

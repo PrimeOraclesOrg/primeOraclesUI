@@ -9,6 +9,7 @@ import { SocialPlatform } from "@/types";
 import { toast } from "@/hooks/useToast";
 import { useTranslation } from "react-i18next";
 import { setProfile } from "@/store/authSlice";
+import { useCallback, useEffect } from "react";
 
 export const useBasicSettings = () => {
   const navigate = useNavigate();
@@ -23,19 +24,29 @@ export const useBasicSettings = () => {
     navigate("/");
   };
 
-  const getSocialLink = (socialPlatform: SocialPlatform) => {
-    return profile?.social_medias.filter((link) => link.type === socialPlatform)[0]?.link || "";
-  };
+  const getSocialLink = useCallback(
+    (socialPlatform: SocialPlatform) => {
+      return profile?.social_medias.filter((link) => link.type === socialPlatform)[0]?.link || "";
+    },
+    [profile]
+  );
 
-  const updateProfileForm = useForm<UpdateProfileFormData>({
-    resolver: zodResolver(updateProfileSchema),
-    defaultValues: {
+  const getDefaultValues = useCallback(
+    (): UpdateProfileFormData => ({
       name: profile.name,
       description: profile.bio || "",
       instagramUrl: getSocialLink("instagram"),
       tiktokUrl: getSocialLink("tiktok"),
       youtubeUrl: getSocialLink("youtube"),
-    },
+      selectedAvatar: "",
+      uploadedAvatar: "",
+    }),
+    [profile, getSocialLink]
+  );
+
+  const updateProfileForm = useForm<UpdateProfileFormData>({
+    resolver: zodResolver(updateProfileSchema),
+    defaultValues: getDefaultValues(),
     mode: "onBlur",
   });
 
@@ -58,6 +69,10 @@ export const useBasicSettings = () => {
 
     dispatch(setProfile(profile));
   };
+
+  useEffect(() => {
+    updateProfileForm.reset(getDefaultValues());
+  }, [profile, updateProfileForm, getDefaultValues]);
 
   return {
     onTabChange,

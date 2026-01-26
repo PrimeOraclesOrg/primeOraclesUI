@@ -134,4 +134,7 @@ export interface RatingDistributionItem {
   percentage: number;
 }
 
-export type FullProfile = Database["public"]["Views"]["public_profiles_full_view"]["Row"];
+export type FullProfile = Omit<
+  Database["public"]["Views"]["public_profiles_full_view"]["Row"],
+  "social_medias"
+> & { social_medias: Array<SocialLink> };

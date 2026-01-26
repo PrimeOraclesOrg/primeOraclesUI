@@ -15,6 +15,7 @@ interface SettingsBasicTemplateProps {
   setValue: UseFormSetValue<UpdateProfileFormData>;
   isSubmitting: boolean;
   defaultAvatars: Array<string>;
+  wasDataChanged: boolean;
 }
 
 export const SettingsBasicTemplate = ({
@@ -28,6 +29,7 @@ export const SettingsBasicTemplate = ({
   watch,
   defaultAvatars,
   setValue,
+  wasDataChanged,
 }: SettingsBasicTemplateProps) => {
   return (
     <SettingsLayout activeTab="basic" name={name} username={username} onLogout={onLogout}>
@@ -39,6 +41,7 @@ export const SettingsBasicTemplate = ({
         watch={watch}
         defaultAvatars={defaultAvatars}
         setValue={setValue}
+        wasDataChanged={wasDataChanged}
       />
     </SettingsLayout>
   );

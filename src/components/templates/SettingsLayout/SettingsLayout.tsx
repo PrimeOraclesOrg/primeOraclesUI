@@ -2,10 +2,10 @@ import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { Settings as SettingsIcon, Shield, Wallet, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/helpers";
-import { UserAvatar } from "@/components/molecules/UserAvatar/UserAvatar";
 import { ReactNode } from "react";
 import { SettingsTab } from "@/pages/@settings/types";
 import { Link } from "react-router-dom";
+import { MyAvatar } from "@/components/molecules";
 
 const tabItems = [
   { id: "basic" as const, label: "Основные", icon: SettingsIcon },
@@ -40,7 +40,7 @@ export function SettingsLayout({
             <div className="sticky top-0">
               {/* Profile card */}
               <div className="mb-6 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0">
-                <UserAvatar className="w-16 h-16 lg:w-20 lg:h-20 lg:mb-3" />
+                <MyAvatar className="w-16 h-16 lg:w-20 lg:h-20 lg:mb-3" />
                 <div className="max-w-full">
                   <h2 className="font-semibold text-lg overflow-hidden text-ellipsis">{name}</h2>
                   <p className="text-muted-foreground text-sm overflow-hidden text-ellipsis">

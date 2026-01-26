@@ -18,7 +18,7 @@ import {
   VerifyOtpForPasswordChangeParams,
 } from "./types";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
-import { FullProfile } from "@/types";
+import { FullProfile, SocialLink } from "@/types";
 
 /**
  * Sign up a new user with email and password
@@ -531,8 +531,12 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
       .select("*")
       .eq("id", session?.user?.id)
       .single();
+
     return {
-      data,
+      data: data && {
+        ...data,
+        social_medias: data.social_medias as unknown as Array<SocialLink>,
+      },
       error,
     };
   } catch {

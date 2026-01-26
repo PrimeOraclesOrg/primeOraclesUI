@@ -19,6 +19,7 @@ export const BasicSettings = () => {
       defaultAvatars={DEFAULT_AVATARS}
       watch={updateProfileForm.watch}
       setValue={updateProfileForm.setValue}
+      wasDataChanged={updateProfileForm.formState.isDirty}
     />
   );
 };

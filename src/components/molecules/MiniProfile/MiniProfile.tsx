@@ -3,7 +3,7 @@ import { selectAuthProfile } from "@/store";
 import { cn } from "@/utils";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { UserAvatar } from "../UserAvatar/UserAvatar";
+import { MyAvatar } from "../MyAvatar/MyAvatar";
 
 interface SidebarProfileProps {
   isActive: (href: string) => boolean;
@@ -25,7 +25,7 @@ export const MiniProfile = ({ isActive }: SidebarProfileProps) => {
           )}
         >
           <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-            <UserAvatar />
+            <MyAvatar />
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-xs font-medium text-nowrap text-ellipsis overflow-hidden">
