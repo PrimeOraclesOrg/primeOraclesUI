@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute/ProtectedRoute";
 import Home from "@/pages/Home";
 import Rewards from "@/pages/Rewards";
@@ -7,7 +7,6 @@ import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
 import CreateProduct from "@/pages/CreateProduct/CreateProduct";
-import Settings from "@/pages/Settings/Settings";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp/SignUp";
@@ -17,6 +16,10 @@ import { AuthRoute } from "@/components/shared";
 import { useAuthListener } from "@/hooks/useAuthListener";
 import { selectAuthIsFetching, selectAuthIsProfileFetching, useAppSelector } from "@/store";
 import { LoadingScreen } from "@/components/atoms";
+import { BasicSettings } from "@/pages/@settings/BasicSettings/BasicSettings";
+import { SecuritySettings } from "@/pages/@settings/SecuritySettings/SecuritySettings";
+import { BalanceSettings } from "@/pages/@settings/BalanceSettings/BalanceSettings";
+import { HistorySettings } from "@/pages/@settings/HistorySettings/HistorySettings";
 
 export function AppRoutes() {
   useAuthListener();
@@ -68,26 +71,30 @@ export function AppRoutes() {
         path="/profile"
         element={
           <ProtectedRoute>
-            <Settings />
+            <BasicSettings />
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/settings"
         element={
           <ProtectedRoute>
-            <Settings />
+            <Outlet />
           </ProtectedRoute>
         }
-      />
-      <Route
-        path="/settings/:tab"
-        element={
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        }
-      />
+      >
+        <Route index element={<BasicSettings />} />
+
+        <Route path="basic" element={<BasicSettings />} />
+
+        <Route path="security" element={<SecuritySettings />} />
+
+        <Route path="balance" element={<BalanceSettings />} />
+
+        <Route path="history" element={<HistorySettings />} />
+      </Route>
+
       <Route
         path="/messages"
         element={

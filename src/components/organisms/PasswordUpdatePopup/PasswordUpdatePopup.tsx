@@ -16,7 +16,6 @@ interface PasswordUpdatePopupContentProps {
   onResendCode: () => void;
   resendTimer: number;
   isResending: boolean;
-  email: string;
 }
 
 export const PasswordUpdatePopup = ({
@@ -31,7 +30,6 @@ export const PasswordUpdatePopup = ({
   onSubmit,
   register,
   resetField,
-  email,
 }: PasswordUpdatePopupContentProps) => {
   return (
     <Dialog open={isChangePasswordDialogOpen} onOpenChange={setIsChangePasswordDialogOpen}>
@@ -39,7 +37,7 @@ export const PasswordUpdatePopup = ({
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">Изменение пароля</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
-            На ваш адрес {email} отправлен код
+            На ваш адрес э-почты отправлен код
           </DialogDescription>
         </DialogHeader>
 

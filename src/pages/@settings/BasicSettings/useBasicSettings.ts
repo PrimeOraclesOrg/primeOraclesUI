@@ -1,7 +1,7 @@
 import { signOut, updateProfile } from "@/services";
-import { selectAuthProfile, selectAuthUser, useAppDispatch, useAppSelector } from "@/store";
-import { useNavigate, useParams } from "react-router-dom";
-import { SettingsTab } from "./types";
+import { selectAuthProfile, useAppDispatch, useAppSelector } from "@/store";
+import { useNavigate } from "react-router-dom";
+import { SettingsTab } from "../types";
 import { useForm } from "react-hook-form";
 import { UpdateProfileFormData, updateProfileSchema } from "@/utils/validators/updateProfile";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,19 +9,12 @@ import { SocialPlatform } from "@/types";
 import { toast } from "@/hooks/useToast";
 import { useTranslation } from "react-i18next";
 import { setProfile } from "@/store/authSlice";
-import { UpdatePasswordFormData, updatePasswordSchema } from "@/utils";
-import { useState } from "react";
 
-export const useSettings = () => {
-  const { tab } = useParams();
+export const useBasicSettings = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const profile = useAppSelector(selectAuthProfile);
-  const user = useAppSelector(selectAuthUser);
   const dispatch = useAppDispatch();
-  const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);
-  const [resendTimer, setResendTimer] = useState(0);
-  const [isResending, setIsResending] = useState(false);
 
   const onTabChange = (tab: SettingsTab) => navigate(`/settings/${tab}`);
 
@@ -46,16 +39,6 @@ export const useSettings = () => {
     mode: "onBlur",
   });
 
-  const updatePasswordForm = useForm<UpdatePasswordFormData>({
-    resolver: zodResolver(updatePasswordSchema),
-    defaultValues: {
-      code: "",
-      password: "",
-      confirmPassword: "",
-    },
-    mode: "onBlur",
-  });
-
   const onUpdateProfileSubmit = async (data: UpdateProfileFormData) => {
     const { data: profile, error } = await updateProfile(data);
 
@@ -76,24 +59,10 @@ export const useSettings = () => {
     dispatch(setProfile(profile));
   };
 
-  const onUpdatePasswordSubmit = async (data: UpdatePasswordFormData) => {
-    console.log(data);
-  };
-
-  const handlePasswordChangeClick = () => setIsChangePasswordDialogOpen(true);
-
   return {
-    user,
-    profile,
-    tab,
     onTabChange,
     onLogout,
     updateProfileForm,
-    isChangePasswordDialogOpen,
-    setIsChangePasswordDialogOpen,
-    updatePasswordForm,
-    onUpdatePasswordSubmit,
     onUpdateProfileSubmit,
-    handlePasswordChangeClick,
   };
 };

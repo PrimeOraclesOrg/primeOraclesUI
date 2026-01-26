@@ -7,7 +7,6 @@ interface SettingsHistoryTemplateProps {
   username: string;
   orders: Array<Order>;
   onLogout: () => void;
-  onTabChange: (tab: string) => void;
 }
 
 export const SettingsHistoryTemplate = ({
@@ -15,16 +14,9 @@ export const SettingsHistoryTemplate = ({
   name,
   username,
   onLogout,
-  onTabChange,
 }: SettingsHistoryTemplateProps) => {
   return (
-    <SettingsLayout
-      activeTab="history"
-      name={name}
-      username={username}
-      onLogout={onLogout}
-      onTabChange={onTabChange}
-    >
+    <SettingsLayout activeTab="history" name={name} username={username} onLogout={onLogout}>
       <div>
         <h3 className="text-xl font-medium italic mb-4">История заказов</h3>
         <div className="space-y-0">

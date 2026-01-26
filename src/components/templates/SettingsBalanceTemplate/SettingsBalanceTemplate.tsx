@@ -9,7 +9,6 @@ interface SettingsBalanceTemplateProps {
   name: string;
   username: string;
   onLogout: () => void;
-  onTabChange: (tab: string) => void;
 }
 
 export const SettingsBalanceTemplate = ({
@@ -18,16 +17,9 @@ export const SettingsBalanceTemplate = ({
   name,
   username,
   onLogout,
-  onTabChange,
 }: SettingsBalanceTemplateProps) => {
   return (
-    <SettingsLayout
-      activeTab="balance"
-      name={name}
-      username={username}
-      onLogout={onLogout}
-      onTabChange={onTabChange}
-    >
+    <SettingsLayout activeTab="balance" name={name} username={username} onLogout={onLogout}>
       <div className="space-y-6">
         <div>
           <p className="text-sm text-muted-foreground">Доступный баланс</p>

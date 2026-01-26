@@ -2,13 +2,12 @@ import { ProfileUpdateForm } from "@/components/organisms";
 import { SettingsLayout } from "../SettingsLayout/SettingsLayout";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
-import { SettingsTab } from "@/pages/Settings/types";
+import { SettingsTab } from "@/pages/@settings/types";
 
 interface SettingsBasicTemplateProps {
   name: string;
   username: string;
   onLogout: () => void;
-  onTabChange: (tab: SettingsTab) => void;
   onSubmit: () => void;
   register: UseFormRegister<UpdateProfileFormData>;
   errors: FieldErrors<UpdateProfileFormData>;
@@ -22,7 +21,6 @@ export const SettingsBasicTemplate = ({
   name,
   username,
   onLogout,
-  onTabChange,
   onSubmit,
   register,
   errors,
@@ -32,13 +30,7 @@ export const SettingsBasicTemplate = ({
   setValue,
 }: SettingsBasicTemplateProps) => {
   return (
-    <SettingsLayout
-      activeTab="basic"
-      name={name}
-      username={username}
-      onLogout={onLogout}
-      onTabChange={onTabChange}
-    >
+    <SettingsLayout activeTab="basic" name={name} username={username} onLogout={onLogout}>
       <ProfileUpdateForm
         onSubmit={onSubmit}
         register={register}

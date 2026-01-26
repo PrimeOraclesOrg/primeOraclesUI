@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/helpers";
 import { UserAvatar } from "@/components/molecules/UserAvatar/UserAvatar";
 import { ReactNode } from "react";
-import { SettingsTab } from "@/pages/Settings/types";
+import { SettingsTab } from "@/pages/@settings/types";
+import { Link } from "react-router-dom";
 
 const tabItems = [
   { id: "basic" as const, label: "Основные", icon: SettingsIcon },
@@ -17,7 +18,6 @@ interface SettingsLayoutProps {
   activeTab: SettingsTab;
   name: string;
   username: string;
-  onTabChange: (tab: SettingsTab) => void;
   onLogout: () => void;
   children: ReactNode;
 }
@@ -26,7 +26,6 @@ export function SettingsLayout({
   activeTab,
   name,
   username,
-  onTabChange,
   onLogout,
   children,
 }: SettingsLayoutProps) {
@@ -53,9 +52,9 @@ export function SettingsLayout({
               {/* Navigation tabs */}
               <nav className="flex lg:flex-col gap-2 lg:gap-1 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
                 {tabItems.map((tab) => (
-                  <button
+                  <Link
                     key={tab.id}
-                    onClick={() => onTabChange(tab.id)}
+                    to={`/settings/${tab.id}`}
                     className={cn(
                       "flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-2.5 rounded-lg text-left transition-colors whitespace-nowrap",
                       activeTab === tab.id
@@ -65,7 +64,7 @@ export function SettingsLayout({
                   >
                     <tab.icon className="w-4 h-4" />
                     <span className="text-sm">{tab.label}</span>
-                  </button>
+                  </Link>
                 ))}
               </nav>
 

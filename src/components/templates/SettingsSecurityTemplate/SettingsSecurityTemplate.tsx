@@ -6,7 +6,6 @@ interface SettingsSecurityTemplateProps {
   name: string;
   username: string;
   onLogout: () => void;
-  onTabChange: (tab: string) => void;
   onPasswordChangeClick: () => void;
 }
 
@@ -14,17 +13,10 @@ export const SettingsSecurityTemplate = ({
   name,
   username,
   onLogout,
-  onTabChange,
   onPasswordChangeClick,
 }: SettingsSecurityTemplateProps) => {
   return (
-    <SettingsLayout
-      activeTab="security"
-      name={name}
-      username={username}
-      onLogout={onLogout}
-      onTabChange={onTabChange}
-    >
+    <SettingsLayout activeTab="security" name={name} username={username} onLogout={onLogout}>
       <div className="space-y-6">
         <p className="text-sm text-muted-foreground">
           Защитите свою учетную запись, запросив проверочный код при входе в систему.
