@@ -2,7 +2,6 @@ import { ProfileUpdateForm } from "@/components/organisms";
 import { SettingsLayout } from "../SettingsLayout/SettingsLayout";
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
-import { SettingsTab } from "@/pages/@settings/types";
 
 interface SettingsBasicTemplateProps {
   name: string;
