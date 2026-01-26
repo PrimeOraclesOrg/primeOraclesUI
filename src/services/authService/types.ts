@@ -44,7 +44,6 @@ export interface GetSocialMediasArgs {
 export interface VerifyOtpForPasswordChangeParams {
   email: string;
   otpToken: string;
-  flow: "forgot_password" | "change_password";
 }
 
 export interface ChangePasswordParams {

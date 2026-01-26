@@ -196,19 +196,14 @@ export async function requestPasswordChange(email: string): Promise<AuthResult<n
 export async function verifyOtpForPasswordChange({
   email,
   otpToken,
-  flow,
 }: VerifyOtpForPasswordChangeParams): Promise<AuthResult<null>> {
   try {
-    const { response, data, error } = await supabase.functions.invoke(
-      "verify_otp_for_password_change",
-      {
-        body: {
-          email,
-          otp_token: otpToken,
-          flow,
-        },
-      }
-    );
+    const { error } = await supabase.functions.invoke("verify_otp_for_password_change", {
+      body: {
+        email,
+        otp_token: otpToken,
+      },
+    });
 
     const errorCode = (await error?.context?.json())?.error || null;
 
@@ -268,7 +263,6 @@ export async function changePassword({
       const { error: verifyError } = await verifyOtpForPasswordChange({
         email,
         otpToken,
-        flow: "change_password",
       });
 
       if (verifyError) {

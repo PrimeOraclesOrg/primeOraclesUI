@@ -157,10 +157,16 @@ export const ProfileUpdateForm = ({
           </span>
         </div>
         <div className="relative">
-          <Input
+          <input
+            id="name"
+            type="text"
+            placeholder="Введите ваше имя"
             {...register("name")}
             disabled={isSubmitting}
-            className="bg-card border-border pr-10"
+            className={cn(
+              "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+              errors.name && "border-destructive focus:border-destructive"
+            )}
           />
           <Pencil className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         </div>
@@ -178,10 +184,15 @@ export const ProfileUpdateForm = ({
         </div>
         <div className="relative">
           <Textarea
+            id="description"
+            placeholder="Описание"
             {...register("description")}
             disabled={isSubmitting}
-            placeholder="Описание"
-            className="bg-card border-border min-h-[100px] pr-10"
+            rows={3}
+            className={cn(
+              "bg-secondary/30 border-2 border-border/50 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 focus-visible:ring-transparent transition-colors rounded-lg resize-none",
+              errors.description && "border-destructive focus:border-destructive"
+            )}
           />
           <Pencil className="absolute right-3 top-3 w-4 h-4 text-muted-foreground" />
         </div>
@@ -195,39 +206,37 @@ export const ProfileUpdateForm = ({
           Добавьте ссылки на ваши аккаунты
         </label>
         <div className="space-y-2">
-          <div className="flex items-center gap-3 bg-card border border-border rounded-lg px-4 py-3">
-            <div
-              className={cn(
-                "w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm bg-red-600"
-              )}
-            >
-              <Youtube />
-            </div>
-            <Input
+          <div className="relative">
+            <Youtube className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
+            <input
+              type="text"
+              placeholder="https://www.youtube.com/@username"
               {...register("youtubeUrl")}
               disabled={isSubmitting}
-              placeholder="https://www.youtube.com/@username"
-              className="flex-1 bg-transparent border-0 p-0 h-auto focus-visible:ring-0"
+              className={cn(
+                "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                errors.youtubeUrl && "border-destructive focus:border-destructive"
+              )}
             />
+            <Pencil className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           </div>
           {errors.youtubeUrl && (
             <p className="text-destructive text-sm animate-fade-in">{errors.youtubeUrl?.message}</p>
           )}
 
-          <div className="flex items-center gap-3 bg-card border border-border rounded-lg px-4 py-3">
-            <div
-              className={cn(
-                "w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600"
-              )}
-            >
-              <Instagram />
-            </div>
-            <Input
+          <div className="relative">
+            <Instagram className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-pink-500" />
+            <input
+              type="text"
+              placeholder="https://www.instagram.com/@username"
               {...register("instagramUrl")}
               disabled={isSubmitting}
-              placeholder="https://www.instagram.com/@username"
-              className="flex-1 bg-transparent border-0 p-0 h-auto focus-visible:ring-0"
+              className={cn(
+                "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                errors.instagramUrl && "border-destructive focus:border-destructive"
+              )}
             />
+            <Pencil className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           </div>
           {errors.instagramUrl && (
             <p className="text-destructive text-sm animate-fade-in">
@@ -235,20 +244,19 @@ export const ProfileUpdateForm = ({
             </p>
           )}
 
-          <div className="flex items-center gap-3 bg-card border border-border rounded-lg px-4 py-3">
-            <div
-              className={cn(
-                "w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm bg-black"
-              )}
-            >
-              <TikTokIcon />
-            </div>
-            <Input
+          <div className="relative">
+            <TikTokIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground" />
+            <input
+              type="text"
+              placeholder="https://www.tiktok.com/@username"
               {...register("tiktokUrl")}
               disabled={isSubmitting}
-              placeholder="https://www.tiktok.com/@username"
-              className="flex-1 bg-transparent border-0 p-0 h-auto focus-visible:ring-0"
+              className={cn(
+                "flex h-12 w-full rounded-lg border-2 bg-secondary/30 border-border/50 pl-10 pr-3 py-2 text-base text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-0 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                errors.tiktokUrl && "border-destructive focus:border-destructive"
+              )}
             />
+            <Pencil className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           </div>
           {errors.tiktokUrl && (
             <p className="text-destructive text-sm animate-fade-in">{errors.tiktokUrl?.message}</p>
