@@ -7,6 +7,7 @@ interface SettingsSecurityTemplateProps {
   username: string;
   onLogout: () => void;
   onPasswordChangeClick: () => void;
+  isSending: boolean;
 }
 
 export const SettingsSecurityTemplate = ({
@@ -14,6 +15,7 @@ export const SettingsSecurityTemplate = ({
   username,
   onLogout,
   onPasswordChangeClick,
+  isSending,
 }: SettingsSecurityTemplateProps) => {
   return (
     <SettingsLayout activeTab="security" name={name} username={username} onLogout={onLogout}>
@@ -54,7 +56,7 @@ export const SettingsSecurityTemplate = ({
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
             onClick={onPasswordChangeClick}
           >
-            Изменить пароль
+            {isSending ? "Отправляем код..." : "Изменить пароль"}
           </Button>
         </div>
       </div>

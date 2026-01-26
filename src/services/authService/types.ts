@@ -40,3 +40,16 @@ export interface GetSocialMediasArgs {
   youtubeUrl: string;
   tiktokUrl: string;
 }
+
+export interface VerifyOtpForPasswordChangeParams {
+  email: string;
+  otpToken: string;
+  flow: "forgot_password" | "change_password";
+}
+
+export interface ChangePasswordParams {
+  email: string;
+  otpToken: string;
+  newPassword: string;
+  isCodeVerified: boolean;
+}

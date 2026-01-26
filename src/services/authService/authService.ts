@@ -9,11 +9,13 @@ import { base64ToBlob, ProfileSetupFormData, supabase } from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
   AuthResult,
+  ChangePasswordParams,
   GetSocialMediasArgs,
   SignInCredentials,
   SignUpCredentials,
   UserAndSession,
   VerifyOtpCredentials,
+  VerifyOtpForPasswordChangeParams,
 } from "./types";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
 
@@ -148,13 +150,73 @@ export async function getCurrentUser(): Promise<AuthResult<User>> {
  */
 export async function resetPassword(email: string): Promise<AuthResult<null>> {
   try {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
 
     return {
       data: null,
       error,
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
+}
+
+/**
+ * Send password change email
+ */
+export async function requestPasswordChange(email: string): Promise<AuthResult<null>> {
+  try {
+    const { error } = await supabase.auth.signInWithOtp({ email });
+
+    return {
+      data: null,
+      error,
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
+}
+
+/**
+ * verify_otp_for_password_change
+ */
+export async function verifyOtpForPasswordChange({
+  email,
+  otpToken,
+  flow,
+}: VerifyOtpForPasswordChangeParams): Promise<AuthResult<null>> {
+  try {
+    const { response, data, error } = await supabase.functions.invoke(
+      "verify_otp_for_password_change",
+      {
+        body: {
+          email,
+          otp_token: otpToken,
+          flow,
+        },
+      }
+    );
+
+    const errorCode = (await error?.context?.json())?.error || null;
+
+    return {
+      data: null,
+      error: error && {
+        code: errorCode,
+        message: errorCode,
+      },
     };
   } catch {
     return {
@@ -178,6 +240,51 @@ export async function updatePassword(newPassword: string): Promise<AuthResult<{ 
 
     return {
       data,
+      error,
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
+}
+
+/**
+ * Change password
+ */
+export async function changePassword({
+  email,
+  otpToken,
+  newPassword,
+  isCodeVerified,
+}: ChangePasswordParams): Promise<AuthResult<{ isVerified: boolean }>> {
+  try {
+    if (!isCodeVerified) {
+      const { error: verifyError } = await verifyOtpForPasswordChange({
+        email,
+        otpToken,
+        flow: "change_password",
+      });
+
+      if (verifyError) {
+        return {
+          data: {
+            isVerified: false,
+          },
+          error: verifyError,
+        };
+      }
+    }
+    const { error } = await updatePassword(newPassword);
+
+    return {
+      data: {
+        isVerified: true,
+      },
       error,
     };
   } catch {
@@ -472,8 +579,6 @@ export async function updateProfile({
       p_default_avatar_name: changeAvatar ? getAvatarName(selectedAvatar) : null,
       p_use_custom_avatar: changeAvatar ? isUploadedAvatar : null,
     });
-
-    console.log("error:", error);
 
     if (error)
       return {

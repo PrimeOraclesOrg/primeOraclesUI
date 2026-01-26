@@ -10,6 +10,9 @@ export const SecuritySettings = () => {
     onUpdatePasswordSubmit,
     updatePasswordForm,
     handlePasswordChangeClick,
+    resendTimer,
+    isSendingPasswordChange,
+    sendPasswordChangeEmail,
   } = useSecuritySettings();
   const { onLogout, profile } = useSettings();
 
@@ -20,6 +23,7 @@ export const SecuritySettings = () => {
         username={profile?.username}
         onLogout={onLogout}
         onPasswordChangeClick={handlePasswordChangeClick}
+        isSending={isSendingPasswordChange}
       />
 
       <PasswordUpdatePopup
@@ -31,9 +35,9 @@ export const SecuritySettings = () => {
         isSubmitting={updatePasswordForm.formState.isSubmitting}
         resetField={updatePasswordForm.resetField}
         onSubmit={updatePasswordForm.handleSubmit(onUpdatePasswordSubmit)}
-        isResending={false}
-        onResendCode={() => {}}
-        resendTimer={60}
+        onResendCode={sendPasswordChangeEmail}
+        resendTimer={resendTimer}
+        isResending={isSendingPasswordChange}
       />
     </>
   );
