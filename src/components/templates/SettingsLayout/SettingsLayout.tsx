@@ -71,7 +71,7 @@ export function SettingsLayout({
               {/* Logout button */}
               <Button
                 variant="outline"
-                className="w-full mt-6 lg:mt-8 border-primary/50 text-primary hover:bg-primary/10"
+                className="w-full mt-6 lg:mt-8 border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"
                 onClick={onLogout}
               >
                 <LogOut className="w-4 h-4 mr-2" />
