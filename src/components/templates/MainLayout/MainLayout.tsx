@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Sidebar, MobileHeader } from "@/components/organisms";
+import { Sidebar, MobileHeader, Footer } from "@/components/organisms";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -7,12 +7,15 @@ interface MainLayoutProps {
 
 export function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="hidden lg:block">
-        <Sidebar />
-      </div>
+    <div className="min-h-screen bg-background overflow-hidden">
       <MobileHeader />
-      <main className="lg:ml-64 min-h-screen pt-[57px] lg:pt-0">{children}</main>
+      <div className="flex">
+        <div className="hidden lg:block">
+          <Sidebar />
+        </div>
+        <main className="w-full min-h-screen pt-[57px] lg:pt-0 min-w-0">{children}</main>
+      </div>
+      <Footer />
     </div>
   );
 }

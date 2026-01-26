@@ -59,5 +59,15 @@
   "profile_already_registered": "Ваш профиль уже был заполнен ранее, перейдите в настройки профиля для внесения изменений.",
   "StorageApiError": "Ошибка загрузки файла.",
   "42501": "Не достаточно прав.",
-  "unexpected_error": "Неожиданная ошибка"
+  "unexpected_error": "Неожиданная ошибка",
+  "product_title_taken": "Название продукта уже занято.",
+  "invalid_product_title": "Название продукта введено не верно.",
+  "invalid_product_description": "Описание продукта введено не верно.",
+  "invalid_product_price": "Цена продукта введена не верно.",
+  "invalid_product_advantages": "Преимущества продукта введены не верно.",
+  "invalid_product_faq": "FAQ продукта введены не верно.",
+  "invalid_faq_question": "Вопрос FAQ введен не верно.",
+  "invalid_faq_answer": "Ответ FAQ введен не верно.",
+  "invalid_advantage_position": "Позиция преимущества введена не верно.",
+  "invalid_advantage_description": "Описание преимущества введено не верно."
 }

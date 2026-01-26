@@ -1,15 +1,17 @@
-import { UserProfile } from "@/types";
+import { FullProfile } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@supabase/supabase-js";
 
 export interface AuthState {
-  user?: User;
-  profile?: UserProfile;
+  user: User | null;
+  profile: FullProfile | null;
   isAuthFetching: boolean;
   isProfileFetching: boolean;
 }
 
 const initialState: AuthState = {
+  user: null,
+  profile: null,
   isAuthFetching: true,
   isProfileFetching: true,
 };
@@ -26,7 +28,7 @@ export const authSlice = createSlice({
       state.user = null;
       state.isAuthFetching = false;
     },
-    setProfile: (state, action: PayloadAction<UserProfile>) => {
+    setProfile: (state, action: PayloadAction<FullProfile>) => {
       const processAvatarPath = (avatarPath: string) => {
         /* if user uploads new avatar - browser caches old one, so we update link every time to always have current avatar image  */
         if (avatarPath.includes("default_avatars")) return avatarPath;

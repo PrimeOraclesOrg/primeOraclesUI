@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { getCroppedImg } from "@/utils";
+import { getCroppedImg, cn } from "@/utils";
 import { MutableRefObject, useCallback, useState } from "react";
 import Cropper, { Area, Size } from "react-easy-crop";
 
@@ -10,6 +10,9 @@ interface ImageCropProps {
   cropShape?: "round" | "rect";
   showGrid?: boolean;
   cropSize?: Size;
+  aspect?: number;
+  dialogMaxWidth?: string;
+  previewHeight?: string;
 }
 
 export const ImageCrop = ({
@@ -18,7 +21,13 @@ export const ImageCrop = ({
   cropShape = "rect",
   showGrid = false,
   cropSize,
+  aspect,
+  dialogMaxWidth = "sm:max-w-md",
+  previewHeight = "h-72",
 }: ImageCropProps) => {
+  // Default aspect ratio: 1 for round crops, undefined (free) for rect crops
+  const defaultAspect = cropShape === "round" ? 1 : undefined;
+  const cropAspect = aspect ?? defaultAspect;
   const [isCropDialogOpen, setIsCropDialogOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -79,19 +88,24 @@ export const ImageCrop = ({
       />
 
       <Dialog open={isCropDialogOpen} onOpenChange={setIsCropDialogOpen}>
-        <DialogContent className="sm:max-w-md bg-background border-secondary">
+        <DialogContent className={cn("bg-background border-secondary", dialogMaxWidth)}>
           <DialogHeader>
             <DialogTitle className="text-foreground">Обрезать изображение</DialogTitle>
             <p className="text-muted-foreground text-sm">(Масштабирование колесиком мыши)</p>
           </DialogHeader>
 
-          <div className="relative w-full h-72 bg-secondary/30 rounded-lg overflow-hidden">
+          <div
+            className={cn(
+              "relative w-full bg-secondary/30 rounded-lg overflow-hidden",
+              previewHeight
+            )}
+          >
             {imageSrc && (
               <Cropper
                 image={imageSrc}
                 crop={crop}
                 zoom={zoom}
-                aspect={1}
+                aspect={cropAspect}
                 cropShape={cropShape}
                 showGrid={showGrid}
                 onCropChange={setCrop}
