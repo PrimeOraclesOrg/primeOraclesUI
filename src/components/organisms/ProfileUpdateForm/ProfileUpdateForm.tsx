@@ -190,7 +190,7 @@ export const ProfileUpdateForm = ({
             disabled={isSubmitting}
             rows={3}
             className={cn(
-              "bg-secondary/30 border-2 border-border/50 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 focus-visible:ring-transparent transition-colors rounded-lg resize-none",
+              "bg-secondary/30 border-2 border-border/50 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 focus-visible:ring-transparent transition-colors rounded-lg resize-y",
               errors.description && "border-destructive focus:border-destructive"
             )}
           />
