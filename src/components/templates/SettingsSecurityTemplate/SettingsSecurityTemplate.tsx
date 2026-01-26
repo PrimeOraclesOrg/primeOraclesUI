@@ -55,6 +55,7 @@ export const SettingsSecurityTemplate = ({
             variant="outline"
             className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
             onClick={onPasswordChangeClick}
+            disabled={isSending}
           >
             {isSending ? "Отправляем код..." : "Изменить пароль"}
           </Button>
