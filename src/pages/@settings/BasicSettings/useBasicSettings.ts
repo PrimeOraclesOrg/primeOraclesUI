@@ -1,4 +1,3 @@
-import { signOut } from "@/services";
 import { useNavigate } from "react-router-dom";
 import { SettingsTab } from "../types";
 import { useForm } from "react-hook-form";
