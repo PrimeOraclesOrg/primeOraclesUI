@@ -5,7 +5,7 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { base64ToBlob, ProfileSetupFormData, supabase } from "@/utils";
+import { base64ToBlob, formatApiError, ProfileSetupFormData, supabase } from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
   AuthResult,
@@ -36,7 +36,7 @@ export async function signUp(credentials: SignUpCredentials): Promise<AuthResult
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -61,7 +61,7 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -83,7 +83,7 @@ export async function signOut(): Promise<AuthResult<null>> {
 
     return {
       data: null,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -108,7 +108,7 @@ export async function getSession(): Promise<AuthResult<Session>> {
 
     return {
       data: session,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -133,7 +133,7 @@ export async function getCurrentUser(): Promise<AuthResult<User>> {
 
     return {
       data: user,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -155,7 +155,7 @@ export async function resetPassword(email: string): Promise<AuthResult<null>> {
 
     return {
       data: null,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -177,7 +177,7 @@ export async function requestPasswordChange(email: string): Promise<AuthResult<n
 
     return {
       data: null,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -236,7 +236,7 @@ export async function updatePassword(newPassword: string): Promise<AuthResult<{ 
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -270,7 +270,7 @@ export async function changePassword({
           data: {
             isVerified: false,
           },
-          error: verifyError,
+          error: formatApiError(verifyError),
         };
       }
     }
@@ -280,7 +280,7 @@ export async function changePassword({
       data: {
         isVerified: true,
       },
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -314,7 +314,7 @@ export async function verifyOtp({
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -333,7 +333,7 @@ export async function resendSignUpOtp(email: string): Promise<AuthResult<UserAnd
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -502,7 +502,7 @@ export async function completeProfile({
   if (error)
     return {
       data: null,
-      error,
+      error: formatApiError(error),
     };
 
   const profile = await getUserProfile();
@@ -516,7 +516,7 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
     if (userError) {
       return {
         data: null,
-        error: userError,
+        error: formatApiError(userError),
       };
     }
 
@@ -526,12 +526,19 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
       .eq("id", session?.user?.id)
       .single();
 
+    const processAvatarPath = (avatarPath: string) => {
+      /* if user uploads new avatar - browser caches old one, so we update link every time to always have current avatar image  */
+      if (avatarPath.includes("default_avatars")) return avatarPath;
+      return `${avatarPath}?v=${new Date().getTime()}`;
+    };
+
     return {
       data: data && {
         ...data,
+        avatar_path: processAvatarPath(data.avatar_path),
         social_medias: data.social_medias as unknown as Array<SocialLink>,
       },
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -559,7 +566,7 @@ export async function updateProfile({
     if (sessionError)
       return {
         data: null,
-        error: sessionError,
+        error: formatApiError(sessionError),
       };
 
     const changeAvatar = Boolean(selectedAvatar || uploadedAvatar);
@@ -570,7 +577,7 @@ export async function updateProfile({
       if (error)
         return {
           data: null,
-          error,
+          error: formatApiError(error),
         };
     }
 

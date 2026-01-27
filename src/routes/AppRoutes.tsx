@@ -13,19 +13,20 @@ import SignUp from "@/pages/SignUp/SignUp";
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 import { AuthRoute } from "@/components/shared";
-import { useAuthListener } from "@/hooks/useAuthListener";
-import { selectAuthIsFetching, selectAuthIsProfileFetching, useAppSelector } from "@/store";
 import { LoadingScreen } from "@/components/atoms";
 import { BasicSettings } from "@/pages/@settings/BasicSettings/BasicSettings";
 import { SecuritySettings } from "@/pages/@settings/SecuritySettings/SecuritySettings";
 import { BalanceSettings } from "@/pages/@settings/BalanceSettings/BalanceSettings";
 import { HistorySettings } from "@/pages/@settings/HistorySettings/HistorySettings";
+import { useGetMyProfileQuery } from "@/store/usersApi";
+import { useGetAuthUserQuery } from "@/store/authApi";
+import { useForceProfileSetup } from "@/hooks/useForceProfileSetup";
 
 export function AppRoutes() {
-  useAuthListener();
+  useForceProfileSetup();
 
-  const isAuthFetching = useAppSelector(selectAuthIsFetching);
-  const isProfileFetching = useAppSelector(selectAuthIsProfileFetching);
+  const { isFetching: isAuthFetching } = useGetAuthUserQuery();
+  const { isFetching: isProfileFetching } = useGetMyProfileQuery();
 
   if (isAuthFetching || isProfileFetching) return <LoadingScreen />;
 

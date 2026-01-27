@@ -1,7 +1,8 @@
 import { ConfirmCodeHelpPopupContent } from "@/components/organisms";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
-import { resendSignUpOtp, signUp, verifyOtp } from "@/services";
+import { resendSignUpOtp, signUp } from "@/services";
+import { useVerifyOtpMutation } from "@/store/authApi";
 import {
   RegisterFormData,
   registerSchema,
@@ -28,6 +29,7 @@ export const useSignUp = () => {
   const [userEmail, setUserEmail] = useState("");
   const [resendTimer, setResendTimer] = useState(0);
   const [isResending, setIsResending] = useState(false);
+  const [verifyOtp] = useVerifyOtpMutation();
 
   const registerFormForm = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -60,25 +62,23 @@ export const useSignUp = () => {
   };
 
   const onConfirmSubmit = async (data: VerificationCodeFormData) => {
-    const { error } = await verifyOtp({
-      email: userEmail,
-      code: data.code,
-      type: "signup",
-    });
-
-    if (error) {
+    try {
+      await verifyOtp({
+        email: userEmail,
+        code: data.code,
+        type: "signup",
+      }).unwrap();
+      toast({
+        title: "Успешно",
+        description: "Успешная регистрация. Теперь заполните ваш профиль",
+      });
+    } catch (error) {
       toast({
         title: "Ошибка подтверждения",
         description: t(`status:${error.code}`),
         variant: "destructive",
       });
-      return;
     }
-
-    toast({
-      title: "Успешно",
-      description: "Успешная регистрация. Теперь заполните ваш профиль",
-    });
   };
 
   const handleResendCode = async () => {

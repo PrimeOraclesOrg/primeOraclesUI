@@ -6,14 +6,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@/store";
-import { setProfile } from "@/store/authSlice";
+import { useLoginMutation } from "@/store/authApi";
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("status");
-  const dispatch = useAppDispatch();
+  const [login] = useLoginMutation();
 
   const afterLogin = location.state?.afterLogin || "/";
   const beforeLogin = location.state?.beforeLogin || "/";
@@ -24,21 +23,16 @@ export default function Login() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const { error } = await signIn(data);
-
-    if (error) {
+    try {
+      await login(data).unwrap();
+      navigate(afterLogin);
+    } catch (error) {
       toast({
         title: "Ошибка входа",
         description: t(`status:${error.code}`),
         variant: "destructive",
       });
-      return;
     }
-
-    const { data: profile } = await getUserProfile();
-    dispatch(setProfile(profile));
-
-    navigate(afterLogin);
   };
 
   const navigateWithState = (to: string) => {

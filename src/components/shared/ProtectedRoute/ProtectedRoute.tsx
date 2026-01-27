@@ -7,19 +7,21 @@
 
 import { Navigate, useLocation } from "react-router-dom";
 import { usePreviousLocation } from "@/hooks/usePreviousLocation";
-import { selectAuthIsFetching, selectAuthUser, useAppSelector } from "@/store";
+import { useGetAuthUserQuery } from "@/store/authApi";
+import { LoadingScreen } from "@/components/atoms";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const user = useAppSelector(selectAuthUser);
-  const isAuthFetching = useAppSelector(selectAuthIsFetching);
+  const { data: user, isLoading } = useGetAuthUserQuery();
   const location = useLocation();
   const previousLocation = usePreviousLocation();
 
-  if (!user && !isAuthFetching) {
+  if (isLoading) return <LoadingScreen />;
+
+  if (!user) {
     return (
       <Navigate
         to={"/login"}

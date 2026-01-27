@@ -1,4 +1,3 @@
-import { selectAuthUser, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
@@ -6,13 +5,14 @@ import { UpdatePasswordFormData, updatePasswordSchema } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { changePassword, requestPasswordChange } from "@/services";
 import { toast } from "@/hooks/useToast";
+import { useGetAuthUserQuery } from "@/store/authApi";
 
 export const useSecuritySettings = () => {
   const { t } = useTranslation();
+  const { data: user } = useGetAuthUserQuery();
   const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
   const [isSendingPasswordChange, setIsSendingPasswordChange] = useState(false);
-  const user = useAppSelector(selectAuthUser);
   const [isCodeVerified, setIsCodeVerified] = useState(false);
 
   const updatePasswordForm = useForm<UpdatePasswordFormData>({

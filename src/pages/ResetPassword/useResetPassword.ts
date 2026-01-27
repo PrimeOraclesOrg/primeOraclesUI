@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
-import { resetPassword, signOut, updatePassword, verifyOtp } from "@/services";
+import { resetPassword, updatePassword, verifyOtp } from "@/services";
 import {
   ForgotPasswordFormData,
   forgotPasswordSchema,
@@ -15,6 +15,7 @@ import {
   verificationCodeSchema,
 } from "@/utils";
 import { ConfirmCodeHelpPopupContent } from "@/components/organisms";
+import { useLogoutMutation } from "@/store/authApi";
 
 export type Step = "email-input" | "confirm-code" | "password-change";
 
@@ -23,6 +24,7 @@ export const useResetPassword = () => {
   const location = useLocation();
   const { t } = useTranslation("status");
   const { openPopup } = usePopup();
+  const [logout] = useLogoutMutation();
 
   const beforeLogin = location.state?.beforeLogin || "/";
 
@@ -77,7 +79,7 @@ export const useResetPassword = () => {
       return;
     }
     toast({ title: "Пароль изменён", description: "Теперь вы можете войти с новым паролем" });
-    await signOut();
+    await logout();
     navigate("/login");
   };
 

@@ -1,16 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { selectAuthProfile } from "@/store";
 import { cn } from "@/utils";
-import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import { MyAvatar } from "../MyAvatar/MyAvatar";
+import { useGetMyProfileQuery } from "@/store/usersApi";
 
 interface SidebarProfileProps {
   isActive: (href: string) => boolean;
 }
 
 export const MiniProfile = ({ isActive }: SidebarProfileProps) => {
-  const profile = useSelector(selectAuthProfile);
+  const { data: profile } = useGetMyProfileQuery();
 
   return (
     <div className="p-4 border-t border-sidebar-border">

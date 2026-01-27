@@ -9,6 +9,11 @@ import type {
   RatingDistributionItem,
 } from "./models";
 
+export interface ApiError {
+  message: string;
+  code: string;
+}
+
 // ========================================
 // Products API Types
 // ========================================
