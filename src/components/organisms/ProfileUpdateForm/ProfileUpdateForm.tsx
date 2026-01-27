@@ -1,6 +1,5 @@
 import { TikTokIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn, profileSetupMaxLenghtLimits } from "@/utils";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
