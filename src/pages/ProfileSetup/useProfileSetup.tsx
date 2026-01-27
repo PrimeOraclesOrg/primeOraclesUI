@@ -1,7 +1,7 @@
 import { LogoutPopupContent } from "@/components/organisms";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
-import { completeProfile } from "@/services";
+
 import {
   useCompleteProfileMutation,
   useGetAuthUserQuery,
