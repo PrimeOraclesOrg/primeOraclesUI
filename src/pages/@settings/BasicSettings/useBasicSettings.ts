@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useCallback, useEffect } from "react";
 import { useGetMyProfileQuery, useUpdateMyProfileMutation } from "@/store/usersApi";
 import { SocialMediaType } from "@/types";
+import { getSocialLink } from "@/utils";
 
 export const useBasicSettings = () => {
   const navigate = useNavigate();
@@ -17,24 +18,17 @@ export const useBasicSettings = () => {
 
   const onTabChange = (tab: SettingsTab) => navigate(`/settings/${tab}`);
 
-  const getSocialLink = useCallback(
-    (socialPlatform: SocialMediaType) => {
-      return profile?.social_medias.filter((link) => link.type === socialPlatform)[0]?.link || "";
-    },
-    [profile]
-  );
-
   const getDefaultValues = useCallback(
     (): UpdateProfileFormData => ({
       name: profile?.name || "",
       description: profile?.bio || "",
-      instagramUrl: getSocialLink("instagram"),
-      tiktokUrl: getSocialLink("tiktok"),
-      youtubeUrl: getSocialLink("youtube"),
+      instagramUrl: getSocialLink("instagram", profile),
+      tiktokUrl: getSocialLink("tiktok", profile),
+      youtubeUrl: getSocialLink("youtube", profile),
       selectedAvatar: "",
       uploadedAvatar: "",
     }),
-    [profile, getSocialLink]
+    [profile]
   );
 
   const updateProfileForm = useForm<UpdateProfileFormData>({
