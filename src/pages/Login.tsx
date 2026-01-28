@@ -1,6 +1,5 @@
 import { LoginTemplate } from "@/components/templates";
 import { toast } from "@/hooks/useToast";
-import { getUserProfile, signIn } from "@/services";
 import { LoginFormData, loginSchema } from "@/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
