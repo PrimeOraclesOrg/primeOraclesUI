@@ -70,6 +70,12 @@ export default {
           light: "hsl(var(--gold-light))",
           dark: "hsl(var(--gold-dark))",
         },
+        badge: {
+          DEFAULT: "hsl(var(--badge))",
+          pink: "hsl(var(--badge-pink))",
+          blue: "hsl(var(--badge-blue))",
+          aqua: "hsl(var(--badge-aqua))",
+        },
         surface: {
           DEFAULT: "hsl(var(--surface))",
           elevated: "hsl(var(--surface-elevated))",

@@ -5,12 +5,19 @@ interface CategoryBadgeProps {
   className?: string;
 }
 
+const categoryColors = {
+  "Soft/Bot": "bg-badge-blue",
+  Курс: "bg-badge-pink",
+  "Цифровой материал": "bg-badge-aqua",
+};
+
 export function CategoryBadge({ category, className }: CategoryBadgeProps) {
   return (
     <span
       className={cn(
         "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-        "bg-secondary text-secondary-foreground border border-border",
+        "text-secondary-foreground border border-border",
+        categoryColors[category] || "bg-badge",
         className
       )}
     >
