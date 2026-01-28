@@ -41,8 +41,6 @@ export interface ProductDetails {
 // ========================================
 // Reward Models
 // ========================================
-export type SocialNetwork = "instagram" | "youtube" | "tiktok" | "vk" | "x";
-
 export interface Reward {
   logo: string;
   name: string;
@@ -54,7 +52,7 @@ export interface Reward {
   category: string;
   type: string;
   views: string;
-  socialNetworks: SocialNetwork[];
+  socialNetworks: SocialMediaType[];
 }
 
 // ========================================

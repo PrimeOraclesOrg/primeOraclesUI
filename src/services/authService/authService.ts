@@ -18,7 +18,7 @@ import {
   VerifyOtpForPasswordChangeParams,
 } from "./types";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
-import { FullProfile, SocialLink } from "@/types";
+import { FullProfile, SocialMedia } from "@/types";
 
 /**
  * Sign up a new user with email and password
@@ -536,7 +536,7 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
       data: data && {
         ...data,
         avatar_path: processAvatarPath(data.avatar_path),
-        social_medias: data.social_medias as unknown as Array<SocialLink>,
+        social_medias: data.social_medias as unknown as Array<SocialMedia>,
       },
       error: formatApiError(error),
     };
