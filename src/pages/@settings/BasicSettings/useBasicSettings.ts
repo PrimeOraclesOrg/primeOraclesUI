@@ -7,7 +7,6 @@ import { toast } from "@/hooks/useToast";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect } from "react";
 import { useGetMyProfileQuery, useUpdateMyProfileMutation } from "@/store/usersApi";
-import { SocialMediaType } from "@/types";
 import { getSocialLink } from "@/utils";
 
 export const useBasicSettings = () => {
