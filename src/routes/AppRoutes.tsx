@@ -30,126 +30,127 @@ export function AppRoutes() {
   const { isFetching: isAuthFetching } = useGetAuthUserQuery();
   const { isFetching: isProfileFetching } = useGetMyProfileQuery();
 
-  if (isAuthFetching || isProfileFetching) return <LoadingScreen />;
-
   return (
-    <Routes>
-      {/* Public app routes - accessible without auth */}
-      <Route path="/" element={<Home />} />
-      <Route path="/marketplace" element={<Marketplace />} />
-      <Route path="/learning" element={<Learning />} />
-      <Route path="/learning/:id" element={<LearningDetail />} />
-      <Route path="/product/:id" element={<ProductDetail />} />
-      <Route path="/rewards" element={<Rewards />} />
+    <>
+      {(isAuthFetching || isProfileFetching) && <LoadingScreen />}
+      <Routes>
+        {/* Public app routes - accessible without auth */}
+        <Route path="/" element={<Home />} />
+        <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/learning" element={<Learning />} />
+        <Route path="/learning/:id" element={<LearningDetail />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/rewards" element={<Rewards />} />
 
-      {/* Auth routes */}
-      <Route
-        path="/login"
-        element={
-          <AuthRoute>
-            <Login />
-          </AuthRoute>
-        }
-      />
-      <Route
-        path="/sign-up"
-        element={
-          <AuthRoute>
-            <SignUp />
-          </AuthRoute>
-        }
-      />
-      <Route
-        path="/reset-password"
-        element={
-          <AuthRoute>
-            <ResetPassword />
-          </AuthRoute>
-        }
-      />
-      <Route path="/profile-setup" element={<ProfileSetup />} />
+        {/* Auth routes */}
+        <Route
+          path="/login"
+          element={
+            <AuthRoute>
+              <Login />
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/sign-up"
+          element={
+            <AuthRoute>
+              <SignUp />
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <AuthRoute>
+              <ResetPassword />
+            </AuthRoute>
+          }
+        />
+        <Route path="/profile-setup" element={<ProfileSetup />} />
 
-      {/* Protected routes - require authentication */}
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <BasicSettings />
-          </ProtectedRoute>
-        }
-      />
+        {/* Protected routes - require authentication */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <BasicSettings />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <Outlet />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<BasicSettings />} />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Outlet />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<BasicSettings />} />
 
-        <Route path="basic" element={<BasicSettings />} />
+          <Route path="basic" element={<BasicSettings />} />
 
-        <Route path="security" element={<SecuritySettings />} />
+          <Route path="security" element={<SecuritySettings />} />
 
-        <Route path="balance" element={<BalanceSettings />} />
+          <Route path="balance" element={<BalanceSettings />} />
 
-        <Route path="history" element={<HistorySettings />} />
-      </Route>
+          <Route path="history" element={<HistorySettings />} />
+        </Route>
 
-      <Route
-        path="/messages"
-        element={
-          <ProtectedRoute>
-            <Marketplace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/notifications"
-        element={
-          <ProtectedRoute>
-            <Marketplace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/workspace"
-        element={
-          <ProtectedRoute>
-            <Marketplace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/workspace/*"
-        element={
-          <ProtectedRoute>
-            <Marketplace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/purchases"
-        element={
-          <ProtectedRoute>
-            <Marketplace />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute>
+              <Marketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Marketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/workspace"
+          element={
+            <ProtectedRoute>
+              <Marketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/workspace/*"
+          element={
+            <ProtectedRoute>
+              <Marketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/purchases"
+          element={
+            <ProtectedRoute>
+              <Marketplace />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/create-product"
-        element={
-          <ProtectedRoute>
-            <CreateProduct />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/create-product"
+          element={
+            <ProtectedRoute>
+              <CreateProduct />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* 404 */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }

@@ -3,17 +3,30 @@ import { SettingsTab } from "../types";
 import { useForm } from "react-hook-form";
 import { UpdateProfileFormData, updateProfileSchema } from "@/utils/validators/updateProfile";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "@/hooks/useToast";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect } from "react";
 import { useGetMyProfileQuery, useUpdateMyProfileMutation } from "@/store/usersApi";
 import { getSocialLink } from "@/utils";
+import { useOnRequestResult } from "@/hooks/useOnRequestResult";
 
 export const useBasicSettings = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { data: profile } = useGetMyProfileQuery();
-  const [updateProfile] = useUpdateMyProfileMutation();
+  const [updateProfile, { isError, isSuccess, error }] = useUpdateMyProfileMutation();
+
+  useOnRequestResult({
+    isError,
+    isSuccess,
+    errorMessage: {
+      title: "Ошибка сохранения",
+      description: error ? t(`status:${error.code}`) : "",
+    },
+    successMessage: {
+      title: "Успешно",
+      description: "Профиль успешно сохранён",
+    },
+  });
 
   const onTabChange = (tab: SettingsTab) => navigate(`/settings/${tab}`);
 
@@ -37,19 +50,7 @@ export const useBasicSettings = () => {
   });
 
   const onUpdateProfileSubmit = async (data: UpdateProfileFormData) => {
-    try {
-      await updateProfile(data).unwrap();
-      toast({
-        title: "Успешно",
-        description: "Профиль успешно сохранён",
-      });
-    } catch (error) {
-      toast({
-        title: "Ошибка сохранения",
-        description: t(`status:${error.code}`) || error.message,
-        variant: "destructive",
-      });
-    }
+    await updateProfile(data);
   };
 
   useEffect(() => {

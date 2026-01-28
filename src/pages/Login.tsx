@@ -1,20 +1,30 @@
 import { LoginTemplate } from "@/components/templates";
-import { toast } from "@/hooks/useToast";
 import { LoginFormData, loginSchema } from "@/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "@/store/authApi";
+import { useOnRequestResult } from "@/hooks/useOnRequestResult";
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("status");
-  const [login] = useLoginMutation();
+  const [login, { isError, isSuccess, error }] = useLoginMutation();
 
   const afterLogin = location.state?.afterLogin || "/";
   const beforeLogin = location.state?.beforeLogin || "/";
+
+  useOnRequestResult({
+    isError,
+    isSuccess,
+    errorMessage: {
+      title: "Ошибка входа",
+      description: error ? t(`status:${error.code}`) : "",
+    },
+    onSuccess: () => navigate(afterLogin),
+  });
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -22,16 +32,7 @@ export default function Login() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    try {
-      await login(data).unwrap();
-      navigate(afterLogin);
-    } catch (error) {
-      toast({
-        title: "Ошибка входа",
-        description: t(`status:${error.code}`),
-        variant: "destructive",
-      });
-    }
+    await login(data);
   };
 
   const navigateWithState = (to: string) => {
