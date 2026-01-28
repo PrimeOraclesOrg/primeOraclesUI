@@ -20,5 +20,3 @@ export {
 } from "./toastSlice";
 
 export type { ToasterToast } from "./toastSlice";
-
-export * from "./selectors";
