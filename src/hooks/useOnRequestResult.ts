@@ -41,10 +41,13 @@ export function useOnRequestResult({
   const errorMessageRef = useRef(errorMessage);
   const onErrorRef = useRef(onError);
 
-  successMessageRef.current = successMessage;
-  errorMessageRef.current = errorMessage;
-  onSuccessRef.current = onSuccess;
-  onErrorRef.current = onError;
+  useEffect(() => {
+    successMessageRef.current = successMessage;
+    errorMessageRef.current = errorMessage;
+    onSuccessRef.current = onSuccess;
+    onErrorRef.current = onError;
+  });
+
   /* Success listener */
   useEffect(() => {
     if (!isSuccess) return;

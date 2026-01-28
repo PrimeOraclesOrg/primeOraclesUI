@@ -1,4 +1,5 @@
 import { LogoutPopupContent } from "@/components/organisms";
+import { useOnRequestResult } from "@/hooks/useOnRequestResult";
 import { usePopup } from "@/hooks/usePopup";
 import { toast } from "@/hooks/useToast";
 
@@ -21,8 +22,30 @@ export const useProfileSetup = () => {
   const { openPopup, closePopup } = usePopup();
   const { data: profile } = useGetMyProfileQuery();
   const { data: user, isLoading: isAuthLoading } = useGetAuthUserQuery();
-  const [logout] = useLogoutMutation();
-  const [completeProfile] = useCompleteProfileMutation();
+  const [completeProfile, { isError, isSuccess, error }] = useCompleteProfileMutation();
+  const [logout, { isError: isLogoutError, isSuccess: isLogoutSuccess, error: logoutError }] =
+    useLogoutMutation();
+
+  useOnRequestResult({
+    isError,
+    isSuccess,
+    successMessage: "Профиль успешно сохранён",
+    errorMessage: {
+      title: "Ошибка сохранения",
+      description: error ? t(`status:${error?.code}`) : "",
+    },
+    onSuccess: () => navigate("/", { replace: true }),
+  });
+
+  useOnRequestResult({
+    isError: isLogoutError,
+    isSuccess: isLogoutSuccess,
+    errorMessage: logoutError ? t(`status:${logoutError.code}`) : "",
+    onSuccess: () => {
+      closePopup();
+      navigate("/");
+    },
+  });
 
   const profileSetupForm = useForm<ProfileSetupFormData>({
     resolver: zodResolver(profileSetupSchema),
@@ -39,41 +62,21 @@ export const useProfileSetup = () => {
   });
 
   const onProfileSetupSubmit = async (data: ProfileSetupFormData) => {
-    try {
-      await completeProfile({
-        name: data.name,
-        username: data.username,
-        description: data.description,
-        youtubeUrl: data.youtubeUrl,
-        instagramUrl: data.instagramUrl,
-        tiktokUrl: data.tiktokUrl,
-        selectedAvatar: data.selectedAvatar,
-        uploadedAvatar: data.uploadedAvatar,
-      }).unwrap();
-
-      toast({
-        title: "Успешно",
-        description: "Профиль успешно сохранён",
-      });
-      navigate("/", { replace: true });
-    } catch (error) {
-      toast({
-        title: "Ошибка сохранения",
-        description: t(`status:${error.code}`) || error.message,
-        variant: "destructive",
-      });
-    }
+    await completeProfile({
+      name: data.name,
+      username: data.username,
+      description: data.description,
+      youtubeUrl: data.youtubeUrl,
+      instagramUrl: data.instagramUrl,
+      tiktokUrl: data.tiktokUrl,
+      selectedAvatar: data.selectedAvatar,
+      uploadedAvatar: data.uploadedAvatar,
+    });
   };
 
-  const logoutProcess = useCallback(async () => {
-    await logout();
-    closePopup();
-    navigate("/");
-  }, [closePopup, navigate, logout]);
-
   const onLogout = useCallback(
-    () => openPopup(<LogoutPopupContent logout={logoutProcess} />),
-    [openPopup, logoutProcess]
+    () => openPopup(<LogoutPopupContent logout={logout} />),
+    [openPopup, logout]
   );
 
   useEffect(() => {
