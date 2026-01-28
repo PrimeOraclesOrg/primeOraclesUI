@@ -20,9 +20,9 @@ export function WorkspaceProductCard({
   onViewStats,
 }: WorkspaceProductCardProps) {
   return (
-    <div className="surface-card p-4 flex flex-col lg:flex-row lg:items-center gap-4">
+    <div className="surface-card p-4 flex flex-col md:flex-row md:items-center gap-4">
       {/* Product Image */}
-      <div className="relative w-full lg:w-40 h-32 lg:h-24 flex-shrink-0 rounded-lg overflow-hidden">
+      <div className="relative w-full md:w-40 h-32 md:h-24 flex-shrink-0 rounded-lg overflow-hidden">
         <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
         <div className="absolute bottom-2 left-2">
           <span className="badge-price px-2 py-0.5 rounded-full text-xs font-medium">
@@ -33,7 +33,7 @@ export function WorkspaceProductCard({
 
       {/* Product Info */}
       <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-1">
           <h3 className="font-semibold text-foreground truncate">{product.title}</h3>
           <WorkspaceStatusBadge status={product.status} />
         </div>
