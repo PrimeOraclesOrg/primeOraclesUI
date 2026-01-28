@@ -107,7 +107,10 @@ export interface Order {
 export type SocialPlatform = "youtube" | "instagram" | "tiktok";
 
 export interface SocialLink {
-  type: SocialPlatform;
+export type SocialMediaType = Database["public"]["Enums"]["social_media_type"];
+
+export interface SocialMedia {
+  type: SocialMediaType;
   link: string;
 }
 
