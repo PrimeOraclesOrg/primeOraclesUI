@@ -29,7 +29,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
         setWaiting(false);
       }, 10);
     }
-    return () => clearTimeout(timer);
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [isFetching]);
 
   if (isLoading || waiting) return <LoadingScreen />;
