@@ -12,6 +12,18 @@ import { PRODUCT_IMAGES_BUCKET, supabase } from "@/utils";
 import { ProductDetailsResult, ProductsFilter, ProductsResult } from "./types";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 
+export async function fetchMyProfucts() {
+  const { data, error } = await supabase.rpc("app_get_my_products", {
+    p_cursor: null,
+    p_limit: null,
+    p_sort: null,
+    p_status: null,
+  });
+
+  console.log("error:", error);
+  console.log("data:", data);
+}
+
 /**
  * Fetch products with optional filtering
  */

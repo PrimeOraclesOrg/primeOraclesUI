@@ -1,4 +1,3 @@
-import { Check, ChevronDown } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -13,15 +12,10 @@ interface WorkspaceSortSelectProps {
   onChange: (value: WorkspaceSortOption) => void;
 }
 
-export function WorkspaceSortSelect({
-  value,
-  onChange,
-}: WorkspaceSortSelectProps) {
+export function WorkspaceSortSelect({ value, onChange }: WorkspaceSortSelectProps) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-muted-foreground whitespace-nowrap">
-        Сортировка:
-      </span>
+      <span className="text-sm text-muted-foreground whitespace-nowrap">Сортировка:</span>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="w-[160px] bg-secondary border-border">
           <SelectValue />
@@ -34,12 +28,7 @@ export function WorkspaceSortSelect({
               className="cursor-pointer focus:bg-primary/20 focus:text-primary data-[state=checked]:text-primary"
             >
               <div className="flex items-center gap-2">
-                {value === option.id && (
-                  <Check className="h-4 w-4 text-primary" />
-                )}
-                <span className={value === option.id ? "text-primary" : ""}>
-                  {option.label}
-                </span>
+                <span className={value === option.id ? "text-primary" : ""}>{option.label}</span>
               </div>
             </SelectItem>
           ))}
