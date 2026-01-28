@@ -12,3 +12,6 @@ export { RatingDistribution } from "./RatingDistribution";
 export { ReviewList } from "./ReviewList";
 export { MiniProfile } from "./MiniProfile/MiniProfile";
 export { UserAvatar } from "./UserAvatar/UserAvatar";
+export { WorkspaceProductCard } from "./WorkspaceProductCard/WorkspaceProductCard";
+export { WorkspaceSortSelect } from "./WorkspaceSortSelect/WorkspaceSortSelect";
+export { WorkspaceStatusTabs } from "./WorkspaceStatusTabs/WorkspaceStatusTabs";
