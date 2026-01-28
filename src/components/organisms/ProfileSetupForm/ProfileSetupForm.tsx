@@ -274,7 +274,12 @@ export const ProfileSetupForm = ({
           })}
         </div>
       </div>
-      <ImageCrop fileInputRef={fileInputRef} setUploadedImage={setUploadedAvatar} aspect={1} />
+      <ImageCrop
+        fileInputRef={fileInputRef}
+        cropShape="round"
+        setUploadedImage={setUploadedAvatar}
+        aspect={1}
+      />
 
       <Button
         type="submit"

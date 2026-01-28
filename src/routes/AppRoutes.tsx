@@ -21,8 +21,10 @@ import { HistorySettings } from "@/pages/@settings/HistorySettings/HistorySettin
 import { useGetMyProfileQuery } from "@/store/usersApi";
 import { useGetAuthUserQuery } from "@/store/authApi";
 import { useForceProfileSetup } from "@/hooks/useForceProfileSetup";
+import { useAuthListener } from "@/hooks/useAuthListener";
 
 export function AppRoutes() {
+  useAuthListener();
   useForceProfileSetup();
 
   const { isFetching: isAuthFetching } = useGetAuthUserQuery();
