@@ -7,6 +7,7 @@ import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
 import CreateProduct from "@/pages/CreateProduct/CreateProduct";
+import WorkspaceMarketplace from "@/pages/WorkspaceMarketplace/WorkspaceMarketplace";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
@@ -100,15 +101,15 @@ export function AppRoutes() {
         path="/workspace"
         element={
           <ProtectedRoute>
-            <Marketplace />
+            <WorkspaceMarketplace />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/workspace/*"
+        path="/workspace/marketplace"
         element={
           <ProtectedRoute>
-            <Marketplace />
+            <WorkspaceMarketplace />
           </ProtectedRoute>
         }
       />
