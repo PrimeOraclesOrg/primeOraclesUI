@@ -9,17 +9,30 @@ import { Navigate, useLocation } from "react-router-dom";
 import { usePreviousLocation } from "@/hooks/usePreviousLocation";
 import { useGetAuthUserQuery } from "@/store/authApi";
 import { LoadingScreen } from "@/components/atoms";
+import { useEffect, useState } from "react";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { data: user, isLoading } = useGetAuthUserQuery();
+  const { data: user, isLoading, isFetching } = useGetAuthUserQuery();
   const location = useLocation();
   const previousLocation = usePreviousLocation();
+  const [waiting, setWaiting] = useState(true);
 
-  if (isLoading) return <LoadingScreen />;
+  useEffect(() => {
+    setWaiting(true);
+    let timer: NodeJS.Timeout;
+    if (!isFetching) {
+      timer = setTimeout(() => {
+        setWaiting(false);
+      }, 10);
+    }
+    return () => clearTimeout(timer);
+  }, [isFetching]);
+
+  if (isLoading || waiting) return <LoadingScreen />;
 
   if (!user) {
     return (
