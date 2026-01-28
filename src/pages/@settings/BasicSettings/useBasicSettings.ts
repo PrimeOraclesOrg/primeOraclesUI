@@ -3,11 +3,11 @@ import { SettingsTab } from "../types";
 import { useForm } from "react-hook-form";
 import { UpdateProfileFormData, updateProfileSchema } from "@/utils/validators/updateProfile";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SocialPlatform } from "@/types";
 import { toast } from "@/hooks/useToast";
 import { useTranslation } from "react-i18next";
 import { useCallback, useEffect } from "react";
 import { useGetMyProfileQuery, useUpdateMyProfileMutation } from "@/store/usersApi";
+import { SocialMediaType } from "@/types";
 
 export const useBasicSettings = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export const useBasicSettings = () => {
   const onTabChange = (tab: SettingsTab) => navigate(`/settings/${tab}`);
 
   const getSocialLink = useCallback(
-    (socialPlatform: SocialPlatform) => {
+    (socialPlatform: SocialMediaType) => {
       return profile?.social_medias.filter((link) => link.type === socialPlatform)[0]?.link || "";
     },
     [profile]

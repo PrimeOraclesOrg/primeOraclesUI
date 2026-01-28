@@ -104,9 +104,6 @@ export interface Order {
 // ========================================
 // User Models
 // ========================================
-export type SocialPlatform = "youtube" | "instagram" | "tiktok";
-
-export interface SocialLink {
 export type SocialMediaType = Database["public"]["Enums"]["social_media_type"];
 
 export interface SocialMedia {
@@ -140,4 +137,4 @@ export interface RatingDistributionItem {
 export type FullProfile = Omit<
   Database["public"]["Views"]["public_profiles_full_view"]["Row"],
   "social_medias"
-> & { social_medias: Array<SocialLink> };
+> & { social_medias: Array<SocialMedia> };
