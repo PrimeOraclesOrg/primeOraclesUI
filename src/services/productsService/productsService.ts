@@ -12,7 +12,7 @@ import { PRODUCT_IMAGES_BUCKET, supabase } from "@/utils";
 import { ProductDetailsResult, ProductsFilter, ProductsResult } from "./types";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 
-export async function fetchMyProfucts() {
+export async function fetchMyProducts() {
   const { data, error } = await supabase.rpc("app_get_my_products", {
     p_cursor: null,
     p_limit: null,

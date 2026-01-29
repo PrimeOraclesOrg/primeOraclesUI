@@ -19,3 +19,18 @@ export interface ProductDetailsResult {
   faqs: FAQ[];
   ratingDistribution: RatingDistributionItem[];
 }
+
+export interface FetchMyProductsParams {
+  p_status?: "all" | "active" | "inactive";
+  p_sort?:
+    | "created_at_desc"
+    | "created_at_asc"
+    | "title_asc"
+    | "title_desc"
+    | "rating_desc"
+    | "rating_asc"
+    | "price_desc"
+    | "price_asc"
+    | "popularity_desc";
+  p_limig?: number; /* 1-50  */
+}
