@@ -22,7 +22,7 @@ export function WorkspaceProductCard({
   return (
     <div className="surface-card p-4 flex flex-col md:flex-row md:items-center gap-4">
       {/* Product Image */}
-      <div className="relative w-full md:w-40 h-32 md:h-24 flex-shrink-0 rounded-lg overflow-hidden">
+      <div className="relative w-full md:w-60 h-32 md:h-36 flex-shrink-0 rounded-lg overflow-hidden">
         <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
         <div className="absolute bottom-2 left-2">
           <span className="badge-price px-2 py-0.5 rounded-full text-xs font-medium">
