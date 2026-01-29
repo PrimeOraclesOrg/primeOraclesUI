@@ -2,6 +2,8 @@ import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
 import type { Product, ProductDetails, Review, FAQ, RatingDistributionItem } from "@/types";
+import { FetchMyProductsParams } from "@/services/productsService/types";
+import { fetchMyProducts } from "@/services";
 
 interface ProductsQueryArgs {
   category?: string;
@@ -22,6 +24,16 @@ interface ProductDetailsResponse {
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getMyProducts: builder.query<Product, FetchMyProductsParams | void>({
+      queryFn: async (params) => {
+        const { data, error } = await fetchMyProducts(params || {});
+
+        if (error) return { error };
+
+        return { data };
+      },
+    }),
+
     getProducts: builder.query<ProductsResponse, ProductsQueryArgs>({
       queryFn: ({ category, searchQuery }) => {
         let filtered = [...mockProducts];
@@ -69,5 +81,9 @@ export const productsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetProductsQuery, useGetHomeProductsQuery, useGetProductDetailsQuery } =
-  productsApi;
+export const {
+  useGetProductsQuery,
+  useGetHomeProductsQuery,
+  useGetProductDetailsQuery,
+  useGetMyProductsQuery,
+} = productsApi;

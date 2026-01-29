@@ -1,10 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { WorkspaceMarketplaceTemplate } from "@/components/templates/WorkspaceMarketplaceTemplate/WorkspaceMarketplaceTemplate";
-import {
-  mockWorkspaceProducts,
-  type WorkspaceSortOption,
-} from "@/data/workspaceProducts";
+import { mockWorkspaceProducts, type WorkspaceSortOption } from "@/data/workspaceProducts";
+import { useGetMyProductsQuery } from "@/store/productsApi";
 
 type StatusTabId = "all" | "active" | "archived";
 
@@ -15,6 +13,11 @@ export default function WorkspaceMarketplace() {
   const [activeTab, setActiveTab] = useState<StatusTabId>("all");
   const [sortBy, setSortBy] = useState<WorkspaceSortOption>("date");
   const [currentPage, setCurrentPage] = useState(1);
+  const { data } = useGetMyProductsQuery();
+
+  useEffect(() => {
+    console.log("data:", data);
+  }, [data]);
 
   const filteredProducts = useMemo(() => {
     let products = [...mockWorkspaceProducts];
@@ -27,10 +30,7 @@ export default function WorkspaceMarketplace() {
     // Sort products
     switch (sortBy) {
       case "date":
-        products.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         break;
       case "name":
         products.sort((a, b) => a.title.localeCompare(b.title));

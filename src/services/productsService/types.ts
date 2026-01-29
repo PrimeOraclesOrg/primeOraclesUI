@@ -32,5 +32,6 @@ export interface FetchMyProductsParams {
     | "price_desc"
     | "price_asc"
     | "popularity_desc";
-  p_limig?: number; /* 1-50  */
+  p_limit?: number; /* 1-50  */
+  p_cursor?: { id: string; created_at: string } | null;
 }

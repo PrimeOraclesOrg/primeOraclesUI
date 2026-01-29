@@ -9,19 +9,49 @@ import { mockProducts, productCategories, homePageProducts } from "@/data/produc
 import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
 import type { Product } from "@/types";
 import { PRODUCT_IMAGES_BUCKET, supabase } from "@/utils";
-import { ProductDetailsResult, ProductsFilter, ProductsResult } from "./types";
+import {
+  FetchMyProductsParams,
+  ProductDetailsResult,
+  ProductsFilter,
+  ProductsResult,
+} from "./types";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 
-export async function fetchMyProducts() {
-  const { data, error } = await supabase.rpc("app_get_my_products", {
-    p_cursor: null,
-    p_limit: null,
-    p_sort: null,
-    p_status: null,
-  });
+export async function fetchMyProducts({
+  p_cursor = null,
+  p_limit = 20,
+  p_sort = "created_at_desc",
+  p_status = "all",
+}: FetchMyProductsParams = {}) {
+  try {
+    const { data, error } = await supabase.rpc("app_get_my_products", {
+      p_cursor,
+      p_limit,
+      p_sort,
+      p_status,
+    });
 
-  console.log("error:", error);
-  console.log("data:", data);
+    if (error)
+      return {
+        data: null,
+        error: {
+          code: error.hint || error.code,
+          message: error.message,
+        },
+      };
+    return {
+      data,
+      error: null,
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
 }
 
 /**
