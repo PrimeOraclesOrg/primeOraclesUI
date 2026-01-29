@@ -10,7 +10,7 @@ export const authApi = baseApi.injectEndpoints({
       queryFn: async () => {
         const { data, error } = await getCurrentUser();
 
-        if (error) return { data: null };
+        if (error) return { error };
 
         return { data };
       },

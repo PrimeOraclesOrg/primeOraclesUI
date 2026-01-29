@@ -1,7 +1,6 @@
 import { LogoutPopupContent } from "@/components/organisms";
 import { useOnRequestResult } from "@/hooks/useOnRequestResult";
 import { usePopup } from "@/hooks/usePopup";
-import { toast } from "@/hooks/useToast";
 
 import {
   useCompleteProfileMutation,
