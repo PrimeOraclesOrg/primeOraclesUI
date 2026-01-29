@@ -20,7 +20,7 @@ export function WorkspaceProductCard({
   onViewStats,
 }: WorkspaceProductCardProps) {
   return (
-    <div className="surface-card p-4 flex flex-col md:flex-row md:items-center gap-4">
+    <div className="surface-card p-4 flex flex-col md:flex-row gap-4">
       {/* Product Image */}
       <div className="relative w-full md:w-60 h-32 md:h-36 flex-shrink-0 rounded-lg overflow-hidden">
         <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
@@ -32,66 +32,74 @@ export function WorkspaceProductCard({
       </div>
 
       {/* Product Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="font-semibold text-foreground line-clamp-3">{product.title}</h3>
-          <WorkspaceStatusBadge status={product.status} />
+      <div className="flex-1 min-w-0 flex flex-col justify-between">
+        <div>
+          <div className="flex items-start gap-2 mb-1 justify-between">
+            <h3 className="font-semibold text-foreground line-clamp-3">{product.title}</h3>
+            <WorkspaceStatusBadge status={product.status} />
+          </div>
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <CategoryBadge category={product.category} />
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 mb-2">
-          <CategoryBadge category={product.category} />
+        <div className="flex justify-between">
+          <RatingStars rating={product.rating} reviewCount={product.reviewCount} size="sm" />
+          {/* Actions */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                    onClick={() => onOpenPage(product.id)}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="bg-popover text-popover-foreground border-border"
+                >
+                  <p>Открыть страницу</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                    onClick={() => onEdit(product.id)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="bg-popover text-popover-foreground border-border"
+                >
+                  <p>Редактировать</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <Button
+              variant="default"
+              size="sm"
+              className="gold-gradient text-primary-foreground hover:opacity-90 gap-2"
+              onClick={() => onViewStats(product.id)}
+            >
+              <BarChart3 className="h-4 w-4" />
+              <span className="hidden sm:inline">Статистика</span>
+            </Button>
+          </div>
         </div>
-
-        <RatingStars rating={product.rating} reviewCount={product.reviewCount} size="sm" />
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center gap-2 flex-shrink-0">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-foreground"
-                onClick={() => onOpenPage(product.id)}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top" className="bg-popover text-popover-foreground border-border">
-              <p>Открыть страницу</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-primary hover:bg-primary/10"
-                onClick={() => onEdit(product.id)}
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top" className="bg-popover text-popover-foreground border-border">
-              <p>Редактировать</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <Button
-          variant="default"
-          size="sm"
-          className="gold-gradient text-primary-foreground hover:opacity-90 gap-2"
-          onClick={() => onViewStats(product.id)}
-        >
-          <BarChart3 className="h-4 w-4" />
-          <span className="hidden sm:inline">Статистика</span>
-        </Button>
       </div>
     </div>
   );
