@@ -31,7 +31,6 @@ export const authApi = baseApi.injectEndpoints({
     logout: builder.mutation<null, void>({
       queryFn: async () => {
         const { error } = await signOut();
-
         if (error) return { error };
 
         return { data: null };

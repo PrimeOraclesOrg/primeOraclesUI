@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 export const useSettings = () => {
   const navigate = useNavigate();
-  const [onLogout, { isError, isSuccess, error }] = useLogoutMutation();
+  const [onLogout, { isError, isSuccess, error }] = useLogoutMutation({
+    fixedCacheKey: "shared-logout-state",
+  });
   const { data: profile } = useGetMyProfileQuery();
   const { t } = useTranslation();
 
