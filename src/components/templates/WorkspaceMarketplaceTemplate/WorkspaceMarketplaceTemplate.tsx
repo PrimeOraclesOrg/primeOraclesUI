@@ -3,27 +3,32 @@ import { WorkspaceStatusTabs } from "@/components/molecules/WorkspaceStatusTabs/
 import { WorkspaceSortSelect } from "@/components/molecules/WorkspaceSortSelect/WorkspaceSortSelect";
 import { WorkspaceProductList } from "@/components/organisms/WorkspaceProductList/WorkspaceProductList";
 import type { MyProducts } from "@/types";
-import type { WorkspaceSortOption } from "@/data/workspaceProducts";
 import { WorkspaceMarketplaceTabs } from "@/pages/WorkspaceMarketplace/types";
+import { Button } from "@/components/ui/button";
+import { WorkspaceSortOption } from "@/types/workspace";
 
 interface WorkspaceMarketplaceTemplateProps {
   products: MyProducts;
   activeTab: WorkspaceMarketplaceTabs;
   sortBy: WorkspaceSortOption;
+  isFetching: boolean;
   onTabChange: (tab: WorkspaceMarketplaceTabs) => void;
   onSortChange: (sort: WorkspaceSortOption) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
+  onLoadMore: () => void;
 }
 
 export function WorkspaceMarketplaceTemplate({
   products,
   activeTab,
   sortBy,
+  isFetching,
   onTabChange,
   onSortChange,
   onEdit,
   onViewStats,
+  onLoadMore,
 }: WorkspaceMarketplaceTemplateProps) {
   return (
     <MainLayout>
@@ -50,6 +55,9 @@ export function WorkspaceMarketplaceTemplate({
         </div>
 
         {/* TODO: Load more btn  */}
+        <Button onClick={onLoadMore} disabled={isFetching}>
+          Загрузить еще
+        </Button>
       </div>
     </MainLayout>
   );

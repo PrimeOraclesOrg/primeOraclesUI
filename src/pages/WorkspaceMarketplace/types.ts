@@ -1,1 +1,1 @@
-export type WorkspaceMarketplaceTabs = "all" | "active" | "archived";
+export type WorkspaceMarketplaceTabs = "all" | "active" | "inactive";

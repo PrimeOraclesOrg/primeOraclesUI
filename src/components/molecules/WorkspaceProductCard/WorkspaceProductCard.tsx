@@ -8,6 +8,7 @@ import { MyProducts } from "@/types";
 import { productCategoryColors, storageUrlBase } from "@/data";
 import { formatDateTime } from "@/utils";
 import { useTranslation } from "react-i18next";
+import { Image } from "@/components/atoms/Image/Image";
 
 interface WorkspaceProductCardProps {
   product: MyProducts[0];
@@ -21,10 +22,11 @@ export function WorkspaceProductCard({ product, onEdit, onViewStats }: Workspace
     <div className="surface-card p-4 flex flex-col md:flex-row gap-4">
       {/* Product Image */}
       <div className="relative w-full md:w-60 h-32 md:h-36 flex-shrink-0 rounded-lg overflow-hidden">
-        <img
+        <Image
           src={`${storageUrlBase}/${product.cover_url}`}
           alt={product.title}
           className="w-full h-full object-cover"
+          onError={() => console.log("uwu")}
         />
         <div className="absolute bottom-2 left-2">
           <span className="badge-price px-2 py-0.5 rounded-full text-xs font-medium">

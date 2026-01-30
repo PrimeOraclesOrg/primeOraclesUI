@@ -5,7 +5,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { workspaceSortOptions, type WorkspaceSortOption } from "@/data/workspaceProducts";
+import { workspaceSortOptions } from "@/data";
+import { WorkspaceSortOption } from "@/types/workspace";
 
 interface WorkspaceSortSelectProps {
   value: WorkspaceSortOption;

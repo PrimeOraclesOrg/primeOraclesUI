@@ -31,15 +31,31 @@ interface ProductDetailsResponse {
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getMyProducts: builder.query<MyProducts, FetchMyProductsParams | void>({
+    getMyProducts: builder.query<MyProducts, FetchMyProductsParams>({
       queryFn: async (params) => {
-        const { data, error } = await fetchMyProducts(params || {});
-
+        const { data, error } = await fetchMyProducts(params);
         if (error) return { error };
-
         return { data };
       },
-      providesTags: ["Products"],
+
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        if (!queryArgs) {
+          return `${endpointName}-default-all`;
+        }
+
+        const { p_sort = "created_at_desc", p_status = "all" } = queryArgs;
+        return `${endpointName}-${p_sort}-${p_status}`;
+      },
+
+      merge: (currentCache, newItems, { arg }) => {
+        if (!arg.p_cursor) {
+          return newItems;
+        }
+        return [...currentCache, ...newItems];
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
     }),
 
     getProducts: builder.query<ProductsResponse, ProductsQueryArgs>({

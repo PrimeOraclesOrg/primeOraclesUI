@@ -1,19 +1,29 @@
 import { useState, useEffect } from "react";
 import { WorkspaceMarketplaceTemplate } from "@/components/templates/WorkspaceMarketplaceTemplate/WorkspaceMarketplaceTemplate";
-import { type WorkspaceSortOption } from "@/data/workspaceProducts";
 import { useGetMyProductsQuery } from "@/store/productsApi";
 import { WorkspaceMarketplaceTabs } from "./types";
+import { WorkspaceSortOption } from "@/types/workspace";
+import { FetchMyProductsParams } from "@/services/productsService/types";
 
 export default function WorkspaceMarketplace() {
   const [activeTab, setActiveTab] = useState<WorkspaceMarketplaceTabs>("all");
-  const [sortBy, setSortBy] = useState<WorkspaceSortOption>("date");
-  const { data: products } = useGetMyProductsQuery();
+  const [sortBy, setSortBy] = useState<WorkspaceSortOption>("created_at_desc");
+
+  const [cursor, setCursor] = useState<FetchMyProductsParams["p_cursor"]>(null);
+
+  const { data: products, isFetching } = useGetMyProductsQuery({
+    p_status: activeTab,
+    p_sort: sortBy,
+    p_cursor: cursor,
+    p_limit: 8,
+  });
 
   useEffect(() => {
     console.log(products);
   }, [products]);
 
   const handleTabChange = (tab: WorkspaceMarketplaceTabs) => {
+    setCursor(null);
     setActiveTab(tab);
   };
 
@@ -27,15 +37,29 @@ export default function WorkspaceMarketplace() {
     console.log("View stats:", id);
   };
 
+  const handleLoadMore = () => {
+    if (products && products.length > 0) {
+      const lastItem = products[products.length - 1];
+      setCursor(lastItem.next_cursor as FetchMyProductsParams["p_cursor"]);
+    }
+  };
+
+  const handleSetSortBy = (sort: WorkspaceSortOption) => {
+    setCursor(null);
+    setSortBy(sort);
+  };
+
   return (
     <WorkspaceMarketplaceTemplate
       products={products || []}
       activeTab={activeTab}
       sortBy={sortBy}
       onTabChange={handleTabChange}
-      onSortChange={setSortBy}
+      onSortChange={handleSetSortBy}
       onEdit={handleEdit}
       onViewStats={handleViewStats}
+      onLoadMore={handleLoadMore}
+      isFetching={isFetching}
     />
   );
 }
