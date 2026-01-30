@@ -10,7 +10,8 @@
     "lint": "bun --bun eslint .",
     "preview": "bun --bun vite preview",
     "prepare": "husky",
-    "lint-staged": "bunx lint-staged"
+    "lint-staged": "bunx lint-staged",
+    "gen-supabase-types": "supabase gen types typescript --project-id ooglglelvfkjzfxrcsjg > src/types/supabase.ts"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

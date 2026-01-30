@@ -38,6 +38,13 @@ export type Database = {
             foreignKeyName: "chats_buyer_id_fkey";
             columns: ["buyer_id"];
             isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "chats_buyer_id_fkey";
+            columns: ["buyer_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -52,8 +59,22 @@ export type Database = {
             foreignKeyName: "chats_purchase_id_fkey";
             columns: ["purchase_id"];
             isOneToOne: true;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["purchase_id"];
+          },
+          {
+            foreignKeyName: "chats_purchase_id_fkey";
+            columns: ["purchase_id"];
+            isOneToOne: true;
             referencedRelation: "purchases";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chats_seller_id_fkey";
+            columns: ["seller_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
           },
           {
             foreignKeyName: "chats_seller_id_fkey";
@@ -98,6 +119,13 @@ export type Database = {
             foreignKeyName: "chats_messages_author_id_fkey";
             columns: ["author_id"];
             isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "chats_messages_author_id_fkey";
+            columns: ["author_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -112,14 +140,28 @@ export type Database = {
             foreignKeyName: "chats_messages_chat_id_fkey";
             columns: ["chat_id"];
             isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["chat_id"];
+          },
+          {
+            foreignKeyName: "chats_messages_chat_id_fkey";
+            columns: ["chat_id"];
+            isOneToOne: false;
             referencedRelation: "chats";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chats_messages_chat_id_fkey";
+            columns: ["chat_id"];
+            isOneToOne: false;
+            referencedRelation: "user_chats_view";
+            referencedColumns: ["chat_id"];
           },
         ];
       };
       escrows: {
         Row: {
-          amount_usd: string;
+          amount_usd: number;
           buyer_id: string;
           created_at: string;
           id: string;
@@ -129,7 +171,7 @@ export type Database = {
           state: Database["public"]["Enums"]["escrow_state"];
         };
         Insert: {
-          amount_usd: string;
+          amount_usd: number;
           buyer_id: string;
           created_at?: string;
           id?: string;
@@ -139,7 +181,7 @@ export type Database = {
           state: Database["public"]["Enums"]["escrow_state"];
         };
         Update: {
-          amount_usd?: string;
+          amount_usd?: number;
           buyer_id?: string;
           created_at?: string;
           id?: string;
@@ -149,6 +191,13 @@ export type Database = {
           state?: Database["public"]["Enums"]["escrow_state"];
         };
         Relationships: [
+          {
+            foreignKeyName: "escrows_buyer_id_fkey";
+            columns: ["buyer_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
           {
             foreignKeyName: "escrows_buyer_id_fkey";
             columns: ["buyer_id"];
@@ -167,123 +216,154 @@ export type Database = {
             foreignKeyName: "escrows_purchase_id_fkey";
             columns: ["purchase_id"];
             isOneToOne: true;
-            referencedRelation: "purchases";
-            referencedColumns: ["id"];
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["purchase_id"];
           },
           {
-            foreignKeyName: "escrows_seller_id_fkey";
-            columns: ["seller_id"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "escrows_seller_id_fkey";
-            columns: ["seller_id"];
-            isOneToOne: false;
-            referencedRelation: "public_profiles_full_view";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      ledger_entries: {
-        Row: {
-          amount_usd: string;
-          created_at: string;
-          direction: Database["public"]["Enums"]["ledger_direction"];
-          id: string;
-          reason: Database["public"]["Enums"]["ledger_reason"];
-          reference_id: string;
-          user_id: string;
-        };
-        Insert: {
-          amount_usd: string;
-          created_at?: string;
-          direction: Database["public"]["Enums"]["ledger_direction"];
-          id?: string;
-          reason: Database["public"]["Enums"]["ledger_reason"];
-          reference_id: string;
-          user_id: string;
-        };
-        Update: {
-          amount_usd?: string;
-          created_at?: string;
-          direction?: Database["public"]["Enums"]["ledger_direction"];
-          id?: string;
-          reason?: Database["public"]["Enums"]["ledger_reason"];
-          reference_id?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "ledger_entries_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "ledger_entries_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "public_profiles_full_view";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      payment_intents: {
-        Row: {
-          created_at: string;
-          expected_amount_usd: string;
-          id: string;
-          overpaid_amount_usd: string | null;
-          paid_amount_usd: string | null;
-          payment_state: Database["public"]["Enums"]["payment_state"];
-          provider: string;
-          provider_payment_id: string | null;
-          purchase_id: string;
-          updated_at: string;
-        };
-        Insert: {
-          created_at?: string;
-          expected_amount_usd: string;
-          id?: string;
-          overpaid_amount_usd?: string | null;
-          paid_amount_usd?: string | null;
-          payment_state: Database["public"]["Enums"]["payment_state"];
-          provider: string;
-          provider_payment_id?: string | null;
-          purchase_id: string;
-          updated_at?: string;
-        };
-        Update: {
-          created_at?: string;
-          expected_amount_usd?: string;
-          id?: string;
-          overpaid_amount_usd?: string | null;
-          paid_amount_usd?: string | null;
-          payment_state?: Database["public"]["Enums"]["payment_state"];
-          provider?: string;
-          provider_payment_id?: string | null;
-          purchase_id?: string;
-          updated_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "payment_intents_purchase_id_fkey";
+            foreignKeyName: "escrows_purchase_id_fkey";
             columns: ["purchase_id"];
             isOneToOne: true;
             referencedRelation: "purchases";
             referencedColumns: ["id"];
           },
+          {
+            foreignKeyName: "escrows_seller_id_fkey";
+            columns: ["seller_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "escrows_seller_id_fkey";
+            columns: ["seller_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "escrows_seller_id_fkey";
+            columns: ["seller_id"];
+            isOneToOne: false;
+            referencedRelation: "public_profiles_full_view";
+            referencedColumns: ["id"];
+          },
         ];
+      };
+      ledger_correction_log: {
+        Row: {
+          authorized_by: string;
+          created_at: string;
+          documentation_reference: string | null;
+          id: string;
+          new_data: Json | null;
+          old_data: Json | null;
+          operation: string;
+          reason: string;
+          table_name: string;
+        };
+        Insert: {
+          authorized_by: string;
+          created_at?: string;
+          documentation_reference?: string | null;
+          id?: string;
+          new_data?: Json | null;
+          old_data?: Json | null;
+          operation: string;
+          reason: string;
+          table_name: string;
+        };
+        Update: {
+          authorized_by?: string;
+          created_at?: string;
+          documentation_reference?: string | null;
+          id?: string;
+          new_data?: Json | null;
+          old_data?: Json | null;
+          operation?: string;
+          reason?: string;
+          table_name?: string;
+        };
+        Relationships: [];
+      };
+      ledger_transactions: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          reference_id: string;
+          reference_type: Database["public"]["Enums"]["ledger_reference_type"];
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          reference_id: string;
+          reference_type: Database["public"]["Enums"]["ledger_reference_type"];
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          reference_id?: string;
+          reference_type?: Database["public"]["Enums"]["ledger_reference_type"];
+        };
+        Relationships: [];
+      };
+      payment_intents: {
+        Row: {
+          billable_id: string;
+          billable_type: Database["public"]["Enums"]["billable_type"];
+          created_at: string;
+          expected_amount_usd: number;
+          expires_at: string | null;
+          id: string;
+          overpaid_amount_usd: number | null;
+          paid_amount_usd: number | null;
+          payment_state: Database["public"]["Enums"]["payment_state"];
+          provider: Database["public"]["Enums"]["payment_provider"];
+          provider_payment_id: string | null;
+          purchase_id: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          billable_id: string;
+          billable_type?: Database["public"]["Enums"]["billable_type"];
+          created_at?: string;
+          expected_amount_usd: number;
+          expires_at?: string | null;
+          id?: string;
+          overpaid_amount_usd?: number | null;
+          paid_amount_usd?: number | null;
+          payment_state: Database["public"]["Enums"]["payment_state"];
+          provider: Database["public"]["Enums"]["payment_provider"];
+          provider_payment_id?: string | null;
+          purchase_id?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          billable_id?: string;
+          billable_type?: Database["public"]["Enums"]["billable_type"];
+          created_at?: string;
+          expected_amount_usd?: number;
+          expires_at?: string | null;
+          id?: string;
+          overpaid_amount_usd?: number | null;
+          paid_amount_usd?: number | null;
+          payment_state?: Database["public"]["Enums"]["payment_state"];
+          provider?: Database["public"]["Enums"]["payment_provider"];
+          provider_payment_id?: string | null;
+          purchase_id?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       payment_provider_events: {
         Row: {
           id: string;
           payment_intent_id: string | null;
           processed_at: string | null;
-          provider: string;
+          processing_error: string | null;
+          provider: Database["public"]["Enums"]["payment_provider"];
           provider_event_id: string;
           raw_payload: Json;
           received_at: string;
@@ -292,7 +372,8 @@ export type Database = {
           id?: string;
           payment_intent_id?: string | null;
           processed_at?: string | null;
-          provider: string;
+          processing_error?: string | null;
+          provider: Database["public"]["Enums"]["payment_provider"];
           provider_event_id: string;
           raw_payload: Json;
           received_at?: string;
@@ -301,7 +382,8 @@ export type Database = {
           id?: string;
           payment_intent_id?: string | null;
           processed_at?: string | null;
-          provider?: string;
+          processing_error?: string | null;
+          provider?: Database["public"]["Enums"]["payment_provider"];
           provider_event_id?: string;
           raw_payload?: Json;
           received_at?: string;
@@ -312,6 +394,60 @@ export type Database = {
             columns: ["payment_intent_id"];
             isOneToOne: false;
             referencedRelation: "payment_intents";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      platform_accounting_entries: {
+        Row: {
+          account_code: Database["public"]["Enums"]["system_account_code"];
+          accounting_action: Database["public"]["Enums"]["accounting_action"];
+          amount_usd: number;
+          created_at: string;
+          description: string | null;
+          direction: Database["public"]["Enums"]["ledger_direction"];
+          event_type: Database["public"]["Enums"]["ledger_event_type"];
+          id: string;
+          reference_id: string;
+          transaction_id: string;
+        };
+        Insert: {
+          account_code: Database["public"]["Enums"]["system_account_code"];
+          accounting_action: Database["public"]["Enums"]["accounting_action"];
+          amount_usd: number;
+          created_at?: string;
+          description?: string | null;
+          direction: Database["public"]["Enums"]["ledger_direction"];
+          event_type: Database["public"]["Enums"]["ledger_event_type"];
+          id?: string;
+          reference_id: string;
+          transaction_id: string;
+        };
+        Update: {
+          account_code?: Database["public"]["Enums"]["system_account_code"];
+          accounting_action?: Database["public"]["Enums"]["accounting_action"];
+          amount_usd?: number;
+          created_at?: string;
+          description?: string | null;
+          direction?: Database["public"]["Enums"]["ledger_direction"];
+          event_type?: Database["public"]["Enums"]["ledger_event_type"];
+          id?: string;
+          reference_id?: string;
+          transaction_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "platform_accounting_entries_account_code_fkey";
+            columns: ["account_code"];
+            isOneToOne: false;
+            referencedRelation: "system_accounts";
+            referencedColumns: ["account_code"];
+          },
+          {
+            foreignKeyName: "platform_accounting_entries_transaction_id_fkey";
+            columns: ["transaction_id"];
+            isOneToOne: false;
+            referencedRelation: "ledger_transactions";
             referencedColumns: ["id"];
           },
         ];
@@ -327,9 +463,13 @@ export type Database = {
           fts: unknown;
           id: string;
           is_active: boolean;
-          price: string;
+          price: number;
           rating: number;
-          rating_sum: number;
+          rating_1_count: number;
+          rating_2_count: number;
+          rating_3_count: number;
+          rating_4_count: number;
+          rating_5_count: number;
           title: string;
           updated_at: string;
         };
@@ -343,9 +483,13 @@ export type Database = {
           fts?: unknown;
           id?: string;
           is_active?: boolean;
-          price: string;
+          price: number;
           rating?: number;
-          rating_sum?: number;
+          rating_1_count?: number;
+          rating_2_count?: number;
+          rating_3_count?: number;
+          rating_4_count?: number;
+          rating_5_count?: number;
           title: string;
           updated_at?: string;
         };
@@ -359,13 +503,24 @@ export type Database = {
           fts?: unknown;
           id?: string;
           is_active?: boolean;
-          price?: string;
+          price?: number;
           rating?: number;
-          rating_sum?: number;
+          rating_1_count?: number;
+          rating_2_count?: number;
+          rating_3_count?: number;
+          rating_4_count?: number;
+          rating_5_count?: number;
           title?: string;
           updated_at?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "products_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
           {
             foreignKeyName: "products_created_by_fkey";
             columns: ["created_by"];
@@ -406,15 +561,8 @@ export type Database = {
             foreignKeyName: "products_advantages_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "owner_products_tile_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_advantages_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "owner_products_view";
-            referencedColumns: ["id"];
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["product_id"];
           },
           {
             foreignKeyName: "products_advantages_product_id_fkey";
@@ -434,15 +582,99 @@ export type Database = {
             foreignKeyName: "products_advantages_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "public_product_page_view";
+            referencedRelation: "public_products_tile_view";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "products_advantages_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
+            referencedRelation: "user_transactions_view";
+            referencedColumns: ["product_id"];
+          },
+        ];
+      };
+      products_comments: {
+        Row: {
+          comment: string;
+          created_at: string;
+          created_by: string;
+          id: string;
+          product_id: string;
+          rating: number;
+        };
+        Insert: {
+          comment: string;
+          created_at?: string;
+          created_by: string;
+          id?: string;
+          product_id: string;
+          rating: number;
+        };
+        Update: {
+          comment?: string;
+          created_at?: string;
+          created_by?: string;
+          id?: string;
+          product_id?: string;
+          rating?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "products_comments_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "products_comments_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_comments_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "public_profiles_full_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_comments_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["product_id"];
+          },
+          {
+            foreignKeyName: "products_comments_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_comments_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "products_search_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_comments_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
             referencedRelation: "public_products_tile_view";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_comments_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "user_transactions_view";
+            referencedColumns: ["product_id"];
           },
         ];
       };
@@ -473,15 +705,8 @@ export type Database = {
             foreignKeyName: "products_faq_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "owner_products_tile_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_faq_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "owner_products_view";
-            referencedColumns: ["id"];
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["product_id"];
           },
           {
             foreignKeyName: "products_faq_product_id_fkey";
@@ -501,15 +726,15 @@ export type Database = {
             foreignKeyName: "products_faq_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "public_product_page_view";
+            referencedRelation: "public_products_tile_view";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "products_faq_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "public_products_tile_view";
-            referencedColumns: ["id"];
+            referencedRelation: "user_transactions_view";
+            referencedColumns: ["product_id"];
           },
         ];
       };
@@ -540,15 +765,8 @@ export type Database = {
             foreignKeyName: "products_resources_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: true;
-            referencedRelation: "owner_products_tile_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_resources_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: true;
-            referencedRelation: "owner_products_view";
-            referencedColumns: ["id"];
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["product_id"];
           },
           {
             foreignKeyName: "products_resources_product_id_fkey";
@@ -568,15 +786,15 @@ export type Database = {
             foreignKeyName: "products_resources_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: true;
-            referencedRelation: "public_product_page_view";
+            referencedRelation: "public_products_tile_view";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "products_resources_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: true;
-            referencedRelation: "public_products_tile_view";
-            referencedColumns: ["id"];
+            referencedRelation: "user_transactions_view";
+            referencedColumns: ["product_id"];
           },
         ];
       };
@@ -682,6 +900,13 @@ export type Database = {
             foreignKeyName: "profiles_social_medias_profile_id_fkey";
             columns: ["profile_id"];
             isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "profiles_social_medias_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
@@ -694,6 +919,78 @@ export type Database = {
           },
         ];
       };
+      purchase_status_history: {
+        Row: {
+          changed_by_system: boolean;
+          changed_by_user_id: string | null;
+          created_at: string;
+          id: string;
+          metadata: Json | null;
+          new_status: Database["public"]["Enums"]["purchase_status"];
+          old_status: Database["public"]["Enums"]["purchase_status"] | null;
+          purchase_id: string;
+          reason: Database["public"]["Enums"]["status_change_reason"] | null;
+        };
+        Insert: {
+          changed_by_system?: boolean;
+          changed_by_user_id?: string | null;
+          created_at?: string;
+          id?: string;
+          metadata?: Json | null;
+          new_status: Database["public"]["Enums"]["purchase_status"];
+          old_status?: Database["public"]["Enums"]["purchase_status"] | null;
+          purchase_id: string;
+          reason?: Database["public"]["Enums"]["status_change_reason"] | null;
+        };
+        Update: {
+          changed_by_system?: boolean;
+          changed_by_user_id?: string | null;
+          created_at?: string;
+          id?: string;
+          metadata?: Json | null;
+          new_status?: Database["public"]["Enums"]["purchase_status"];
+          old_status?: Database["public"]["Enums"]["purchase_status"] | null;
+          purchase_id?: string;
+          reason?: Database["public"]["Enums"]["status_change_reason"] | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "purchase_status_history_changed_by_user_id_fkey";
+            columns: ["changed_by_user_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "purchase_status_history_changed_by_user_id_fkey";
+            columns: ["changed_by_user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchase_status_history_changed_by_user_id_fkey";
+            columns: ["changed_by_user_id"];
+            isOneToOne: false;
+            referencedRelation: "public_profiles_full_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchase_status_history_purchase_id_fkey";
+            columns: ["purchase_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["purchase_id"];
+          },
+          {
+            foreignKeyName: "purchase_status_history_purchase_id_fkey";
+            columns: ["purchase_id"];
+            isOneToOne: false;
+            referencedRelation: "purchases";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       purchases: {
         Row: {
           buyer_id: string;
@@ -701,7 +998,7 @@ export type Database = {
           created_at: string;
           id: string;
           is_confirmed: boolean;
-          price_usd: string;
+          price_usd: number;
           product_id: string;
           seller_id: string;
           status: Database["public"]["Enums"]["purchase_status"];
@@ -713,7 +1010,7 @@ export type Database = {
           created_at?: string;
           id?: string;
           is_confirmed?: boolean;
-          price_usd: string;
+          price_usd: number;
           product_id: string;
           seller_id: string;
           status: Database["public"]["Enums"]["purchase_status"];
@@ -725,13 +1022,20 @@ export type Database = {
           created_at?: string;
           id?: string;
           is_confirmed?: boolean;
-          price_usd?: string;
+          price_usd?: number;
           product_id?: string;
           seller_id?: string;
           status?: Database["public"]["Enums"]["purchase_status"];
           updated_at?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "purchases_buyer_id_fkey";
+            columns: ["buyer_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
           {
             foreignKeyName: "purchases_buyer_id_fkey";
             columns: ["buyer_id"];
@@ -750,15 +1054,8 @@ export type Database = {
             foreignKeyName: "purchases_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "owner_products_tile_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "purchases_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "owner_products_view";
-            referencedColumns: ["id"];
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["product_id"];
           },
           {
             foreignKeyName: "purchases_product_id_fkey";
@@ -778,15 +1075,22 @@ export type Database = {
             foreignKeyName: "purchases_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "public_product_page_view";
+            referencedRelation: "public_products_tile_view";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "purchases_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "public_products_tile_view";
-            referencedColumns: ["id"];
+            referencedRelation: "user_transactions_view";
+            referencedColumns: ["product_id"];
+          },
+          {
+            foreignKeyName: "purchases_seller_id_fkey";
+            columns: ["seller_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
           },
           {
             foreignKeyName: "purchases_seller_id_fkey";
@@ -804,71 +1108,222 @@ export type Database = {
           },
         ];
       };
-    };
-    Views: {
-      owner_products_tile_view: {
+      reconciliation_runs: {
         Row: {
-          category: Database["public"]["Enums"]["product_category"] | null;
-          comments_count: number | null;
-          cover_url: string | null;
-          created_at: string | null;
-          creator: Json | null;
-          id: string | null;
-          is_active: boolean | null;
-          price: string | null;
-          rating: number | null;
-          title: string | null;
+          discrepancy_details: Json | null;
+          discrepancy_usd: number | null;
+          escrow_accounting_usd: number;
+          escrow_operational_usd: number;
+          id: string;
+          is_balanced: boolean;
+          platform_revenue_usd: number;
+          run_at: string;
+          run_date: string;
+          total_user_balances_usd: number;
+          total_user_ledger_usd: number;
+        };
+        Insert: {
+          discrepancy_details?: Json | null;
+          discrepancy_usd?: number | null;
+          escrow_accounting_usd: number;
+          escrow_operational_usd: number;
+          id?: string;
+          is_balanced: boolean;
+          platform_revenue_usd: number;
+          run_at?: string;
+          run_date: string;
+          total_user_balances_usd: number;
+          total_user_ledger_usd: number;
+        };
+        Update: {
+          discrepancy_details?: Json | null;
+          discrepancy_usd?: number | null;
+          escrow_accounting_usd?: number;
+          escrow_operational_usd?: number;
+          id?: string;
+          is_balanced?: boolean;
+          platform_revenue_usd?: number;
+          run_at?: string;
+          run_date?: string;
+          total_user_balances_usd?: number;
+          total_user_ledger_usd?: number;
         };
         Relationships: [];
       };
-      owner_products_view: {
+      system_accounts: {
         Row: {
-          advantages: Json | null;
-          category: Database["public"]["Enums"]["product_category"] | null;
-          comments_count: number | null;
-          cover_url: string | null;
-          created_at: string | null;
+          account_code: Database["public"]["Enums"]["system_account_code"];
+          account_name: string;
+          account_type: Database["public"]["Enums"]["accounting_type"];
+          created_at: string;
           description: string | null;
-          faq: Json | null;
-          id: string | null;
-          instructions: string | null;
-          is_active: boolean | null;
-          price: string | null;
-          rating: number | null;
-          title: string | null;
-          updated_at: string | null;
+          id: string;
+          is_active: boolean;
         };
         Insert: {
-          advantages?: never;
-          category?: Database["public"]["Enums"]["product_category"] | null;
-          comments_count?: number | null;
-          cover_url?: string | null;
-          created_at?: string | null;
+          account_code: Database["public"]["Enums"]["system_account_code"];
+          account_name: string;
+          account_type: Database["public"]["Enums"]["accounting_type"];
+          created_at?: string;
           description?: string | null;
-          faq?: never;
-          id?: string | null;
-          instructions?: never;
-          is_active?: boolean | null;
-          price?: string | null;
-          rating?: number | null;
-          title?: string | null;
-          updated_at?: string | null;
+          id?: string;
+          is_active?: boolean;
         };
         Update: {
-          advantages?: never;
-          category?: Database["public"]["Enums"]["product_category"] | null;
-          comments_count?: number | null;
-          cover_url?: string | null;
-          created_at?: string | null;
+          account_code?: Database["public"]["Enums"]["system_account_code"];
+          account_name?: string;
+          account_type?: Database["public"]["Enums"]["accounting_type"];
+          created_at?: string;
           description?: string | null;
-          faq?: never;
-          id?: string | null;
-          instructions?: never;
-          is_active?: boolean | null;
-          price?: string | null;
-          rating?: number | null;
-          title?: string | null;
-          updated_at?: string | null;
+          id?: string;
+          is_active?: boolean;
+        };
+        Relationships: [];
+      };
+      user_balances: {
+        Row: {
+          balance_usd: number;
+          last_entry_id: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          balance_usd?: number;
+          last_entry_id?: string | null;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          balance_usd?: number;
+          last_entry_id?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_balances_last_entry_id_fkey";
+            columns: ["last_entry_id"];
+            isOneToOne: false;
+            referencedRelation: "user_ledger_entries";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_balances_last_entry_id_fkey";
+            columns: ["last_entry_id"];
+            isOneToOne: false;
+            referencedRelation: "user_transactions_view";
+            referencedColumns: ["transaction_id"];
+          },
+          {
+            foreignKeyName: "user_balances_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "user_balances_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_balances_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "public_profiles_full_view";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      user_ledger_entries: {
+        Row: {
+          accounting_action: Database["public"]["Enums"]["accounting_action"];
+          amount_usd: number;
+          created_at: string;
+          direction: Database["public"]["Enums"]["ledger_direction"];
+          event_type: Database["public"]["Enums"]["ledger_event_type"];
+          id: string;
+          reference_id: string;
+          transaction_id: string;
+          user_id: string;
+        };
+        Insert: {
+          accounting_action: Database["public"]["Enums"]["accounting_action"];
+          amount_usd: number;
+          created_at?: string;
+          direction: Database["public"]["Enums"]["ledger_direction"];
+          event_type: Database["public"]["Enums"]["ledger_event_type"];
+          id?: string;
+          reference_id: string;
+          transaction_id: string;
+          user_id: string;
+        };
+        Update: {
+          accounting_action?: Database["public"]["Enums"]["accounting_action"];
+          amount_usd?: number;
+          created_at?: string;
+          direction?: Database["public"]["Enums"]["ledger_direction"];
+          event_type?: Database["public"]["Enums"]["ledger_event_type"];
+          id?: string;
+          reference_id?: string;
+          transaction_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_ledger_entries_transaction_id_fkey";
+            columns: ["transaction_id"];
+            isOneToOne: false;
+            referencedRelation: "ledger_transactions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_ledger_entries_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "user_ledger_entries_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_ledger_entries_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "public_profiles_full_view";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+    };
+    Views: {
+      buyer_purchases_view: {
+        Row: {
+          chat_id: string | null;
+          confirmation_deadline: string | null;
+          is_confirmed: boolean | null;
+          price_usd: number | null;
+          product_category: Database["public"]["Enums"]["product_category"] | null;
+          product_comments_count: number | null;
+          product_cover_url: string | null;
+          product_description: string | null;
+          product_id: string | null;
+          product_rating: number | null;
+          product_title: string | null;
+          purchase_id: string | null;
+          purchase_status: Database["public"]["Enums"]["purchase_status"] | null;
+          purchased_at: string | null;
+          seller_avatar_path: string | null;
+          seller_id: string | null;
+          seller_is_verified: boolean | null;
+          seller_name: string | null;
         };
         Relationships: [];
       };
@@ -887,22 +1342,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      public_product_page_view: {
-        Row: {
-          advantages: Json | null;
-          category: Database["public"]["Enums"]["product_category"] | null;
-          comments_count: number | null;
-          cover_url: string | null;
-          creator: Json | null;
-          description: string | null;
-          faq: Json | null;
-          id: string | null;
-          price: string | null;
-          rating: number | null;
-          title: string | null;
-        };
-        Relationships: [];
-      };
       public_products_tile_view: {
         Row: {
           category: Database["public"]["Enums"]["product_category"] | null;
@@ -910,7 +1349,7 @@ export type Database = {
           cover_url: string | null;
           creator: Json | null;
           id: string | null;
-          price: string | null;
+          price: number | null;
           rating: number | null;
           title: string | null;
         };
@@ -926,6 +1365,40 @@ export type Database = {
           name: string | null;
           social_medias: Json | null;
           username: string | null;
+        };
+        Relationships: [];
+      };
+      user_chats_view: {
+        Row: {
+          chat_created_at: string | null;
+          chat_id: string | null;
+          chat_is_closed: boolean | null;
+          product_category: Database["public"]["Enums"]["product_category"] | null;
+          product_cover_url: string | null;
+          product_title: string | null;
+          purchase_confirmation_deadline: string | null;
+        };
+        Relationships: [];
+      };
+      user_transactions_view: {
+        Row: {
+          accounting_action: Database["public"]["Enums"]["accounting_action"] | null;
+          amount_usd: number | null;
+          direction: Database["public"]["Enums"]["ledger_direction"] | null;
+          event_type: Database["public"]["Enums"]["ledger_event_type"] | null;
+          product_cover_url: string | null;
+          product_id: string | null;
+          product_title: string | null;
+          reference_id: string | null;
+          transaction_date: string | null;
+          transaction_id: string | null;
+        };
+        Relationships: [];
+      };
+      user_wallet_view: {
+        Row: {
+          available_balance_usd: number | null;
+          pending_purchases_usd: number | null;
         };
         Relationships: [];
       };
@@ -1010,7 +1483,7 @@ export type Database = {
         Returns: string;
       };
       _app_validate_product_price: {
-        Args: { p_input: string };
+        Args: { p_input: number };
         Returns: string;
       };
       _app_validate_product_title: {
@@ -1058,10 +1531,14 @@ export type Database = {
           p_faq?: Json;
           p_instructions: string;
           p_is_active?: boolean;
-          p_price: string;
+          p_price: number;
           p_title: string;
         };
         Returns: string;
+      };
+      app_create_product_comment: {
+        Args: { p_comment: string; p_product_id: string; p_rating: number };
+        Returns: undefined;
       };
       app_filter_products: {
         Args: {
@@ -1077,7 +1554,7 @@ export type Database = {
           creator: Json;
           id: string;
           next_cursor: Json;
-          price: string;
+          price: number;
           rating: number;
           title: string;
         }[];
@@ -1094,13 +1571,30 @@ export type Database = {
           comments_count: number;
           cover_url: string;
           created_at: string;
-          creator: Json;
           id: string;
           is_active: boolean;
           next_cursor: Json;
-          price: string;
+          price: number;
           rating: number;
           title: string;
+          updated_at: string;
+        }[];
+      };
+      app_product_comments: {
+        Args: {
+          p_cursor?: Json;
+          p_limit?: number;
+          p_product_id: string;
+          p_rating?: number;
+        };
+        Returns: {
+          author_avatar: string;
+          author_name: string;
+          author_username: string;
+          comment: string;
+          created_at: string;
+          next_cursor: Json;
+          rating: number;
         }[];
       };
       app_profile_registration_update: {
@@ -1127,7 +1621,7 @@ export type Database = {
           creator: Json;
           id: string;
           next_cursor: Json;
-          price: string;
+          price: number;
           rating: number;
           title: string;
         }[];
@@ -1139,7 +1633,7 @@ export type Database = {
           p_faq?: Json;
           p_instructions?: string;
           p_is_active?: boolean;
-          p_price?: string;
+          p_price?: number;
           p_product_id: string;
           p_title?: string;
         };
@@ -1149,27 +1643,94 @@ export type Database = {
         Args: {
           p_bio?: string;
           p_default_avatar_name?: string;
-          p_name?: string;
+          p_name: string;
           p_social_medias?: Json;
           p_use_custom_avatar?: boolean;
         };
         Returns: undefined;
       };
+      get_public_product_page: {
+        Args: { p_product_id: string };
+        Returns: {
+          advantages: Json;
+          category: string;
+          comments_count: number;
+          cover_url: string;
+          creator: Json;
+          description: string;
+          faq: Json;
+          id: string;
+          price: number;
+          rating: number;
+          rating_1_count: number;
+          rating_2_count: number;
+          rating_3_count: number;
+          rating_4_count: number;
+          rating_5_count: number;
+          title: string;
+        }[];
+      };
+      get_user_balance: { Args: never; Returns: number };
+      is_valid_escrow_transition: {
+        Args: {
+          p_new_state: Database["public"]["Enums"]["escrow_state"];
+          p_old_state: Database["public"]["Enums"]["escrow_state"];
+        };
+        Returns: boolean;
+      };
+      is_valid_payment_state_transition: {
+        Args: {
+          p_new_state: Database["public"]["Enums"]["payment_state"];
+          p_old_state: Database["public"]["Enums"]["payment_state"];
+        };
+        Returns: boolean;
+      };
+      is_valid_purchase_transition: {
+        Args: {
+          p_new_status: Database["public"]["Enums"]["purchase_status"];
+          p_old_status: Database["public"]["Enums"]["purchase_status"];
+        };
+        Returns: boolean;
+      };
       rpc_create_purchase: { Args: { p_product_id: string }; Returns: string };
       rpc_payment_paid: {
-        Args: { p_payment_amount_usd: string; p_provider_payment_id: string };
+        Args: { p_payment_amount_usd: number; p_provider_payment_id: string };
         Returns: string;
+      };
+      rpc_send_message: {
+        Args: { p_chat_id: string; p_message_text: string };
+        Returns: undefined;
       };
     };
     Enums: {
+      accounting_action:
+        | "payment"
+        | "receipt"
+        | "hold"
+        | "release"
+        | "earn"
+        | "refund_out"
+        | "refund_in"
+        | "reversal";
+      accounting_type: "asset" | "liability" | "equity" | "revenue" | "expense";
+      billable_type: "purchase";
       escrow_state: "locked" | "released" | "refunded";
       ledger_direction: "credit" | "debit";
-      ledger_reason:
-        | "marketplace_sale"
-        | "marketplace_refund"
-        | "overpayment_credit"
+      ledger_event_type:
+        | "purchase"
+        | "purchase_complete"
+        | "refund"
+        | "overpay_refund"
         | "withdrawal"
-        | "marketplace_purchase";
+        | "fee"
+        | "adjustment";
+      ledger_reference_type:
+        | "purchase"
+        | "refund"
+        | "overpay_refund"
+        | "withdrawal"
+        | "fee_adjustment"
+        | "manual_correction";
       owner_product_sort_option:
         | "title_asc"
         | "title_desc"
@@ -1180,6 +1741,7 @@ export type Database = {
         | "popularity_desc"
         | "created_at_desc"
         | "created_at_asc";
+      payment_provider: "cryptomus";
       payment_state:
         | "awaiting_payment"
         | "processing"
@@ -1207,7 +1769,19 @@ export type Database = {
         | "refund_requested"
         | "refunded"
         | "canceled";
-      social_media_type: "instagram" | "tiktok" | "youtube" | "x" | "discord" | "telegram" | "vk";
+      social_media_type: "instagram" | "tiktok" | "youtube";
+      status_change_reason:
+        | "payment_initiated"
+        | "payment_received"
+        | "buyer_confirmed"
+        | "auto_completed"
+        | "refund_requested_by_buyer"
+        | "refund_approved"
+        | "payment_failed"
+        | "payment_expired"
+        | "admin_action"
+        | "dispute_resolved";
+      system_account_code: "escrow" | "revenue" | "refunds_payable";
       user_role: "user" | "moderator" | "admin";
     };
     CompositeTypes: {
@@ -1334,14 +1908,36 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      accounting_action: [
+        "payment",
+        "receipt",
+        "hold",
+        "release",
+        "earn",
+        "refund_out",
+        "refund_in",
+        "reversal",
+      ],
+      accounting_type: ["asset", "liability", "equity", "revenue", "expense"],
+      billable_type: ["purchase"],
       escrow_state: ["locked", "released", "refunded"],
       ledger_direction: ["credit", "debit"],
-      ledger_reason: [
-        "marketplace_sale",
-        "marketplace_refund",
-        "overpayment_credit",
+      ledger_event_type: [
+        "purchase",
+        "purchase_complete",
+        "refund",
+        "overpay_refund",
         "withdrawal",
-        "marketplace_purchase",
+        "fee",
+        "adjustment",
+      ],
+      ledger_reference_type: [
+        "purchase",
+        "refund",
+        "overpay_refund",
+        "withdrawal",
+        "fee_adjustment",
+        "manual_correction",
       ],
       owner_product_sort_option: [
         "title_asc",
@@ -1354,6 +1950,7 @@ export const Constants = {
         "created_at_desc",
         "created_at_asc",
       ],
+      payment_provider: ["cryptomus"],
       payment_state: [
         "awaiting_payment",
         "processing",
@@ -1384,7 +1981,20 @@ export const Constants = {
         "refunded",
         "canceled",
       ],
-      social_media_type: ["instagram", "tiktok", "youtube", "x", "discord", "telegram", "vk"],
+      social_media_type: ["instagram", "tiktok", "youtube"],
+      status_change_reason: [
+        "payment_initiated",
+        "payment_received",
+        "buyer_confirmed",
+        "auto_completed",
+        "refund_requested_by_buyer",
+        "refund_approved",
+        "payment_failed",
+        "payment_expired",
+        "admin_action",
+        "dispute_resolved",
+      ],
+      system_account_code: ["escrow", "revenue", "refunds_payable"],
       user_role: ["user", "moderator", "admin"],
     },
   },
