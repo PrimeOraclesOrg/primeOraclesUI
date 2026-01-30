@@ -1,8 +1,8 @@
 import { WorkspaceProductCard } from "@/components/molecules/WorkspaceProductCard/WorkspaceProductCard";
-import type { WorkspaceProduct } from "@/types";
+import { MyProducts } from "@/types";
 
 interface WorkspaceProductListProps {
-  products: WorkspaceProduct[];
+  products: MyProducts;
   onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;

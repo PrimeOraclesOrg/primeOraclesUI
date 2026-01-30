@@ -1,23 +1,23 @@
 import { cn } from "@/lib/utils";
-import type { WorkspaceProductStatus } from "@/types";
 
 interface WorkspaceStatusBadgeProps {
-  status: WorkspaceProductStatus;
+  is_active: boolean;
 }
 
-const statusConfig: Record<WorkspaceProductStatus, { label: string; className: string }> = {
-  active: {
-    label: "Активный",
-    className: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  },
-  archived: {
+const statusConfig = (is_active: boolean) => {
+  if (is_active)
+    return {
+      label: "Активный",
+      className: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+    };
+  return {
     label: "В архиве",
     className: "bg-muted text-muted-foreground border-border",
-  },
+  };
 };
 
-export function WorkspaceStatusBadge({ status }: WorkspaceStatusBadgeProps) {
-  const config = statusConfig[status];
+export function WorkspaceStatusBadge({ is_active }: WorkspaceStatusBadgeProps) {
+  const config = statusConfig(is_active);
 
   return (
     <span

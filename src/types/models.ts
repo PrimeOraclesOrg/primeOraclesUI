@@ -135,3 +135,4 @@ export interface RatingDistributionItem {
 }
 
 export type FullProfile = Database["public"]["Views"]["public_profiles_full_view"]["Row"];
+export type MyProducts = Database["public"]["Functions"]["app_get_my_products"]["Returns"];

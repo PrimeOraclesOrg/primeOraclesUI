@@ -3,20 +3,17 @@ import { Pagination } from "@/components/molecules";
 import { WorkspaceStatusTabs } from "@/components/molecules/WorkspaceStatusTabs/WorkspaceStatusTabs";
 import { WorkspaceSortSelect } from "@/components/molecules/WorkspaceSortSelect/WorkspaceSortSelect";
 import { WorkspaceProductList } from "@/components/organisms/WorkspaceProductList/WorkspaceProductList";
-import type { WorkspaceProduct } from "@/types";
+import type { MyProducts } from "@/types";
 import type { WorkspaceSortOption } from "@/data/workspaceProducts";
 
 type StatusTabId = "all" | "active" | "archived";
 
 interface WorkspaceMarketplaceTemplateProps {
-  products: WorkspaceProduct[];
+  products: MyProducts;
   activeTab: StatusTabId;
   sortBy: WorkspaceSortOption;
-  currentPage: number;
-  totalPages: number;
   onTabChange: (tab: StatusTabId) => void;
   onSortChange: (sort: WorkspaceSortOption) => void;
-  onPageChange: (page: number) => void;
   onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
@@ -26,11 +23,8 @@ export function WorkspaceMarketplaceTemplate({
   products,
   activeTab,
   sortBy,
-  currentPage,
-  totalPages,
   onTabChange,
   onSortChange,
-  onPageChange,
   onOpenPage,
   onEdit,
   onViewStats,
@@ -64,14 +58,7 @@ export function WorkspaceMarketplaceTemplate({
           />
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={onPageChange}
-          />
-        )}
+        {/* TODO: Load more btn  */}
       </div>
     </MainLayout>
   );

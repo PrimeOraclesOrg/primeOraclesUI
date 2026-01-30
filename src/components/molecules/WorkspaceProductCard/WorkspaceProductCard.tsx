@@ -4,10 +4,12 @@ import { WorkspaceStatusBadge } from "@/components/atoms/WorkspaceStatusBadge/Wo
 import { CategoryBadge } from "@/components/atoms/CategoryBadge/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import type { WorkspaceProduct } from "@/types";
+import { MyProducts } from "@/types";
+import { storageUrlBase } from "@/data";
+import { formatDateTime } from "@/utils";
 
 interface WorkspaceProductCardProps {
-  product: WorkspaceProduct;
+  product: MyProducts[0];
   onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
@@ -23,10 +25,14 @@ export function WorkspaceProductCard({
     <div className="surface-card p-4 flex flex-col md:flex-row gap-4">
       {/* Product Image */}
       <div className="relative w-full md:w-60 h-32 md:h-36 flex-shrink-0 rounded-lg overflow-hidden">
-        <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+        <img
+          src={`${storageUrlBase}/${product.cover_url}`}
+          alt={product.title}
+          className="w-full h-full object-cover"
+        />
         <div className="absolute bottom-2 left-2">
           <span className="badge-price px-2 py-0.5 rounded-full text-xs font-medium">
-            ${product.price.toFixed(2)}
+            ${Number(product.price)?.toFixed(2)}
           </span>
         </div>
       </div>
@@ -36,15 +42,25 @@ export function WorkspaceProductCard({
         <div>
           <div className="flex items-start gap-2 mb-1 justify-between">
             <h3 className="font-semibold text-foreground line-clamp-3">{product.title}</h3>
-            <WorkspaceStatusBadge status={product.status} />
+            <WorkspaceStatusBadge is_active={product.is_active} />
           </div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <CategoryBadge category={product.category} />
           </div>
+          <div className="text-xs mb-2">
+            <p>
+              <span className="text-sm text-muted-foreground">Создано:</span>{" "}
+              {formatDateTime(product.created_at)}
+            </p>
+            <p>
+              <span className="text-sm text-muted-foreground">Изменено:</span>{" "}
+              {formatDateTime(product.updated_at)}
+            </p>
+          </div>
         </div>
 
         <div className="flex justify-between">
-          <RatingStars rating={product.rating} reviewCount={product.reviewCount} size="sm" />
+          <RatingStars rating={product.rating} reviewCount={product.comments_count} size="sm" />
           {/* Actions */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <TooltipProvider>
