@@ -5,12 +5,13 @@
  * When Supabase is integrated, this will use the Supabase client.
  */
 
+import { PostgrestError } from "@supabase/supabase-js";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
-import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
-import type { Product } from "@/types";
-import { PRODUCT_IMAGES_BUCKET, supabase } from "@/utils";
-import { ProductDetailsResult, ProductsFilter, ProductsResult } from "./types";
+import { FullProfile, Product, PublicProductPage, ServiceError } from "@/types";
+import { PRODUCT_IMAGES_BUCKET, supabase, normalizeError } from "@/utils";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
+import { buildCoverUrl } from "@/utils/base64ToBlob";
+import { ProductsFilter, ProductsResult } from "./types";
 
 /**
  * Fetch products with optional filtering
@@ -59,22 +60,38 @@ export async function fetchHomeProducts(): Promise<Product[]> {
 /**
  * Fetch single product details by ID
  */
-export async function fetchProductById(id: string): Promise<ProductDetailsResult> {
-  // TODO: Replace with Supabase query
-  // const { data: product, error } = await supabase
-  //   .from('products')
-  //   .select('*, reviews(*), faqs(*)')
-  //   .eq('id', id)
-  //   .single();
+export async function fetchProductById(
+  id: string
+): Promise<{ data: PublicProductPage | null; error: ServiceError | null }> {
+  try {
+    const { data: product, error } = await supabase.rpc("get_public_product_page", {
+      p_product_id: id,
+    });
 
-  const product = getProductDetails(id);
+    if (error) {
+      throw error;
+    }
 
-  return {
-    product,
-    reviews: mockReviews,
-    faqs: productFaqs,
-    ratingDistribution,
-  };
+    if (!product[0]) {
+      throw new PostgrestError({
+        message: "Product not found",
+        details: "Product not found",
+        hint: "product_not_found",
+        code: "product_not_found",
+      });
+    }
+
+    return {
+      data: {
+        ...product[0],
+        cover_url: buildCoverUrl(product[0].cover_url),
+        creator: product[0].creator as unknown as FullProfile,
+      } as PublicProductPage,
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
+  }
 }
 
 /**
@@ -109,15 +126,15 @@ export async function checkProductTitleAvailability(
 /**
  * Create a new product
  */
-export async function createProduct(
+export async function createProductService(
   productData: CreateProductFormData,
   mediaFile?: File | null
-): Promise<{ data: string | null; error: { code: string; message: string } | null }> {
+): Promise<{ data: string | null; error: ServiceError | null }> {
   try {
     // Check title availability
     const { error: availabilityError } = await checkProductTitleAvailability(productData.title);
     if (availabilityError) {
-      return { data: null, error: availabilityError };
+      throw availabilityError;
     }
 
     // Create the product
@@ -125,7 +142,7 @@ export async function createProduct(
       p_title: productData.title,
       p_category: productData.category,
       p_description: productData.description,
-      p_price: productData.price.toString(),
+      p_price: productData.price,
       p_instructions: productData.instructions,
       p_advantages: productData.advantages,
       p_faq: productData.faq,
@@ -133,13 +150,7 @@ export async function createProduct(
     });
 
     if (createError) {
-      return {
-        data: null,
-        error: {
-          code: createError.hint ?? "unexpected_error",
-          message: createError.message ?? "Unexpected error",
-        },
-      };
+      throw createError;
     }
 
     // Upload image if provided
@@ -149,25 +160,13 @@ export async function createProduct(
         .upload(productId, mediaFile, { contentType: mediaFile.type, upsert: true });
 
       if (uploadError) {
-        return {
-          data: null,
-          error: {
-            code: "unexpected_error",
-            message: "Unexpected error",
-          },
-        };
+        throw uploadError;
       }
     }
 
     return { data: productId, error: null };
   } catch (error) {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+    return normalizeError(error);
   }
 }
 

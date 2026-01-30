@@ -1,7 +1,8 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
-import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
-import type { Product, ProductDetails, Review, FAQ, RatingDistributionItem } from "@/types";
+import type { Product, PublicProductPage } from "@/types";
+import { fetchProductById, createProductService } from "@/services/productsService/productsService";
+import { CreateProductFormData } from "@/utils/validators/createProduct";
 
 interface ProductsQueryArgs {
   category?: string;
@@ -11,13 +12,6 @@ interface ProductsQueryArgs {
 interface ProductsResponse {
   products: Product[];
   categories: string[];
-}
-
-interface ProductDetailsResponse {
-  product: ProductDetails;
-  reviews: Review[];
-  faqs: FAQ[];
-  ratingDistribution: RatingDistributionItem[];
 }
 
 export const productsApi = baseApi.injectEndpoints({
@@ -52,22 +46,30 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    getProductDetails: builder.query<ProductDetailsResponse, string>({
-      queryFn: (id) => {
-        const product = getProductDetails(id);
-        return {
-          data: {
-            product,
-            reviews: mockReviews,
-            faqs: productFaqs,
-            ratingDistribution,
-          },
-        };
+    getProductDetails: builder.query<PublicProductPage | null, string>({
+      queryFn: async (id) => {
+        const { data, error } = await fetchProductById(id);
+        return error ? { error } : { data };
       },
       providesTags: (_result, _error, id) => [{ type: "Products", id }],
+    }),
+
+    createProduct: builder.mutation<
+      string,
+      { productData: CreateProductFormData; mediaFile?: File | null }
+    >({
+      queryFn: async ({ productData, mediaFile }) => {
+        const { data, error } = await createProductService(productData, mediaFile);
+        return error ? { error } : { data };
+      },
+      invalidatesTags: ["Products"],
     }),
   }),
 });
 
-export const { useGetProductsQuery, useGetHomeProductsQuery, useGetProductDetailsQuery } =
-  productsApi;
+export const {
+  useGetProductsQuery,
+  useGetHomeProductsQuery,
+  useGetProductDetailsQuery,
+  useCreateProductMutation,
+} = productsApi;

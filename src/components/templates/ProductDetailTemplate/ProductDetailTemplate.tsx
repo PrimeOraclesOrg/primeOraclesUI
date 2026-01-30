@@ -1,28 +1,24 @@
 import { ChevronLeft, CheckCircle, Flag } from "lucide-react";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
-import { FAQAccordion, RatingDistribution, ReviewList } from "@/components/molecules";
-import { RatingStars, Loader } from "@/components/atoms";
+import { FAQAccordion, RatingDistribution, ReviewList, UserAvatar } from "@/components/molecules";
+import { RatingStars, Loader, SocialIcon } from "@/components/atoms";
 import { Button } from "@/components/ui/button";
-import type { ProductDetails, RatingDistributionItem, Review, FAQ } from "@/types";
+import { Badge } from "@/components/ui/badge";
+import { getCategoryDisplayName } from "@/types/createProduct";
+import type { PublicProductPage } from "@/types";
 
 interface ProductDetailTemplateProps {
-  product?: ProductDetails;
-  reviews: Review[];
-  faqs: FAQ[];
-  ratingDistribution: RatingDistributionItem[];
+  product: PublicProductPage;
   isLoading: boolean;
   onBackClick: () => void;
 }
 
 export function ProductDetailTemplate({
   product,
-  reviews,
-  faqs,
-  ratingDistribution,
   isLoading,
   onBackClick,
 }: ProductDetailTemplateProps) {
-  if (isLoading || !product) {
+  if (isLoading) {
     return (
       <MainLayout>
         <div className="p-6 lg:p-8 flex items-center justify-center min-h-[400px]">
@@ -51,16 +47,10 @@ export function ProductDetailTemplate({
             <div className="lg:w-96 flex-shrink-0">
               <div className="aspect-[16/9] rounded-xl overflow-hidden bg-card">
                 <img
-                  src={product.image}
+                  src={product.cover_url}
                   alt={product.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="relative -mt-20 p-4">
-                  <div className="text-primary font-bold italic text-lg">{product.subtitle}</div>
-                  <div className="text-foreground text-xs uppercase tracking-wider mt-1">
-                    ДОКУМЕНТАЛЬНЫЙ ФИЛЬМ
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -69,17 +59,24 @@ export function ProductDetailTemplate({
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                      <span className="text-sm font-medium">{product.author.name.charAt(0)}</span>
-                    </div>
-                    <span className="text-foreground font-medium">{product.author.name}</span>
+                    <UserAvatar avatarPath={product.creator.avatar_path} />
+                    <span className="text-foreground font-medium">{product.creator.name}</span>
                   </div>
-                  <h1 className="text-2xl font-bold text-foreground mb-2">{product.title}</h1>
+                  <div className="flex flex-col gap-2 mb-2">
+                    {product.category && (
+                      <Badge
+                        variant="outline"
+                        className="w-fit border-gold text-gold bg-transparent font-medium"
+                      >
+                        {getCategoryDisplayName(product.category)}
+                      </Badge>
+                    )}
+                    <h1 className="text-2xl font-bold text-foreground">{product.title}</h1>
+                  </div>
                   <div className="flex items-center gap-2 mb-4">
                     <RatingStars rating={product.rating} size="md" />
-                    <span className="text-primary">({product.reviewCount})</span>
+                    <span className="text-primary">({product.comments_count})</span>
                   </div>
-                  <p className="text-muted-foreground">{product.description}</p>
                 </div>
               </div>
 
@@ -87,43 +84,71 @@ export function ProductDetailTemplate({
                 <Button className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full lg:w-auto px-8">
                   Купить за {product.price}$
                 </Button>
-                <span className="text-sm text-muted-foreground">
+                {/* TODO: add memberCount */}
+                {/* <span className="text-sm text-muted-foreground">
                   Присоединяйтесь к {product.memberCount} участнику
-                </span>
+                </span> */}
               </div>
             </div>
           </div>
 
-          {/* Features Section */}
+          {/* Description Section */}
           <div className="mb-12">
-            <h2 className="text-xl font-bold text-foreground mb-6">Особенности</h2>
-            <div className="space-y-0">
-              {product.features.map((feature, index) => {
-                return (
-                  <div key={feature.id}>
-                    <div className="flex items-start gap-3 py-4">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                      <p className="text-foreground flex-1">{feature.text}</p>
-                    </div>
-                    {index < product.features.length - 1 && <div className="h-px bg-border" />}
-                  </div>
-                );
-              })}
-            </div>
+            <h2 className="text-xl font-bold text-foreground mb-6">Описание</h2>
+            <p className="text-foreground">{product.description}</p>
           </div>
 
-          {/* Reviews Section */}
-          <div className="mb-12">
-            <h2 className="text-xl font-bold text-foreground mb-6">Отзывы</h2>
-            <div className="flex flex-col lg:flex-row gap-8">
-              <RatingDistribution
-                distribution={ratingDistribution}
-                rating={product.rating}
-                totalReviews={product.reviewCount}
-              />
-              <ReviewList reviews={reviews} />
+          {/* Features Section */}
+          {product?.advantages.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-foreground mb-6">Особенности</h2>
+              <div className="space-y-0">
+                {product.advantages.map((advantage, index) => {
+                  return (
+                    <div key={advantage.position}>
+                      <div className="flex items-start gap-3 py-4">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                        <p className="text-foreground flex-1">{advantage.description}</p>
+                      </div>
+                      {index < product.advantages.length - 1 && <div className="h-px bg-border" />}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* FAQ Section */}
+          {product?.faq.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-foreground mb-6 text-center">
+                Часто задаваемые вопросы:
+              </h2>
+              <FAQAccordion questions={product.faq} />
+            </div>
+          )}
+
+          {/* Reviews Section */}
+          {product.comments_count > 0 && (
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-foreground mb-6">Отзывы</h2>
+              <div className="flex flex-col lg:flex-row gap-8">
+                <RatingDistribution
+                  distribution={[
+                    { stars: 5, count: product.rating_5_count },
+                    { stars: 4, count: product.rating_4_count },
+                    { stars: 3, count: product.rating_3_count },
+                    { stars: 2, count: product.rating_2_count },
+                    { stars: 1, count: product.rating_1_count },
+                  ]}
+                  rating={product.rating}
+                  totalReviews={product.comments_count}
+                />
+                {/* TODO: add product.comments */}
+                {/* <ReviewList reviews={product.comments} /> */}
+              </div>
+            </div>
+          )}
 
           {/* About the creator Section */}
           <div className="mb-12">
@@ -131,15 +156,29 @@ export function ProductDetailTemplate({
             <div className="flex flex-col sm:flex-row items-start gap-4">
               <div className="flex-1">
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
-                    <span className="text-lg font-medium">{product.author.name.charAt(0)}</span>
-                  </div>
+                  <UserAvatar avatarPath={product.creator.avatar_path} size="16" />
                   <div className="flex-1">
-                    <div className="font-bold text-foreground mb-1">{product.author.name}</div>
-                    <div className="text-sm text-muted-foreground mb-1">
-                      @shwhynot
-                      <span className="mx-1">·</span>
-                      Присоединился в авг. 2025
+                    <div className="font-bold text-foreground mb-1">{product.creator.name}</div>
+                    <div className="flex gap-4">
+                      <div className="text-sm text-muted-foreground mb-1">
+                        @{product.creator.username}
+                      </div>
+                      {product.creator.social_medias.length > 0 && (
+                        <div className="flex items-center gap-4">
+                          {product.creator.social_medias.map((sm) => (
+                            <a
+                              key={`${sm.type}-${sm.link}`}
+                              href={sm.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-muted-foreground hover:text-foreground transition-colors inline-flex"
+                              aria-label={sm.type}
+                            >
+                              <SocialIcon network={sm.type} />
+                            </a>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <button className="flex items-center gap-1 text-sm text-foreground hover:text-primary transition-colors mt-2">
                       <Flag className="w-4 h-4" />
@@ -155,14 +194,6 @@ export function ProductDetailTemplate({
                 Посмотреть профиль
               </Button>
             </div>
-          </div>
-
-          {/* FAQ Section */}
-          <div>
-            <h2 className="text-xl font-bold text-foreground mb-6 text-center">
-              Часто задаваемые вопросы:
-            </h2>
-            <FAQAccordion questions={faqs} />
           </div>
         </div>
       </div>

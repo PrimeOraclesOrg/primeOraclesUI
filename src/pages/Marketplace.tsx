@@ -24,7 +24,7 @@ export default function Marketplace() {
       onSearchChange={setSearchQuery}
       onCategoryChange={setActiveCategory}
       onPageChange={setCurrentPage}
-      onProductClick={(id) => navigate(`/product/${id}`)}
+      onProductClick={(id) => navigate(`/products/${id}`)}
       onCreateClick={() => navigate("/create-product")}
     />
   );

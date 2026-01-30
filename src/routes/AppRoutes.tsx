@@ -33,7 +33,7 @@ export function AppRoutes() {
       <Route path="/marketplace" element={<Marketplace />} />
       <Route path="/learning" element={<Learning />} />
       <Route path="/learning/:id" element={<LearningDetail />} />
-      <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/products/:id" element={<ProductDetail />} />
       <Route path="/rewards" element={<Rewards />} />
 
       {/* Auth routes */}

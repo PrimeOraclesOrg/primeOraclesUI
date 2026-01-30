@@ -15,7 +15,7 @@ export const FAQAccordion: FC<FAQAccordionProps> = ({ questions }) => {
   return (
     <Accordion type="single" collapsible className="max-w-2xl w-full mx-auto lg:text-xl text-lg">
       {questions.map((faq) => (
-        <AccordionItem key={faq.id} value={faq.id} className="border-border">
+        <AccordionItem key={faq.position} value={faq.position.toString()} className="border-border">
           <AccordionTrigger className="text-foreground hover:text-primary">
             {faq.question}
           </AccordionTrigger>

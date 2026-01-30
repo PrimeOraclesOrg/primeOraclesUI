@@ -1,25 +1,22 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useGetProductDetailsQuery } from "@/store";
 import { ProductDetailTemplate } from "@/components/templates";
+import { useGetProductDetailsQuery } from "@/store";
+import { useCallback } from "react";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading } = useGetProductDetailsQuery(id || "1");
+  const { data: product, isLoading, isError } = useGetProductDetailsQuery(id);
 
-  const product = data?.product;
-  const reviews = data?.reviews ?? [];
-  const faqs = data?.faqs ?? [];
-  const ratingDistribution = data?.ratingDistribution ?? [];
+  if (isError) {
+    navigate("/not-found", { replace: true });
+  }
+
+  const onBackClick = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
 
   return (
-    <ProductDetailTemplate
-      product={product}
-      reviews={reviews}
-      faqs={faqs}
-      ratingDistribution={ratingDistribution}
-      isLoading={isLoading}
-      onBackClick={() => navigate(-1)}
-    />
+    <ProductDetailTemplate product={product} isLoading={isLoading} onBackClick={onBackClick} />
   );
 }

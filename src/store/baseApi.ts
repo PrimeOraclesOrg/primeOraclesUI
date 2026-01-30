@@ -1,4 +1,5 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ServiceError } from "@/types";
 
 /**
  * Base API configuration for RTK Query.
@@ -8,7 +9,7 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
  */
 export const baseApi = createApi({
   reducerPath: "api",
-  baseQuery: fakeBaseQuery(),
+  baseQuery: fakeBaseQuery<ServiceError>(),
   tagTypes: ["Products", "Rewards", "Learning", "Transactions"],
   endpoints: () => ({}),
 });

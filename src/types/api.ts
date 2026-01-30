@@ -5,9 +5,9 @@ import type {
   LearningItem,
   LessonDetails,
   Review,
-  FAQ,
   RatingDistributionItem,
 } from "./models";
+import { FAQ } from "./products";
 
 // ========================================
 // Products API Types
