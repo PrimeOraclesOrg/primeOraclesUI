@@ -1,20 +1,17 @@
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
-import { Pagination } from "@/components/molecules";
 import { WorkspaceStatusTabs } from "@/components/molecules/WorkspaceStatusTabs/WorkspaceStatusTabs";
 import { WorkspaceSortSelect } from "@/components/molecules/WorkspaceSortSelect/WorkspaceSortSelect";
 import { WorkspaceProductList } from "@/components/organisms/WorkspaceProductList/WorkspaceProductList";
 import type { MyProducts } from "@/types";
 import type { WorkspaceSortOption } from "@/data/workspaceProducts";
-
-type StatusTabId = "all" | "active" | "archived";
+import { WorkspaceMarketplaceTabs } from "@/pages/WorkspaceMarketplace/types";
 
 interface WorkspaceMarketplaceTemplateProps {
   products: MyProducts;
-  activeTab: StatusTabId;
+  activeTab: WorkspaceMarketplaceTabs;
   sortBy: WorkspaceSortOption;
-  onTabChange: (tab: StatusTabId) => void;
+  onTabChange: (tab: WorkspaceMarketplaceTabs) => void;
   onSortChange: (sort: WorkspaceSortOption) => void;
-  onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
 }
@@ -25,7 +22,6 @@ export function WorkspaceMarketplaceTemplate({
   sortBy,
   onTabChange,
   onSortChange,
-  onOpenPage,
   onEdit,
   onViewStats,
 }: WorkspaceMarketplaceTemplateProps) {
@@ -50,12 +46,7 @@ export function WorkspaceMarketplaceTemplate({
 
         {/* Product List */}
         <div className="mb-8">
-          <WorkspaceProductList
-            products={products}
-            onOpenPage={onOpenPage}
-            onEdit={onEdit}
-            onViewStats={onViewStats}
-          />
+          <WorkspaceProductList products={products} onEdit={onEdit} onViewStats={onViewStats} />
         </div>
 
         {/* TODO: Load more btn  */}

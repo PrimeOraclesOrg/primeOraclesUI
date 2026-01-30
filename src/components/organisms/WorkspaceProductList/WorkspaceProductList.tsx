@@ -3,17 +3,11 @@ import { MyProducts } from "@/types";
 
 interface WorkspaceProductListProps {
   products: MyProducts;
-  onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
 }
 
-export function WorkspaceProductList({
-  products,
-  onOpenPage,
-  onEdit,
-  onViewStats,
-}: WorkspaceProductListProps) {
+export function WorkspaceProductList({ products, onEdit, onViewStats }: WorkspaceProductListProps) {
   if (products.length === 0) {
     return (
       <div className="surface-card p-12 text-center">
@@ -30,12 +24,7 @@ export function WorkspaceProductList({
           className="animate-fade-in"
           style={{ animationDelay: `${index * 50}ms` }}
         >
-          <WorkspaceProductCard
-            product={product}
-            onOpenPage={onOpenPage}
-            onEdit={onEdit}
-            onViewStats={onViewStats}
-          />
+          <WorkspaceProductCard product={product} onEdit={onEdit} onViewStats={onViewStats} />
         </div>
       ))}
     </div>

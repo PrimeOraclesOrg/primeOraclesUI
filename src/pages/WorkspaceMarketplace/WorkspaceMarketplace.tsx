@@ -1,14 +1,11 @@
-import { useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { WorkspaceMarketplaceTemplate } from "@/components/templates/WorkspaceMarketplaceTemplate/WorkspaceMarketplaceTemplate";
 import { type WorkspaceSortOption } from "@/data/workspaceProducts";
 import { useGetMyProductsQuery } from "@/store/productsApi";
-
-type StatusTabId = "all" | "active" | "archived";
+import { WorkspaceMarketplaceTabs } from "./types";
 
 export default function WorkspaceMarketplace() {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<StatusTabId>("all");
+  const [activeTab, setActiveTab] = useState<WorkspaceMarketplaceTabs>("all");
   const [sortBy, setSortBy] = useState<WorkspaceSortOption>("date");
   const { data: products } = useGetMyProductsQuery();
 
@@ -16,12 +13,8 @@ export default function WorkspaceMarketplace() {
     console.log(products);
   }, [products]);
 
-  const handleTabChange = (tab: StatusTabId) => {
+  const handleTabChange = (tab: WorkspaceMarketplaceTabs) => {
     setActiveTab(tab);
-  };
-
-  const handleOpenPage = (id: string) => {
-    navigate(`/product/${id}`);
   };
 
   const handleEdit = (id: string) => {
@@ -41,7 +34,6 @@ export default function WorkspaceMarketplace() {
       sortBy={sortBy}
       onTabChange={handleTabChange}
       onSortChange={setSortBy}
-      onOpenPage={handleOpenPage}
       onEdit={handleEdit}
       onViewStats={handleViewStats}
     />

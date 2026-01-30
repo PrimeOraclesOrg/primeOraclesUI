@@ -5,22 +5,18 @@ import { CategoryBadge } from "@/components/atoms/CategoryBadge/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { MyProducts } from "@/types";
-import { storageUrlBase } from "@/data";
+import { productCategoryColors, storageUrlBase } from "@/data";
 import { formatDateTime } from "@/utils";
+import { useTranslation } from "react-i18next";
 
 interface WorkspaceProductCardProps {
   product: MyProducts[0];
-  onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
 }
 
-export function WorkspaceProductCard({
-  product,
-  onOpenPage,
-  onEdit,
-  onViewStats,
-}: WorkspaceProductCardProps) {
+export function WorkspaceProductCard({ product, onEdit, onViewStats }: WorkspaceProductCardProps) {
+  const { t } = useTranslation();
   return (
     <div className="surface-card p-4 flex flex-col md:flex-row gap-4">
       {/* Product Image */}
@@ -45,7 +41,10 @@ export function WorkspaceProductCard({
             <WorkspaceStatusBadge is_active={product.is_active} />
           </div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <CategoryBadge category={product.category} />
+            <CategoryBadge
+              className={productCategoryColors[product.category] || ""}
+              category={t(`product:category.${product.category}`)}
+            />
           </div>
           <div className="text-xs mb-2">
             <p>
@@ -70,7 +69,6 @@ export function WorkspaceProductCard({
                     variant="ghost"
                     size="icon"
                     className="h-9 w-9 text-muted-foreground hover:text-foreground"
-                    onClick={() => onOpenPage(product.id)}
                   >
                     <ExternalLink className="h-4 w-4" />
                   </Button>

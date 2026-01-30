@@ -5,6 +5,13 @@ import productWealth from "@/assets/product-wealth.jpg";
 import productTradingBot from "@/assets/product-trading-bot.jpg";
 import productSoftware from "@/assets/product-software.jpg";
 
+export const productCategoryColors = {
+  "Soft/Bot": "bg-badge-blue",
+  Course: "bg-badge-pink",
+  "Digital Material": "bg-badge-green",
+  Community: "bg-badge-orange",
+};
+
 export const productCategories = [
   "Все",
   "Софты/боты",
