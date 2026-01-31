@@ -1,11 +1,11 @@
 import { CheckCircle, Flag } from "lucide-react";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
-import { FAQAccordion, RatingDistribution, ReviewList, UserAvatar } from "@/components/molecules";
+import { FAQAccordion, RatingDistribution, UserAvatar } from "@/components/molecules";
 import { RatingStars, Loader, SocialIcon, BackButton } from "@/components/atoms";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getCategoryDisplayName } from "@/types/createProduct";
-import { PublicProductPage, Review } from "@/types";
+import { PublicProductPage } from "@/types";
 
 interface ProductDetailTemplateProps {
   product: PublicProductPage;
