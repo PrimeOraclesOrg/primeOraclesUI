@@ -1,7 +1,7 @@
 export const workspaceStatusTabs = [
   { id: "all", label: "Все статусы" },
   { id: "active", label: "Активные" },
-  { id: "archived", label: "В архиве" },
+  { id: "inactive", label: "В архиве" },
 ] as const;
 
 export const workspaceSortOptions = [

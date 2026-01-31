@@ -48,20 +48,20 @@ export function WorkspaceProductCard({ product, onEdit, onViewStats }: Workspace
               category={t(`product:category.${product.category}`)}
             />
           </div>
-          <div className="text-xs mb-2">
-            <p>
+          <RatingStars rating={product.rating} reviewCount={product.comments_count} size="sm" />
+        </div>
+
+        <div className="flex justify-between">
+          <div className="text-xs mb-2 flex gap-x-4 flex-wrap">
+            <p className="flex flex-col">
               <span className="text-sm text-muted-foreground">Создано:</span>{" "}
               {formatDateTime(product.created_at)}
             </p>
-            <p>
+            <p className="flex flex-col">
               <span className="text-sm text-muted-foreground">Изменено:</span>{" "}
               {formatDateTime(product.updated_at)}
             </p>
           </div>
-        </div>
-
-        <div className="flex justify-between">
-          <RatingStars rating={product.rating} reviewCount={product.comments_count} size="sm" />
           {/* Actions */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <TooltipProvider>

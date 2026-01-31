@@ -12,6 +12,7 @@ interface WorkspaceMarketplaceTemplateProps {
   activeTab: WorkspaceMarketplaceTabs;
   sortBy: WorkspaceSortOption;
   isFetching: boolean;
+  loadMoreButtonShown: boolean;
   onTabChange: (tab: WorkspaceMarketplaceTabs) => void;
   onSortChange: (sort: WorkspaceSortOption) => void;
   onEdit: (id: string) => void;
@@ -24,6 +25,7 @@ export function WorkspaceMarketplaceTemplate({
   activeTab,
   sortBy,
   isFetching,
+  loadMoreButtonShown,
   onTabChange,
   onSortChange,
   onEdit,
@@ -51,13 +53,21 @@ export function WorkspaceMarketplaceTemplate({
 
         {/* Product List */}
         <div className="mb-8">
-          <WorkspaceProductList products={products} onEdit={onEdit} onViewStats={onViewStats} />
+          <WorkspaceProductList
+            products={products}
+            isFetching={isFetching}
+            onEdit={onEdit}
+            onViewStats={onViewStats}
+          />
         </div>
 
-        {/* TODO: Load more btn  */}
-        <Button onClick={onLoadMore} disabled={isFetching}>
-          Загрузить еще
-        </Button>
+        {loadMoreButtonShown && (
+          <div className="text-center">
+            <Button onClick={onLoadMore} disabled={isFetching}>
+              {isFetching ? "Загрузка..." : "Загрузить еще"}
+            </Button>
+          </div>
+        )}
       </div>
     </MainLayout>
   );

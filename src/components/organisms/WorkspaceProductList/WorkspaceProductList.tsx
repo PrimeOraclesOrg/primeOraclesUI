@@ -5,13 +5,21 @@ interface WorkspaceProductListProps {
   products: MyProducts;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
+  isFetching: boolean;
 }
 
-export function WorkspaceProductList({ products, onEdit, onViewStats }: WorkspaceProductListProps) {
+export function WorkspaceProductList({
+  products,
+  isFetching,
+  onEdit,
+  onViewStats,
+}: WorkspaceProductListProps) {
   if (products.length === 0) {
     return (
       <div className="surface-card p-12 text-center">
-        <p className="text-muted-foreground">Продукты не найдены</p>
+        <p className="text-muted-foreground">
+          {isFetching ? "Загрузка..." : "Продукты не найдены"}
+        </p>
       </div>
     );
   }
