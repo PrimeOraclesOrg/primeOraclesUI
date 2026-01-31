@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { WorkspaceMarketplaceTemplate } from "@/components/templates/WorkspaceMarketplaceTemplate/WorkspaceMarketplaceTemplate";
 import { useGetMyProductsQuery } from "@/store/productsApi";
-import { WorkspaceMarketplaceTabs } from "./types";
-import { WorkspaceSortOption } from "@/types/workspace";
+import { WorkspaceMarketplaceTabs, WorkspaceSortOption } from "@/types/workspace";
 import { FetchMyProductsParams } from "@/services/productsService/types";
 
 export default function WorkspaceMarketplace() {

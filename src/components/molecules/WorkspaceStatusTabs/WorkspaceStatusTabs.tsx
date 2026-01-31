@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { workspaceStatusTabs } from "@/data/workspaceProducts";
-import { WorkspaceMarketplaceTabs } from "@/pages/WorkspaceMarketplace/types";
+import { WorkspaceMarketplaceTabs } from "@/types/workspace";
 
 interface WorkspaceStatusTabsProps {
   activeTab: WorkspaceMarketplaceTabs;

@@ -3,9 +3,8 @@ import { WorkspaceStatusTabs } from "@/components/molecules/WorkspaceStatusTabs/
 import { WorkspaceSortSelect } from "@/components/molecules/WorkspaceSortSelect/WorkspaceSortSelect";
 import { WorkspaceProductList } from "@/components/organisms/WorkspaceProductList/WorkspaceProductList";
 import type { MyProducts } from "@/types";
-import { WorkspaceMarketplaceTabs } from "@/pages/WorkspaceMarketplace/types";
 import { Button } from "@/components/ui/button";
-import { WorkspaceSortOption } from "@/types/workspace";
+import { WorkspaceMarketplaceTabs, WorkspaceSortOption } from "@/types/workspace";
 
 interface WorkspaceMarketplaceTemplateProps {
   products: MyProducts;

@@ -5,3 +5,4 @@ export type WorkspaceSortOption =
   | "rating_desc"
   | "price_desc"
   | "popularity_desc";
+export type WorkspaceMarketplaceTabs = "all" | "active" | "inactive";
