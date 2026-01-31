@@ -13,14 +13,10 @@ export const useSettings = () => {
   const { t } = useTranslation();
 
   useOnRequestResult({
-    isError: isError,
-    isSuccess: isSuccess,
-    errorMessage: {
-      description: error ? t(`status:${error.code}`) : "",
-    },
-    onSuccess: () => {
-      navigate("/");
-    },
+    isError,
+    isSuccess,
+    errorMessage: error ? { description: t(`status:${error.code}`) } : undefined,
+    onSuccess: () => navigate("/"),
   });
 
   return {
