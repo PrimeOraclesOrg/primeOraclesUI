@@ -20,7 +20,7 @@ export default function WorkspaceMarketplace() {
     p_limit: PAGE_LIMIT,
   });
 
-  const loadMoreButtonShown = products && products[products.length - 1].has_more;
+  const loadMoreButtonShown = products && products[products.length - 1]?.has_more;
 
   const handleTabChange = (tab: WorkspaceMarketplaceTabs) => {
     setCursor(null);
