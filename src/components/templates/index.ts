@@ -6,7 +6,7 @@ export { LearningTemplate } from "./LearningTemplate/LearningTemplate";
 export { LearningDetailTemplate } from "./LearningDetailTemplate/LearningDetailTemplate";
 export { ProductDetailTemplate } from "./ProductDetailTemplate/ProductDetailTemplate";
 export { HomeTemplate } from "./HomeTemplate/HomeTemplate";
-export { SettingsTemplate } from "./SettingsTemplate/SettingsTemplate";
+export { SettingsLayout } from "./SettingsLayout/SettingsLayout";
 export { LoginTemplate } from "./LoginTemplate/LoginTemplate";
 export { SignUpTemplate } from "./SignUpTemplate/SignUpTemplate";
 export { ConfirmCodeTemplate } from "./ConfirmCodeTemplate/ConfirmCodeTemplate";
@@ -15,3 +15,7 @@ export { ResetPasswordTemplate } from "./ResetPasswordTemplate/ResetPasswordTemp
 export { CreateProductTemplate } from "./CreateProductTemplate/CreateProductTemplate";
 export { ProfileSetupTemplate } from "./ProfileSetupTemplate/ProfileSetupTemplate";
 export { WorkspaceMarketplaceTemplate } from "./WorkspaceMarketplaceTemplate/WorkspaceMarketplaceTemplate";
+export { SettingsBasicTemplate } from "./SettingsBasicTemplate/SettingsBasicTemplate";
+export { SettingsBalanceTemplate } from "./SettingsBalanceTemplate/SettingsBalanceTemplate";
+export { SettingsHistoryTemplate } from "./SettingsHistoryTemplate/SettingsHistoryTemplate";
+export { SettingsSecurityTemplate } from "./SettingsSecurityTemplate/SettingsSecurityTemplate";

@@ -4,14 +4,15 @@ import { User } from "lucide-react";
 
 interface UserAvatarProps {
   avatarPath: string;
+  className?: string;
 }
 
-export const UserAvatar = ({ avatarPath }: UserAvatarProps) => {
+export const UserAvatar = ({ avatarPath, className }: UserAvatarProps) => {
   return (
-    <Avatar>
+    <Avatar className={className}>
       <AvatarImage src={`${storageUrlBase}/${avatarPath}`} />
       <AvatarFallback>
-        <User className="w-4 h-4" />
+        <User />
       </AvatarFallback>
     </Avatar>
   );

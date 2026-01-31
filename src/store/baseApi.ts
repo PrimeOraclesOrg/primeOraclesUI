@@ -1,3 +1,4 @@
+import { ApiError } from "@/types";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 
 /**
@@ -8,7 +9,7 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
  */
 export const baseApi = createApi({
   reducerPath: "api",
-  baseQuery: fakeBaseQuery(),
-  tagTypes: ["Products", "Rewards", "Learning", "Transactions"],
+  baseQuery: fakeBaseQuery<ApiError>(),
+  tagTypes: ["Products", "Rewards", "Learning", "Transactions", "User", "AuthUser"],
   endpoints: () => ({}),
 });

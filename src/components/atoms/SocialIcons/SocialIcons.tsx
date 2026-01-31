@@ -1,8 +1,8 @@
+import { SocialMediaType } from "@/types";
 import { Instagram, Youtube } from "lucide-react";
-import type { SocialNetwork } from "@/types";
 
 interface SocialIconProps {
-  network: SocialNetwork | string;
+  network: SocialMediaType | string;
   className?: string;
 }
 
@@ -35,7 +35,7 @@ export function SocialIcon({ network, className }: SocialIconProps) {
 }
 
 interface SocialIconsProps {
-  networks: (SocialNetwork | string)[];
+  networks: (SocialMediaType | string)[];
   className?: string;
 }
 

@@ -7,4 +7,7 @@ export { CreateProductForm } from "./CreateProductForm/CreateProductForm";
 export { ProductPreview } from "./ProductPreview/ProductPreview";
 export { ConfirmCodeHelpPopupContent } from "./ConfirmCodeHelpPopupContent/ConfirmCodeHelpPopupContent";
 export { LogoutPopupContent } from "./LogoutPopupContent/LogoutPopupContent";
+export { ProfileUpdateForm } from "./ProfileUpdateForm/ProfileUpdateForm";
+export { PasswordUpdatePopup } from "./PasswordUpdatePopup/PasswordUpdatePopup";
+export { PasswordUpdateForm } from "./PasswordUpdateForm/PasswordUpdateForm";
 export { Footer } from "./Footer/Footer";

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute/ProtectedRoute";
 import Home from "@/pages/Home";
 import Rewards from "@/pages/Rewards";
@@ -8,131 +8,151 @@ import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
 import CreateProduct from "@/pages/CreateProduct/CreateProduct";
 import WorkspaceMarketplace from "@/pages/WorkspaceMarketplace/WorkspaceMarketplace";
-import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp/SignUp";
 import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 import { AuthRoute } from "@/components/shared";
-import { useAuthListener } from "@/hooks/useAuthListener";
-import { selectAuthIsFetching, selectAuthIsProfileFetching, useAppSelector } from "@/store";
 import { LoadingScreen } from "@/components/atoms";
+import { BasicSettings } from "@/pages/@settings/BasicSettings/BasicSettings";
+import { SecuritySettings } from "@/pages/@settings/SecuritySettings/SecuritySettings";
+import { BalanceSettings } from "@/pages/@settings/BalanceSettings/BalanceSettings";
+import { HistorySettings } from "@/pages/@settings/HistorySettings/HistorySettings";
+import { useGetMyProfileQuery } from "@/store/usersApi";
+import { useGetAuthUserQuery } from "@/store/authApi";
+import { useForceProfileSetup } from "@/hooks/useForceProfileSetup";
+import { useAuthListener } from "@/hooks/useAuthListener";
 
 export function AppRoutes() {
   useAuthListener();
+  useForceProfileSetup();
 
-  const isAuthFetching = useAppSelector(selectAuthIsFetching);
-  const isProfileFetching = useAppSelector(selectAuthIsProfileFetching);
-
-  if (isAuthFetching || isProfileFetching) return <LoadingScreen />;
+  const { isFetching: isAuthFetching } = useGetAuthUserQuery();
+  const { isFetching: isProfileFetching } = useGetMyProfileQuery();
 
   return (
-    <Routes>
-      {/* Public app routes - accessible without auth */}
-      <Route path="/" element={<Home />} />
-      <Route path="/marketplace" element={<Marketplace />} />
-      <Route path="/learning" element={<Learning />} />
-      <Route path="/learning/:id" element={<LearningDetail />} />
-      <Route path="/product/:id" element={<ProductDetail />} />
-      <Route path="/rewards" element={<Rewards />} />
+    <>
+      {(isAuthFetching || isProfileFetching) && <LoadingScreen />}
+      <Routes>
+        {/* Public app routes - accessible without auth */}
+        <Route path="/" element={<Home />} />
+        <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/learning" element={<Learning />} />
+        <Route path="/learning/:id" element={<LearningDetail />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/rewards" element={<Rewards />} />
 
-      {/* Auth routes */}
-      <Route
-        path="/login"
-        element={
-          <AuthRoute>
-            <Login />
-          </AuthRoute>
-        }
-      />
-      <Route
-        path="/sign-up"
-        element={
-          <AuthRoute>
-            <SignUp />
-          </AuthRoute>
-        }
-      />
-      <Route
-        path="/reset-password"
-        element={
-          <AuthRoute>
-            <ResetPassword />
-          </AuthRoute>
-        }
-      />
-      <Route path="/profile-setup" element={<ProfileSetup />} />
+        {/* Auth routes */}
+        <Route
+          path="/login"
+          element={
+            <AuthRoute>
+              <Login />
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/sign-up"
+          element={
+            <AuthRoute>
+              <SignUp />
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <AuthRoute>
+              <ResetPassword />
+            </AuthRoute>
+          }
+        />
+        <Route path="/profile-setup" element={<ProfileSetup />} />
 
-      {/* Protected routes - require authentication */}
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/messages"
-        element={
-          <ProtectedRoute>
-            <Marketplace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/notifications"
-        element={
-          <ProtectedRoute>
-            <Marketplace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/workspace"
-        element={
-          <ProtectedRoute>
-            <WorkspaceMarketplace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/workspace/marketplace"
-        element={
-          <ProtectedRoute>
-            <WorkspaceMarketplace />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/purchases"
-        element={
-          <ProtectedRoute>
-            <Marketplace />
-          </ProtectedRoute>
-        }
-      />
+        {/* Protected routes - require authentication */}
+        <Route
+          path="/workspace"
+          element={
+            <ProtectedRoute>
+              <WorkspaceMarketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/workspace/marketplace"
+          element={
+            <ProtectedRoute>
+              <WorkspaceMarketplace />
+            </ProtectedRoute>
+          }
+        />
+        {/* Protected routes - require authentication */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <BasicSettings />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/create-product"
-        element={
-          <ProtectedRoute>
-            <CreateProduct />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Outlet />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<BasicSettings />} />
 
-      {/* 404 */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+          <Route path="basic" element={<BasicSettings />} />
+
+          <Route path="security" element={<SecuritySettings />} />
+
+          <Route path="balance" element={<BalanceSettings />} />
+
+          <Route path="history" element={<HistorySettings />} />
+        </Route>
+
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute>
+              <Marketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <Marketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/purchases"
+          element={
+            <ProtectedRoute>
+              <Marketplace />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/create-product"
+          element={
+            <ProtectedRoute>
+              <CreateProduct />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
