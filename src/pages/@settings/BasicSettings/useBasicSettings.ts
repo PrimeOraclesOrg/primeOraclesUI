@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { UpdateProfileFormData, updateProfileSchema } from "@/utils/validators/updateProfile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useGetMyProfileQuery, useUpdateMyProfileMutation } from "@/store/usersApi";
 import { getSocialLink } from "@/utils";
 import { useOnRequestResult } from "@/hooks/useOnRequestResult";
@@ -28,7 +28,7 @@ export const useBasicSettings = () => {
     },
   });
 
-  const onTabChange = (tab: SettingsTab) => navigate(`/settings/${tab}`);
+  const onTabChange = useCallback((tab: SettingsTab) => navigate(`/settings/${tab}`), [navigate]);
 
   const defaultValues = useMemo(
     (): UpdateProfileFormData => ({
@@ -49,9 +49,12 @@ export const useBasicSettings = () => {
     mode: "onBlur",
   });
 
-  const onUpdateProfileSubmit = async (data: UpdateProfileFormData) => {
-    await updateProfile(data);
-  };
+  const onUpdateProfileSubmit = useCallback(
+    async (data: UpdateProfileFormData) => {
+      await updateProfile(data);
+    },
+    [updateProfile]
+  );
 
   useEffect(() => {
     updateProfileForm.reset(defaultValues);
