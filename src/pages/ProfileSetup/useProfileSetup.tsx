@@ -28,7 +28,9 @@ export const useProfileSetup = () => {
   useOnRequestResult({
     isError,
     isSuccess,
-    successMessage: "Профиль успешно сохранён",
+    successMessage: {
+      description: "Профиль успешно сохранён",
+    },
     errorMessage: {
       title: "Ошибка сохранения",
       description: error ? t(`status:${error?.code}`) : "",
@@ -39,7 +41,9 @@ export const useProfileSetup = () => {
   useOnRequestResult({
     isError: isLogoutError,
     isSuccess: isLogoutSuccess,
-    errorMessage: logoutError ? t(`status:${logoutError.code}`) : "",
+    errorMessage: {
+      description: logoutError ? t(`status:${logoutError.code}`) : "",
+    },
     onSuccess: () => {
       closePopup();
       navigate("/");

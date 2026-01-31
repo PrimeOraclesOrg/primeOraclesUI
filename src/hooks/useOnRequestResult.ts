@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { toast } from "./useToast";
 
-type ToastMessage = string | { title: string; description: string };
+type ToastMessage = { title?: string; description?: string };
 
 interface UseOnRequestResultParams {
   isSuccess: boolean;
@@ -11,22 +11,6 @@ interface UseOnRequestResultParams {
   onSuccess?: () => void;
   onError?: () => void;
 }
-
-const sendToast = (message: ToastMessage, isErrorMessage: boolean = true) => {
-  if (typeof message === "string") {
-    toast({
-      title: isErrorMessage ? "Ошибка" : "Успех",
-      description: message,
-      variant: isErrorMessage ? "destructive" : "default",
-    });
-    return;
-  }
-
-  toast({
-    ...message,
-    variant: isErrorMessage ? "destructive" : "default",
-  });
-};
 
 export function useOnRequestResult({
   isSuccess,
@@ -54,18 +38,27 @@ export function useOnRequestResult({
 
     const message = successMessageRef.current;
     if (message) {
-      sendToast(message, false);
+      toast({
+        title: "Успех",
+        variant: "default",
+        ...message,
+      });
     }
 
     onSuccessRef.current?.();
   }, [isSuccess]);
+
   /* Error listener */
   useEffect(() => {
     if (!isError) return;
 
     const message = errorMessageRef.current;
     if (message) {
-      sendToast(message);
+      toast({
+        title: "Ошибка",
+        variant: "destructive",
+        ...message,
+      });
     }
 
     onErrorRef.current?.();

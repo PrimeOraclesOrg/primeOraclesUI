@@ -35,7 +35,9 @@ export const useSignUp = () => {
   useOnRequestResult({
     isError,
     isSuccess,
-    successMessage: "Успешная регистрация. Теперь заполните ваш профиль",
+    successMessage: {
+      description: "Успешная регистрация. Теперь заполните ваш профиль",
+    },
     errorMessage: {
       title: "Ошибка подтверждения",
       description: error ? t(`status:${error.code}`) : "",

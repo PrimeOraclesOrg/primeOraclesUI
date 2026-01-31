@@ -15,7 +15,9 @@ export const useSettings = () => {
   useOnRequestResult({
     isError: isError,
     isSuccess: isSuccess,
-    errorMessage: error ? t(`status:${error.code}`) : "",
+    errorMessage: {
+      description: error ? t(`status:${error.code}`) : "",
+    },
     onSuccess: () => {
       navigate("/");
     },
