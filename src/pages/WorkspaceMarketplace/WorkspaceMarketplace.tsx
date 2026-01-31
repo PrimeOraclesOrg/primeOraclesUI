@@ -11,7 +11,7 @@ export default function WorkspaceMarketplace() {
 
   const [cursor, setCursor] = useState<FetchMyProductsParams["p_cursor"]>(null);
 
-  const PAGE_LIMIT = 8;
+  const PAGE_LIMIT = 2;
 
   const { data: products, isFetching } = useGetMyProductsQuery({
     p_status: activeTab,
@@ -20,8 +20,7 @@ export default function WorkspaceMarketplace() {
     p_limit: PAGE_LIMIT,
   });
 
-  const loadMoreButtonShown =
-    products && products.length !== 0 && products.length % PAGE_LIMIT === 0;
+  const loadMoreButtonShown = products && products[products.length - 1].has_more;
 
   const handleTabChange = (tab: WorkspaceMarketplaceTabs) => {
     setCursor(null);

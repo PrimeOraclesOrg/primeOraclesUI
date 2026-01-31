@@ -1571,6 +1571,7 @@ export type Database = {
           comments_count: number;
           cover_url: string;
           created_at: string;
+          has_more: boolean;
           id: string;
           is_active: boolean;
           next_cursor: Json;
@@ -1589,6 +1590,7 @@ export type Database = {
         };
         Returns: {
           author_avatar: string;
+          author_id: string;
           author_name: string;
           author_username: string;
           comment: string;
