@@ -1,4 +1,4 @@
-import { ImgHTMLAttributes } from "react";
+/* import { ImgHTMLAttributes } from "react";
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallbackSrc?: string;
@@ -7,3 +7,4 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 export const Image = ({ fallbackSrc = "/img/fallback.svg", ...props }: ImageProps) => {
   return <img {...props} onError={(event) => (event.currentTarget.src = fallbackSrc)} />;
 };
+ */
