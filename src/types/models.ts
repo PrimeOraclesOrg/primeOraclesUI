@@ -114,14 +114,6 @@ export interface SocialLink {
 // ========================================
 // Review & FAQ Models
 // ========================================
-export interface Review {
-  id: string;
-  author: string;
-  avatar?: string;
-  rating: number;
-  text: string;
-  date: string;
-}
 
 export interface RatingDistributionItem {
   stars: number;

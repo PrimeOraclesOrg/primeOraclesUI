@@ -1,13 +1,4 @@
-import type {
-  Product,
-  ProductDetails,
-  Reward,
-  LearningItem,
-  LessonDetails,
-  Review,
-  RatingDistributionItem,
-} from "./models";
-import { FAQ } from "./products";
+import type { Product, Reward, LearningItem, LessonDetails } from "./models";
 
 // ========================================
 // Products API Types
@@ -20,13 +11,6 @@ export interface ProductsQueryArgs {
 export interface ProductsResponse {
   products: Product[];
   categories: string[];
-}
-
-export interface ProductDetailsResponse {
-  product: ProductDetails;
-  reviews: Review[];
-  faqs: FAQ[];
-  ratingDistribution: RatingDistributionItem[];
 }
 
 // ========================================

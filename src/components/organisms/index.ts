@@ -6,5 +6,6 @@ export { ForgotPasswordForm } from "./ForgotPasswordForm/ForgotPasswordForm";
 export { CreateProductForm } from "./CreateProductForm/CreateProductForm";
 export { ProductPreview } from "./ProductPreview/ProductPreview";
 export { ConfirmCodeHelpPopupContent } from "./ConfirmCodeHelpPopupContent/ConfirmCodeHelpPopupContent";
+export { ChatPopupContent } from "./ChatPopupContent/ChatPopupContent";
 export { LogoutPopupContent } from "./LogoutPopupContent/LogoutPopupContent";
 export { Footer } from "./Footer/Footer";

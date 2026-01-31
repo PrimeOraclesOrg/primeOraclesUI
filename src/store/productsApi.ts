@@ -1,7 +1,11 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
-import type { Product, PublicProductPage } from "@/types";
-import { fetchProductById, createProductService } from "@/services/productsService/productsService";
+import { Product, PublicProductPage, Review } from "@/types";
+import {
+  fetchProductById,
+  createProductService,
+  fetchProductComments,
+} from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 
 interface ProductsQueryArgs {
@@ -54,6 +58,19 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: (_result, _error, id) => [{ type: "Products", id }],
     }),
 
+    getProductComments: builder.query<Review[], { productId: string; limit?: number }>({
+      queryFn: async ({ productId, limit }) => {
+        const { data, error } = await fetchProductComments(productId, {
+          p_limit: limit,
+        });
+        return error ? { error } : { data: data ?? [] };
+      },
+      providesTags: (_result, _error, { productId }) => [
+        { type: "Products", id: productId },
+        { type: "ProductComments", id: productId },
+      ],
+    }),
+
     createProduct: builder.mutation<
       string,
       { productData: CreateProductFormData; mediaFile?: File | null }
@@ -71,5 +88,6 @@ export const {
   useGetProductsQuery,
   useGetHomeProductsQuery,
   useGetProductDetailsQuery,
+  useGetProductCommentsQuery,
   useCreateProductMutation,
 } = productsApi;

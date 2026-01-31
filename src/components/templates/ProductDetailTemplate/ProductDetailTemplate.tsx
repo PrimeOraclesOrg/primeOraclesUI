@@ -1,22 +1,30 @@
-import { CheckCircle, Flag } from "lucide-react";
+import { Check, Flag } from "lucide-react";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
-import { FAQAccordion, RatingDistribution, UserAvatar } from "@/components/molecules";
+import { FAQAccordion, RatingDistribution, ReviewList, UserAvatar } from "@/components/molecules";
 import { RatingStars, Loader, SocialIcon, BackButton } from "@/components/atoms";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getCategoryDisplayName } from "@/types/createProduct";
-import { PublicProductPage } from "@/types";
+import { PublicProductPage, Review } from "@/types";
 
 interface ProductDetailTemplateProps {
   product: PublicProductPage;
   isLoading: boolean;
   onBackClick: () => void;
+  onOpenChatPopup: () => void;
+  comments: Review[];
+  isCommentsLoading: boolean;
+  isCommentsError: boolean;
 }
 
 export function ProductDetailTemplate({
   product,
   isLoading,
   onBackClick,
+  onOpenChatPopup,
+  comments,
+  isCommentsLoading,
+  isCommentsError,
 }: ProductDetailTemplateProps) {
   if (isLoading) {
     return (
@@ -83,7 +91,12 @@ export function ProductDetailTemplate({
                     >
                       Купить за {product.price}$
                     </Button>
-                    <Button variant="outline" size="sm" className="w-full lg:w-auto">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full lg:w-auto"
+                      onClick={onOpenChatPopup}
+                    >
                       Перейти в чат
                     </Button>
                   </div>
@@ -100,14 +113,19 @@ export function ProductDetailTemplate({
               {product?.advantages.length > 0 && (
                 <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10 overflow-hidden">
                   <h2 className="text-xl font-bold text-foreground mb-6">Особенности</h2>
-                  <div className="space-y-0">
+                  <div className="grid grid-cols-1 gap-3">
                     {product.advantages.map(({ position, description }) => {
                       return (
-                        <div key={position}>
-                          <div className="flex items-start gap-3 py-2">
-                            <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                            <p className="text-foreground flex-1">{description}</p>
+                        <div
+                          key={position}
+                          className="flex items-center gap-3 surface-card p-4 rounded-lg overflow-hidden"
+                        >
+                          <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-4 h-4 text-primary" />
                           </div>
+                          <span className="text-sm text-foreground line-clamp-2">
+                            {description}
+                          </span>
                         </div>
                       );
                     })}
@@ -141,8 +159,17 @@ export function ProductDetailTemplate({
                       rating={product.rating}
                       totalReviews={product.comments_count}
                     />
-                    {/* TODO: add product.comments */}
-                    {/* <ReviewList reviews={product.comments} /> */}
+                    {isCommentsLoading ? (
+                      <div className="flex-1 flex items-center justify-center min-h-[120px]">
+                        <Loader size="md" />
+                      </div>
+                    ) : isCommentsError ? (
+                      <div className="flex-1 flex items-center justify-center min-h-[120px]">
+                        <p className="text-foreground">Ошибка при загрузке отзывов</p>
+                      </div>
+                    ) : (
+                      <ReviewList reviews={comments} />
+                    )}
                   </div>
                 </div>
               )}
@@ -193,6 +220,7 @@ export function ProductDetailTemplate({
                 </div>
               </div>
             </div>
+            {/* Product name + Buy CTA Section */}
           </div>
           <div className="py-8 flex flex-col sm:flex-row items-center justify-between gap-4 px-6 sm:border-t md:rounded-lg">
             <h2 className="text-xl font-bold text-foreground">{product.title}</h2>
