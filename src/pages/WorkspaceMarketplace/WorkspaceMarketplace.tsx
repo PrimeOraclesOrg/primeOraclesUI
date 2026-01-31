@@ -11,7 +11,7 @@ export default function WorkspaceMarketplace() {
 
   const [cursor, setCursor] = useState<FetchMyProductsParams["p_cursor"]>(null);
 
-  const PAGE_LIMIT = 2;
+  const PAGE_LIMIT = 8;
 
   const { data: products, isFetching } = useGetMyProductsQuery({
     p_status: activeTab,
