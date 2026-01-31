@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { toast } from "@/hooks/useToast";
 
-type ToastMessage = { title: string; description: string };
+type ToastMessage = { title?: string; description?: string };
 
 interface UseOnRequestResultParams {
   isSuccess: boolean;
@@ -39,8 +39,9 @@ export function useOnRequestResult({
     const message = successMessageRef.current;
     if (message) {
       toast({
-        ...message,
+        title: "Успешно",
         variant: "default",
+        ...message,
       });
     }
 
@@ -53,10 +54,10 @@ export function useOnRequestResult({
 
     const message = errorMessageRef.current;
     if (message) {
-      // sendToast(message);
       toast({
-        ...message,
+        title: "Ошибка",
         variant: "destructive",
+        ...message,
       });
     }
 
