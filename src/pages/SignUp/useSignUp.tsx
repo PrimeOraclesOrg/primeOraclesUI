@@ -74,8 +74,8 @@ export const useSignUp = () => {
     setResendTimer(60);
   };
 
-  const onConfirmSubmit = async (data: VerificationCodeFormData) => {
-    await verifyOtp({
+  const onConfirmSubmit = (data: VerificationCodeFormData) => {
+    verifyOtp({
       email: userEmail,
       code: data.code,
       type: "signup",

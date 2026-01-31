@@ -31,8 +31,8 @@ export default function Login() {
     defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    await login(data);
+  const onSubmit = (data: LoginFormData) => {
+    login(data);
   };
 
   const navigateWithState = (to: string) => {

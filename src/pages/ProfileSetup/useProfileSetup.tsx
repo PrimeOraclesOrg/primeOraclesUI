@@ -64,8 +64,8 @@ export const useProfileSetup = () => {
     mode: "onBlur",
   });
 
-  const onProfileSetupSubmit = async (data: ProfileSetupFormData) => {
-    await completeProfile({
+  const onProfileSetupSubmit = (data: ProfileSetupFormData) => {
+    completeProfile({
       name: data.name,
       username: data.username,
       description: data.description,

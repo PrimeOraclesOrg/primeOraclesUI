@@ -50,8 +50,8 @@ export const useBasicSettings = () => {
   });
 
   const onUpdateProfileSubmit = useCallback(
-    async (data: UpdateProfileFormData) => {
-      await updateProfile(data);
+    (data: UpdateProfileFormData) => {
+      updateProfile(data);
     },
     [updateProfile]
   );
