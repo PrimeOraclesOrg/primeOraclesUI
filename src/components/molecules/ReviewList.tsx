@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import { Review } from "@/types";
+import { UserAvatar } from "./UserAvatar/UserAvatar";
 
 interface ReviewList {
   reviews: Review[];
@@ -9,14 +10,12 @@ export const ReviewList = ({ reviews }: ReviewList) => {
   return (
     <div className="flex-1 space-y-4">
       {reviews.map((review) => (
-        <div key={review.id} className="surface-card p-4 animate-fade-in">
+        <div key={review.author_id} className="surface-card p-4 animate-fade-in">
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                <span className="text-sm font-medium">{review.author.charAt(0)}</span>
-              </div>
+              <UserAvatar avatarPath={review.author_avatar} />
               <div>
-                <div className="font-medium text-foreground">{review.author}</div>
+                <div className="font-medium text-foreground">{review.author_name}</div>
                 <div className="flex">
                   {Array.from({ length: 5 }, (_, i) => (
                     <Star
@@ -29,9 +28,9 @@ export const ReviewList = ({ reviews }: ReviewList) => {
                 </div>
               </div>
             </div>
-            <span className="text-sm text-muted-foreground">{review.date}</span>
+            <span className="text-sm text-muted-foreground">{review.created_at}</span>
           </div>
-          <p className="text-muted-foreground text-sm">{review.text}</p>
+          <p className="text-muted-foreground text-sm">{review.comment}</p>
         </div>
       ))}
     </div>

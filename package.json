@@ -10,7 +10,8 @@
     "lint": "bun --bun eslint .",
     "preview": "bun --bun vite preview",
     "prepare": "husky",
-    "lint-staged": "bunx lint-staged"
+    "lint-staged": "bunx lint-staged",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

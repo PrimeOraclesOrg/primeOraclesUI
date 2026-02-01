@@ -14,7 +14,7 @@ import {
   UserAndSession,
   VerifyOtpCredentials,
 } from "./types";
-import { FullProfile } from "@/types";
+import { FullProfile, SocialMedia } from "@/types";
 
 /**
  * Sign up a new user with email and password
@@ -418,7 +418,10 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
       .eq("id", session?.user?.id)
       .single();
     return {
-      data,
+      data: {
+        ...data,
+        social_medias: data.social_medias as unknown as SocialMedia[],
+      },
       error,
     };
   } catch {

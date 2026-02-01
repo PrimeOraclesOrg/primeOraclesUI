@@ -124,27 +124,27 @@ export function HomeTemplate({
           <FAQAccordion
             questions={[
               {
-                id: "1",
+                position: 1,
                 question: "Вопрос 1",
                 answer: "Ответ 1",
               },
               {
-                id: "2",
+                position: 2,
                 question: "Вопрос 2",
                 answer: "Ответ 2",
               },
               {
-                id: "3",
+                position: 3,
                 question: "Вопрос 3",
                 answer: "Ответ 3",
               },
               {
-                id: "4",
+                position: 4,
                 question: "Вопрос 4",
                 answer: "Ответ 4",
               },
               {
-                id: "5",
+                position: 5,
                 question: "Вопрос 5",
                 answer: "Ответ 5",
               },

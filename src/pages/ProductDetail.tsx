@@ -1,25 +1,42 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useGetProductDetailsQuery } from "@/store";
+import { ChatPopupContent } from "@/components/organisms";
 import { ProductDetailTemplate } from "@/components/templates";
+import { usePopup } from "@/hooks/usePopup";
+import { useGetProductDetailsQuery, useGetProductCommentsQuery } from "@/store";
+import { useCallback } from "react";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading } = useGetProductDetailsQuery(id || "1");
+  const { openPopup } = usePopup();
+  const { data: product, isLoading, isError } = useGetProductDetailsQuery(id);
+  const {
+    data: comments,
+    isLoading: isCommentsLoading,
+    isError: isCommentsError,
+  } = useGetProductCommentsQuery({ productId: id! }, { skip: !id });
 
-  const product = data?.product;
-  const reviews = data?.reviews ?? [];
-  const faqs = data?.faqs ?? [];
-  const ratingDistribution = data?.ratingDistribution ?? [];
+  if (isError) {
+    navigate("/not-found", { replace: true });
+  }
+
+  const onBackClick = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+
+  const onOpenChatPopup = useCallback(() => {
+    openPopup(<ChatPopupContent />);
+  }, [openPopup]);
 
   return (
     <ProductDetailTemplate
       product={product}
-      reviews={reviews}
-      faqs={faqs}
-      ratingDistribution={ratingDistribution}
       isLoading={isLoading}
-      onBackClick={() => navigate(-1)}
+      onBackClick={onBackClick}
+      onOpenChatPopup={onOpenChatPopup}
+      comments={comments}
+      isCommentsLoading={isCommentsLoading}
+      isCommentsError={isCommentsError}
     />
   );
 }

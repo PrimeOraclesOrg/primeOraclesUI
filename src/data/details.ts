@@ -27,17 +27,17 @@ export const mockReviews: Review[] = [
 ];
 
 export const productFaqs: FAQ[] = [
-  { id: "1", question: "Вопрос 1", answer: "Ответ на первый вопрос будет здесь." },
-  { id: "2", question: "Вопрос 2", answer: "Ответ на второй вопрос будет здесь." },
-  { id: "3", question: "Вопрос 3", answer: "Ответ на третий вопрос будет здесь." },
+  { position: 1, question: "Вопрос 1", answer: "Ответ на первый вопрос будет здесь." },
+  { position: 2, question: "Вопрос 2", answer: "Ответ на второй вопрос будет здесь." },
+  { position: 3, question: "Вопрос 3", answer: "Ответ на третий вопрос будет здесь." },
 ];
 
 export const ratingDistribution: RatingDistributionItem[] = [
-  { stars: 5, percentage: 85 },
-  { stars: 4, percentage: 10 },
-  { stars: 3, percentage: 3 },
-  { stars: 2, percentage: 1 },
-  { stars: 1, percentage: 1 },
+  { stars: 5, count: 85 },
+  { stars: 4, count: 10 },
+  { stars: 3, count: 3 },
+  { stars: 2, count: 1 },
+  { stars: 1, count: 1 },
 ];
 
 export const getProductDetails = (id: string): ProductDetails => ({
