@@ -68,17 +68,19 @@ export const resetPasswordSchema = z
 /**
  * Verification code schema
  */
+const codeSchema = z
+  .string()
+  .length(8, "Код должен содержать 8 символов")
+  .regex(/^\d+$/, "Код должен содержать только цифры");
+
 export const verificationCodeSchema = z.object({
-  code: z
-    .string()
-    .length(8, "Код должен содержать 8 символов")
-    .regex(/^\d+$/, "Код должен содержать только цифры"),
+  code: codeSchema,
 });
 
 /**
  * URL schema for social links (optional)
  */
-const instagramUrlSchema = z
+export const instagramUrlSchema = z
   .string()
   .max(2048, "Ссылка не должена превышать 2048 символов")
   .regex(
@@ -88,7 +90,7 @@ const instagramUrlSchema = z
   .optional()
   .or(z.literal(""));
 
-const youtubeUrlSchema = z
+export const youtubeUrlSchema = z
   .string()
   .max(2048, "Ссылка не должена превышать 2048 символов")
   .regex(
@@ -98,7 +100,7 @@ const youtubeUrlSchema = z
   .optional()
   .or(z.literal(""));
 
-const tiktokUrlSchema = z
+export const tiktokUrlSchema = z
   .string()
   .max(2048, "Ссылка не должена превышать 2048 символов")
   .regex(
@@ -172,9 +174,24 @@ export const productSchema = z.object({
   category: z.string().min(1, "Выберите категорию"),
 });
 
+/**
+ * Update password validation schema
+ */
+export const updatePasswordSchema = z
+  .object({
+    code: codeSchema,
+    password: passwordSchema,
+    confirmPassword: confirmPasswordSchema,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Пароли не совпадают",
+    path: ["confirmPassword"],
+  });
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 export type ProfileSetupFormData = z.infer<typeof profileSetupSchema>;
 export type VerificationCodeFormData = z.infer<typeof verificationCodeSchema>;
+export type UpdatePasswordFormData = z.infer<typeof updatePasswordSchema>;

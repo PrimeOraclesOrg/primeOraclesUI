@@ -21,7 +21,3 @@ export {
 } from "./toastSlice";
 
 export type { ToasterToast } from "./toastSlice";
-
-export { authReducer, authSlice, clearUser, setUser } from "./authSlice";
-
-export * from "./selectors";

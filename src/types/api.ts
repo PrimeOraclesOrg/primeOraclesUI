@@ -1,5 +1,10 @@
 import type { Product, Reward, LearningItem, LessonDetails } from "./models";
 
+export interface ApiError {
+  message: string;
+  code: string;
+}
+
 // ========================================
 // Products API Types
 // ========================================

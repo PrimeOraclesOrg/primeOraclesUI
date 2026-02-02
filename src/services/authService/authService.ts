@@ -5,15 +5,19 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { base64ToBlob, ProfileSetupFormData, supabase } from "@/utils";
+import { base64ToBlob, formatApiError, ProfileSetupFormData, supabase } from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
   AuthResult,
+  ChangePasswordParams,
+  GetSocialMediasArgs,
   SignInCredentials,
   SignUpCredentials,
   UserAndSession,
   VerifyOtpCredentials,
+  VerifyOtpForPasswordChangeParams,
 } from "./types";
+import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
 import { FullProfile, SocialMedia } from "@/types";
 
 /**
@@ -32,7 +36,7 @@ export async function signUp(credentials: SignUpCredentials): Promise<AuthResult
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -57,7 +61,7 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -79,7 +83,7 @@ export async function signOut(): Promise<AuthResult<null>> {
 
     return {
       data: null,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -104,7 +108,7 @@ export async function getSession(): Promise<AuthResult<Session>> {
 
     return {
       data: session,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -129,7 +133,7 @@ export async function getCurrentUser(): Promise<AuthResult<User>> {
 
     return {
       data: user,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -147,13 +151,68 @@ export async function getCurrentUser(): Promise<AuthResult<User>> {
  */
 export async function resetPassword(email: string): Promise<AuthResult<null>> {
   try {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
 
     return {
       data: null,
-      error,
+      error: formatApiError(error),
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
+}
+
+/**
+ * Send password change email
+ */
+export async function requestPasswordChange(email: string): Promise<AuthResult<null>> {
+  try {
+    const { error } = await supabase.auth.signInWithOtp({ email });
+
+    return {
+      data: null,
+      error: formatApiError(error),
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
+}
+
+/**
+ * verify_otp_for_password_change
+ */
+export async function verifyOtpForPasswordChange({
+  email,
+  otpToken,
+}: VerifyOtpForPasswordChangeParams): Promise<AuthResult<null>> {
+  try {
+    const { error } = await supabase.functions.invoke("verify_otp_for_password_change", {
+      body: {
+        email,
+        otp_token: otpToken,
+      },
+    });
+
+    const errorCode = (await error?.context?.json())?.error || null;
+
+    return {
+      data: null,
+      error: error && {
+        code: errorCode,
+        message: errorCode,
+      },
     };
   } catch {
     return {
@@ -177,7 +236,51 @@ export async function updatePassword(newPassword: string): Promise<AuthResult<{ 
 
     return {
       data,
-      error,
+      error: formatApiError(error),
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
+}
+
+/**
+ * Change password
+ */
+export async function changePassword({
+  email,
+  otpToken,
+  newPassword,
+  isCodeVerified,
+}: ChangePasswordParams): Promise<AuthResult<{ isVerified: boolean }>> {
+  try {
+    if (!isCodeVerified) {
+      const { error: verifyError } = await verifyOtpForPasswordChange({
+        email,
+        otpToken,
+      });
+
+      if (verifyError) {
+        return {
+          data: {
+            isVerified: false,
+          },
+          error: formatApiError(verifyError),
+        };
+      }
+    }
+    const { error } = await updatePassword(newPassword);
+
+    return {
+      data: {
+        isVerified: true,
+      },
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -211,7 +314,7 @@ export async function verifyOtp({
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -230,7 +333,7 @@ export async function resendSignUpOtp(email: string): Promise<AuthResult<UserAnd
 
     return {
       data,
-      error,
+      error: formatApiError(error),
     };
   } catch {
     return {
@@ -277,6 +380,7 @@ export async function uploadAvatar(
       .from("avatars")
       .upload(userId, base64ToBlob(avatarBase64), {
         contentType: "image/png",
+        upsert: true,
       });
 
     if (error)
@@ -287,6 +391,10 @@ export async function uploadAvatar(
           message: error?.message,
         },
       };
+    return {
+      data: null,
+      error: null,
+    };
   } catch {
     return {
       data: null,
@@ -335,6 +443,30 @@ export async function profileRegistrationUpdate(
   }
 }
 
+const getSocialMedias = ({ instagramUrl, youtubeUrl, tiktokUrl }: GetSocialMediasArgs) => {
+  if (!instagramUrl && !youtubeUrl && !tiktokUrl) return null;
+  return [
+    instagramUrl && {
+      type: "instagram",
+      link: instagramUrl,
+    },
+    youtubeUrl && {
+      type: "youtube",
+      link: youtubeUrl,
+    },
+    tiktokUrl && {
+      type: "tiktok",
+      link: tiktokUrl,
+    },
+  ].filter(Boolean);
+};
+
+const getAvatarName = (selectedAvatar: string) => {
+  const avatarNumber = Number(selectedAvatar);
+  if (!avatarNumber) return null;
+  return `avatar${avatarNumber}.png`;
+};
+
 /**
  * Complete user profile after registration
  */
@@ -348,53 +480,29 @@ export async function completeProfile({
   uploadedAvatar,
   youtubeUrl,
 }: ProfileSetupFormData): Promise<AuthResult<FullProfile>> {
-  const getAvatarName = () => {
-    const avatarNumber = Number(selectedAvatar);
-    if (!avatarNumber) return null;
-    return `avatar${avatarNumber}.png`;
-  };
-
-  const getSocialMedias = () => {
-    if (!instagramUrl && !youtubeUrl && !tiktokUrl) return null;
-    return [
-      instagramUrl && {
-        type: "instagram",
-        link: instagramUrl,
-      },
-      youtubeUrl && {
-        type: "youtube",
-        link: youtubeUrl,
-      },
-      tiktokUrl && {
-        type: "tiktok",
-        link: tiktokUrl,
-      },
-    ].filter(Boolean);
-  };
-
   const { data: user, error: userError } = await getCurrentUser();
   if (userError) return { data: null, error: userError };
 
   const usernameAvailability = await checkUsernameAvailability(username);
   if (usernameAvailability?.error) return usernameAvailability;
 
-  if (!getAvatarName() && uploadedAvatar) {
+  if (!getAvatarName(selectedAvatar) && uploadedAvatar) {
     const avatarUploading = await uploadAvatar(uploadedAvatar, user.id);
-    if (avatarUploading?.error) return avatarUploading;
+    if (avatarUploading.error) return avatarUploading;
   }
 
   const { error } = await profileRegistrationUpdate(
     username,
     name,
     description,
-    getAvatarName(),
-    getSocialMedias()
+    getAvatarName(selectedAvatar),
+    getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl })
   );
 
   if (error)
     return {
       data: null,
-      error,
+      error: formatApiError(error),
     };
 
   const profile = await getUserProfile();
@@ -408,7 +516,7 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
     if (userError) {
       return {
         data: null,
-        error: userError,
+        error: formatApiError(userError),
       };
     }
 
@@ -417,13 +525,81 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
       .select("*")
       .eq("id", session?.user?.id)
       .single();
-    return {
-      data: {
-        ...data,
-        social_medias: data.social_medias as unknown as SocialMedia[],
-      },
-      error,
+
+    const processAvatarPath = (avatarPath: string) => {
+      /* if user uploads new avatar - browser caches old one, so we update link every time to always have current avatar image  */
+      if (avatarPath.includes("default_avatars")) return avatarPath;
+      return `${avatarPath}?v=${new Date().getTime()}`;
     };
+
+    return {
+      data: data && {
+        ...data,
+        avatar_path: processAvatarPath(data.avatar_path),
+        social_medias: data.social_medias as unknown as Array<SocialMedia>,
+      },
+      error: formatApiError(error),
+    };
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: "unexpected_error",
+        message: "Unexpected error",
+      },
+    };
+  }
+}
+
+export async function updateProfile({
+  name,
+  description,
+  instagramUrl,
+  tiktokUrl,
+  youtubeUrl,
+  selectedAvatar,
+  uploadedAvatar,
+}: UpdateProfileFormData): Promise<AuthResult<FullProfile>> {
+  try {
+    const { data: session, error: sessionError } = await getSession();
+
+    if (sessionError)
+      return {
+        data: null,
+        error: formatApiError(sessionError),
+      };
+
+    const changeAvatar = Boolean(selectedAvatar || uploadedAvatar);
+    const isUploadedAvatar = Boolean(!selectedAvatar && uploadedAvatar);
+
+    if (isUploadedAvatar) {
+      const { error } = await uploadAvatar(uploadedAvatar, session.user.id);
+      if (error)
+        return {
+          data: null,
+          error: formatApiError(error),
+        };
+    }
+
+    const { error } = await supabase.rpc("app_update_profile", {
+      p_name: name,
+      p_bio: description || null,
+      p_social_medias: getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl }) || [],
+      p_default_avatar_name: changeAvatar ? getAvatarName(selectedAvatar) : null,
+      p_use_custom_avatar: changeAvatar ? isUploadedAvatar : null,
+    });
+
+    if (error)
+      return {
+        data: null,
+        error: {
+          code: error?.hint || error?.code,
+          message: error?.message,
+        },
+      };
+
+    const profile = await getUserProfile();
+    return profile;
   } catch {
     return {
       data: null,

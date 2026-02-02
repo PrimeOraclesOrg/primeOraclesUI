@@ -12,3 +12,4 @@ export { RatingDistribution } from "./RatingDistribution";
 export { ReviewList } from "./ReviewList";
 export { MiniProfile } from "./MiniProfile/MiniProfile";
 export { UserAvatar } from "./UserAvatar/UserAvatar";
+export { MyAvatar } from "./MyAvatar/MyAvatar";

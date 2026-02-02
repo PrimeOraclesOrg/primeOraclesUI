@@ -4,41 +4,32 @@
  * Wrapper for auth pages that redirects authenticated users to previous location.
  */
 
-import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { usePreviousLocation } from "@/hooks/usePreviousLocation";
+import { useGetAuthUserQuery } from "@/store/authApi";
 import { LoadingScreen } from "@/components/atoms";
-import { getCurrentUser } from "@/services";
+import { useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
 
 interface PublicRouteProps {
   children: React.ReactNode;
 }
 
 export function AuthRoute({ children }: PublicRouteProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [fetched, setFetched] = useState(false);
+  const [user, setUser] = useState<User>();
+  const { data, isLoading } = useGetAuthUserQuery();
   const previousLocation = usePreviousLocation();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data: user } = await getCurrentUser();
-        setIsAuthenticated(!!user);
-      } catch {
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (fetched || isLoading) return;
+    setUser(data);
+    setFetched(true);
+  }, [data, fetched, setFetched, isLoading]);
 
-    checkAuth();
-  }, []);
+  if (isLoading && !fetched) return <LoadingScreen />;
 
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
-  if (isAuthenticated) {
+  if (user) {
     return <Navigate to={previousLocation || "/"} replace />;
   }
 

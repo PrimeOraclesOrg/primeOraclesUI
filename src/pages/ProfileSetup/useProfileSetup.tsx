@@ -1,25 +1,54 @@
 import { LogoutPopupContent } from "@/components/organisms";
+import { useOnRequestResult } from "@/hooks/useOnRequestResult";
 import { usePopup } from "@/hooks/usePopup";
-import { toast } from "@/hooks/useToast";
-import { completeProfile, signOut } from "@/services";
-import { selectAuthIsFetching, selectAuthProfile, selectAuthUser, useAppDispatch } from "@/store";
-import { setProfile } from "@/store/authSlice";
+
+import {
+  useCompleteProfileMutation,
+  useGetAuthUserQuery,
+  useLogoutMutation,
+} from "@/store/authApi";
+import { useGetMyProfileQuery } from "@/store/usersApi";
 import { ProfileSetupFormData, profileSetupSchema } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const useProfileSetup = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { openPopup, closePopup } = usePopup();
-  const isAuthFetching = useSelector(selectAuthIsFetching);
-  const user = useSelector(selectAuthUser);
-  const profile = useSelector(selectAuthProfile);
-  const dispatch = useAppDispatch();
+  const { data: profile } = useGetMyProfileQuery();
+  const { data: user, isLoading: isAuthLoading } = useGetAuthUserQuery();
+  const [completeProfile, { isError, isSuccess, error }] = useCompleteProfileMutation();
+  const [logout, { isError: isLogoutError, isSuccess: isLogoutSuccess, error: logoutError }] =
+    useLogoutMutation();
+
+  useOnRequestResult({
+    isError,
+    isSuccess,
+    successMessage: {
+      description: "Профиль успешно сохранён",
+    },
+    errorMessage: {
+      title: "Ошибка сохранения",
+      description: error ? t(`status:${error?.code}`) : "",
+    },
+    onSuccess: () => navigate("/", { replace: true }),
+  });
+
+  useOnRequestResult({
+    isError: isLogoutError,
+    isSuccess: isLogoutSuccess,
+    errorMessage: {
+      description: logoutError ? t(`status:${logoutError.code}`) : "",
+    },
+    onSuccess: () => {
+      closePopup();
+      navigate("/");
+    },
+  });
 
   const profileSetupForm = useForm<ProfileSetupFormData>({
     resolver: zodResolver(profileSetupSchema),
@@ -35,8 +64,8 @@ export const useProfileSetup = () => {
     mode: "onBlur",
   });
 
-  const onProfileSetupSubmit = async (data: ProfileSetupFormData) => {
-    const { data: profile, error } = await completeProfile({
+  const onProfileSetupSubmit = (data: ProfileSetupFormData) => {
+    completeProfile({
       name: data.name,
       username: data.username,
       description: data.description,
@@ -46,28 +75,7 @@ export const useProfileSetup = () => {
       selectedAvatar: data.selectedAvatar,
       uploadedAvatar: data.uploadedAvatar,
     });
-
-    if (error) {
-      toast({
-        title: "Ошибка сохранения",
-        description: t(`status:${error.code}`) || error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Успешно",
-        description: "Профиль успешно сохранён",
-      });
-      dispatch(setProfile(profile));
-      navigate("/", { replace: true });
-    }
   };
-
-  const logout = useCallback(async () => {
-    await signOut();
-    closePopup();
-    navigate("/");
-  }, [closePopup, navigate]);
 
   const onLogout = useCallback(
     () => openPopup(<LogoutPopupContent logout={logout} />),
@@ -75,10 +83,10 @@ export const useProfileSetup = () => {
   );
 
   useEffect(() => {
-    if ((!isAuthFetching && !user) || profile?.is_profile_completed) {
+    if ((!isAuthLoading && !user) || profile?.is_profile_completed) {
       return navigate("/");
     }
-  }, [isAuthFetching, user, navigate, profile]);
+  }, [user, navigate, profile, isAuthLoading]);
 
   return {
     profileSetupForm,

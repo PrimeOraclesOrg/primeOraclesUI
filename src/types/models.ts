@@ -41,8 +41,6 @@ export interface ProductDetails {
 // ========================================
 // Reward Models
 // ========================================
-export type SocialNetwork = "instagram" | "youtube" | "tiktok" | "vk" | "x";
-
 export interface Reward {
   logo: string;
   name: string;
@@ -54,7 +52,7 @@ export interface Reward {
   category: string;
   type: string;
   views: string;
-  socialNetworks: SocialNetwork[];
+  socialNetworks: SocialMediaType[];
 }
 
 // ========================================
@@ -104,10 +102,10 @@ export interface Order {
 // ========================================
 // User Models
 // ========================================
-export type SocialPlatform = "youtube" | "instagram" | "tiktok";
+export type SocialMediaType = Database["public"]["Enums"]["social_media_type"];
 
-export interface SocialLink {
-  type: SocialPlatform;
+export interface SocialMedia {
+  type: SocialMediaType;
   link: string;
 }
 
@@ -118,13 +116,6 @@ export interface SocialLink {
 export interface RatingDistributionItem {
   stars: number;
   count: number;
-}
-
-export type SocialMediaType = Database["public"]["Enums"]["social_media_type"];
-
-export interface SocialMedia {
-  type: SocialMediaType;
-  link: string;
 }
 
 export type FullProfile = Omit<
