@@ -6,6 +6,5 @@ export * from "./numbers";
 export * from "./constants";
 export { supabase } from "./supabase";
 export { base64ToBlob, base64ToFile } from "./base64ToBlob";
-export { formatApiError } from "./formatApiError";
 export { getSocialLink } from "./getSocialLink";
-export { normalizeError } from "./normalizeError";
+export { normalizeError, normalizeAsyncError } from "./normalizeError";

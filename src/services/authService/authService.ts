@@ -5,7 +5,13 @@
  * Prepared for Supabase Auth integration.
  */
 
-import { base64ToBlob, formatApiError, ProfileSetupFormData, supabase } from "@/utils";
+import {
+  base64ToBlob,
+  normalizeAsyncError,
+  normalizeError,
+  ProfileSetupFormData,
+  supabase,
+} from "@/utils";
 import { Session, User } from "@supabase/supabase-js";
 import {
   AuthResult,
@@ -34,18 +40,14 @@ export async function signUp(credentials: SignUpCredentials): Promise<AuthResult
       },
     });
 
+    if (error) throw error;
+
     return {
       data,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -59,18 +61,14 @@ export async function signIn(credentials: SignInCredentials): Promise<AuthResult
       password: credentials.password,
     });
 
+    if (error) throw error;
+
     return {
       data,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -81,18 +79,14 @@ export async function signOut(): Promise<AuthResult<null>> {
   try {
     const { error } = await supabase.auth.signOut();
 
+    if (error) throw error;
+
     return {
       data: null,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -106,18 +100,14 @@ export async function getSession(): Promise<AuthResult<Session>> {
       error,
     } = await supabase.auth.getSession();
 
+    if (error) throw error;
+
     return {
       data: session,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -131,18 +121,14 @@ export async function getCurrentUser(): Promise<AuthResult<User>> {
       error,
     } = await supabase.auth.getUser();
 
+    if (error) throw error;
+
     return {
       data: user,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -153,18 +139,14 @@ export async function resetPassword(email: string): Promise<AuthResult<null>> {
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email);
 
+    if (error) throw error;
+
     return {
       data: null,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -175,18 +157,14 @@ export async function requestPasswordChange(email: string): Promise<AuthResult<n
   try {
     const { error } = await supabase.auth.signInWithOtp({ email });
 
+    if (error) throw error;
+
     return {
       data: null,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -205,23 +183,14 @@ export async function verifyOtpForPasswordChange({
       },
     });
 
-    const errorCode = (await error?.context?.json())?.error || null;
+    if (error) throw error;
 
     return {
       data: null,
-      error: error && {
-        code: errorCode,
-        message: errorCode,
-      },
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return await normalizeAsyncError(error);
   }
 }
 
@@ -234,18 +203,14 @@ export async function updatePassword(newPassword: string): Promise<AuthResult<{ 
       password: newPassword,
     });
 
+    if (error) throw error;
+
     return {
       data,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -265,31 +230,22 @@ export async function changePassword({
         otpToken,
       });
 
-      if (verifyError) {
-        return {
-          data: {
-            isVerified: false,
-          },
-          error: formatApiError(verifyError),
-        };
-      }
-    }
-    const { error } = await updatePassword(newPassword);
+      if (verifyError) throw verifyError;
 
-    return {
-      data: {
-        isVerified: true,
-      },
-      error: formatApiError(error),
-    };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+      const { error } = await updatePassword(newPassword);
+
+      return {
+        data: {
+          isVerified: true,
+        },
+        error: {
+          code: error.code,
+          message: error.message,
+        },
+      };
+    }
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -312,18 +268,14 @@ export async function verifyOtp({
   try {
     const { data, error } = await supabase.auth.verifyOtp({ ...params, token: code });
 
+    if (error) throw error;
+
     return {
       data,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -331,18 +283,14 @@ export async function resendSignUpOtp(email: string): Promise<AuthResult<UserAnd
   try {
     const { data, error } = await supabase.auth.resend({ email, type: "signup" });
 
+    if (error) throw error;
+
     return {
       data,
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -352,22 +300,14 @@ export async function checkUsernameAvailability(username: string) {
       p_username: username,
     });
 
-    if (error)
-      return {
-        data: null,
-        error: {
-          code: error.hint || error.code,
-          message: error.message,
-        },
-      };
-  } catch {
+    if (error) throw error;
+
     return {
       data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
+      error: null,
     };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -384,25 +324,17 @@ export async function uploadAvatar(
       });
 
     if (error)
-      return {
-        data: null,
-        error: {
-          code: error?.name,
-          message: error?.message,
-        },
+      throw {
+        code: error?.name,
+        message: error?.message,
       };
+
     return {
       data: null,
       error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -425,21 +357,14 @@ export async function profileRegistrationUpdate(
       p_social_medias: socialMedias,
     });
 
+    if (error) throw error;
+
     return {
       data: null,
-      error: error && {
-        code: error.hint || error.code,
-        message: error.message,
-      },
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -480,51 +405,48 @@ export async function completeProfile({
   uploadedAvatar,
   youtubeUrl,
 }: ProfileSetupFormData): Promise<AuthResult<FullProfile>> {
-  const { data: user, error: userError } = await getCurrentUser();
-  if (userError) return { data: null, error: userError };
+  try {
+    const { data: user, error: userError } = await getCurrentUser();
+    if (userError) return { data: null, error: userError };
 
-  const usernameAvailability = await checkUsernameAvailability(username);
-  if (usernameAvailability?.error) return usernameAvailability;
+    const { error: usernameAvailabilityError } = await checkUsernameAvailability(username);
+    if (usernameAvailabilityError) throw usernameAvailabilityError;
 
-  if (!getAvatarName(selectedAvatar) && uploadedAvatar) {
-    const avatarUploading = await uploadAvatar(uploadedAvatar, user.id);
-    if (avatarUploading.error) return avatarUploading;
+    if (!getAvatarName(selectedAvatar) && uploadedAvatar) {
+      const { error } = await uploadAvatar(uploadedAvatar, user.id);
+      if (error) throw error;
+    }
+
+    const { error } = await profileRegistrationUpdate(
+      username,
+      name,
+      description,
+      getAvatarName(selectedAvatar),
+      getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl })
+    );
+
+    if (error) throw error;
+
+    const profile = await getUserProfile();
+    return profile;
+  } catch (error) {
+    return normalizeError(error);
   }
-
-  const { error } = await profileRegistrationUpdate(
-    username,
-    name,
-    description,
-    getAvatarName(selectedAvatar),
-    getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl })
-  );
-
-  if (error)
-    return {
-      data: null,
-      error: formatApiError(error),
-    };
-
-  const profile = await getUserProfile();
-  return profile;
 }
 
 export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
   try {
     const { data: session, error: userError } = await getSession();
 
-    if (userError) {
-      return {
-        data: null,
-        error: formatApiError(userError),
-      };
-    }
+    if (userError) throw userError;
 
     const { data, error } = await supabase
       .from("public_profiles_full_view")
       .select("*")
       .eq("id", session?.user?.id)
       .single();
+
+    if (error) throw error;
 
     const processAvatarPath = (avatarPath: string) => {
       /* if user uploads new avatar - browser caches old one, so we update link every time to always have current avatar image  */
@@ -538,16 +460,10 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
         avatar_path: processAvatarPath(data.avatar_path),
         social_medias: data.social_medias as unknown as Array<SocialMedia>,
       },
-      error: formatApiError(error),
+      error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
@@ -563,22 +479,14 @@ export async function updateProfile({
   try {
     const { data: session, error: sessionError } = await getSession();
 
-    if (sessionError)
-      return {
-        data: null,
-        error: formatApiError(sessionError),
-      };
+    if (sessionError) throw sessionError;
 
     const changeAvatar = Boolean(selectedAvatar || uploadedAvatar);
     const isUploadedAvatar = Boolean(!selectedAvatar && uploadedAvatar);
 
     if (isUploadedAvatar) {
       const { error } = await uploadAvatar(uploadedAvatar, session.user.id);
-      if (error)
-        return {
-          data: null,
-          error: formatApiError(error),
-        };
+      if (error) throw error;
     }
 
     const { error } = await supabase.rpc("app_update_profile", {
@@ -589,24 +497,11 @@ export async function updateProfile({
       p_use_custom_avatar: changeAvatar ? isUploadedAvatar : null,
     });
 
-    if (error)
-      return {
-        data: null,
-        error: {
-          code: error?.hint || error?.code,
-          message: error?.message,
-        },
-      };
+    if (error) throw error;
 
     const profile = await getUserProfile();
     return profile;
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
