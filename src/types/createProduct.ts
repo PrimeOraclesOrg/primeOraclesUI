@@ -3,10 +3,11 @@
  */
 
 import { CreateProductFormData } from "@/utils/validators/createProduct";
+import { Constants, Database } from "./supabase";
 
-export const PRODUCT_CATEGORIES = ["Soft/Bot", "Community", "Course", "Digital Material"] as const;
+export const PRODUCT_CATEGORIES = Constants.public.Enums.product_category;
 
-export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
+export type ProductCategory = Database["public"]["Enums"]["product_category"];
 
 export const CATEGORY_DISPLAY_NAMES: Record<ProductCategory, string> = {
   "Soft/Bot": "Софты/боты",
@@ -15,7 +16,7 @@ export const CATEGORY_DISPLAY_NAMES: Record<ProductCategory, string> = {
   "Digital Material": "Цифровые материалы",
 } as const;
 
-export function getCategoryDisplayName(category: ProductCategory): string {
+export function getCategoryDisplayName(category: string): string {
   return CATEGORY_DISPLAY_NAMES[category];
 }
 

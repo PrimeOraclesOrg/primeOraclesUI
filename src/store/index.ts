@@ -7,6 +7,7 @@ export {
   useGetProductsQuery,
   useGetHomeProductsQuery,
   useGetProductDetailsQuery,
+  useGetProductCommentsQuery,
 } from "./productsApi";
 export { rewardsApi, useGetRewardsQuery, useGetHomeRewardsQuery } from "./rewardsApi";
 export { learningApi, useGetLearningItemsQuery, useGetLessonDetailsQuery } from "./learningApi";

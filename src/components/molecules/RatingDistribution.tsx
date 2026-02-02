@@ -13,6 +13,10 @@ export const RatingDistribution = ({ distribution, rating, totalReviews }: Ratin
     return "Звезд";
   };
 
+  const getPercentage = (count: number) => {
+    return totalReviews > 0 ? Math.round((count / totalReviews) * 100) : 0;
+  };
+
   return (
     <div className="lg:w-64 flex-shrink-0">
       <div className="flex items-center gap-2 mb-2">
@@ -39,7 +43,7 @@ export const RatingDistribution = ({ distribution, rating, totalReviews }: Ratin
             <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full bg-primary rounded-full transition-all duration-500"
-                style={{ width: `${item.percentage}%` }}
+                style={{ width: `${getPercentage(item.count)}%` }}
               />
             </div>
           </div>

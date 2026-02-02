@@ -1,13 +1,4 @@
-import type {
-  Product,
-  ProductDetails,
-  Reward,
-  LearningItem,
-  LessonDetails,
-  Review,
-  FAQ,
-  RatingDistributionItem,
-} from "./models";
+import type { Product, Reward, LearningItem, LessonDetails } from "./models";
 
 export interface ApiError {
   message: string;
@@ -25,13 +16,6 @@ export interface ProductsQueryArgs {
 export interface ProductsResponse {
   products: Product[];
   categories: string[];
-}
-
-export interface ProductDetailsResponse {
-  product: ProductDetails;
-  reviews: Review[];
-  faqs: FAQ[];
-  ratingDistribution: RatingDistributionItem[];
 }
 
 // ========================================

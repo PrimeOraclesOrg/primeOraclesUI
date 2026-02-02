@@ -10,52 +10,22 @@ import {
   type ProductFAQItem,
 } from "@/types/createProduct";
 import { useToast } from "@/hooks/useToast";
-import { createProduct } from "@/services/productsService/productsService";
+import { useCreateProductMutation } from "@/store/productsApi";
+import { useOnRequestResult } from "@/data/useOnRequestResult";
 
 export const useCreateProduct = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [createProduct, { data: createdProductId, isSuccess, isError, error }] =
+    useCreateProductMutation();
 
   const createProductForm = useForm<CreateProductFormData>({
     resolver: zodResolver(createProductSchema),
     defaultValues: DEFAULT_FORM_DATA,
     mode: "onBlur",
   });
-
-  const onSubmit = async (values: CreateProductFormData) => {
-    const { data, error } = await createProduct(
-      {
-        title: values.title,
-        category: values.category,
-        description: values.description,
-        advantages: values.advantages,
-        faq: values.faq,
-        instructions: values.instructions,
-        price: values.price,
-        isActive: values.isActive,
-      },
-      mediaFile
-    );
-
-    if (error) {
-      toast({
-        title: "Ошибка",
-        description: t(`status:${error.code}`) || error.message,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (data) {
-      toast({
-        title: "Продукт создан",
-        description: "Ваш продукт успешно создан!",
-      });
-      navigate("/marketplace");
-    }
-  };
 
   // Navigate back
   const handleBackClick = useCallback(() => {
@@ -109,15 +79,6 @@ export const useCreateProduct = () => {
     createProductForm.setValue("mediaUrl", undefined);
   }, [createProductForm]);
 
-  useEffect(() => {
-    return () => {
-      const currentUrl = createProductForm.getValues("mediaUrl");
-      if (currentUrl) {
-        URL.revokeObjectURL(currentUrl);
-      }
-    };
-  }, [createProductForm]);
-
   // Advantages handlers
   const handleAddAdvantage = useCallback(() => {
     const currentAdvantages = createProductForm.getValues("advantages");
@@ -157,6 +118,45 @@ export const useCreateProduct = () => {
     },
     [createProductForm]
   );
+
+  const onSubmit = (values: CreateProductFormData) => {
+    createProduct({
+      productData: {
+        title: values.title,
+        category: values.category,
+        description: values.description,
+        advantages: values.advantages,
+        faq: values.faq,
+        instructions: values.instructions,
+        price: values.price,
+        isActive: values.isActive,
+      },
+      mediaFile,
+    });
+  };
+
+  useOnRequestResult({
+    isSuccess,
+    isError,
+    successMessage: {
+      title: "Продукт создан",
+      description: "Ваш продукт успешно создан!",
+    },
+    errorMessage: {
+      title: "Ошибка",
+      description: t(`status:${error?.code}`) || error?.message,
+    },
+    onSuccess: () => navigate(`/products/${createdProductId}`),
+  });
+
+  useEffect(() => {
+    return () => {
+      const currentUrl = createProductForm.getValues("mediaUrl");
+      if (currentUrl) {
+        URL.revokeObjectURL(currentUrl);
+      }
+    };
+  }, [createProductForm]);
 
   return {
     createProductForm,

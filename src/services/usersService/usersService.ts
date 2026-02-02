@@ -7,8 +7,7 @@
 
 import { mockSocialLinks } from "@/data/transactions";
 import { ServiceResult, UserProfileUpdate } from "./types";
-import { FullProfile } from "@/types";
-import { Json } from "@/types/supabase";
+import { FullProfile, SocialMedia } from "@/types";
 
 /**
  * Get user profile by user ID
@@ -29,7 +28,7 @@ export async function fetchUserProfile(userId: string): Promise<ServiceResult<Fu
       username: "Leshamais",
       avatar_path: "default_avatars/avatar1.png",
       bio: "",
-      social_medias: mockSocialLinks as unknown as Json,
+      social_medias: mockSocialLinks as SocialMedia[],
       is_profile_completed: true,
       is_verified: true,
     },
