@@ -10,6 +10,14 @@ import { ServiceError } from "@/types";
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fakeBaseQuery<ServiceError>(),
-  tagTypes: ["Products", "ProductComments", "Rewards", "Learning", "Transactions"],
+  tagTypes: [
+    "Products",
+    "ProductComments",
+    "Rewards",
+    "Learning",
+    "Transactions",
+    "AuthUser",
+    "User",
+  ],
   endpoints: () => ({}),
 });
