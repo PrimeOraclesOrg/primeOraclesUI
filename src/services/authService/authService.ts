@@ -440,6 +440,12 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
 
     if (userError) throw userError;
 
+    if (!session)
+      return {
+        data: null,
+        error: null,
+      };
+
     const { data, error } = await supabase
       .from("public_profiles_full_view")
       .select("*")
