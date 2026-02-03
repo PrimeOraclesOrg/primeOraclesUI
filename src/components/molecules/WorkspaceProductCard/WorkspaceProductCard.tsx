@@ -5,7 +5,7 @@ import { CategoryBadge } from "@/components/atoms/CategoryBadge/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { MyProducts } from "@/types";
-import { productCategoryColors, storageUrlBase } from "@/data";
+import { productCategoryColors } from "@/data";
 import { formatDateTime } from "@/utils";
 import { useTranslation } from "react-i18next";
 
