@@ -436,9 +436,9 @@ export async function completeProfile({
 
 export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
   try {
-    const { data: session, error: userError } = await getSession();
+    const { data: session, error: sessionError } = await getSession();
 
-    if (userError) throw userError;
+    if (sessionError) throw sessionError;
 
     if (!session)
       return {
