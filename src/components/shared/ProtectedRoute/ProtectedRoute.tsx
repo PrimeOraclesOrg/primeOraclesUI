@@ -24,6 +24,16 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return () => console.log("Protected route unmounted");
   }, []);
 
+  console.log(
+    `
+    Protected route rerender
+    Location state: ${location.pathname}
+    Is fetching state: ${isFetching}
+    User state:
+  `,
+    user
+  );
+
   if (!user && !isFetching) {
     console.log("Navigate to login, current location:", location.pathname);
 
