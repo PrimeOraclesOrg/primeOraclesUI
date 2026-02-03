@@ -25,7 +25,6 @@ export function WorkspaceProductCard({ product, onEdit, onViewStats }: Workspace
           src={`${storageUrlBase}/${product.cover_url}`}
           alt={product.title}
           className="w-full h-full object-cover"
-          onError={() => console.log("uwu")}
         />
         <div className="absolute bottom-2 left-2">
           <span className="badge-price px-2 py-0.5 rounded-full text-s font-medium">
