@@ -1,6 +1,6 @@
-import { WorkspaceSortOption } from "@/types/workspace";
+import { WorkspaceMarketplaceTabs, WorkspaceSortOption } from "@/types/workspace";
 
-export const workspaceStatusTabs = [
+export const workspaceStatusTabs: Array<{ id: WorkspaceMarketplaceTabs; label: string }> = [
   { id: "all", label: "Все статусы" },
   { id: "active", label: "Активные" },
   { id: "inactive", label: "В архиве" },
