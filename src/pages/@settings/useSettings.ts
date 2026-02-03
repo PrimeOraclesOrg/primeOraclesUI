@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export const useSettings = () => {
   const navigate = useNavigate();
-  const [onLogout, { isError, isSuccess, error }] = useLogoutMutation({
+  const [onLogout, { isError, isSuccess, error, reset }] = useLogoutMutation({
     fixedCacheKey: "shared-logout-state",
   });
   const { data: profile } = useGetMyProfileQuery();
@@ -16,7 +16,11 @@ export const useSettings = () => {
     isError,
     isSuccess,
     errorMessage: error ? { description: t(`status:${error.code}`) } : undefined,
-    onSuccess: () => navigate("/"),
+    onSuccess: () => {
+      console.log("Navigate to home called");
+      reset();
+      navigate("/");
+    },
   });
 
   return {
