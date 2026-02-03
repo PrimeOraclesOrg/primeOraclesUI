@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { WorkspaceMarketplaceTemplate } from "@/components/templates/WorkspaceMarketplaceTemplate/WorkspaceMarketplaceTemplate";
 import { useGetMyProductsQuery } from "@/store/productsApi";
 import { WorkspaceMarketplaceTabs, WorkspaceSortOption } from "@/types/workspace";
@@ -21,27 +21,27 @@ export default function WorkspaceMarketplace() {
 
   const loadMoreButtonShown = products && products[products.length - 1]?.has_more;
 
-  const handleTabChange = (tab: WorkspaceMarketplaceTabs) => {
+  const handleTabChange = useCallback((tab: WorkspaceMarketplaceTabs) => {
     setCursor(null);
     setActiveTab(tab);
-  };
+  }, []);
 
-  const handleEdit = (id: string) => {
+  const handleEdit = useCallback((id: string) => {
     // TODO: Navigate to edit page when implemented
     console.log("Edit product:", id);
-  };
+  }, []);
 
-  const handleViewStats = (id: string) => {
+  const handleViewStats = useCallback((id: string) => {
     // TODO: Navigate to stats page when implemented
     console.log("View stats:", id);
-  };
+  }, []);
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     if (products && products.length > 0) {
       const lastItem = products[products.length - 1];
       setCursor(lastItem.next_cursor as FetchMyProductsParams["p_cursor"]);
     }
-  };
+  }, [products]);
 
   const handleSetSortBy = (sort: WorkspaceSortOption) => {
     setCursor(null);
