@@ -8,6 +8,7 @@ import { MyProducts } from "@/types";
 import { productCategoryColors, storageUrlBase } from "@/data";
 import { formatDateTime } from "@/utils";
 import { useTranslation } from "react-i18next";
+import { buildCoverUrl } from "@/utils/base64ToBlob";
 
 interface WorkspaceProductCardProps {
   product: MyProducts[0];
@@ -22,7 +23,7 @@ export function WorkspaceProductCard({ product, onEdit, onViewStats }: Workspace
       {/* Product Image */}
       <div className="relative w-full md:w-60 h-32 md:h-36 flex-shrink-0 rounded-lg overflow-hidden">
         <img
-          src={`${storageUrlBase}/${product.cover_url}`}
+          src={buildCoverUrl(product.cover_url)}
           alt={product.title}
           className="w-full h-full object-cover"
         />
