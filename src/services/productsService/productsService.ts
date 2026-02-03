@@ -29,26 +29,16 @@ export async function fetchMyProducts({
       p_status,
     });
 
-    if (error)
-      return {
-        data: null,
-        error: {
-          code: error.hint || error.code,
-          message: error.message,
-        },
-      };
+    if (error) throw error;
     return {
-      data,
+      data: data.map((product) => ({
+        ...product,
+        cover_url: buildCoverUrl(product.cover_url),
+      })),
       error: null,
     };
-  } catch {
-    return {
-      data: null,
-      error: {
-        code: "unexpected_error",
-        message: "Unexpected error",
-      },
-    };
+  } catch (error) {
+    return normalizeError(error);
   }
 }
 
