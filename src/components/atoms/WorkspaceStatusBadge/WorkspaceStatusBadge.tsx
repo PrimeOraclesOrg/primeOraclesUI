@@ -1,23 +1,22 @@
 import { cn } from "@/lib/utils";
+import { useMemo } from "react";
 
 interface WorkspaceStatusBadgeProps {
-  is_active: boolean;
+  isActive: boolean;
 }
 
-const statusConfig = (is_active: boolean) => {
-  if (is_active)
+export function WorkspaceStatusBadge({ isActive }: WorkspaceStatusBadgeProps) {
+  const config = useMemo(() => {
+    if (isActive)
+      return {
+        label: "Активный",
+        className: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+      };
     return {
-      label: "Активный",
-      className: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+      label: "В архиве",
+      className: "bg-muted text-muted-foreground border-border",
     };
-  return {
-    label: "В архиве",
-    className: "bg-muted text-muted-foreground border-border",
-  };
-};
-
-export function WorkspaceStatusBadge({ is_active }: WorkspaceStatusBadgeProps) {
-  const config = statusConfig(is_active);
+  }, [isActive]);
 
   return (
     <span

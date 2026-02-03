@@ -39,7 +39,7 @@ export function WorkspaceProductCard({ product, onEdit, onViewStats }: Workspace
         <div>
           <div className="flex items-start gap-2 mb-1 justify-between">
             <h3 className="font-semibold text-foreground line-clamp-3">{product.title}</h3>
-            <WorkspaceStatusBadge is_active={product.is_active} />
+            <WorkspaceStatusBadge isActive={product.is_active} />
           </div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <CategoryBadge
