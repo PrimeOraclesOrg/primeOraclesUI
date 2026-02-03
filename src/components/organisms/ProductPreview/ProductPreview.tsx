@@ -128,11 +128,6 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
                 <span className="text-primary text-sm">({mockReviewCount})</span>
               </div>
 
-              {/* Description */}
-              <p className="text-sm text-muted-foreground mb-6 line-clamp-3">
-                {data.description || "Описание продукта будет отображаться здесь..."}
-              </p>
-
               {/* Price & CTA */}
               <div className="flex flex-col gap-3">
                 <Button
@@ -148,6 +143,14 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
             </div>
           </div>
 
+          {/* Description */}
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-foreground mb-6">Описание</h2>
+            <p className="text-foreground">
+              {data.description || "Описание продукта будет отображаться здесь..."}
+            </p>
+          </div>
+
           {/* Advantages Section */}
           {data.advantages.length > 0 && (
             <div className="mb-8">
@@ -156,7 +159,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
                 {data.advantages.map((adv) => (
                   <div
                     key={adv.position}
-                    className="flex items-start gap-3 surface-card p-4 rounded-lg overflow-hidden"
+                    className="flex items-center gap-3 surface-card p-4 rounded-lg overflow-hidden"
                   >
                     <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                       <Check className="w-4 h-4 text-primary" />

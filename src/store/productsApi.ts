@@ -1,16 +1,14 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
-import { getProductDetails, mockReviews, productFaqs, ratingDistribution } from "@/data/details";
-import type {
-  Product,
-  ProductDetails,
-  Review,
-  FAQ,
-  RatingDistributionItem,
-  MyProducts,
-} from "@/types";
+import { MyProducts, Product, PublicProductPage, Review } from "@/types";
+import {
+  fetchProductById,
+  createProductService,
+  fetchProductComments,
+  fetchMyProducts,
+} from "@/services/productsService/productsService";
+import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FetchMyProductsParams } from "@/services/productsService/types";
-import { fetchMyProducts } from "@/services";
 
 interface ProductsQueryArgs {
   category?: string;
@@ -20,13 +18,6 @@ interface ProductsQueryArgs {
 interface ProductsResponse {
   products: Product[];
   categories: string[];
-}
-
-interface ProductDetailsResponse {
-  product: ProductDetails;
-  reviews: Review[];
-  faqs: FAQ[];
-  ratingDistribution: RatingDistributionItem[];
 }
 
 export const productsApi = baseApi.injectEndpoints({
@@ -88,19 +79,36 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    getProductDetails: builder.query<ProductDetailsResponse, string>({
-      queryFn: (id) => {
-        const product = getProductDetails(id);
-        return {
-          data: {
-            product,
-            reviews: mockReviews,
-            faqs: productFaqs,
-            ratingDistribution,
-          },
-        };
+    getProductDetails: builder.query<PublicProductPage | null, string>({
+      queryFn: async (id) => {
+        const { data, error } = await fetchProductById(id);
+        return error ? { error } : { data };
       },
       providesTags: (_result, _error, id) => [{ type: "Products", id }],
+    }),
+
+    getProductComments: builder.query<Review[], { productId: string; limit?: number }>({
+      queryFn: async ({ productId, limit }) => {
+        const { data, error } = await fetchProductComments(productId, {
+          p_limit: limit,
+        });
+        return error ? { error } : { data: data ?? [] };
+      },
+      providesTags: (_result, _error, { productId }) => [
+        { type: "Products", id: productId },
+        { type: "ProductComments", id: productId },
+      ],
+    }),
+
+    createProduct: builder.mutation<
+      string,
+      { productData: CreateProductFormData; mediaFile?: File | null }
+    >({
+      queryFn: async ({ productData, mediaFile }) => {
+        const { data, error } = await createProductService(productData, mediaFile);
+        return error ? { error } : { data };
+      },
+      invalidatesTags: ["Products"],
     }),
   }),
 });
@@ -110,4 +118,6 @@ export const {
   useGetHomeProductsQuery,
   useGetProductDetailsQuery,
   useGetMyProductsQuery,
+  useGetProductCommentsQuery,
+  useCreateProductMutation,
 } = productsApi;

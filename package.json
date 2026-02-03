@@ -11,7 +11,8 @@
     "preview": "bun --bun vite preview",
     "prepare": "husky",
     "lint-staged": "bunx lint-staged",
-    "gen-supabase-types": "supabase gen types typescript --project-id ooglglelvfkjzfxrcsjg > src/types/supabase.ts"
+    "gen-supabase-types": "supabase gen types typescript --project-id ooglglelvfkjzfxrcsjg > src/types/supabase.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

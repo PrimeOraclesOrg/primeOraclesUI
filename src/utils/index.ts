@@ -7,5 +7,5 @@ export * from "./constants";
 export { supabase } from "./supabase";
 export { base64ToBlob, base64ToFile } from "./base64ToBlob";
 export { formatDateTime } from "./formatDateTime";
-export { formatApiError } from "./formatApiError";
 export { getSocialLink } from "./getSocialLink";
+export { normalizeError, normalizeAsyncError } from "./normalizeError";

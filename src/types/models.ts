@@ -112,24 +112,10 @@ export interface SocialMedia {
 // ========================================
 // Review & FAQ Models
 // ========================================
-export interface Review {
-  id: string;
-  author: string;
-  avatar?: string;
-  rating: number;
-  text: string;
-  date: string;
-}
-
-export interface FAQ {
-  id: string;
-  question: string;
-  answer: string;
-}
 
 export interface RatingDistributionItem {
   stars: number;
-  percentage: number;
+  count: number;
 }
 
 export type MyProducts = Database["public"]["Functions"]["app_get_my_products"]["Returns"];
@@ -137,4 +123,6 @@ export type ProductCategory = Database["public"]["Tables"]["products"]["Row"]["c
 export type FullProfile = Omit<
   Database["public"]["Views"]["public_profiles_full_view"]["Row"],
   "social_medias"
-> & { social_medias: Array<SocialMedia> };
+> & {
+  social_medias: SocialMedia[];
+};

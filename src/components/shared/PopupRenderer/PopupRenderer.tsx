@@ -13,7 +13,9 @@ export function PopupRenderer() {
 
   return (
     <Dialog open={popup !== null} onOpenChange={(open) => !open && closePopup()}>
-      <DialogContent className="sm:max-w-md">{popup}</DialogContent>
+      <DialogContent className="w-[calc(100%-2rem)] max-w-[calc(100vw-2rem)] p-4 sm:max-w-md sm:p-6 max-h-[85vh] overflow-y-auto">
+        {popup}
+      </DialogContent>
     </Dialog>
   );
 }

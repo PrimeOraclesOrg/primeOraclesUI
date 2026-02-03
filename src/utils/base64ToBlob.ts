@@ -1,3 +1,5 @@
+import { storageUrlBase } from "@/data";
+
 export const base64ToBlob = (base64: string, mimeType: string = "image/png") => {
   // Remove data URL prefix if present
   const base64Data = base64.includes(",") ? base64.split(",")[1] : base64;
@@ -21,4 +23,10 @@ export const base64ToFile = (
 ): File => {
   const blob = base64ToBlob(base64String, mimeType);
   return new File([blob], filename, { type: mimeType });
+};
+
+export const buildCoverUrl = (coverUrl: string | null): string | null => {
+  if (!coverUrl) return null;
+  if (coverUrl.startsWith("http")) return coverUrl;
+  return `${storageUrlBase}/${coverUrl}`;
 };
