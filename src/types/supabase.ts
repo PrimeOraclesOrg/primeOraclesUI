@@ -1571,6 +1571,7 @@ export type Database = {
           comments_count: number;
           cover_url: string;
           created_at: string;
+          has_more: boolean;
           id: string;
           is_active: boolean;
           next_cursor: Json;

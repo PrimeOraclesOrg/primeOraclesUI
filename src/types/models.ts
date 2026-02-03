@@ -118,6 +118,8 @@ export interface RatingDistributionItem {
   count: number;
 }
 
+export type MyProducts = Database["public"]["Functions"]["app_get_my_products"]["Returns"];
+export type ProductCategory = Database["public"]["Tables"]["products"]["Row"]["category"];
 export type FullProfile = Omit<
   Database["public"]["Views"]["public_profiles_full_view"]["Row"],
   "social_medias"

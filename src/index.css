@@ -52,6 +52,14 @@
     --gold-dark: 45 100% 40%;
     --surface: 0 0% 10%;
     --surface-elevated: 0 0% 13%;
+
+    --badge: 0 0% 10%;
+    --badge-pink: 328 66% 44%;
+    --badge-blue: 231 46% 43%;
+    --badge-aqua: 186 58% 36%;
+    --badge-purple: 274 76% 48%;
+    --badge-orange: 34 76% 42%;
+    --badge-green: 84 76% 29%;
   }
 
   .dark {

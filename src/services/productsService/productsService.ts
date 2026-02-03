@@ -13,7 +13,34 @@ import { PRODUCT_IMAGES_BUCKET, supabase, normalizeError } from "@/utils";
 import { formatDate } from "@/utils/formatters";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { buildCoverUrl } from "@/utils/base64ToBlob";
-import { ProductsFilter, ProductsResult } from "./types";
+import { FetchMyProductsParams, ProductsFilter, ProductsResult } from "./types";
+
+export async function fetchMyProducts({
+  p_cursor,
+  p_limit,
+  p_sort,
+  p_status,
+}: FetchMyProductsParams) {
+  try {
+    const { data, error } = await supabase.rpc("app_get_my_products", {
+      p_cursor,
+      p_limit,
+      p_sort,
+      p_status,
+    });
+
+    if (error) throw error;
+    return {
+      data: data.map((product) => ({
+        ...product,
+        cover_url: buildCoverUrl(product.cover_url),
+      })),
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
+  }
+}
 
 /**
  * Fetch products with optional filtering
