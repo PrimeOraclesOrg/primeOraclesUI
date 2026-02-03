@@ -21,7 +21,9 @@ export interface ProductDetailsResult {
   ratingDistribution: RatingDistributionItem[];
 }
 
-export type FetchMyProductsParams =
-  Database["public"]["Functions"]["app_get_my_products"]["Args"] & {
-    p_cursor?: { id: string; created_at: string } | null;
-  };
+export type FetchMyProductsParams = Omit<
+  Database["public"]["Functions"]["app_get_my_products"]["Args"],
+  "p_cursor"
+> & {
+  p_cursor?: { id: string; created_at: string } | null;
+};
