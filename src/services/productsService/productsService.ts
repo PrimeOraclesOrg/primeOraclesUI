@@ -16,11 +16,11 @@ import { buildCoverUrl } from "@/utils/base64ToBlob";
 import { FetchMyProductsParams, ProductsFilter, ProductsResult } from "./types";
 
 export async function fetchMyProducts({
-  p_cursor = null,
-  p_limit = 20,
-  p_sort = "created_at_desc",
-  p_status = "all",
-}: FetchMyProductsParams = {}) {
+  p_cursor,
+  p_limit,
+  p_sort,
+  p_status,
+}: FetchMyProductsParams) {
   try {
     const { data, error } = await supabase.rpc("app_get_my_products", {
       p_cursor,
