@@ -1,10 +1,12 @@
+import { WorkspaceSortOption } from "@/types/workspace";
+
 export const workspaceStatusTabs = [
   { id: "all", label: "Все статусы" },
   { id: "active", label: "Активные" },
   { id: "inactive", label: "В архиве" },
 ] as const;
 
-export const workspaceSortOptions = [
+export const workspaceSortOptions: Array<{ id: WorkspaceSortOption; label: string }> = [
   { id: "created_at_desc", label: "Дата создания" },
   { id: "title_asc", label: "Название" },
   { id: "price_desc", label: "Цена" },
