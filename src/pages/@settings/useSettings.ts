@@ -17,7 +17,6 @@ export const useSettings = () => {
     isSuccess,
     errorMessage: error ? { description: t(`status:${error.code}`) } : undefined,
     onSuccess: () => {
-      console.log("Navigate to home called");
       reset();
       navigate("/");
     },

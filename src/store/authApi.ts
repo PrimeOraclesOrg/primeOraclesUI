@@ -8,11 +8,7 @@ export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAuthUser: builder.query<User | null, void>({
       queryFn: async () => {
-        console.log("User fetch started");
-        console.time("User fetch finished in");
-
         const { data, error } = await getCurrentUser();
-        console.timeEnd("User fetch finished in");
 
         if (error) return { data: null };
 
@@ -34,11 +30,7 @@ export const authApi = baseApi.injectEndpoints({
 
     logout: builder.mutation<null, void>({
       queryFn: async () => {
-        console.log("Logout started");
-        console.time("Logout finished in");
-
         const { error } = await signOut();
-        console.timeEnd("Logout finished in");
 
         if (error) return { error };
 
