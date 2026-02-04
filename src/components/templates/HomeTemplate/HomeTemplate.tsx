@@ -1,9 +1,10 @@
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { RewardCard, ProductCard, FAQAccordion } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import type { Reward, Product } from "@/types";
 import { BrandLogo } from "@/assets/icons";
+import { SpotLight } from "@/assets/graphics/SpotLight";
+import { SpotLightShoe } from "@/assets/graphics/SpotLightShoe";
 
 interface HomeTemplateProps {
   rewardsPreview: Reward[];
@@ -18,72 +19,57 @@ export function HomeTemplate({
 }: HomeTemplateProps) {
   return (
     <MainLayout>
-      <div className="p-4 md:p-6 lg:p-8 flex flex-col items-center">
+      <div className="p-4 md:p-6 lg:p-8 flex flex-col items-center overflow-hidden">
         {/* Hero Section */}
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-7xl lg:text-7xl font-bold text-primary tracking-wider mb-4 mt-8 lg:mt-20">
-            PRIME ORACLES
-          </h1>
-          <p className="text-muted-foreground text-base md:text-lg px-4">
-            Все необходимые инструменты для роста — в одном месте.
-          </p>
-        </div>
+        <div className="flex items-center relative mb-36 gap-x-6 mt-32 z-[1] w-full max-w-screen-2xl">
+          <div className="w-max z-10">
+            <h1 className="flex flex-col items-start leading-[120px] text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
+              <span>PRIME</span>
+              <span className="text-[130px]">ORACLES</span>
+            </h1>
+            <p className="text-base font-Russo_One md:text-2xl opacity-75">
+              Зарабатывай на контенте и цифровых
+              <br />
+              продуктах без команды, без рисков и без
+              <br />
+              ручной возни
+            </p>
+            <Button
+              variant="outline"
+              className="mt-5 border-light-accent rounded-sm text-light-accent hover:bg-primary hover:text-primary-foreground px-6 text-lg font-bold py-3"
+              onClick={onCreateClick}
+            >
+              Создать компанию
+            </Button>
+          </div>
+          <img
+            className="w-full h-full min-w-0 max-w-[950px] flex-1 scale z-10"
+            src="/img/illustrations/home_hero_cover.avif"
+            alt="Hero cover"
+          />
 
-        {/* Featured Sections */}
-        <div className="flex justify-center items-center gap-8 flex-col md:flex-row w-full">
-          {/* Награда за контент preview */}
-          <Link
-            to="/rewards"
-            className="relative bg-card aspect-[490/280] rounded-xl p-6 border-2 border-primary transition-colors group overflow-hidden max-w-[540px] w-full"
-          >
-            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 group-hover:backdrop-blur-sm">
-              Награды за контент
-            </strong>
-            <img
-              className="absolute left-0 top-0 block w-full h-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:-rotate-1"
-              src="/img/preview/tasks_preview.png"
-              alt="rewards preview"
-            />
-          </Link>
+          {/* Graphics */}
+          <img
+            className="absolute bottom-0 translate-y-8 left-0"
+            src="/img/illustrations/hero_graphics.avif"
+            alt="Hero graphics"
+          />
 
-          {/* Маркетплейс preview */}
-          <Link
-            to="/marketplace"
-            className="relative bg-card aspect-[490/280] rounded-xl p-6 border-2 border-primary transition-colors group overflow-hidden max-w-[540px] w-full"
-          >
-            <strong className="absolute top-1/2 left-0 w-full -translate-y-1/2 z-10 flex justify-center items-center p-4 bg-black/60 font-[Oswald] text-2xl backdrop-blur-none transition-all duration-300 group-hover:backdrop-blur-sm">
-              Маркетплейс
-            </strong>
-            <img
-              className="absolute left-0 top-0 block w-full h-full object-cover transition-all duration-300 group-hover:scale-110 group-hover:-rotate-1"
-              src="/img/preview/market_preview.png"
-              alt="market preview"
-            />
-          </Link>
-        </div>
-
-        {/* CTA Button */}
-        <div className="flex justify-center mb-10 md:mb-16 mt-8">
-          <Button
-            variant="outline"
-            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 md:px-8 py-3"
-            onClick={onCreateClick}
-          >
-            Создать компанию
-          </Button>
+          <SpotLight className="text-accent absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <SpotLightShoe className="text-white absolute -right-96 top-1/2 -translate-y-[calc(50%-10em)] pointer-events-none" />
         </div>
 
         {/* Content Rewards Info Section */}
-        <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-6 md:mb-8">
-          Награды за контент
-        </h2>
-        <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card p-4 rounded-xl items-center">
+        <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card p-4 rounded-xl items-center inset-shadow-white">
           <div className="md:col-span-2 h-full flex flex-col justify-center">
-            <BrandLogo className="text-primary mb-4" />
+            <h2 className="text-2xl md:text-3xl font-bold text-light-accent mb-4">
+              Награды за контент
+            </h2>
             <p className="text-lg text-foreground leading-relaxed mb-6">
-              <span className="text-primary font-semibold">Награды за контент</span>— это
-              маркетинговый инструмент, который связывает ваш бренд с создателями контента — Они
-              создают контент, публикуют его в своих социальных сетях, а вы платите им за просмотры
+              Это маркетинговый инструмент, который связывает ваш бренд с<br />
+              создателями контента — Они создают контент, публикуют его в своих социальных сетях, а
+              <br />
+              вы платите им за просмотры
             </p>
             <p className="text-muted-foreground">
               Но только после того, как одобрите их публикацию.
@@ -163,8 +149,8 @@ export function HomeTemplate({
           />
 
           <img
-            className="w-[185px] h-[185px] sm:w-[259px] sm:h-[259px] lg:w-[370px] lg:h-[370px] transition-transform"
-            src="/img/illustrations/hand_cash.png"
+            className="w-[185px] h-[185px] object-contain sm:w-[259px] sm:h-[259px] lg:w-[370px] lg:h-[370px] transition-transform"
+            src="/img/illustrations/hand_cash.avif"
             alt="hand with cash"
             width={370}
             height={370}

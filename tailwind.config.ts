@@ -20,6 +20,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
+        Bebas_Neue: "Bebas Neue",
+        Russo_One: "Russo One",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -46,6 +48,9 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+        },
+        "light-accent": {
+          DEFAULT: "hsl(var(--light-accent))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
