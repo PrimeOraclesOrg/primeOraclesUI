@@ -1,6 +1,6 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
-import { MyProducts, Product, PublicProductPage, Review } from "@/types";
+import { MyProducts, Product, ProductCommentsResponse, PublicProductPage } from "@/types";
 import {
   fetchProductById,
   createProductService,
@@ -87,13 +87,18 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: (_result, _error, id) => [{ type: "Products", id }],
     }),
 
-    getProductComments: builder.query<Review[], { productId: string; limit?: number }>({
-      queryFn: async ({ productId, limit }) => {
+    getProductComments: builder.query<
+      ProductCommentsResponse,
+      { productId: string; page: number; rating: number | null }
+    >({
+      queryFn: async ({ productId, page, rating }) => {
         const { data, error } = await fetchProductComments(productId, {
-          p_limit: limit,
+          p_page: page,
+          p_rating: rating ?? undefined,
         });
-        return error ? { error } : { data: data ?? [] };
+        return error ? { error } : { data };
       },
+      keepUnusedDataFor: 300,
       providesTags: (_result, _error, { productId }) => [
         { type: "Products", id: productId },
         { type: "ProductComments", id: productId },

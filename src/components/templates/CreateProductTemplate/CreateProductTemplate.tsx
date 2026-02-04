@@ -39,7 +39,7 @@ export function CreateProductTemplate({
     <MainLayout>
       <div className="h-full flex flex-col">
         {/* Header with back button */}
-        <div className="p-4 md:p-6 border-b border-border">
+        <div className="p-4 md:p-6 md:border-b md:border-border">
           <button
             onClick={onBackClick}
             className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors bg-primary/10 px-3 py-1.5 rounded-full"
