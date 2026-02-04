@@ -97,7 +97,7 @@ export const ReviewList = memo(
             )}
             {commentsData.totalPages > 1 && (
               <Pagination>
-                <PaginationContent>
+                <PaginationContent className="flex-wrap justify-center">
                   <PaginationItem>
                     <PaginationPrevious
                       href="#"
@@ -112,7 +112,7 @@ export const ReviewList = memo(
                     />
                   </PaginationItem>
                   <PaginationItem>
-                    <span className="px-4 py-2 text-sm text-muted-foreground">
+                    <span className="flex-1 px-4 py-2 text-sm text-muted-foreground">
                       {currentCommentsPage} / {commentsData.totalPages}
                     </span>
                   </PaginationItem>
