@@ -161,9 +161,9 @@ export function ProductDetailTemplate({
           {/* About the creator Section */}
           <div className="mb-4 sm:mb-6 sm:border-t sm:pt-10 overflow-hidden">
             <h2 className="text-xl font-bold text-foreground mb-6">О создателе</h2>
-            <div className="flex flex-col-reverse sm:flex-row sm:items-center gap-4">
-              <div className="flex-1">
-                <div className="flex items-start gap-4">
+            <div className="flex-1 flex-col">
+              <div className="flex-1 flex flex-col justify-between sm:flex-row sm:items-center gap-4">
+                <div className="flex gap-4">
                   <UserAvatar avatarPath={product.creator.avatar_path} size="16" />
                   <div className="flex-1 lg:max-w-[500px] overflow-hidden">
                     <div className="font-bold text-foreground mb-1">{product.creator.name}</div>
@@ -191,19 +191,19 @@ export function ProductDetailTemplate({
                     <div className="text-sm text-muted-foreground mb-1">
                       {product.creator?.bio ?? ""}
                     </div>
-                    <button className="flex items-center gap-1 text-sm text-foreground hover:text-primary transition-colors mt-4 sm:mt-6">
-                      <Flag className="w-4 h-4" />
-                      Пожаловаться на создателя
-                    </button>
                   </div>
                 </div>
+                <Button
+                  variant="outline"
+                  className="border-border bg-card hover:bg-muted text-foreground"
+                >
+                  Посмотреть профиль
+                </Button>
               </div>
-              <Button
-                variant="outline"
-                className="border-border bg-card hover:bg-muted text-foreground"
-              >
-                Посмотреть профиль
-              </Button>
+              <button className="flex justify-self-center sm:justify-self-start gap-1 text-sm text-foreground hover:text-primary transition-colors mt-6 sm:mt-8">
+                <Flag className="w-4 h-4" />
+                Пожаловаться на создателя
+              </button>
             </div>
           </div>
         </div>
