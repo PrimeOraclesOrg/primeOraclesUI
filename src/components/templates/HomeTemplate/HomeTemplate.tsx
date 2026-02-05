@@ -5,6 +5,7 @@ import type { Reward, Product } from "@/types";
 import { SpotLightShape } from "@/assets/graphics/SpotLightShape";
 import { SpotLightShoeShape } from "@/assets/graphics/SpotLightShoeShape";
 import { SpotLightDiskShape } from "@/assets/graphics/SpotLightDiskShape";
+import { ArrowRight } from "lucide-react";
 
 interface HomeTemplateProps {
   rewardsPreview: Reward[];
@@ -55,23 +56,23 @@ export function HomeTemplate({
             alt="Hero graphics"
           />
 
-          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[25vw] top-1/2 -translate-y-1/2 pointer-events-none opacity-70 blur-[128px]" />
-          <SpotLightShoeShape className="text-white absolute right-0 max-w-[25vw] top-1/2 -translate-y-[calc(50%-8em)] pointer-events-none opacity-40 blur-[128px]" />
+          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[25vw] top-1/2 -translate-y-1/2 pointer-events-none blur-[128px]" />
+          <SpotLightShoeShape className="text-white absolute right-0 max-w-[25vw] top-1/2 -translate-y-[calc(50%-8em)] pointer-events-none blur-[128px]" />
         </div>
 
         {/* Content Rewards Info Section */}
         <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card px-6 py-4 rounded-xl items-center shadow-inner-glass">
           <div className="md:col-span-2 h-full flex flex-col justify-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-light-accent my-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-light-accent my-4 drop-shadow-glow-light-accent">
               Награды за контент
             </h2>
-            <p className="text-lg text-foreground leading-relaxed mb-6">
+            <p className="text-lg text-foreground leading-relaxed mb-6 drop-shadow-glow-white">
               Это маркетинговый инструмент, который связывает ваш бренд с<br />
               создателями контента — Они создают контент, публикуют его в своих социальных сетях, а
               <br />
               вы платите им за просмотры
             </p>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground drop-shadow-glow-muted">
               Но только после того, как одобрите их публикацию.
             </p>
           </div>
@@ -118,61 +119,54 @@ export function HomeTemplate({
             questions={[
               {
                 position: 1,
-                question: "Вопрос 1",
+                question: "Как начать зарабатывать на контенте?",
                 answer: "Ответ 1",
               },
               {
                 position: 2,
-                question: "Вопрос 2",
+                question: "Какие способы оплаты поддерживаются?",
                 answer: "Ответ 2",
               },
               {
                 position: 3,
-                question: "Вопрос 3",
+                question: "Как продать свой продукт на маркетплейсе?",
                 answer: "Ответ 3",
               },
               {
                 position: 4,
-                question: "Вопрос 4",
+                question: "Есть ли комиссия платформы?",
                 answer: "Ответ 4",
-              },
-              {
-                position: 5,
-                question: "Вопрос 5",
-                answer: "Ответ 5",
               },
             ]}
           />
         </div>
 
         {/* Income banner */}
-        <section className="relative flex flex-col items-center justify-evenly overflow-hidden rounded-sm bg-[#5E25BC] p-xl z-[1] sm:flex-row sm:p-0 min-h-[410px] w-full">
+        {/* 5E25BC 7B3FD4 */}
+        <section className="relative flex flex-col items-center overflow-hidden rounded-sm bg-gradient-to-br from-[#5E25BC] via-[#7B3FD4] to-[#5E25BC] z-[1] sm:flex-row max-w-[1496px] h-[370px] w-full">
           <img
-            className="absolute inset-0 h-full w-full object-cover z-[-1]"
-            src="/img/bg/pattern_1.png"
-            alt="background pattern"
-            width={1440}
-            height={410}
-          />
-
-          <img
-            className="w-[185px] h-[185px] object-contain sm:w-[259px] sm:h-[259px] lg:w-[370px] lg:h-[370px] transition-transform"
+            className="w-[185px] h-[185px] object-contain sm:w-[259px] sm:h-[259px] lg:w-[400px] lg:h-[400px] transition-transform -translate-x-10 translate-y-8"
             src="/img/illustrations/hand_cash.avif"
             alt="hand with cash"
-            width={370}
-            height={370}
+            width={400}
+            height={400}
           />
 
-          <div className="flex flex-col items-center gap-xl text-center scale-75 sm:scale-70 lg:scale-100 transition-transform">
-            <h2 className="font-[Oswald] text-3xl xl:text-5xl font-medium text-white mb-10">
-              Наша миссия
-              <br />
-              обеспечить каждому доход
+          <div className="flex flex-col items-start gap-5">
+            <h2 className="font-[Oswald] text-3xl xl:text-5xl font-medium text-white">
+              Наша миссия — обеспечить каждому доход
             </h2>
-            <Button className="px-16 py-8 font-semibold bg-primary text-lg xl:text-xl">
-              Присоединиться
+            <p className="opacity-70 text-xl">
+              Присоединяйтесь к тысячам пользователей, которые уже
+              <br />
+              зарабатывают
+            </p>
+            <Button className="px-4 py-6 mt-2 font-semibold bg-primary text-lg [&_svg]:size-8">
+              Присоединиться <ArrowRight strokeWidth={1} />
             </Button>
           </div>
+
+          <SpotLightShape className="absolute text-light-accent blur-2xl -z-10 left-1/2 opacity-45" />
         </section>
       </div>
     </MainLayout>

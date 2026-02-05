@@ -88,6 +88,11 @@ export default {
       boxShadow: {
         "inner-glass": "inset 0 0 2px 1px #fff5",
       },
+      dropShadow: {
+        "glow-light-accent": "0 0 4px hsl(var(--light-accent) / 0.8)",
+        "glow-white": "0 0 4px #fffa",
+        "glow-muted": "0 0 4px #fff8",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
