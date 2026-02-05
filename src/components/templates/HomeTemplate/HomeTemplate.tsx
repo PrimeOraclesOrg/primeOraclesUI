@@ -2,9 +2,9 @@ import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { RewardCard, ProductCard, FAQAccordion } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import type { Reward, Product } from "@/types";
-import { BrandLogo } from "@/assets/icons";
-import { SpotLight } from "@/assets/graphics/SpotLight";
-import { SpotLightShoe } from "@/assets/graphics/SpotLightShoe";
+import { SpotLightShape } from "@/assets/graphics/SpotLightShape";
+import { SpotLightShoeShape } from "@/assets/graphics/SpotLightShoeShape";
+import { SpotLightDiskShape } from "@/assets/graphics/SpotLightDiskShape";
 
 interface HomeTemplateProps {
   rewardsPreview: Reward[];
@@ -55,14 +55,14 @@ export function HomeTemplate({
             alt="Hero graphics"
           />
 
-          <SpotLight className="text-accent absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <SpotLightShoe className="text-white absolute -right-96 top-1/2 -translate-y-[calc(50%-10em)] pointer-events-none" />
+          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[25vw] top-1/2 -translate-y-1/2 pointer-events-none opacity-70 blur-[128px]" />
+          <SpotLightShoeShape className="text-white absolute right-0 max-w-[25vw] top-1/2 -translate-y-[calc(50%-8em)] pointer-events-none opacity-40 blur-[128px]" />
         </div>
 
         {/* Content Rewards Info Section */}
-        <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card p-4 rounded-xl items-center inset-shadow-white">
+        <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card px-6 py-4 rounded-xl items-center shadow-inner-glass">
           <div className="md:col-span-2 h-full flex flex-col justify-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-light-accent mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-light-accent my-4">
               Награды за контент
             </h2>
             <p className="text-lg text-foreground leading-relaxed mb-6">
@@ -92,14 +92,21 @@ export function HomeTemplate({
           </div>
         </div>
 
-        {/* Footer Text */}
-        <div className="text-center max-w-4xl mx-auto text-xl mb-10">
-          <p className="leading-relaxed">
-            Prime Oracles — место, где можно запустить и монетизировать любой цифровой продукт: от
-            веб-приложений и автоматизаций до обучающих программ и закрытых комьюнити.
+        <div className="mb-10 relative">
+          <h2 className="text-4xl font-bold text-center">
+            Запускайте и монетизируйте{" "}
+            <span className="text-accent">
+              любой
+              <br />
+              цифровой продукт
+            </span>
+          </h2>
+          <p className="text-center text-lg text-muted-foreground mt-4">
+            От веб-приложений и автоматизаций до обучающих программ и закрытых
             <br />
-            Всё — в одном удобном интерфейсе.
+            комьюнити — всё в одном месте
           </p>
+          <SpotLightDiskShape className="text-white blur-[96px] opacity-70 absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none" />
         </div>
 
         {/* FAQ */}
