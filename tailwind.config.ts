@@ -22,6 +22,7 @@ export default {
         sans: ["Inter", "system-ui", "sans-serif"],
         Bebas_Neue: "Bebas Neue",
         Russo_One: "Russo One",
+        Roboto: "Roboto",
       },
       colors: {
         border: "hsl(var(--border))",

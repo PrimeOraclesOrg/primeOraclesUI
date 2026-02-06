@@ -22,13 +22,13 @@ export function HomeTemplate({
     <MainLayout>
       <div className="p-4 md:p-6 lg:p-8 flex flex-col items-center overflow-hidden">
         {/* Hero Section */}
-        <div className="flex items-center relative mb-36 gap-x-6 mt-32 z-[1] w-full max-w-screen-2xl">
+        <div className="flex items-center relative mb-36 gap-x-6 mt-20 z-[1] w-full max-w-screen-2xl">
           <div className="w-max z-10">
             <h1 className="flex flex-col items-start leading-[120px] text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
               <span>PRIME</span>
               <span className="text-[130px]">ORACLES</span>
             </h1>
-            <p className="text-base font-Russo_One md:text-2xl opacity-75">
+            <p className="text-foreground font-Russo_One md:text-2xl opacity-75">
               Зарабатывай на контенте и цифровых
               <br />
               продуктах без команды, без рисков и без
@@ -56,7 +56,7 @@ export function HomeTemplate({
             alt="Hero graphics"
           />
 
-          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[25vw] top-1/2 -translate-y-1/2 pointer-events-none blur-[128px]" />
+          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[28vw] w-[400px] h-[400px] top-1/2 -translate-y-1/2 pointer-events-none blur-[128px]" />
           <SpotLightShoeShape className="text-white absolute right-0 max-w-[25vw] top-1/2 -translate-y-[calc(50%-8em)] pointer-events-none blur-[128px]" />
         </div>
 
@@ -66,13 +66,11 @@ export function HomeTemplate({
             <h2 className="text-2xl md:text-3xl font-bold text-light-accent my-4 drop-shadow-glow-light-accent">
               Награды за контент
             </h2>
-            <p className="text-lg text-foreground leading-relaxed mb-6 drop-shadow-glow-white">
-              Это маркетинговый инструмент, который связывает ваш бренд с<br />
-              создателями контента — Они создают контент, публикуют его в своих социальных сетях, а
-              <br />
-              вы платите им за просмотры
+            <p className="text-lg text-foreground leading-relaxed mb-6 drop-shadow-glow-white font-Roboto mr-6">
+              Это маркетинговый инструмент, который связывает ваш бренд с создателями контента — Они
+              создают контент, публикуют его в своих социальных сетях, а вы платите им за просмотры
             </p>
-            <p className="text-muted-foreground drop-shadow-glow-muted">
+            <p className="text-muted-foreground drop-shadow-glow-muted font-Roboto">
               Но только после того, как одобрите их публикацию.
             </p>
           </div>
