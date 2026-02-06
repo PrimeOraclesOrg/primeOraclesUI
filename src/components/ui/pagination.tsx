@@ -54,11 +54,11 @@ const PaginationPrevious = ({
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
-    className={cn("gap-1 pl-2.5", className)}
+    className={cn("gap-1 pl-2.5 max-[320px]:gap-0 max-[320px]:px-2", className)}
     {...props}
   >
     <ChevronLeft className="h-4 w-4" />
-    <span>Previous</span>
+    <span className="max-[320px]:hidden">Предыдущая</span>
   </PaginationLink>
 );
 PaginationPrevious.displayName = "PaginationPrevious";
@@ -67,10 +67,10 @@ const PaginationNext = ({ className, ...props }: React.ComponentProps<typeof Pag
   <PaginationLink
     aria-label="Go to next page"
     size="default"
-    className={cn("gap-1 pr-2.5", className)}
+    className={cn("gap-1 pr-2.5 max-[320px]:gap-0 max-[320px]:px-2", className)}
     {...props}
   >
-    <span>Next</span>
+    <span className="max-[320px]:hidden">Cледующая</span>
     <ChevronRight className="h-4 w-4" />
   </PaginationLink>
 );

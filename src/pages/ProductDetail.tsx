@@ -3,18 +3,24 @@ import { ChatPopupContent } from "@/components/organisms";
 import { ProductDetailTemplate } from "@/components/templates";
 import { usePopup } from "@/hooks/usePopup";
 import { useGetProductDetailsQuery, useGetProductCommentsQuery } from "@/store";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { openPopup } = usePopup();
+  const [currentCommentsPage, setCurrentCommentsPage] = useState(1);
+  const [ratingFilter, setRatingFilter] = useState<number | null>(null);
+
   const { data: product, isLoading, isError } = useGetProductDetailsQuery(id);
   const {
-    data: comments,
+    data: commentsData,
     isLoading: isCommentsLoading,
     isError: isCommentsError,
-  } = useGetProductCommentsQuery({ productId: id! }, { skip: !id });
+  } = useGetProductCommentsQuery(
+    { productId: id, page: currentCommentsPage, rating: ratingFilter },
+    { skip: !id }
+  );
 
   if (isError) {
     navigate("/not-found", { replace: true });
@@ -28,13 +34,30 @@ export default function ProductDetail() {
     openPopup(<ChatPopupContent />);
   }, [openPopup]);
 
+  const onRatingFilterChange = useCallback(
+    (stars: number | null) => {
+      setCurrentCommentsPage(1);
+      setRatingFilter(stars);
+    },
+    [setCurrentCommentsPage, setRatingFilter]
+  );
+
+  useEffect(() => {
+    setCurrentCommentsPage(1);
+    setRatingFilter(null);
+  }, []);
+
   return (
     <ProductDetailTemplate
       product={product}
       isLoading={isLoading}
       onBackClick={onBackClick}
       onOpenChatPopup={onOpenChatPopup}
-      comments={comments}
+      commentsData={commentsData}
+      currentCommentsPage={currentCommentsPage}
+      onCommentsPageChange={setCurrentCommentsPage}
+      selectedRating={ratingFilter}
+      onRatingFilterChange={onRatingFilterChange}
       isCommentsLoading={isCommentsLoading}
       isCommentsError={isCommentsError}
     />

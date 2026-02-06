@@ -7,6 +7,7 @@ import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import ProductDetail from "@/pages/ProductDetail";
 import CreateProduct from "@/pages/CreateProduct/CreateProduct";
+import WorkspaceMarketplace from "@/pages/WorkspaceMarketplace/WorkspaceMarketplace";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp/SignUp";
@@ -71,6 +72,23 @@ export function AppRoutes() {
 
         {/* Protected routes - require authentication */}
         <Route
+          path="/workspace"
+          element={
+            <ProtectedRoute>
+              <WorkspaceMarketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/workspace/marketplace"
+          element={
+            <ProtectedRoute>
+              <WorkspaceMarketplace />
+            </ProtectedRoute>
+          }
+        />
+        {/* Protected routes - require authentication */}
+        <Route
           path="/profile"
           element={
             <ProtectedRoute>
@@ -108,22 +126,6 @@ export function AppRoutes() {
         />
         <Route
           path="/notifications"
-          element={
-            <ProtectedRoute>
-              <Marketplace />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/workspace"
-          element={
-            <ProtectedRoute>
-              <Marketplace />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/workspace/*"
           element={
             <ProtectedRoute>
               <Marketplace />

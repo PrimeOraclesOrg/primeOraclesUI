@@ -7,13 +7,46 @@
 
 import { PostgrestError } from "@supabase/supabase-js";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
-import { FullProfile, Product, PublicProductPage, Review, ServiceError } from "@/types";
-import { Json } from "@/types/supabase";
+import {
+  FullProfile,
+  Product,
+  ProductCommentsResponse,
+  PublicProductPage,
+  Review,
+  ServiceError,
+} from "@/types";
 import { PRODUCT_IMAGES_BUCKET, supabase, normalizeError } from "@/utils";
 import { formatDate } from "@/utils/formatters";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { buildCoverUrl } from "@/utils/base64ToBlob";
-import { ProductsFilter, ProductsResult } from "./types";
+import { FetchMyProductsParams, ProductsFilter, ProductsResult } from "./types";
+
+export async function fetchMyProducts({
+  p_cursor,
+  p_limit,
+  p_sort,
+  p_status,
+}: FetchMyProductsParams) {
+  try {
+    const { data, error } = await supabase.rpc("app_get_my_products", {
+      p_cursor,
+      p_limit,
+      p_sort,
+      p_status,
+    });
+
+    if (error) throw error;
+    return {
+      data: data.map((product) => ({
+        ...product,
+        cover_url: buildCoverUrl(product.cover_url),
+      })),
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
+  }
+}
 
 /**
  * Fetch products with optional filtering
@@ -173,12 +206,12 @@ export async function createProductService(
 }
 
 /**
- * Fetch product comments by product ID
+ * Fetch product comments by product ID with optional pagination
  */
 export async function fetchProductComments(
   productId: string,
-  options?: { p_limit?: number; p_cursor?: Json; p_rating?: number }
-): Promise<{ data: Review[] | null; error: ServiceError | null }> {
+  options?: { p_page?: number; p_rating?: number }
+): Promise<{ data: ProductCommentsResponse | null; error: ServiceError | null }> {
   try {
     const { data: rows, error } = await supabase.rpc("app_product_comments", {
       p_product_id: productId,
@@ -190,20 +223,17 @@ export async function fetchProductComments(
     }
 
     if (rows.length === 0) {
-      throw new PostgrestError({
-        message: "No comments found for product",
-        details: "No comments found for product",
-        hint: "no_comments_found_for_product",
-        code: "no_comments_found_for_product",
-      });
+      return { data: { comments: [], totalPages: 0 }, error: null };
     }
 
     const reviews = rows.map((review) => ({
       ...review,
       created_at: formatDate(review.created_at),
-    }));
+    })) as Review[];
 
-    return { data: reviews as Review[], error: null };
+    const totalPages = rows[0].total_pages;
+
+    return { data: { comments: reviews, totalPages }, error: null };
   } catch (error) {
     return normalizeError(error);
   }

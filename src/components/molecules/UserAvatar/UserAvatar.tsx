@@ -5,7 +5,7 @@ import { User } from "lucide-react";
 
 interface UserAvatarProps {
   avatarPath: string;
-  className: string;
+  className?: string;
   size?: "10" | "16";
 }
 

@@ -1571,6 +1571,7 @@ export type Database = {
           comments_count: number;
           cover_url: string;
           created_at: string;
+          has_more: boolean;
           id: string;
           is_active: boolean;
           next_cursor: Json;
@@ -1581,12 +1582,7 @@ export type Database = {
         }[];
       };
       app_product_comments: {
-        Args: {
-          p_cursor?: Json;
-          p_limit?: number;
-          p_product_id: string;
-          p_rating?: number;
-        };
+        Args: { p_page?: number; p_product_id: string; p_rating?: number };
         Returns: {
           author_avatar: string;
           author_id: string;
@@ -1594,8 +1590,8 @@ export type Database = {
           author_username: string;
           comment: string;
           created_at: string;
-          next_cursor: Json;
           rating: number;
+          total_pages: number;
         }[];
       };
       app_profile_registration_update: {

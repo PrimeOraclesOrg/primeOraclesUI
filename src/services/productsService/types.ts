@@ -1,4 +1,5 @@
 import { FAQ, Product, ProductDetails, RatingDistributionItem, Review } from "@/types";
+import { Database } from "@/types/supabase";
 
 export interface ProductsFilter {
   category?: string;
@@ -19,3 +20,10 @@ export interface ProductDetailsResult {
   faqs: FAQ[];
   ratingDistribution: RatingDistributionItem[];
 }
+
+export type FetchMyProductsParams = Omit<
+  Database["public"]["Functions"]["app_get_my_products"]["Args"],
+  "p_cursor"
+> & {
+  p_cursor?: { id: string; created_at: string } | null;
+};

@@ -14,6 +14,7 @@ export { ForgotPasswordTemplate } from "./ForgotPasswordTemplate/ForgotPasswordT
 export { ResetPasswordTemplate } from "./ResetPasswordTemplate/ResetPasswordTemplate";
 export { CreateProductTemplate } from "./CreateProductTemplate/CreateProductTemplate";
 export { ProfileSetupTemplate } from "./ProfileSetupTemplate/ProfileSetupTemplate";
+export { WorkspaceMarketplaceTemplate } from "./WorkspaceMarketplaceTemplate/WorkspaceMarketplaceTemplate";
 export { SettingsBasicTemplate } from "./SettingsBasicTemplate/SettingsBasicTemplate";
 export { SettingsBalanceTemplate } from "./SettingsBalanceTemplate/SettingsBalanceTemplate";
 export { SettingsHistoryTemplate } from "./SettingsHistoryTemplate/SettingsHistoryTemplate";

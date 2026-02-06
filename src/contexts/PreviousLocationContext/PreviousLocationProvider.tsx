@@ -8,6 +8,7 @@ interface PreviousLocationProviderProps {
 
 export const PreviousLocationProvider = ({ children }: PreviousLocationProviderProps) => {
   const location = useLocation();
+
   const prevLocationRef = useRef<string | null>(null);
 
   const previous = prevLocationRef.current;

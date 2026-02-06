@@ -1,12 +1,14 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
-import { Product, PublicProductPage, Review } from "@/types";
+import { MyProducts, Product, ProductCommentsResponse, PublicProductPage } from "@/types";
 import {
   fetchProductById,
   createProductService,
   fetchProductComments,
+  fetchMyProducts,
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
+import { FetchMyProductsParams } from "@/services/productsService/types";
 
 interface ProductsQueryArgs {
   category?: string;
@@ -20,6 +22,33 @@ interface ProductsResponse {
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getMyProducts: builder.query<MyProducts, FetchMyProductsParams>({
+      queryFn: async (params) => {
+        const { data, error } = await fetchMyProducts(params);
+        if (error) return { error };
+        return { data };
+      },
+
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        if (!queryArgs) {
+          return `${endpointName}-default-all`;
+        }
+
+        const { p_sort = "created_at_desc", p_status = "all" } = queryArgs;
+        return `${endpointName}-${p_sort}-${p_status}`;
+      },
+
+      merge: (currentCache, newItems, { arg }) => {
+        if (!arg.p_cursor) {
+          return newItems;
+        }
+        return [...currentCache, ...newItems];
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+    }),
+
     getProducts: builder.query<ProductsResponse, ProductsQueryArgs>({
       queryFn: ({ category, searchQuery }) => {
         let filtered = [...mockProducts];
@@ -58,13 +87,18 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: (_result, _error, id) => [{ type: "Products", id }],
     }),
 
-    getProductComments: builder.query<Review[], { productId: string; limit?: number }>({
-      queryFn: async ({ productId, limit }) => {
+    getProductComments: builder.query<
+      ProductCommentsResponse,
+      { productId: string; page: number; rating: number | null }
+    >({
+      queryFn: async ({ productId, page, rating }) => {
         const { data, error } = await fetchProductComments(productId, {
-          p_limit: limit,
+          p_page: page,
+          p_rating: rating ?? undefined,
         });
-        return error ? { error } : { data: data ?? [] };
+        return error ? { error } : { data };
       },
+      keepUnusedDataFor: 300,
       providesTags: (_result, _error, { productId }) => [
         { type: "Products", id: productId },
         { type: "ProductComments", id: productId },
@@ -88,6 +122,7 @@ export const {
   useGetProductsQuery,
   useGetHomeProductsQuery,
   useGetProductDetailsQuery,
+  useGetMyProductsQuery,
   useGetProductCommentsQuery,
   useCreateProductMutation,
 } = productsApi;
