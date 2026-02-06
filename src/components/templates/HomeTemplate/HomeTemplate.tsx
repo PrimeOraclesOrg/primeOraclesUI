@@ -56,8 +56,8 @@ export function HomeTemplate({
             alt="Hero graphics"
           />
 
-          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[28vw] w-[400px] h-[400px] top-1/2 -translate-y-1/2 pointer-events-none blur-[128px]" />
-          <SpotLightShoeShape className="text-white absolute right-0 max-w-[25vw] top-1/2 -translate-y-[calc(50%-8em)] pointer-events-none blur-[128px]" />
+          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[28vw] w-[400px] h-[400px] top-1/2 -translate-y-1/2 pointer-events-none blur-[128px] opacity-60" />
+          <SpotLightShoeShape className="text-white absolute right-0 max-w-[25vw] top-1/2 -translate-y-[calc(50%-8em)] pointer-events-none blur-[128px] opacity-20" />
         </div>
 
         {/* Content Rewards Info Section */}
@@ -66,7 +66,7 @@ export function HomeTemplate({
             <h2 className="text-2xl md:text-3xl font-bold text-light-accent my-4 drop-shadow-glow-light-accent">
               Награды за контент
             </h2>
-            <p className="text-lg text-foreground leading-relaxed mb-6 drop-shadow-glow-white font-Roboto mr-6">
+            <p className="sm:text-lg text-foreground leading-relaxed mb-6 drop-shadow-glow-white font-Roboto mr-6">
               Это маркетинговый инструмент, который связывает ваш бренд с создателями контента — Они
               создают контент, публикуют его в своих социальных сетях, а вы платите им за просмотры
             </p>
@@ -105,7 +105,7 @@ export function HomeTemplate({
             <br />
             комьюнити — всё в одном месте
           </p>
-          <SpotLightDiskShape className="text-white blur-[96px] opacity-70 absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none" />
+          <SpotLightDiskShape className="text-white blur-[128px] opacity-5 absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none" />
         </div>
 
         {/* FAQ */}
@@ -141,20 +141,20 @@ export function HomeTemplate({
 
         {/* Income banner */}
         {/* 5E25BC 7B3FD4 */}
-        <section className="relative flex flex-col items-center overflow-hidden rounded-sm bg-gradient-to-br from-[#5E25BC] via-[#7B3FD4] to-[#5E25BC] z-[1] sm:flex-row max-w-[1496px] h-[370px] w-full">
+        <section className="relative flex flex-col items-center overflow-hidden rounded-sm md:flex-row bg-gradient-to-br from-[#5E25BC] via-[#7B3FD4] to-[#5E25BC] z-[1] max-w-[1496px] w-full py-8 px-2">
           <img
-            className="w-[185px] h-[185px] object-contain sm:w-[259px] sm:h-[259px] lg:w-[400px] lg:h-[400px] transition-transform -translate-x-10 translate-y-8"
+            className="w-[185px] h-[185px] 2xl:w-[400px] 2xl:h-[400px] object-contain sm:w-[259px] sm:h-[259px] transition-transform md:-translate-x-10 md:translate-y-8"
             src="/img/illustrations/hand_cash.avif"
             alt="hand with cash"
             width={400}
             height={400}
           />
 
-          <div className="flex flex-col items-start gap-5">
-            <h2 className="font-[Oswald] text-3xl xl:text-5xl font-medium text-white">
+          <div className="flex flex-col items-start p-4 md:p-0 gap-5">
+            <h2 className="font-[Oswald] text-3xl xl:text-4xl 2xl:text-5xl font-medium text-white">
               Наша миссия — обеспечить каждому доход
             </h2>
-            <p className="opacity-70 text-xl">
+            <p className="opacity-70 sm:text-xl">
               Присоединяйтесь к тысячам пользователей, которые уже
               <br />
               зарабатывают
@@ -164,7 +164,7 @@ export function HomeTemplate({
             </Button>
           </div>
 
-          <SpotLightShape className="absolute text-light-accent blur-2xl -z-10 left-1/2 opacity-45" />
+          <SpotLightShape className="absolute text-light-accent blur-2xl -z-10 left-1/2 opacity-25" />
         </section>
       </div>
     </MainLayout>

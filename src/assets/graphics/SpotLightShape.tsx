@@ -10,7 +10,7 @@ export const SpotLightShape = (props: SVGAttributes<SVGSVGElement>) => {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <ellipse cx="186" cy="175.5" rx="186" ry="175.5" fill="currentColor" fill-opacity="0.58" />
+      <ellipse cx="186" cy="175.5" rx="186" ry="175.5" fill="currentColor" />
     </svg>
   );
 };
