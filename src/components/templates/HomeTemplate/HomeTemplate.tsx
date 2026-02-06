@@ -24,11 +24,11 @@ export function HomeTemplate({
         {/* Hero Section */}
         <div className="flex items-center relative mb-36 gap-x-6 mt-20 z-[1] w-full max-w-screen-2xl">
           <div className="w-max z-10">
-            <h1 className="flex flex-col items-start text-7xl 2xl:text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
+            <h1 className="flex flex-col items-start text-7xl xl:text-8xl min-[1660px]:text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
               <span>PRIME</span>
-              <span className="2xl:text-[130px]">ORACLES</span>
+              <span className="min-[1660px]:text-[130px]">ORACLES</span>
             </h1>
-            <p className="text-foreground font-Russo_One 2xl:text-2xl opacity-75">
+            <p className="text-foreground font-Russo_One text-lg xl:text-xl min-[1660px]:text-2xl opacity-75">
               Зарабатывай на контенте и цифровых
               <br />
               продуктах без команды, без рисков и без
@@ -44,20 +44,20 @@ export function HomeTemplate({
             </Button>
           </div>
           <img
-            className="w-full h-full min-w-0 max-w-[950px] flex-1 scale z-10"
+            className="min-[1220px]:w-full min-w-0 max-w-[max(950px,100%)] absolute right-0 -top-16 -z-10 w-[450px] min-[1220px]:relative flex-1 brightness-50 min-[800px]:brightness-100"
             src="/img/illustrations/home_hero_cover.avif"
             alt="Hero cover"
           />
 
           {/* Graphics */}
           <img
-            className="absolute bottom-0 translate-y-8 left-0"
+            className="absolute bottom-0 translate-y-8 left-0 -z-20"
             src="/img/illustrations/hero_graphics.avif"
             alt="Hero graphics"
           />
 
-          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[28vw] w-[400px] h-[400px] top-1/2 -translate-y-1/2 pointer-events-none blur-[128px] opacity-60" />
-          <SpotLightShoeShape className="text-white absolute right-0 max-w-[25vw] top-1/2 -translate-y-[calc(50%-8em)] pointer-events-none blur-[128px] opacity-20" />
+          <SpotLightShape className="text-accent absolute right-[25vw] max-w-[28vw] w-[400px] h-[400px] top-1/2 -translate-y-1/2 pointer-events-none blur-[128px] opacity-60 -z-20" />
+          <SpotLightShoeShape className="text-white absolute right-0 max-w-[25vw] top-1/2 -translate-y-[calc(50%-8em)] pointer-events-none blur-[128px] opacity-20 -z-20" />
         </div>
 
         {/* Content Rewards Info Section */}
@@ -141,7 +141,7 @@ export function HomeTemplate({
 
         {/* Income banner */}
         {/* 5E25BC 7B3FD4 */}
-        <section className="relative flex flex-col items-center overflow-hidden rounded-sm md:flex-row bg-gradient-to-br from-[#5E25BC] via-[#7B3FD4] to-[#5E25BC] z-[1] max-w-[1496px] w-full py-8 px-2">
+        <section className="relative flex flex-col items-center rounded-sm md:flex-row bg-gradient-to-br from-[#5E25BC] via-[#7B3FD4] to-[#5E25BC] z-[1] max-w-[1496px] w-full py-8 px-2">
           <img
             className="w-[185px] h-[185px] 2xl:w-[400px] 2xl:h-[400px] object-contain sm:w-[259px] sm:h-[259px] transition-transform md:-translate-x-10 md:translate-y-8"
             src="/img/illustrations/hand_cash.avif"

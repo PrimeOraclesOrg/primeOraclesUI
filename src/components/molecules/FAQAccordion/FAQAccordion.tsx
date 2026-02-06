@@ -20,7 +20,7 @@ export const FAQAccordion: FC<FAQAccordionProps> = ({ questions }) => {
     >
       {questions.map((faq) => (
         <AccordionItem key={faq.position} value={faq.position.toString()} className="border-border">
-          <AccordionTrigger className="text-foreground hover:text-primary">
+          <AccordionTrigger className="text-foreground hover:text-primary text-start">
             {faq.question}
           </AccordionTrigger>
           <AccordionContent className="text-muted-foreground lg:text-lg">
