@@ -24,11 +24,11 @@ export function HomeTemplate({
         {/* Hero Section */}
         <div className="flex items-center relative mb-36 gap-x-6 mt-20 z-[1] w-full max-w-screen-2xl">
           <div className="w-max z-10">
-            <h1 className="flex flex-col items-start leading-[120px] text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
+            <h1 className="flex flex-col items-start text-7xl 2xl:text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
               <span>PRIME</span>
-              <span className="text-[130px]">ORACLES</span>
+              <span className="2xl:text-[130px]">ORACLES</span>
             </h1>
-            <p className="text-foreground font-Russo_One md:text-2xl opacity-75">
+            <p className="text-foreground font-Russo_One 2xl:text-2xl opacity-75">
               Зарабатывай на контенте и цифровых
               <br />
               продуктах без команды, без рисков и без
