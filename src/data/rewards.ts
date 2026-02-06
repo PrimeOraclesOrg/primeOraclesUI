@@ -25,7 +25,7 @@ export const mockRewards: Reward[] = [
     category: "Личный бренд",
     type: "Клип",
     views: "213,023",
-    socialNetworks: ["instagram", "youtube", "tiktok", "vk"],
+    socialNetworks: ["instagram", "youtube", "tiktok"],
   },
   {
     logo: "А",
@@ -51,7 +51,7 @@ export const mockRewards: Reward[] = [
     category: "Личный бренд",
     type: "UGS",
     views: "0",
-    socialNetworks: ["instagram", "youtube", "x"],
+    socialNetworks: ["instagram", "youtube"],
   },
   {
     logo: "Г",
@@ -64,7 +64,7 @@ export const mockRewards: Reward[] = [
     category: "Личный бренд",
     type: "Клип",
     views: "1,113,023",
-    socialNetworks: ["tiktok", "youtube", "vk"],
+    socialNetworks: ["tiktok", "youtube"],
   },
   {
     logo: "Q",

@@ -1,10 +1,10 @@
-import { SocialLink } from "@/types";
+import { SocialMedia } from "@/types";
 
 export interface UserProfileUpdate {
   name?: string;
   description?: string;
   avatar?: string;
-  socialLinks?: SocialLink[];
+  socialLinks?: SocialMedia[];
 }
 
 export interface ServiceResult<T> {
