@@ -1,6 +1,6 @@
-import type { Transaction, Order, SocialMedia } from "@/types";
+import type { Transaction, Order, SocialLink } from "@/types";
 
-export const mockSocialLinks: SocialMedia[] = [
+export const mockSocialLinks: SocialLink[] = [
   {
     type: "youtube",
     link: "https://www.youtube.com/@LeshaMaisak",
