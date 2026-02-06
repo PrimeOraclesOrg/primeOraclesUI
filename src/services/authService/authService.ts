@@ -436,9 +436,15 @@ export async function completeProfile({
 
 export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
   try {
-    const { data: session, error: userError } = await getSession();
+    const { data: session, error: sessionError } = await getSession();
 
-    if (userError) throw userError;
+    if (sessionError) throw sessionError;
+
+    if (!session)
+      return {
+        data: null,
+        error: null,
+      };
 
     const { data, error } = await supabase
       .from("public_profiles_full_view")
