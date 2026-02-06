@@ -4,25 +4,37 @@ import learningIntro from "@/assets/learning-intro.jpg";
 
 export const mockReviews: Review[] = [
   {
-    id: "1",
-    author: "Михаил Грибенюк",
+    author_id: "1",
+    author_name: "Михаил Грибенюк",
     rating: 5,
-    text: "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
-    date: "1 День назад",
+    comment:
+      "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
+    created_at: new Date().toISOString(),
+    total_pages: 1,
+    author_avatar: "",
+    author_username: "",
   },
   {
-    id: "2",
-    author: "Михаил Грибенюк",
+    author_id: "2",
+    author_name: "Михаил Грибенюк",
     rating: 5,
-    text: "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
-    date: "1 День назад",
+    comment:
+      "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
+    created_at: new Date().toISOString(),
+    total_pages: 1,
+    author_avatar: "",
+    author_username: "",
   },
   {
-    id: "3",
-    author: "Михаил Грибенюк",
+    author_id: "3",
+    author_name: "Михаил Грибенюк",
     rating: 5,
-    text: "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
-    date: "1 День назад",
+    comment:
+      "Отличное приложение, жаль, что я до сих пор не до конца его понимаю, но я разберусь в нем лучше.",
+    created_at: new Date().toISOString(),
+    total_pages: 1,
+    author_avatar: "",
+    author_username: "",
   },
 ];
 
