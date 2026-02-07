@@ -22,13 +22,13 @@ export function HomeTemplate({
     <MainLayout>
       <div className="p-4 md:p-6 lg:p-8 flex flex-col items-center overflow-hidden">
         {/* Hero Section */}
-        <div className="flex items-center relative mb-36 gap-x-6 mt-20 z-[1] w-full max-w-screen-2xl">
-          <div className="w-max z-10">
-            <h1 className="flex flex-col items-start text-7xl xl:text-8xl min-[1660px]:text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
+        <div className="flex items-center relative mb-36 gap-6 mt-20 z-[1] w-full max-w-screen-2xl min-[720px]:flex-row flex-col">
+          <div className="w-max max-w-full z-10">
+            <h1 className="flex flex-col items-start text-6xl min-[280px]:text-7xl xl:text-8xl min-[1660px]:text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
               <span>PRIME</span>
               <span className="min-[1660px]:text-[130px]">ORACLES</span>
             </h1>
-            <p className="text-foreground font-Russo_One text-lg xl:text-xl min-[1660px]:text-2xl opacity-75">
+            <p className="text-foreground font-Russo_One text-sm min-[440px]:text-md sm:text-lg xl:text-xl min-[1660px]:text-2xl opacity-75">
               Зарабатывай на контенте и цифровых
               <br />
               продуктах без команды, без рисков и без
@@ -44,7 +44,7 @@ export function HomeTemplate({
             </Button>
           </div>
           <img
-            className="min-[1220px]:w-full min-w-0 max-w-[max(950px,100%)] absolute right-0 -top-16 -z-10 w-[450px] min-[1220px]:relative flex-1 brightness-50 min-[800px]:brightness-100"
+            className="min-[1300px]:w-full min-w-0 max-w-[min(900px,100%)] right-0 -z-10 flex-1 min-[900px]:static lg:absolute w-[480px] -top-24 min-[1220px]:static min-[720px]:absolute"
             src="/img/illustrations/home_hero_cover.avif"
             alt="Hero cover"
           />
@@ -141,7 +141,7 @@ export function HomeTemplate({
 
         {/* Income banner */}
         {/* 5E25BC 7B3FD4 */}
-        <section className="relative flex flex-col items-center rounded-sm md:flex-row bg-gradient-to-br from-[#5E25BC] via-[#7B3FD4] to-[#5E25BC] z-[1] max-w-[1496px] w-full py-8 px-2">
+        <section className="relative flex flex-col items-center rounded-sm md:flex-row bg-gradient-to-br from-[#5E25BC] via-[#7B3FD4] to-[#5E25BC] z-[1] max-w-[1496px] w-full py-8 px-2 overflow-hidden">
           <img
             className="w-[185px] h-[185px] 2xl:w-[400px] 2xl:h-[400px] object-contain sm:w-[259px] sm:h-[259px] transition-transform md:-translate-x-10 md:translate-y-8"
             src="/img/illustrations/hand_cash.avif"
