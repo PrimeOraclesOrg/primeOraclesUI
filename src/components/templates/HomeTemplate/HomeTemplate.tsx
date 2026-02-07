@@ -22,7 +22,7 @@ export function HomeTemplate({
     <MainLayout>
       <div className="p-4 md:p-6 lg:p-8 flex flex-col items-center overflow-hidden">
         {/* Hero Section */}
-        <div className="flex items-center relative mb-36 gap-6 mt-20 z-[1] w-full max-w-screen-2xl min-[720px]:flex-row flex-col">
+        <div className="flex items-center relative mb-36 gap-6 min-[720px]:mt-20 z-[1] w-full max-w-screen-2xl min-[720px]:flex-row flex-col">
           <div className="w-max max-w-full z-10">
             <h1 className="flex min-[720px]:flex-col gap-x-4 flex-wrap items-start text-6xl min-[280px]:text-7xl xl:text-8xl min-[1660px]:text-[120px] font-Bebas_Neue text-light-accent tracking-wider mb-4">
               <span>PRIME</span>
