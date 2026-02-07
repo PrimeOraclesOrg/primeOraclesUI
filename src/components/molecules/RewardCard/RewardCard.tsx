@@ -28,7 +28,7 @@ export function RewardCard({
   return (
     <div className="bg-card border border-border rounded-xl p-4 transition-colors w-full cursor-pointer hover:bg-surface max-w-xl">
       {/* Header */}
-      <div className="flex items-center justify-between mb-3 w-full gap-4 max-[400px]:flex-col max-[400px]:items-start">
+      <div className="flex items-center justify-between mb-3 w-full gap-4">
         <div className="flex items-center gap-3 grow-1 min-w-0">
           <div className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center flex-shrink-0">
             <span className="text-lg font-bold">{logo}</span>
