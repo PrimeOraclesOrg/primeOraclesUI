@@ -19,7 +19,7 @@ export function HomeTemplate({
   onCreateClick,
 }: HomeTemplateProps) {
   return (
-    <MainLayout>
+    <MainLayout wrapperClassName="mx-0 md:mx-4">
       <div className="p-4 md:p-6 lg:p-8 flex flex-col items-center overflow-hidden">
         {/* Hero Section */}
         <div className="flex items-center relative mb-36 gap-6 min-[720px]:mt-20 z-[1] w-full max-w-screen-2xl min-[720px]:flex-row flex-col">
