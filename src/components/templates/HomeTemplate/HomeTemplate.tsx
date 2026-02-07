@@ -63,14 +63,14 @@ export function HomeTemplate({
         {/* Content Rewards Info Section */}
         <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card px-4 sm:px-6 py-4 rounded-xl items-center shadow-inner-glass">
           <div className="md:col-span-2 h-full flex flex-col justify-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-light-accent my-4 drop-shadow-glow-light-accent">
+            <h2 className="text-2xl md:text-3xl font-bold text-light-accent my-4">
               Награды за контент
             </h2>
-            <p className="sm:text-lg text-foreground leading-relaxed mb-6 drop-shadow-glow-white font-Roboto mr-6">
+            <p className="sm:text-lg text-foreground leading-relaxed mb-6 font-Roboto mr-6">
               Это маркетинговый инструмент, который связывает ваш бренд с создателями контента — Они
               создают контент, публикуют его в своих социальных сетях, а вы платите им за просмотры
             </p>
-            <p className="text-muted-foreground drop-shadow-glow-muted font-Roboto">
+            <p className="text-muted-foreground font-Roboto">
               Но только после того, как одобрите их публикацию.
             </p>
           </div>
