@@ -26,16 +26,16 @@ export function RewardCard({
   };
 
   return (
-    <div className="bg-card border border-border rounded-xl p-4 transition-colors w-full cursor-pointer hover:bg-surface max-w-xl">
+    <div className="bg-card border border-border rounded-xl p-4 transition-colors w-full cursor-pointer hover:bg-surface max-w-xl relative">
       {/* Header */}
       <div className="flex items-center justify-between mb-3 w-full gap-4">
-        <div className="flex items-center gap-3 grow-1">
+        <div className="flex items-center gap-3 grow-1 min-w-0 max-[430px]:flex-col max-[430px]:items-start">
           <div className="w-10 h-10 rounded-full bg-muted overflow-hidden flex items-center justify-center flex-shrink-0">
             <span className="text-lg font-bold">{logo}</span>
           </div>
           <span className="font-semibold text-foreground line-clamp-1">{name}</span>
         </div>
-        <div className="flex items-center gap-1.5 bg-muted px-3 py-1 rounded-full">
+        <div className="flex items-center gap-1.5 bg-muted px-3 py-1 rounded-full max-[430px]:absolute max-[430px]:top-4 max-[430px]:right-4">
           <span className="text-sm font-medium text-foreground">{rate}</span>
           <svg className="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="currentColor">
             <circle cx="12" cy="12" r="10" />

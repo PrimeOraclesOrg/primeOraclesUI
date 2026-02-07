@@ -61,7 +61,7 @@ export function HomeTemplate({
         </div>
 
         {/* Content Rewards Info Section */}
-        <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card px-6 py-4 rounded-xl items-center shadow-inner-glass">
+        <div className="md:grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 mb-10 md:mb-16 flex flex-col max-w-[1280px] w-full bg-card px-4 sm:px-6 py-4 rounded-xl items-center shadow-inner-glass">
           <div className="md:col-span-2 h-full flex flex-col justify-center">
             <h2 className="text-2xl md:text-3xl font-bold text-light-accent my-4 drop-shadow-glow-light-accent">
               Награды за контент
