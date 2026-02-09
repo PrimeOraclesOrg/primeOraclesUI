@@ -241,6 +241,18 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
               </button>
             </div>
           </div>
+          <div className="py-8 flex flex-col items-center justify-between gap-4 px-6">
+            <h2 className="text-xl font-bold text-foreground">
+              {data.title || "Название продукта"}
+            </h2>
+            <Button
+              disabled
+              size="lg"
+              className="gold-gradient text-primary-foreground transition-opacity w-full px-8 text-base"
+            >
+              Купить за {data.price}$
+            </Button>
+          </div>
         </div>
       </div>
     </div>
