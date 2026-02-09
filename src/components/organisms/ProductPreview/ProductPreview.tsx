@@ -110,14 +110,10 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
             <div className="flex-1 flex flex-col gap-6">
               <div className="min-w-80 flex-1 overflow-hidden">
                 <div className="flex items-center gap-3 mb-2">
-                  {
-                    // TODO: Avatar path
-                  }
-                  <UserAvatar avatarPath="" />
-                  {
-                    // TODO: User name
-                  }
-                  <span className="text-foreground font-medium">Автор продукта</span>
+                  <UserAvatar avatarPath={author?.avatar_path} />
+                  <span className="text-foreground font-medium">
+                    {author?.name || "Автор продукта"}
+                  </span>
                 </div>
                 <div className="flex flex-col gap-2 mb-2">
                   {data.category && (
