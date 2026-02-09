@@ -140,7 +140,6 @@ export function HomeTemplate({
         </div>
 
         {/* Income banner */}
-        {/* 5E25BC 7B3FD4 */}
         <section className="relative flex flex-col items-center rounded-sm md:flex-row bg-gradient-to-br from-[#5E25BC] via-[#7B3FD4] to-[#5E25BC] z-[1] max-w-[1496px] w-full py-8 px-2 overflow-hidden">
           <img
             className="w-[185px] h-[185px] xl:w-[400px] xl:h-[400px] object-contain sm:w-[259px] sm:h-[259px] transition-transform md:-translate-x-10 md:translate-y-8"
