@@ -20,6 +20,9 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
+        Bebas_Neue: "Bebas Neue",
+        Russo_One: "Russo One",
+        Roboto: "Roboto",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -46,6 +49,9 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+        },
+        "light-accent": {
+          DEFAULT: "hsl(var(--light-accent))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -88,6 +94,9 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        "inner-glass": "inset 0 0 2px 1px #fff5",
       },
       keyframes: {
         "accordion-down": {

@@ -14,7 +14,7 @@ export function MainLayout({ children }: MainLayoutProps) {
           <Sidebar />
         </div>
         <main className="w-full min-h-screen pt-[57px] lg:pt-0 min-w-0">
-          <div className="m-4 md:border md:rounded-lg border-border">{children}</div>
+          <div className="m-4 md:border md:rounded-lg border-border mx-0 md:mx-4">{children}</div>
         </main>
       </div>
       <Footer />
