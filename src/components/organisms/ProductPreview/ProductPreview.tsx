@@ -7,8 +7,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { CATEGORY_DISPLAY_NAMES } from "@/types/createProduct";
+import { CATEGORY_DISPLAY_NAMES, getCategoryDisplayName } from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
+import { RatingStars } from "@/components/atoms";
+import { FAQAccordion, UserAvatar } from "@/components/molecules";
+import { Badge } from "@/components/ui/badge";
+import { ProductRating } from "../ProductRating/ProductRating";
+import { FAQ } from "@/types";
+import { useMemo } from "react";
 
 type PreviewMode = "desktop" | "mobile";
 
@@ -24,8 +30,25 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
   const mockReviewCount = 128;
   const mockMemberCount = 1247;
 
+  const faqQuestions: FAQ[] = useMemo(() => {
+    if (!data?.faq) return [];
+    return data.faq.map((question, index) => ({
+      question: question?.question || `Вопрос ${index + 1}`,
+      answer: question?.answer || `Ответ ${index + 1}`,
+      position: question?.position || 0,
+    }));
+  }, [data]);
+
+  const advantages = useMemo(() => {
+    if (!data?.advantages) return [];
+    return data.advantages.map((advantage, index) => ({
+      position: advantage.position || 0,
+      description: advantage.description || `Преимущество ${index + 1}`,
+    }));
+  }, [data]);
+
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col">
       {/* Preview Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-foreground">Предпросмотр продукта</h2>
@@ -91,112 +114,140 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
             </div>
 
             {/* Product Info */}
-            <div className="flex-1 min-w-0">
-              {/* Author */}
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                  <span className="text-sm font-medium">A</span>
+            <div className="flex-1 flex flex-col gap-6">
+              <div className="min-w-80 flex-1 lg:max-w-96 overflow-hidden">
+                <div className="flex items-center gap-3 mb-2">
+                  {
+                    // TODO: Avatar path
+                  }
+                  <UserAvatar avatarPath="" />
+                  {
+                    // TODO: User name
+                  }
+                  <span className="text-foreground font-medium">Автор продукта</span>
                 </div>
-                <span className="text-foreground font-medium">Автор продукта</span>
-              </div>
-
-              {/* Category */}
-              <div className="text-xs text-primary uppercase tracking-wider mb-2">
-                {CATEGORY_DISPLAY_NAMES[data.category]}
-              </div>
-
-              {/* Title */}
-              <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2">
-                {data.title || "Название продукта"}
-              </h3>
-
-              {/* Rating */}
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex">
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Star
-                      key={i}
-                      className={cn(
-                        "w-4 h-4",
-                        i < Math.floor(mockRating)
-                          ? "fill-primary text-primary"
-                          : "fill-muted text-muted"
-                      )}
-                    />
-                  ))}
+                <div className="flex flex-col gap-2 mb-2">
+                  {data.category && (
+                    <Badge
+                      variant="outline"
+                      className="w-fit border-gold text-gold bg-transparent font-medium"
+                    >
+                      {getCategoryDisplayName(data.category)}
+                    </Badge>
+                  )}
+                  <h1 className="text-2xl font-bold text-foreground">
+                    {data.title || "Название продукта"}
+                  </h1>
                 </div>
-                <span className="text-primary text-sm">({mockReviewCount})</span>
+                <div className="flex items-center gap-2">
+                  <RatingStars rating={mockRating} size="md" />
+                  <span className="text-primary">({mockReviewCount})</span>
+                </div>
               </div>
 
               {/* Price & CTA */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2 w-full lg:w-auto lg:flex-shrink-0 lg:min-w-[200px]">
                 <Button
+                  size="sm"
+                  className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full lg:w-auto px-6"
                   disabled
-                  className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full px-8"
                 >
-                  Купить за ${data.price.toFixed(2)}
+                  Купить за {data.price.toFixed(2)}$
                 </Button>
-                <span className="text-sm text-muted-foreground text-center">
-                  Присоединяйтесь к {mockMemberCount} участнику
-                </span>
+                <Button variant="outline" size="sm" className="w-full lg:w-auto" disabled>
+                  Перейти в чат
+                </Button>
               </div>
             </div>
           </div>
 
-          {/* Description */}
-          <div className="mb-8">
+          <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10 overflow-hidden">
             <h2 className="text-xl font-bold text-foreground mb-6">Описание</h2>
             <p className="text-foreground">
               {data.description || "Описание продукта будет отображаться здесь..."}
             </p>
           </div>
 
-          {/* Advantages Section */}
-          {data.advantages.length > 0 && (
-            <div className="mb-8">
-              <h4 className="text-lg font-bold text-foreground mb-4">Преимущества</h4>
-              <div className="grid gap-3">
-                {data.advantages.map((adv) => (
-                  <div
-                    key={adv.position}
-                    className="flex items-center gap-3 surface-card p-4 rounded-lg overflow-hidden"
-                  >
-                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="w-4 h-4 text-primary" />
+          {/* Features Section */}
+          {advantages.length > 0 && (
+            <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10 overflow-hidden">
+              <h2 className="text-xl font-bold text-foreground mb-6">Особенности</h2>
+              <div className="grid grid-cols-1 gap-3">
+                {advantages.map(({ position, description }) => {
+                  return (
+                    <div
+                      key={position}
+                      className="flex items-center gap-3 surface-card p-4 rounded-lg overflow-hidden"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4 text-primary" />
+                      </div>
+                      <span className="text-sm text-foreground line-clamp-2">{description}</span>
                     </div>
-                    <span className="text-sm text-foreground line-clamp-2">
-                      {adv.description || "Преимущество"}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
 
-          {/* FAQ Section - Similar to ProductDetailTemplate */}
-          {data.faq.length > 0 && (
-            <div className="mb-8">
-              <h4 className="text-lg font-bold text-foreground mb-4 text-center">
-                Часто задаваемые вопросы
-              </h4>
-              <Accordion type="single" collapsible className="max-w-2xl mx-auto">
-                {data.faq.map((item) => (
-                  <AccordionItem
-                    key={item.position}
-                    value={item.position.toString()}
-                    className="border-border"
-                  >
-                    <AccordionTrigger className="text-foreground hover:text-primary text-left overflow-hidden">
-                      {item.question || "Вопрос"}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
-                      {item.answer || "Ответ"}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+          {/* FAQ Section */}
+          {faqQuestions.length > 0 && (
+            <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10">
+              <h2 className="text-xl font-bold text-foreground mb-6 text-center">
+                Часто задаваемые вопросы:
+              </h2>
+              <FAQAccordion questions={faqQuestions} />
             </div>
           )}
+
+          {/* About the creator Section */}
+          {/* <div className="mb-4 sm:mb-6 sm:border-t sm:pt-10 overflow-hidden">
+                      <h2 className="text-xl font-bold text-foreground mb-6">О создателе</h2>
+                      <div className="flex-1 flex-col">
+                        <div className="flex-1 flex flex-col justify-between sm:flex-row sm:items-center gap-4">
+                          <div className="flex gap-4">
+                            <UserAvatar avatarPath={product.creator.avatar_path} size="16" />
+                            <div className="flex-1 lg:max-w-[500px] overflow-hidden">
+                              <div className="font-bold text-foreground mb-1">{product.creator.name}</div>
+                              <div className="flex gap-4 items-center mb-1">
+                                <div className="text-sm text-muted-foreground">
+                                  @{product.creator.username}
+                                </div>
+                                {product.creator.social_medias.length > 0 && (
+                                  <div className="flex items-center gap-4">
+                                    {product.creator.social_medias.map((sm) => (
+                                      <a
+                                        key={`${sm.type}-${sm.link}`}
+                                        href={sm.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-muted-foreground hover:text-foreground transition-colors inline-flex"
+                                        aria-label={sm.type}
+                                      >
+                                        <SocialIcon network={sm.type} />
+                                      </a>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-sm text-muted-foreground mb-1">
+                                {product.creator?.bio ?? ""}
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            className="border-border bg-card hover:bg-muted text-foreground"
+                          >
+                            Посмотреть профиль
+                          </Button>
+                        </div>
+                        <button className="flex justify-self-center sm:justify-self-start gap-1 text-sm text-foreground hover:text-primary transition-colors mt-6 sm:mt-8">
+                          <Flag className="w-4 h-4" />
+                          Пожаловаться на создателя
+                        </button>
+                      </div>
+                    </div> */}
         </div>
       </div>
     </div>
