@@ -1,34 +1,27 @@
-import { Monitor, Smartphone, Check, Image, Star } from "lucide-react";
+import { Monitor, Smartphone, Check, Image, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { CATEGORY_DISPLAY_NAMES, getCategoryDisplayName } from "@/types/createProduct";
+import { getCategoryDisplayName } from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import { RatingStars } from "@/components/atoms";
+import { RatingStars, SocialIcon } from "@/components/atoms";
 import { FAQAccordion, UserAvatar } from "@/components/molecules";
 import { Badge } from "@/components/ui/badge";
-import { ProductRating } from "../ProductRating/ProductRating";
-import { FAQ } from "@/types";
+import { FAQ, FullProfile } from "@/types";
 import { useMemo } from "react";
 
 type PreviewMode = "desktop" | "mobile";
 
 interface ProductPreviewProps {
+  author?: FullProfile;
   data: CreateProductFormData;
   mode: PreviewMode;
   onModeChange: (mode: PreviewMode) => void;
 }
 
-export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps) {
+export function ProductPreview({ data, mode, author, onModeChange }: ProductPreviewProps) {
   const hasMedia = !!data.mediaUrl;
   const mockRating = 4.5;
   const mockReviewCount = 128;
-  const mockMemberCount = 1247;
 
   const faqQuestions: FAQ[] = useMemo(() => {
     if (!data?.faq) return [];
@@ -115,7 +108,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
 
             {/* Product Info */}
             <div className="flex-1 flex flex-col gap-6">
-              <div className="min-w-80 flex-1 lg:max-w-96 overflow-hidden">
+              <div className="min-w-80 flex-1 overflow-hidden">
                 <div className="flex items-center gap-3 mb-2">
                   {
                     // TODO: Avatar path
@@ -146,22 +139,22 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
               </div>
 
               {/* Price & CTA */}
-              <div className="flex flex-col gap-2 w-full lg:w-auto lg:flex-shrink-0 lg:min-w-[200px]">
+              <div className="flex flex-col gap-2 w-full">
                 <Button
                   size="sm"
-                  className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full lg:w-auto px-6"
+                  className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full px-6"
                   disabled
                 >
                   Купить за {data.price.toFixed(2)}$
                 </Button>
-                <Button variant="outline" size="sm" className="w-full lg:w-auto" disabled>
+                <Button variant="outline" size="sm" className="w-full" disabled>
                   Перейти в чат
                 </Button>
               </div>
             </div>
           </div>
 
-          <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10 overflow-hidden">
+          <div className="pb-8 overflow-hidden">
             <h2 className="text-xl font-bold text-foreground mb-6">Описание</h2>
             <p className="text-foreground">
               {data.description || "Описание продукта будет отображаться здесь..."}
@@ -170,7 +163,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
 
           {/* Features Section */}
           {advantages.length > 0 && (
-            <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10 overflow-hidden">
+            <div className="pb-8 overflow-hidden">
               <h2 className="text-xl font-bold text-foreground mb-6">Особенности</h2>
               <div className="grid grid-cols-1 gap-3">
                 {advantages.map(({ position, description }) => {
@@ -192,7 +185,7 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
 
           {/* FAQ Section */}
           {faqQuestions.length > 0 && (
-            <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10">
+            <div className="pb-8">
               <h2 className="text-xl font-bold text-foreground mb-6 text-center">
                 Часто задаваемые вопросы:
               </h2>
@@ -201,53 +194,57 @@ export function ProductPreview({ data, mode, onModeChange }: ProductPreviewProps
           )}
 
           {/* About the creator Section */}
-          {/* <div className="mb-4 sm:mb-6 sm:border-t sm:pt-10 overflow-hidden">
-                      <h2 className="text-xl font-bold text-foreground mb-6">О создателе</h2>
-                      <div className="flex-1 flex-col">
-                        <div className="flex-1 flex flex-col justify-between sm:flex-row sm:items-center gap-4">
-                          <div className="flex gap-4">
-                            <UserAvatar avatarPath={product.creator.avatar_path} size="16" />
-                            <div className="flex-1 lg:max-w-[500px] overflow-hidden">
-                              <div className="font-bold text-foreground mb-1">{product.creator.name}</div>
-                              <div className="flex gap-4 items-center mb-1">
-                                <div className="text-sm text-muted-foreground">
-                                  @{product.creator.username}
-                                </div>
-                                {product.creator.social_medias.length > 0 && (
-                                  <div className="flex items-center gap-4">
-                                    {product.creator.social_medias.map((sm) => (
-                                      <a
-                                        key={`${sm.type}-${sm.link}`}
-                                        href={sm.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-muted-foreground hover:text-foreground transition-colors inline-flex"
-                                        aria-label={sm.type}
-                                      >
-                                        <SocialIcon network={sm.type} />
-                                      </a>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                              <div className="text-sm text-muted-foreground mb-1">
-                                {product.creator?.bio ?? ""}
-                              </div>
-                            </div>
-                          </div>
-                          <Button
-                            variant="outline"
-                            className="border-border bg-card hover:bg-muted text-foreground"
-                          >
-                            Посмотреть профиль
-                          </Button>
-                        </div>
-                        <button className="flex justify-self-center sm:justify-self-start gap-1 text-sm text-foreground hover:text-primary transition-colors mt-6 sm:mt-8">
-                          <Flag className="w-4 h-4" />
-                          Пожаловаться на создателя
-                        </button>
+          <div className="mb-4 overflow-hidden">
+            <h2 className="text-xl font-bold text-foreground mb-6">О создателе</h2>
+            <div className="flex-1 flex-col">
+              <div className="flex-1 flex flex-col justify-between gap-4">
+                <div className="flex gap-4">
+                  <UserAvatar avatarPath={author?.avatar_path} size="16" />
+                  <div className="flex-1 overflow-hidden">
+                    <div className="font-bold text-foreground mb-1">
+                      {author?.name || "Автор продукта"}
+                    </div>
+                    <div className="flex gap-4 items-center mb-1">
+                      <div className="text-sm text-muted-foreground">
+                        @{author?.username || "author"}
                       </div>
-                    </div> */}
+                      {author?.social_medias.length > 0 && (
+                        <div className="flex items-center gap-4">
+                          {author.social_medias.map((sm) => (
+                            <a
+                              key={`${sm.type}-${sm.link}`}
+                              href={sm.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-muted-foreground hover:text-foreground transition-colors inline-flex"
+                              aria-label={sm.type}
+                            >
+                              <SocialIcon network={sm.type} />
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-sm text-muted-foreground mb-1">{author?.bio ?? ""}</div>
+                  </div>
+                </div>
+                <Button
+                  disabled
+                  variant="outline"
+                  className="border-border bg-card text-foreground"
+                >
+                  Посмотреть профиль
+                </Button>
+              </div>
+              <button
+                disabled
+                className="flex justify-self-center gap-1 text-sm text-muted-foreground transition-colors mt-6"
+              >
+                <Flag className="w-4 h-4" />
+                Пожаловаться на создателя
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

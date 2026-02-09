@@ -12,10 +12,12 @@ export default function CreateProduct() {
     handleRemoveAdvantage,
     handleAddFaq,
     handleRemoveFaq,
+    author,
   } = useCreateProduct();
 
   return (
     <CreateProductTemplate
+      author={author}
       form={createProductForm}
       previewMode="desktop"
       onBackClick={handleBackClick}

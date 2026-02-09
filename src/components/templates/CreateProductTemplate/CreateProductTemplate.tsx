@@ -5,12 +5,14 @@ import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { CreateProductForm } from "@/components/organisms/CreateProductForm/CreateProductForm";
 import { ProductPreview } from "@/components/organisms/ProductPreview/ProductPreview";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
+import { FullProfile } from "@/types";
 
 type PreviewMode = "desktop" | "mobile";
 
 interface CreateProductTemplateProps {
   form: UseFormReturn<CreateProductFormData>;
   previewMode: PreviewMode;
+  author?: FullProfile;
   onBackClick: () => void;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
@@ -24,6 +26,7 @@ interface CreateProductTemplateProps {
 export function CreateProductTemplate({
   form,
   previewMode: initialPreviewMode,
+  author,
   onBackClick,
   onMediaUpload,
   onMediaRemove,
@@ -70,6 +73,7 @@ export function CreateProductTemplate({
           <div className="hidden lg:flex lg:w-1/2 border-l border-border p-6 bg-secondary/30">
             <div className="w-full">
               <ProductPreview
+                author={author}
                 data={form.watch()}
                 mode={previewMode}
                 onModeChange={setPreviewMode}
