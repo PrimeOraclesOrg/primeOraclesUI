@@ -107,8 +107,8 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
             </div>
 
             {/* Product Info */}
-            <div className="flex-1 flex flex-col gap-6">
-              <div className="min-w-80 flex-1 overflow-hidden">
+            <div className="flex-1 flex flex-col gap-6 min-w-0">
+              <div className="flex-1 overflow-hidden">
                 <div className="flex items-center gap-3 mb-2">
                   <UserAvatar avatarPath={author?.avatar_path} />
                   <span className="text-foreground font-medium">
@@ -124,7 +124,7 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
                       {getCategoryDisplayName(data.category)}
                     </Badge>
                   )}
-                  <h1 className="text-2xl font-bold text-foreground">
+                  <h1 className="text-2xl font-bold text-foreground break-words">
                     {data.title || "Название продукта"}
                   </h1>
                 </div>
@@ -152,7 +152,7 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
 
           <div className="pb-8 overflow-hidden">
             <h2 className="text-xl font-bold text-foreground mb-6">Описание</h2>
-            <p className="text-foreground">
+            <p className="text-foreground break-words">
               {data.description || "Описание продукта будет отображаться здесь..."}
             </p>
           </div>
@@ -171,7 +171,9 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
                       <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                         <Check className="w-4 h-4 text-primary" />
                       </div>
-                      <span className="text-sm text-foreground line-clamp-2">{description}</span>
+                      <span className="text-sm text-foreground line-clamp-2 break-words">
+                        {description}
+                      </span>
                     </div>
                   );
                 })}
@@ -242,7 +244,7 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
             </div>
           </div>
           <div className="py-8 flex flex-col items-center justify-between gap-4 px-6">
-            <h2 className="text-xl font-bold text-foreground">
+            <h2 className="text-xl font-bold text-foreground break-words max-w-full">
               {data.title || "Название продукта"}
             </h2>
             <Button

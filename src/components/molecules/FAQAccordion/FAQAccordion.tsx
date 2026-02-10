@@ -25,10 +25,10 @@ export const FAQAccordion: FC<FAQAccordionProps> = ({ questions }) => {
           value={faq.position.toString()}
           className={cn("border-border", index === questions.length - 1 && "border-none")}
         >
-          <AccordionTrigger className="text-foreground hover:text-primary text-start">
-            {faq.question}
+          <AccordionTrigger className="text-foreground hover:text-primary text-start break-words min-w-0">
+            <span className="overflow-hidden">{faq.question}</span>
           </AccordionTrigger>
-          <AccordionContent className="text-muted-foreground lg:text-lg">
+          <AccordionContent className="text-muted-foreground lg:text-lg break-words">
             {faq.answer}
           </AccordionContent>
         </AccordionItem>
