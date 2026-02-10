@@ -20,8 +20,8 @@ interface ProductPreviewProps {
 
 export function ProductPreview({ data, mode, author, onModeChange }: ProductPreviewProps) {
   const hasMedia = !!data.mediaUrl;
-  const mockRating = 4.5;
-  const mockReviewCount = 128;
+  const mockRating = 0;
+  const mockReviewCount = 0;
 
   const faqQuestions: FAQ[] = useMemo(() => {
     if (!data?.faq) return [];
