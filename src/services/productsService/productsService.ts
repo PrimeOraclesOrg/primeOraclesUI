@@ -255,7 +255,11 @@ export async function uploadProductImage(productId: string, file: File) {
 /**
  * Update an existing product
  */
-export async function updateProduct(id: string, updates: Partial<Product>): Promise<Product> {
+export async function updateProduct(
+  id: string,
+  productData: CreateProductFormData,
+  mediaFile?: File | null
+): Promise<Product> {
   // TODO: Replace with Supabase update
   // const { data, error } = await supabase
   //   .from('products')

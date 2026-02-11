@@ -23,6 +23,7 @@ import { useGetMyProfileQuery } from "@/store/usersApi";
 import { useGetAuthUserQuery } from "@/store/authApi";
 import { useForceProfileSetup } from "@/hooks/useForceProfileSetup";
 import { useAuthListener } from "@/hooks/useAuthListener";
+import UpdateProduct from "@/pages/UpdateProduct/UpdateProduct";
 
 export function AppRoutes() {
   useAuthListener();
@@ -146,6 +147,15 @@ export function AppRoutes() {
           element={
             <ProtectedRoute>
               <CreateProduct />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/update-product/:id"
+          element={
+            <ProtectedRoute>
+              <UpdateProduct />
             </ProtectedRoute>
           }
         />
