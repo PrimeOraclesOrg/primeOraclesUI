@@ -124,7 +124,7 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
                       {getCategoryDisplayName(data.category)}
                     </Badge>
                   )}
-                  <h1 className="text-2xl font-bold text-foreground break-words">
+                  <h1 className="text-2xl font-bold text-foreground line-clamp-2 break-words">
                     {data.title || "Название продукта"}
                   </h1>
                 </div>
@@ -244,7 +244,7 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
             </div>
           </div>
           <div className="py-8 flex flex-col items-center justify-between gap-4 px-6">
-            <h2 className="text-xl font-bold text-foreground break-words max-w-full">
+            <h2 className="text-xl font-bold text-foreground line-clamp-2 break-words max-w-full">
               {data.title || "Название продукта"}
             </h2>
             <Button
