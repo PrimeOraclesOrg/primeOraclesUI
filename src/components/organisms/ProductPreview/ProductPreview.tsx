@@ -1,7 +1,6 @@
 import { Monitor, Smartphone, Check, Image, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getCategoryDisplayName } from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { RatingStars, SocialIcon } from "@/components/atoms";
 import { FAQAccordion, UserAvatar } from "@/components/molecules";
@@ -116,14 +115,14 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
                   </span>
                 </div>
                 <div className="flex flex-col gap-2 mb-2">
-                  {data.category && (
+                  {/*                   {data.category && (
                     <Badge
                       variant="outline"
                       className="w-fit border-gold text-gold bg-transparent font-medium"
                     >
                       {getCategoryDisplayName(data.category)}
                     </Badge>
-                  )}
+                  )} */}
                   <h1 className="text-2xl font-bold text-foreground line-clamp-2 break-words">
                     {data.title || "Название продукта"}
                   </h1>

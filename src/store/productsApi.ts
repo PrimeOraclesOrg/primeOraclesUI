@@ -1,11 +1,18 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
-import { MyProducts, Product, ProductCommentsResponse, PublicProductPage } from "@/types";
+import {
+  MyProducts,
+  Product,
+  ProductCategory,
+  ProductCommentsResponse,
+  PublicProductPage,
+} from "@/types";
 import {
   fetchProductById,
   createProductService,
   fetchProductComments,
   fetchMyProducts,
+  fetchCategoriesForProducts,
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FetchMyProductsParams } from "@/services/productsService/types";
@@ -72,6 +79,15 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["Products"],
     }),
 
+    getCategoriesForProducts: builder.query<ProductCategory[], void>({
+      queryFn: async () => {
+        const { data, error } = await fetchCategoriesForProducts();
+        if (error) return { error };
+
+        return { data };
+      },
+    }),
+
     getHomeProducts: builder.query<Product[], void>({
       queryFn: () => {
         return { data: homePageProducts };
@@ -125,4 +141,5 @@ export const {
   useGetMyProductsQuery,
   useGetProductCommentsQuery,
   useCreateProductMutation,
+  useGetCategoriesForProductsQuery,
 } = productsApi;

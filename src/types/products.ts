@@ -1,3 +1,4 @@
+import { Prettify } from "@/utils";
 import { FullProfile } from "./models";
 import { Database } from "./supabase";
 
@@ -19,11 +20,23 @@ export type ProductCommentsResponse = {
   totalPages: number;
 };
 
-export type PublicProductPage = Omit<
-  Database["public"]["Functions"]["get_public_product_page"]["Returns"][0],
-  "creator" | "faq" | "advantages"
-> & {
-  creator: FullProfile;
-  faq: FAQ[];
-  advantages: Advantage[];
-};
+export type PublicProductPage = Prettify<
+  Omit<
+    Database["public"]["Functions"]["get_public_product_page"]["Returns"][0],
+    "creator" | "faq" | "advantages"
+  > & {
+    creator: FullProfile;
+    faq: FAQ[];
+    advantages: Advantage[];
+  }
+>;
+
+export type ProductSubCategory = Prettify<
+  Omit<Database["public"]["Views"]["product_categories_view"]["Row"], "subcategories">
+>;
+
+export type ProductCategory = Prettify<
+  ProductSubCategory & {
+    subcategories: Array<ProductSubCategory>;
+  }
+>;

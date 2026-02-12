@@ -4,7 +4,6 @@ import { FAQAccordion, UserAvatar } from "@/components/molecules";
 import { RatingStars, Loader, SocialIcon, BackButton } from "@/components/atoms";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getCategoryDisplayName } from "@/types/createProduct";
 import { ProductCommentsResponse, PublicProductPage } from "@/types";
 import { ProductRating } from "@/components/organisms";
 
@@ -71,14 +70,14 @@ export function ProductDetailTemplate({
                   <span className="text-foreground font-medium">{product.creator.name}</span>
                 </div>
                 <div className="flex flex-col gap-2 mb-2">
-                  {product.category && (
+                  {/* {product.category && (
                     <Badge
                       variant="outline"
                       className="w-fit border-gold text-gold bg-transparent font-medium"
                     >
                       {getCategoryDisplayName(product.category)}
                     </Badge>
-                  )}
+                  )} */}
                   <h1 className="text-2xl font-bold text-foreground">{product.title}</h1>
                 </div>
                 <div className="flex items-center gap-2">

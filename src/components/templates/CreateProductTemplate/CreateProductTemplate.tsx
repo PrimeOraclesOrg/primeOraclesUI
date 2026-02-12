@@ -5,7 +5,7 @@ import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { CreateProductForm } from "@/components/organisms/CreateProductForm/CreateProductForm";
 import { ProductPreview } from "@/components/organisms/ProductPreview/ProductPreview";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import { FullProfile } from "@/types";
+import { FullProfile, ProductCategory } from "@/types";
 
 type PreviewMode = "desktop" | "mobile";
 
@@ -13,6 +13,7 @@ interface CreateProductTemplateProps {
   form: UseFormReturn<CreateProductFormData>;
   previewMode: PreviewMode;
   author?: FullProfile;
+  categories: Array<ProductCategory>;
   onBackClick: () => void;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
@@ -27,6 +28,7 @@ export function CreateProductTemplate({
   form,
   previewMode: initialPreviewMode,
   author,
+  categories,
   onBackClick,
   onMediaUpload,
   onMediaRemove,
@@ -58,6 +60,7 @@ export function CreateProductTemplate({
           <div className="w-full lg:w-1/2 overflow-auto p-4 md:p-6">
             <h1 className="text-2xl font-bold text-foreground mb-6">Создать продукт</h1>
             <CreateProductForm
+              categories={categories}
               form={form}
               onMediaUpload={onMediaUpload}
               onMediaRemove={onMediaRemove}

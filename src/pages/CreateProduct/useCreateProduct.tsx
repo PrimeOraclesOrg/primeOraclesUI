@@ -10,7 +10,7 @@ import {
   type ProductFAQItem,
 } from "@/types/createProduct";
 import { useToast } from "@/hooks/useToast";
-import { useCreateProductMutation } from "@/store/productsApi";
+import { useCreateProductMutation, useGetCategoriesForProductsQuery } from "@/store/productsApi";
 import { useOnRequestResult } from "@/data/useOnRequestResult";
 import { useGetMyProfileQuery } from "@/store/usersApi";
 
@@ -20,6 +20,7 @@ export const useCreateProduct = () => {
   const { toast } = useToast();
   const { data: author } = useGetMyProfileQuery();
   const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const { data: categories, isLoading: isCategoriesLoading } = useGetCategoriesForProductsQuery();
   const [createProduct, { data: createdProductId, isSuccess, isError, error }] =
     useCreateProductMutation();
 
@@ -125,13 +126,14 @@ export const useCreateProduct = () => {
     createProduct({
       productData: {
         title: values.title,
-        category: values.category,
         description: values.description,
         advantages: values.advantages,
         faq: values.faq,
         instructions: values.instructions,
         price: values.price,
         isActive: values.isActive,
+        category_l1_id: values.category_l1_id,
+        category_l2_id: values.category_l2_id,
       },
       mediaFile,
     });
@@ -162,6 +164,8 @@ export const useCreateProduct = () => {
 
   return {
     createProductForm,
+    categories,
+    isCategoriesLoading,
     onSubmit,
     handleBackClick,
     handleMediaUpload,
