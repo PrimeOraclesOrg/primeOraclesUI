@@ -14,6 +14,7 @@ interface WorkspaceMarketplaceTemplateProps {
   loadMoreButtonShown: boolean;
   onTabChange: (tab: WorkspaceMarketplaceTabs) => void;
   onSortChange: (sort: WorkspaceSortOption) => void;
+  onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
   onLoadMore: () => void;
@@ -27,6 +28,7 @@ export function WorkspaceMarketplaceTemplate({
   loadMoreButtonShown,
   onTabChange,
   onSortChange,
+  onOpenPage,
   onEdit,
   onViewStats,
   onLoadMore,
@@ -55,6 +57,7 @@ export function WorkspaceMarketplaceTemplate({
           <WorkspaceProductList
             products={products}
             isFetching={isFetching}
+            onOpenPage={onOpenPage}
             onEdit={onEdit}
             onViewStats={onViewStats}
           />

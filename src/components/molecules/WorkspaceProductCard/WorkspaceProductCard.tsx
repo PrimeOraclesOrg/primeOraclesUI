@@ -1,20 +1,26 @@
 import { ExternalLink, Pencil, BarChart3 } from "lucide-react";
 import { RatingStars } from "@/components/atoms";
 import { WorkspaceStatusBadge } from "@/components/atoms/WorkspaceStatusBadge/WorkspaceStatusBadge";
-import { CategoryBadge } from "@/components/atoms/CategoryBadge/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { MyProduct } from "@/types";
 import { formatDateTime } from "@/utils";
 import { useTranslation } from "react-i18next";
+import { Badge } from "@/components/ui/badge";
 
 interface WorkspaceProductCardProps {
   product: MyProduct;
+  onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
 }
 
-export function WorkspaceProductCard({ product, onEdit, onViewStats }: WorkspaceProductCardProps) {
+export function WorkspaceProductCard({
+  product,
+  onOpenPage,
+  onEdit,
+  onViewStats,
+}: WorkspaceProductCardProps) {
   const { t } = useTranslation();
 
   return (
@@ -37,8 +43,18 @@ export function WorkspaceProductCard({ product, onEdit, onViewStats }: Workspace
             <WorkspaceStatusBadge isActive={product.is_active} />
           </div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <CategoryBadge category={t(`product:category.${product.category.l1.code}`)} />
-            <CategoryBadge category={t(`product:subCategory.${product.category.l2.code}`)} />
+            <Badge
+              variant="outline"
+              className="w-fit border-gold text-gold bg-transparent font-medium"
+            >
+              {t(`product:category.${product.category.l1.code}`)}
+            </Badge>
+            <Badge
+              variant="outline"
+              className="w-fit border-gold text-gold bg-transparent font-medium"
+            >
+              {t(`product:subCategory.${product.category.l2.code}`)}
+            </Badge>
           </div>
           <RatingStars rating={product.rating} reviewCount={product.comments_count} size="sm" />
         </div>
@@ -63,6 +79,7 @@ export function WorkspaceProductCard({ product, onEdit, onViewStats }: Workspace
                     variant="ghost"
                     size="icon"
                     className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                    onClick={() => onOpenPage(product.id)}
                   >
                     <ExternalLink className="h-4 w-4" />
                   </Button>

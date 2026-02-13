@@ -3,8 +3,10 @@ import { WorkspaceMarketplaceTemplate } from "@/components/templates/WorkspaceMa
 import { useGetMyProductsQuery } from "@/store/productsApi";
 import { WorkspaceMarketplaceTabs, WorkspaceSortOption } from "@/types/workspace";
 import { FetchMyProductsParams } from "@/services/productsService/types";
+import { useNavigate } from "react-router-dom";
 
 export default function WorkspaceMarketplace() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<WorkspaceMarketplaceTabs>("all");
   const [sortBy, setSortBy] = useState<WorkspaceSortOption>("created_at_desc");
 
@@ -25,6 +27,13 @@ export default function WorkspaceMarketplace() {
     setCursor(null);
     setActiveTab(tab);
   }, []);
+
+  const handleOpenPage = useCallback(
+    (id: string) => {
+      navigate(`/products/${id}`);
+    },
+    [navigate]
+  );
 
   const handleEdit = useCallback((id: string) => {
     // TODO: Navigate to edit page when implemented
@@ -55,6 +64,7 @@ export default function WorkspaceMarketplace() {
       sortBy={sortBy}
       onTabChange={handleTabChange}
       onSortChange={handleSetSortBy}
+      onOpenPage={handleOpenPage}
       onEdit={handleEdit}
       onViewStats={handleViewStats}
       onLoadMore={handleLoadMore}
