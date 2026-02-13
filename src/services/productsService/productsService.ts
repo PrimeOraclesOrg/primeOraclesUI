@@ -9,6 +9,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
   FullProfile,
+  MyProduct,
   Product,
   ProductCategory,
   ProductCommentsResponse,
@@ -41,7 +42,7 @@ export async function fetchMyProducts({
       data: data.map((product) => ({
         ...product,
         cover_url: buildCoverUrl(product.cover_url),
-      })),
+      })) as unknown as Array<MyProduct>,
       error: null,
     };
   } catch (error) {
@@ -140,7 +141,7 @@ export async function fetchProductById(
         ...product[0],
         cover_url: buildCoverUrl(product[0].cover_url),
         creator: product[0].creator as unknown as FullProfile,
-      } as PublicProductPage,
+      } as unknown as PublicProductPage,
       error: null,
     };
   } catch (error) {
