@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProductCommentsResponse, PublicProductPage } from "@/types";
 import { ProductRating } from "@/components/organisms";
+import { useTranslation } from "react-i18next";
 
 interface ProductDetailTemplateProps {
   product: PublicProductPage;
@@ -34,6 +35,8 @@ export function ProductDetailTemplate({
   isCommentsLoading,
   isCommentsError,
 }: ProductDetailTemplateProps) {
+  const { t } = useTranslation();
+
   if (isLoading) {
     return (
       <MainLayout>
@@ -70,14 +73,20 @@ export function ProductDetailTemplate({
                   <span className="text-foreground font-medium">{product.creator.name}</span>
                 </div>
                 <div className="flex flex-col gap-2 mb-2">
-                  {/* {product.category && (
+                  <div className="flex flex-wrap gap-2">
                     <Badge
                       variant="outline"
                       className="w-fit border-gold text-gold bg-transparent font-medium"
                     >
-                      {getCategoryDisplayName(product.category)}
+                      {t(`product:category.${product.category.l1.code}`)}
                     </Badge>
-                  )} */}
+                    <Badge
+                      variant="outline"
+                      className="w-fit border-gold text-gold bg-transparent font-medium"
+                    >
+                      {t(`product:subCategory.${product.category.l2.code}`)}
+                    </Badge>
+                  </div>
                   <h1 className="text-2xl font-bold text-foreground">{product.title}</h1>
                 </div>
                 <div className="flex items-center gap-2">

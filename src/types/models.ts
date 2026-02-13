@@ -1,3 +1,4 @@
+import { Prettify } from "@/utils";
 import { Database } from "./supabase";
 // ========================================
 // Product Models
@@ -118,7 +119,6 @@ export interface RatingDistributionItem {
   count: number;
 }
 
-export type MyProducts = Database["public"]["Functions"]["app_get_my_products"]["Returns"];
 export type FullProfile = Omit<
   Database["public"]["Views"]["public_profiles_full_view"]["Row"],
   "social_medias"

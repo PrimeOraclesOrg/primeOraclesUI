@@ -2,12 +2,12 @@ import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { WorkspaceStatusTabs } from "@/components/molecules/WorkspaceStatusTabs/WorkspaceStatusTabs";
 import { WorkspaceSortSelect } from "@/components/molecules/WorkspaceSortSelect/WorkspaceSortSelect";
 import { WorkspaceProductList } from "@/components/organisms/WorkspaceProductList/WorkspaceProductList";
-import type { MyProducts } from "@/types";
+import type { MyProduct } from "@/types";
 import { Button } from "@/components/ui/button";
 import { WorkspaceMarketplaceTabs, WorkspaceSortOption } from "@/types/workspace";
 
 interface WorkspaceMarketplaceTemplateProps {
-  products: MyProducts;
+  products: Array<MyProduct>;
   activeTab: WorkspaceMarketplaceTabs;
   sortBy: WorkspaceSortOption;
   isFetching: boolean;

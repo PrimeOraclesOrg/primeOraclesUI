@@ -1,8 +1,8 @@
 import { WorkspaceProductCard } from "@/components/molecules/WorkspaceProductCard/WorkspaceProductCard";
-import { MyProducts } from "@/types";
+import { MyProduct } from "@/types";
 
 interface WorkspaceProductListProps {
-  products: MyProducts;
+  products: Array<MyProduct>;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
   isFetching: boolean;

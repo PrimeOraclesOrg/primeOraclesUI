@@ -4,19 +4,19 @@ import { WorkspaceStatusBadge } from "@/components/atoms/WorkspaceStatusBadge/Wo
 import { CategoryBadge } from "@/components/atoms/CategoryBadge/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { MyProducts } from "@/types";
-import { productCategoryColors } from "@/data";
+import { MyProduct } from "@/types";
 import { formatDateTime } from "@/utils";
 import { useTranslation } from "react-i18next";
 
 interface WorkspaceProductCardProps {
-  product: MyProducts[0];
+  product: MyProduct;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
 }
 
 export function WorkspaceProductCard({ product, onEdit, onViewStats }: WorkspaceProductCardProps) {
   const { t } = useTranslation();
+
   return (
     <div className="surface-card p-4 flex flex-col md:flex-row gap-4">
       {/* Product Image */}
@@ -37,10 +37,8 @@ export function WorkspaceProductCard({ product, onEdit, onViewStats }: Workspace
             <WorkspaceStatusBadge isActive={product.is_active} />
           </div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <CategoryBadge
-              className={productCategoryColors[product.category] || ""}
-              category={t(`product:category.${product.category}`)}
-            />
+            <CategoryBadge category={t(`product:category.${product.category.l1.code}`)} />
+            <CategoryBadge category={t(`product:subCategory.${product.category.l2.code}`)} />
           </div>
           <RatingStars rating={product.rating} reviewCount={product.comments_count} size="sm" />
         </div>

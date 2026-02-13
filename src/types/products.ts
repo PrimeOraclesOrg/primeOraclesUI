@@ -20,17 +20,6 @@ export type ProductCommentsResponse = {
   totalPages: number;
 };
 
-export type PublicProductPage = Prettify<
-  Omit<
-    Database["public"]["Functions"]["get_public_product_page"]["Returns"][0],
-    "creator" | "faq" | "advantages"
-  > & {
-    creator: FullProfile;
-    faq: FAQ[];
-    advantages: Advantage[];
-  }
->;
-
 export type ProductSubCategory = Prettify<
   Omit<Database["public"]["Views"]["product_categories_view"]["Row"], "subcategories">
 >;
@@ -38,5 +27,28 @@ export type ProductSubCategory = Prettify<
 export type ProductCategory = Prettify<
   ProductSubCategory & {
     subcategories: Array<ProductSubCategory>;
+  }
+>;
+
+export interface SpecificProductCategory {
+  l1: Prettify<Omit<ProductSubCategory, "sort_order">>;
+  l2: Prettify<Omit<ProductSubCategory, "sort_order">>;
+}
+
+export type PublicProductPage = Prettify<
+  Omit<
+    Database["public"]["Functions"]["get_public_product_page"]["Returns"][0],
+    "creator" | "faq" | "advantages" | "category"
+  > & {
+    creator: FullProfile;
+    faq: FAQ[];
+    advantages: Advantage[];
+    category: SpecificProductCategory;
+  }
+>;
+
+export type MyProduct = Prettify<
+  Omit<Database["public"]["Functions"]["app_get_my_products"]["Returns"][0], "category"> & {
+    category: SpecificProductCategory;
   }
 >;

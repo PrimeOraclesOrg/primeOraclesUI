@@ -1,7 +1,7 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
-  MyProducts,
+  MyProduct,
   Product,
   ProductCategory,
   ProductCommentsResponse,
@@ -29,7 +29,7 @@ interface ProductsResponse {
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getMyProducts: builder.query<MyProducts, FetchMyProductsParams>({
+    getMyProducts: builder.query<MyProduct[], FetchMyProductsParams>({
       queryFn: async (params) => {
         const { data, error } = await fetchMyProducts(params);
         if (error) return { error };

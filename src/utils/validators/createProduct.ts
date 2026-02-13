@@ -69,7 +69,7 @@ export const createProductSchema = z.object({
   instructions: productInstructionsSchema,
   price: productPriceSchema,
   category_l1_id: z.string().min(1, { message: "Категория должна быть выбрана" }),
-  category_l2_id: z.string().min(1, { message: "Категория должна быть выбрана" }),
+  category_l2_id: z.string().min(1, { message: "Тип должен быть выбран" }),
 });
 
 export const validateCreateProductData = (values: CreateProductFormData) => {

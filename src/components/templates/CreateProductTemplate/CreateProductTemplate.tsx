@@ -76,6 +76,7 @@ export function CreateProductTemplate({
           <div className="hidden lg:flex lg:w-1/2 border-l border-border p-6 bg-secondary/30">
             <div className="w-full">
               <ProductPreview
+                categories={categories}
                 author={author}
                 data={form.watch()}
                 mode={previewMode}
