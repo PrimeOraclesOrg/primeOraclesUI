@@ -35,6 +35,13 @@ export default function WorkspaceMarketplace() {
     [navigate]
   );
 
+  const handleOpenPage = useCallback(
+    (id: string) => {
+      navigate(`/products/${id}`);
+    },
+    [navigate]
+  );
+
   const handleViewStats = useCallback((id: string) => {
     // TODO: Navigate to stats page when implemented
     console.log("View stats:", id);
@@ -59,6 +66,7 @@ export default function WorkspaceMarketplace() {
       sortBy={sortBy}
       onTabChange={handleTabChange}
       onSortChange={handleSetSortBy}
+      onOpenPage={handleOpenPage}
       onEdit={handleEdit}
       onViewStats={handleViewStats}
       onLoadMore={handleLoadMore}

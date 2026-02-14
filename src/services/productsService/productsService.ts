@@ -9,7 +9,9 @@ import { PostgrestError } from "@supabase/supabase-js";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
   FullProfile,
+  MyProduct,
   Product,
+  ProductCategory,
   ProductCommentsResponse,
   PublicProductPage,
   Review,
@@ -40,7 +42,7 @@ export async function fetchMyProducts({
       data: data.map((product) => ({
         ...product,
         cover_url: buildCoverUrl(product.cover_url),
-      })),
+      })) as unknown as Array<MyProduct>,
       error: null,
     };
   } catch (error) {
@@ -76,6 +78,24 @@ export async function fetchProducts(filter: ProductsFilter = {}): Promise<Produc
     categories: productCategories,
     total: filtered.length,
   };
+}
+
+/**
+ * Fetch product categories
+ */
+export async function fetchCategoriesForProducts() {
+  try {
+    const { data, error } = await supabase.from("product_categories_view").select("*");
+
+    if (error) throw error;
+
+    return {
+      data: data as Array<ProductCategory>,
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
+  }
 }
 
 /**
@@ -121,7 +141,7 @@ export async function fetchProductById(
         ...product[0],
         cover_url: buildCoverUrl(product[0].cover_url),
         creator: product[0].creator as unknown as FullProfile,
-      } as PublicProductPage,
+      } as unknown as PublicProductPage,
       error: null,
     };
   } catch (error) {
@@ -175,7 +195,8 @@ export async function createProductService(
     // Create the product
     const { data: productId, error: createError } = await supabase.rpc("app_create_product", {
       p_title: productData.title,
-      p_category: productData.category,
+      p_category_l1_id: productData.category_l1_id,
+      p_category_l2_id: productData.category_l2_id,
       p_description: productData.description,
       p_price: productData.price,
       p_instructions: productData.instructions,

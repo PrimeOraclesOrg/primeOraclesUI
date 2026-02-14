@@ -452,15 +452,78 @@ export type Database = {
           },
         ];
       };
+      product_category_l1: {
+        Row: {
+          code: string;
+          created_at: string;
+          id: string;
+          is_active: boolean;
+          sort_order: number;
+        };
+        Insert: {
+          code: string;
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          sort_order?: number;
+        };
+        Update: {
+          code?: string;
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
+      product_category_l2: {
+        Row: {
+          code: string;
+          id: string;
+          is_active: boolean;
+          l1_id: string;
+          sort_order: number;
+        };
+        Insert: {
+          code: string;
+          id?: string;
+          is_active?: boolean;
+          l1_id: string;
+          sort_order?: number;
+        };
+        Update: {
+          code?: string;
+          id?: string;
+          is_active?: boolean;
+          l1_id?: string;
+          sort_order?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "product_category_l2_l1_id_fkey";
+            columns: ["l1_id"];
+            isOneToOne: false;
+            referencedRelation: "product_categories_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "product_category_l2_l1_id_fkey";
+            columns: ["l1_id"];
+            isOneToOne: false;
+            referencedRelation: "product_category_l1";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       products: {
         Row: {
-          category: Database["public"]["Enums"]["product_category"];
+          category_l1_id: string;
+          category_l2_id: string;
           comments_count: number;
           cover_url: string | null;
           created_at: string;
           created_by: string;
           description: string;
-          fts: unknown;
           id: string;
           is_active: boolean;
           price: number;
@@ -474,13 +537,13 @@ export type Database = {
           updated_at: string;
         };
         Insert: {
-          category: Database["public"]["Enums"]["product_category"];
+          category_l1_id: string;
+          category_l2_id: string;
           comments_count?: number;
           cover_url?: string | null;
           created_at?: string;
           created_by: string;
           description: string;
-          fts?: unknown;
           id?: string;
           is_active?: boolean;
           price: number;
@@ -494,13 +557,13 @@ export type Database = {
           updated_at?: string;
         };
         Update: {
-          category?: Database["public"]["Enums"]["product_category"];
+          category_l1_id?: string;
+          category_l2_id?: string;
           comments_count?: number;
           cover_url?: string | null;
           created_at?: string;
           created_by?: string;
           description?: string;
-          fts?: unknown;
           id?: string;
           is_active?: boolean;
           price?: number;
@@ -514,6 +577,27 @@ export type Database = {
           updated_at?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "products_category_l1_id_fkey";
+            columns: ["category_l1_id"];
+            isOneToOne: false;
+            referencedRelation: "product_categories_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_category_l1_id_fkey";
+            columns: ["category_l1_id"];
+            isOneToOne: false;
+            referencedRelation: "product_category_l1";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_category_l2_id_fkey";
+            columns: ["category_l2_id"];
+            isOneToOne: false;
+            referencedRelation: "product_category_l2";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "products_created_by_fkey";
             columns: ["created_by"];
@@ -569,20 +653,6 @@ export type Database = {
             columns: ["product_id"];
             isOneToOne: false;
             referencedRelation: "products";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_advantages_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "products_search_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_advantages_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "public_products_tile_view";
             referencedColumns: ["id"];
           },
           {
@@ -659,20 +729,6 @@ export type Database = {
             foreignKeyName: "products_comments_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "products_search_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_comments_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "public_products_tile_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_comments_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
             referencedRelation: "user_transactions_view";
             referencedColumns: ["product_id"];
           },
@@ -719,20 +775,6 @@ export type Database = {
             foreignKeyName: "products_faq_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "products_search_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_faq_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "public_products_tile_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_faq_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
             referencedRelation: "user_transactions_view";
             referencedColumns: ["product_id"];
           },
@@ -773,20 +815,6 @@ export type Database = {
             columns: ["product_id"];
             isOneToOne: true;
             referencedRelation: "products";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_resources_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: true;
-            referencedRelation: "products_search_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_resources_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: true;
-            referencedRelation: "public_products_tile_view";
             referencedColumns: ["id"];
           },
           {
@@ -1068,20 +1096,6 @@ export type Database = {
             foreignKeyName: "purchases_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
-            referencedRelation: "products_search_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "purchases_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "public_products_tile_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "purchases_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
             referencedRelation: "user_transactions_view";
             referencedColumns: ["product_id"];
           },
@@ -1310,7 +1324,7 @@ export type Database = {
           confirmation_deadline: string | null;
           is_confirmed: boolean | null;
           price_usd: number | null;
-          product_category: Database["public"]["Enums"]["product_category"] | null;
+          product_category: Json | null;
           product_comments_count: number | null;
           product_cover_url: string | null;
           product_description: string | null;
@@ -1327,31 +1341,24 @@ export type Database = {
         };
         Relationships: [];
       };
-      products_search_view: {
+      product_categories_view: {
         Row: {
-          fts: unknown;
+          code: string | null;
           id: string | null;
+          sort_order: number | null;
+          subcategories: Json | null;
         };
         Insert: {
-          fts?: unknown;
+          code?: string | null;
           id?: string | null;
+          sort_order?: number | null;
+          subcategories?: never;
         };
         Update: {
-          fts?: unknown;
+          code?: string | null;
           id?: string | null;
-        };
-        Relationships: [];
-      };
-      public_products_tile_view: {
-        Row: {
-          category: Database["public"]["Enums"]["product_category"] | null;
-          comments_count: number | null;
-          cover_url: string | null;
-          creator: Json | null;
-          id: string | null;
-          price: number | null;
-          rating: number | null;
-          title: string | null;
+          sort_order?: number | null;
+          subcategories?: never;
         };
         Relationships: [];
       };
@@ -1373,7 +1380,7 @@ export type Database = {
           chat_created_at: string | null;
           chat_id: string | null;
           chat_is_closed: boolean | null;
-          product_category: Database["public"]["Enums"]["product_category"] | null;
+          product_category: Json | null;
           product_cover_url: string | null;
           product_title: string | null;
           purchase_confirmation_deadline: string | null;
@@ -1430,21 +1437,6 @@ export type Database = {
         Returns: string;
       };
       _app_product_validation_constants: { Args: never; Returns: Json };
-      _app_products_build_cursor: {
-        Args: { p_sort: Database["public"]["Enums"]["product_sort_option"] };
-        Returns: string;
-      };
-      _app_products_cursor_condition: {
-        Args: {
-          p_cursor: Json;
-          p_sort: Database["public"]["Enums"]["product_sort_option"];
-        };
-        Returns: string;
-      };
-      _app_products_sort_clause: {
-        Args: { p_sort: Database["public"]["Enums"]["product_sort_option"] };
-        Returns: string;
-      };
       _app_require_completed_profile: { Args: never; Returns: undefined };
       _app_sanitize_text: {
         Args: { p_allow_newlines?: boolean; p_input: string };
@@ -1526,7 +1518,8 @@ export type Database = {
       app_create_product: {
         Args: {
           p_advantages?: Json;
-          p_category: Database["public"]["Enums"]["product_category"];
+          p_category_l1_id: string;
+          p_category_l2_id: string;
           p_description: string;
           p_faq?: Json;
           p_instructions: string;
@@ -1540,25 +1533,6 @@ export type Database = {
         Args: { p_comment: string; p_product_id: string; p_rating: number };
         Returns: undefined;
       };
-      app_filter_products: {
-        Args: {
-          p_category: Database["public"]["Enums"]["product_category"];
-          p_cursor?: Json;
-          p_limit?: number;
-          p_sort?: Database["public"]["Enums"]["product_sort_option"];
-        };
-        Returns: {
-          category: Database["public"]["Enums"]["product_category"];
-          comments_count: number;
-          cover_url: string;
-          creator: Json;
-          id: string;
-          next_cursor: Json;
-          price: number;
-          rating: number;
-          title: string;
-        }[];
-      };
       app_get_my_products: {
         Args: {
           p_cursor?: Json;
@@ -1567,7 +1541,7 @@ export type Database = {
           p_status?: string;
         };
         Returns: {
-          category: Database["public"]["Enums"]["product_category"];
+          category: Json;
           comments_count: number;
           cover_url: string;
           created_at: string;
@@ -1604,28 +1578,11 @@ export type Database = {
         };
         Returns: undefined;
       };
-      app_search_products: {
-        Args: {
-          p_cursor?: Json;
-          p_limit?: number;
-          p_query: string;
-          p_sort?: Database["public"]["Enums"]["product_sort_option"];
-        };
-        Returns: {
-          category: Database["public"]["Enums"]["product_category"];
-          comments_count: number;
-          cover_url: string;
-          creator: Json;
-          id: string;
-          next_cursor: Json;
-          price: number;
-          rating: number;
-          title: string;
-        }[];
-      };
       app_update_product: {
         Args: {
           p_advantages?: Json;
+          p_category_l1_id?: string;
+          p_category_l2_id?: string;
           p_description?: string;
           p_faq?: Json;
           p_instructions?: string;
@@ -1646,11 +1603,34 @@ export type Database = {
         };
         Returns: undefined;
       };
+      get_editor_product_page: {
+        Args: { p_product_id: string };
+        Returns: {
+          advantages: Json;
+          category: Json;
+          comments_count: number;
+          cover_url: string;
+          creator: Json;
+          description: string;
+          faq: Json;
+          id: string;
+          instructions: string;
+          is_active: boolean;
+          price: number;
+          rating: number;
+          rating_1_count: number;
+          rating_2_count: number;
+          rating_3_count: number;
+          rating_4_count: number;
+          rating_5_count: number;
+          title: string;
+        }[];
+      };
       get_public_product_page: {
         Args: { p_product_id: string };
         Returns: {
           advantages: Json;
-          category: string;
+          category: Json;
           comments_count: number;
           cover_url: string;
           creator: Json;
@@ -1747,16 +1727,6 @@ export type Database = {
         | "locked"
         | "refunding"
         | "refunded";
-      product_category: "Soft/Bot" | "Course" | "Community" | "Digital Material";
-      product_sort_option:
-        | "best_match"
-        | "title_asc"
-        | "title_desc"
-        | "rating_desc"
-        | "rating_asc"
-        | "price_desc"
-        | "price_asc"
-        | "popularity_desc";
       profile_security_event_type: "password_reset_otp_verified";
       profile_security_provider_type: "email" | "sms";
       purchase_status:
@@ -1956,17 +1926,6 @@ export const Constants = {
         "locked",
         "refunding",
         "refunded",
-      ],
-      product_category: ["Soft/Bot", "Course", "Community", "Digital Material"],
-      product_sort_option: [
-        "best_match",
-        "title_asc",
-        "title_desc",
-        "rating_desc",
-        "rating_asc",
-        "price_desc",
-        "price_asc",
-        "popularity_desc",
       ],
       profile_security_event_type: ["password_reset_otp_verified"],
       profile_security_provider_type: ["email", "sms"],

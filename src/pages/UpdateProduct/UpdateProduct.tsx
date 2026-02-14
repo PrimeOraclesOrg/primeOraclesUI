@@ -6,6 +6,8 @@ export default function UpdateProduct() {
   const {
     updateProductForm,
     isProductLoading,
+    profile,
+    categories,
     onSubmit,
     handleBackClick,
     handleMediaUpload,
@@ -14,14 +16,14 @@ export default function UpdateProduct() {
     handleRemoveAdvantage,
     handleAddFaq,
     handleRemoveFaq,
-    author,
   } = useUpdateProduct();
 
   if (isProductLoading) return <LoadingScreen />;
 
   return (
     <UpdateProductTemplate
-      author={author}
+      categories={categories}
+      author={profile}
       form={updateProductForm}
       previewMode="desktop"
       onBackClick={handleBackClick}

@@ -1,8 +1,18 @@
 {
   "category": {
-    "Digital Material": "Цифровой материал",
-    "Course": "Курс",
-    "Soft/Bot": "Софт/Бот",
-    "Community": "Сообщество"
+    "trading": "Трейдинг",
+    "social-media": "Социальные сети",
+    "ai-products": "AI Продукты",
+    "business": "Бизнес",
+    "other": "Другое"
+  },
+  "subCategory": {
+    "communities": "Сообщества",
+    "softs": "Софты",
+    "scripts": "Скрипты",
+    "courses": "Обучение",
+    "parsers": "Парсеры",
+    "templates": "Шаблоны",
+    "others": "Другое"
   }
 }

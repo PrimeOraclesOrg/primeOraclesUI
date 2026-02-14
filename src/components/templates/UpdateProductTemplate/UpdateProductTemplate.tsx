@@ -5,14 +5,15 @@ import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { CreateProductForm } from "@/components/organisms/CreateProductForm/CreateProductForm";
 import { ProductPreview } from "@/components/organisms/ProductPreview/ProductPreview";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import { FullProfile } from "@/types";
+import { FullProfile, ProductCategory } from "@/types";
 
 type PreviewMode = "desktop" | "mobile";
 
 interface UpdateProductTemplateProps {
   form: UseFormReturn<CreateProductFormData>;
   previewMode: PreviewMode;
-  author?: FullProfile;
+  author: FullProfile;
+  categories: Array<ProductCategory>;
   onBackClick: () => void;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
@@ -27,6 +28,7 @@ export function UpdateProductTemplate({
   form,
   previewMode: initialPreviewMode,
   author,
+  categories,
   onBackClick,
   onMediaUpload,
   onMediaRemove,
@@ -58,6 +60,7 @@ export function UpdateProductTemplate({
           <div className="w-full lg:w-1/2 overflow-auto p-4 md:p-6">
             <h1 className="text-2xl font-bold text-foreground mb-6">Обновить продукт</h1>
             <CreateProductForm
+              categories={categories}
               form={form}
               onMediaUpload={onMediaUpload}
               onMediaRemove={onMediaRemove}
@@ -73,6 +76,7 @@ export function UpdateProductTemplate({
           <div className="hidden lg:flex lg:w-1/2 border-l border-border p-6 bg-secondary/30">
             <div className="w-full">
               <ProductPreview
+                categories={categories}
                 author={author}
                 data={form.watch()}
                 mode={previewMode}

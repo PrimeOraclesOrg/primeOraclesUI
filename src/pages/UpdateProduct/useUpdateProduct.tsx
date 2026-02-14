@@ -10,19 +10,23 @@ import {
   type ProductFAQItem,
 } from "@/types/createProduct";
 import { useToast } from "@/hooks/useToast";
-import { useCreateProductMutation, useGetProductDetailsQuery } from "@/store/productsApi";
+import {
+  useCreateProductMutation,
+  useGetCategoriesForProductsQuery,
+  useGetProductDetailsQuery,
+} from "@/store/productsApi";
 import { useOnRequestResult } from "@/data/useOnRequestResult";
 import { useGetMyProfileQuery } from "@/store/usersApi";
-import { ProductCategory } from "@/types";
 
 export const useUpdateProduct = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { data: author } = useGetMyProfileQuery();
+  const { data: profile } = useGetMyProfileQuery();
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [createProduct, { data: createdProductId, isSuccess, isError, error }] =
     useCreateProductMutation();
+  const { data: categories, isLoading: isCategoriesLoading } = useGetCategoriesForProductsQuery();
   const { id } = useParams();
   const {
     data: product,
@@ -33,7 +37,8 @@ export const useUpdateProduct = () => {
   const defaultValues = useMemo(
     () => ({
       advantages: product?.advantages || [],
-      category: (product?.category as ProductCategory) || "Soft/Bot",
+      category_l1_id: "",
+      category_l2_id: "",
       description: product?.description || "",
       faq: product?.faq || [],
       instructions: "",
@@ -147,7 +152,8 @@ export const useUpdateProduct = () => {
     createProduct({
       productData: {
         title: values.title,
-        category: values.category,
+        category_l1_id: values.category_l1_id,
+        category_l2_id: values.category_l2_id,
         description: values.description,
         advantages: values.advantages,
         faq: values.faq,
@@ -185,6 +191,8 @@ export const useUpdateProduct = () => {
   return {
     updateProductForm,
     isProductLoading,
+    profile,
+    categories,
     onSubmit,
     handleBackClick,
     handleMediaUpload,
@@ -193,6 +201,5 @@ export const useUpdateProduct = () => {
     handleRemoveAdvantage,
     handleAddFaq,
     handleRemoveFaq,
-    author,
   };
 };

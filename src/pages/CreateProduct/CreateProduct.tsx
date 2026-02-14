@@ -1,9 +1,12 @@
 import { CreateProductTemplate } from "@/components/templates/CreateProductTemplate/CreateProductTemplate";
 import { useCreateProduct } from "./useCreateProduct";
+import { LoadingScreen } from "@/components/atoms";
 
 export default function CreateProduct() {
   const {
     createProductForm,
+    categories,
+    isCategoriesLoading,
     onSubmit,
     handleBackClick,
     handleMediaUpload,
@@ -15,8 +18,11 @@ export default function CreateProduct() {
     author,
   } = useCreateProduct();
 
+  if (isCategoriesLoading) return <LoadingScreen />;
+
   return (
     <CreateProductTemplate
+      categories={categories}
       author={author}
       form={createProductForm}
       previewMode="desktop"
