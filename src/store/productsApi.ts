@@ -1,6 +1,7 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
+  EditorProductPage,
   MyProduct,
   Product,
   ProductCategory,
@@ -13,6 +14,7 @@ import {
   fetchProductComments,
   fetchMyProducts,
   fetchCategoriesForProducts,
+  fetchEditorProductPage,
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FetchMyProductsParams } from "@/services/productsService/types";
@@ -53,6 +55,14 @@ export const productsApi = baseApi.injectEndpoints({
       },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
+      },
+    }),
+
+    getEditorProductPage: builder.query<EditorProductPage, string>({
+      queryFn: async (id) => {
+        const { data, error } = await fetchEditorProductPage(id);
+        if (error) return { error };
+        return { data };
       },
     }),
 
@@ -142,4 +152,5 @@ export const {
   useGetProductCommentsQuery,
   useCreateProductMutation,
   useGetCategoriesForProductsQuery,
+  useGetEditorProductPageQuery,
 } = productsApi;

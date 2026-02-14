@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/useToast";
 import {
   useCreateProductMutation,
   useGetCategoriesForProductsQuery,
+  useGetEditorProductPageQuery,
   useGetProductDetailsQuery,
 } from "@/store/productsApi";
 import { useOnRequestResult } from "@/data/useOnRequestResult";
@@ -26,26 +27,26 @@ export const useUpdateProduct = () => {
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [createProduct, { data: createdProductId, isSuccess, isError, error }] =
     useCreateProductMutation();
-  const { data: categories, isLoading: isCategoriesLoading } = useGetCategoriesForProductsQuery();
+  const { data: categories } = useGetCategoriesForProductsQuery();
   const { id } = useParams();
   const {
     data: product,
     isError: isProductError,
     isLoading: isProductLoading,
-  } = useGetProductDetailsQuery(id);
+  } = useGetEditorProductPageQuery(id);
 
   const defaultValues = useMemo(
     () => ({
       advantages: product?.advantages || [],
-      category_l1_id: "",
-      category_l2_id: "",
+      category_l1_id: product?.category.l1.id || "",
+      category_l2_id: product?.category.l2.id || "",
       description: product?.description || "",
       faq: product?.faq || [],
-      instructions: "",
-      isActive: true,
+      instructions: product?.instructions || "",
+      isActive: product?.is_active || true,
       price: product?.price || 0,
       title: product?.title || "",
-      mediaUrl: "",
+      mediaUrl: product?.cover_url || "",
     }),
     [product]
   );
@@ -55,6 +56,10 @@ export const useUpdateProduct = () => {
     defaultValues,
     mode: "onBlur",
   });
+
+  useEffect(() => {
+    updateProductForm.reset(defaultValues);
+  }, [updateProductForm, defaultValues]);
 
   // Navigate back
   const handleBackClick = useCallback(() => {

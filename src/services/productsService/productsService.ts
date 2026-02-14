@@ -8,6 +8,7 @@
 import { PostgrestError } from "@supabase/supabase-js";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
+  EditorProductPage,
   FullProfile,
   MyProduct,
   Product,
@@ -43,6 +44,26 @@ export async function fetchMyProducts({
         ...product,
         cover_url: buildCoverUrl(product.cover_url),
       })) as unknown as Array<MyProduct>,
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
+  }
+}
+
+export async function fetchEditorProductPage(id: string) {
+  try {
+    const { data, error } = await supabase
+      .rpc("get_editor_product_page", { p_product_id: id })
+      .single();
+
+    if (error) throw error;
+
+    return {
+      data: {
+        ...data,
+        cover_url: buildCoverUrl(data.cover_url),
+      } as unknown as EditorProductPage,
       error: null,
     };
   } catch (error) {
