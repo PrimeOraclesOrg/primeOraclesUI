@@ -6,6 +6,7 @@ import { CreateProductForm } from "@/components/organisms/CreateProductForm/Crea
 import { ProductPreview } from "@/components/organisms/ProductPreview/ProductPreview";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FullProfile, ProductCategory } from "@/types";
+import { UpdateProductForm } from "@/components/organisms";
 
 type PreviewMode = "desktop" | "mobile";
 
@@ -14,6 +15,7 @@ interface UpdateProductTemplateProps {
   previewMode: PreviewMode;
   author: FullProfile;
   categories: Array<ProductCategory>;
+  wasDataChanged: boolean;
   onBackClick: () => void;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
@@ -29,6 +31,7 @@ export function UpdateProductTemplate({
   previewMode: initialPreviewMode,
   author,
   categories,
+  wasDataChanged,
   onBackClick,
   onMediaUpload,
   onMediaRemove,
@@ -59,7 +62,7 @@ export function UpdateProductTemplate({
           {/* Form Column */}
           <div className="w-full lg:w-1/2 overflow-auto p-4 md:p-6">
             <h1 className="text-2xl font-bold text-foreground mb-6">Обновить продукт</h1>
-            <CreateProductForm
+            <UpdateProductForm
               categories={categories}
               form={form}
               onMediaUpload={onMediaUpload}
@@ -69,6 +72,7 @@ export function UpdateProductTemplate({
               onAddFaq={onAddFaq}
               onRemoveFaq={onRemoveFaq}
               onSubmit={onSubmit}
+              wasDataChanged={wasDataChanged}
             />
           </div>
 

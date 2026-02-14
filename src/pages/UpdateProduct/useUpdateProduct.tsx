@@ -4,17 +4,12 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProductFormData, createProductSchema } from "@/utils/validators/createProduct";
-import {
-  DEFAULT_FORM_DATA,
-  type ProductAdvantage,
-  type ProductFAQItem,
-} from "@/types/createProduct";
+import { type ProductAdvantage, type ProductFAQItem } from "@/types/createProduct";
 import { useToast } from "@/hooks/useToast";
 import {
-  useCreateProductMutation,
   useGetCategoriesForProductsQuery,
   useGetEditorProductPageQuery,
-  useGetProductDetailsQuery,
+  useUpdateProductMutation,
 } from "@/store/productsApi";
 import { useOnRequestResult } from "@/data/useOnRequestResult";
 import { useGetMyProfileQuery } from "@/store/usersApi";
@@ -25,8 +20,8 @@ export const useUpdateProduct = () => {
   const { toast } = useToast();
   const { data: profile } = useGetMyProfileQuery();
   const [mediaFile, setMediaFile] = useState<File | null>(null);
-  const [createProduct, { data: createdProductId, isSuccess, isError, error }] =
-    useCreateProductMutation();
+  const [updateProduct, { data: createdProductId, isSuccess, isError, error }] =
+    useUpdateProductMutation();
   const { data: categories } = useGetCategoriesForProductsQuery();
   const { id } = useParams();
   const {
@@ -46,7 +41,7 @@ export const useUpdateProduct = () => {
       isActive: product?.is_active || true,
       price: product?.price || 0,
       title: product?.title || "",
-      mediaUrl: product?.cover_url || "",
+      mediaUrl: product?.cover_url || undefined,
     }),
     [product]
   );
@@ -97,7 +92,7 @@ export const useUpdateProduct = () => {
 
       const url = URL.createObjectURL(file);
       setMediaFile(file);
-      updateProductForm.setValue("mediaUrl", url, { shouldValidate: true });
+      updateProductForm.setValue("mediaUrl", url, { shouldValidate: true, shouldDirty: true });
       updateProductForm.clearErrors("mediaUrl");
     },
     [updateProductForm, toast]
@@ -110,7 +105,7 @@ export const useUpdateProduct = () => {
       URL.revokeObjectURL(currentUrl);
     }
     setMediaFile(null);
-    updateProductForm.setValue("mediaUrl", undefined);
+    updateProductForm.setValue("mediaUrl", undefined, { shouldDirty: true });
   }, [updateProductForm]);
 
   // Advantages handlers
@@ -154,7 +149,8 @@ export const useUpdateProduct = () => {
   );
 
   const onSubmit = (values: CreateProductFormData) => {
-    createProduct({
+    updateProduct({
+      productId: product.id,
       productData: {
         title: values.title,
         category_l1_id: values.category_l1_id,
@@ -174,8 +170,8 @@ export const useUpdateProduct = () => {
     isSuccess,
     isError,
     successMessage: {
-      title: "Продукт создан",
-      description: "Ваш продукт успешно создан!",
+      title: "Продукт обновлен",
+      description: "Ваш продукт успешно обновлен!",
     },
     errorMessage: {
       title: "Ошибка",

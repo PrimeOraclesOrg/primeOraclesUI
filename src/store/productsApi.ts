@@ -15,6 +15,7 @@ import {
   fetchMyProducts,
   fetchCategoriesForProducts,
   fetchEditorProductPage,
+  updateProductService,
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FetchMyProductsParams } from "@/services/productsService/types";
@@ -141,6 +142,17 @@ export const productsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Products"],
     }),
+
+    updateProduct: builder.mutation<
+      string,
+      { productId: string; productData: CreateProductFormData; mediaFile?: File | null }
+    >({
+      queryFn: async ({ productId, productData, mediaFile }) => {
+        const { data, error } = await updateProductService(productId, productData, mediaFile);
+        return error ? { error } : { data };
+      },
+      invalidatesTags: ["Products"],
+    }),
   }),
 });
 
@@ -153,4 +165,5 @@ export const {
   useCreateProductMutation,
   useGetCategoriesForProductsQuery,
   useGetEditorProductPageQuery,
+  useUpdateProductMutation,
 } = productsApi;
