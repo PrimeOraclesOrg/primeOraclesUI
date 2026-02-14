@@ -12,7 +12,7 @@ type PreviewMode = "desktop" | "mobile";
 interface CreateProductTemplateProps {
   form: UseFormReturn<CreateProductFormData>;
   previewMode: PreviewMode;
-  author?: FullProfile;
+  author: FullProfile;
   onBackClick: () => void;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
