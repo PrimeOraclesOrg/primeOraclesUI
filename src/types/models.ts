@@ -1,4 +1,3 @@
-import { Prettify } from "@/utils";
 import { Database } from "./supabase";
 // ========================================
 // Product Models
