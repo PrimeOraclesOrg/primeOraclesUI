@@ -57,6 +57,7 @@ export const productsApi = baseApi.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: ["Products"],
     }),
 
     getEditorProductPage: builder.query<EditorProductPage, string>({
@@ -65,6 +66,7 @@ export const productsApi = baseApi.injectEndpoints({
         if (error) return { error };
         return { data };
       },
+      providesTags: ["Products"],
     }),
 
     getProducts: builder.query<ProductsResponse, ProductsQueryArgs>({
