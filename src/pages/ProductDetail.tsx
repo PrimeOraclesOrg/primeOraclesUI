@@ -4,7 +4,6 @@ import { ProductDetailTemplate } from "@/components/templates";
 import { usePopup } from "@/hooks/usePopup";
 import { useGetProductDetailsQuery, useGetProductCommentsQuery } from "@/store";
 import { useCallback, useEffect, useState } from "react";
-import { LoadingScreen } from "@/components/atoms";
 
 export default function ProductDetail() {
   const { id } = useParams();
