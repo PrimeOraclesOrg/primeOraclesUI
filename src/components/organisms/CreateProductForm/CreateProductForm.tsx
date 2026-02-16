@@ -14,11 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FormSection, FormField } from "@/components/atoms";
-import {
-  PRODUCT_CATEGORIES,
-  CATEGORY_DISPLAY_NAMES,
-  type ProductCategory,
-} from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import {
   isValidDecimalDraft,
@@ -27,9 +22,12 @@ import {
   base64ToFile,
 } from "@/utils";
 import { ImageCrop } from "../ImageCrop/ImageCrop";
+import { ProductCategory } from "@/types";
+import { useTranslation } from "react-i18next";
 
 interface CreateProductFormProps {
   form: UseFormReturn<CreateProductFormData>;
+  categories: Array<ProductCategory>;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
   onAddAdvantage: () => void;
@@ -41,6 +39,7 @@ interface CreateProductFormProps {
 
 export function CreateProductForm({
   form,
+  categories,
   onMediaUpload,
   onMediaRemove,
   onAddAdvantage,
@@ -49,6 +48,7 @@ export function CreateProductForm({
   onRemoveFaq,
   onSubmit,
 }: CreateProductFormProps) {
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isPriceFocused = useRef(false);
   const {
@@ -162,22 +162,50 @@ export function CreateProductForm({
       {/* Category Section */}
       <FormSection title="Категория">
         <Select
-          value={values.category}
-          onValueChange={(value) => setValue("category", value as ProductCategory)}
+          value={values.category_l1_id}
+          onValueChange={(value) => {
+            setValue("category_l1_id", value);
+            setValue("category_l2_id", "");
+          }}
         >
           <SelectTrigger className="w-full bg-background border-border">
             <SelectValue placeholder="Выберите категорию" />
           </SelectTrigger>
           <SelectContent>
-            {PRODUCT_CATEGORIES.map((cat) => (
-              <SelectItem key={cat} value={cat}>
-                {CATEGORY_DISPLAY_NAMES[cat]}
+            {categories.map((category) => (
+              <SelectItem key={category.id} value={category.id}>
+                {t(`product:category.${category.code}`)}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {errors.category && (
-          <p className="text-sm text-destructive mt-1">{errors.category.message}</p>
+        {errors.category_l1_id && (
+          <p className="text-sm text-destructive mt-1">{errors.category_l1_id.message}</p>
+        )}
+
+        {values.category_l1_id && (
+          <>
+            <Select
+              value={values.category_l2_id}
+              onValueChange={(value) => setValue("category_l2_id", value)}
+            >
+              <SelectTrigger className="w-full bg-background border-border">
+                <SelectValue placeholder="Выберите тип" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories
+                  .find((category) => category.id === values.category_l1_id)
+                  .subcategories.map((type) => (
+                    <SelectItem key={type.id} value={type.id}>
+                      {t(`product:subCategory.${type.code}`)}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+            {errors.category_l2_id && (
+              <p className="text-sm text-destructive mt-1">{errors.category_l2_id.message}</p>
+            )}
+          </>
         )}
       </FormSection>
 

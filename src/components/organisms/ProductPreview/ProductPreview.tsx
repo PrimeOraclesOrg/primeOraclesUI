@@ -1,13 +1,13 @@
 import { Monitor, Smartphone, Check, Image, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getCategoryDisplayName } from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { RatingStars, SocialIcon } from "@/components/atoms";
 import { FAQAccordion, UserAvatar } from "@/components/molecules";
 import { Badge } from "@/components/ui/badge";
-import { FAQ, FullProfile } from "@/types";
+import { FAQ, FullProfile, ProductCategory } from "@/types";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 type PreviewMode = "desktop" | "mobile";
 
@@ -15,13 +15,24 @@ interface ProductPreviewProps {
   author?: FullProfile;
   data: CreateProductFormData;
   mode: PreviewMode;
+  categories: Array<ProductCategory>;
   onModeChange: (mode: PreviewMode) => void;
 }
 
-export function ProductPreview({ data, mode, author, onModeChange }: ProductPreviewProps) {
+export function ProductPreview({
+  data,
+  mode,
+  author,
+  categories,
+  onModeChange,
+}: ProductPreviewProps) {
+  const { t } = useTranslation();
   const hasMedia = !!data.mediaUrl;
   const mockRating = 0;
   const mockReviewCount = 0;
+
+  const category = categories.find((category) => category.id === data.category_l1_id);
+  const type = category?.subcategories.find((type) => type.id === data.category_l2_id);
 
   const faqQuestions: FAQ[] = useMemo(() => {
     if (!data?.faq) return [];
@@ -116,12 +127,25 @@ export function ProductPreview({ data, mode, author, onModeChange }: ProductPrev
                   </span>
                 </div>
                 <div className="flex flex-col gap-2 mb-2">
-                  <Badge
-                    variant="outline"
-                    className="w-fit border-gold text-gold bg-transparent font-medium"
-                  >
-                    {getCategoryDisplayName(data.category)}
-                  </Badge>
+                  <div className="flex flex-wrap gap-2">
+                    {category && (
+                      <Badge
+                        variant="outline"
+                        className="w-fit border-gold text-gold bg-transparent font-medium"
+                      >
+                        {t(`product:category.${category.code}`)}
+                      </Badge>
+                    )}
+
+                    {type && (
+                      <Badge
+                        variant="outline"
+                        className="w-fit border-gold text-gold bg-transparent font-medium"
+                      >
+                        {t(`product:subCategory.${type.code}`)}
+                      </Badge>
+                    )}
+                  </div>
                   <h1 className="text-2xl font-bold text-foreground line-clamp-2 break-words">
                     {data.title || "Название продукта"}
                   </h1>

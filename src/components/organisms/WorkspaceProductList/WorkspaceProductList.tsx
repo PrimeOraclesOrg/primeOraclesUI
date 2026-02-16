@@ -1,8 +1,9 @@
 import { WorkspaceProductCard } from "@/components/molecules/WorkspaceProductCard/WorkspaceProductCard";
-import { MyProducts } from "@/types";
+import { MyProduct } from "@/types";
 
 interface WorkspaceProductListProps {
-  products: MyProducts;
+  products: Array<MyProduct>;
+  onOpenPage: (id: string) => void;
   onEdit: (id: string) => void;
   onViewStats: (id: string) => void;
   isFetching: boolean;
@@ -11,6 +12,7 @@ interface WorkspaceProductListProps {
 export function WorkspaceProductList({
   products,
   isFetching,
+  onOpenPage,
   onEdit,
   onViewStats,
 }: WorkspaceProductListProps) {
@@ -32,7 +34,12 @@ export function WorkspaceProductList({
           className="animate-fade-in"
           style={{ animationDelay: `${index * 50}ms` }}
         >
-          <WorkspaceProductCard product={product} onEdit={onEdit} onViewStats={onViewStats} />
+          <WorkspaceProductCard
+            product={product}
+            onEdit={onEdit}
+            onOpenPage={onOpenPage}
+            onViewStats={onViewStats}
+          />
         </div>
       ))}
     </div>
