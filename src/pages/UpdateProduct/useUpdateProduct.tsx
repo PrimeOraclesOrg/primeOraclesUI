@@ -38,7 +38,7 @@ export const useUpdateProduct = () => {
       description: product?.description || "",
       faq: product?.faq || [],
       instructions: product?.instructions || "",
-      isActive: product?.is_active || true,
+      isActive: product?.is_active ?? true,
       price: product?.price || 0,
       title: product?.title || "",
       mediaUrl: product?.cover_url || undefined,
@@ -51,6 +51,8 @@ export const useUpdateProduct = () => {
     defaultValues,
     mode: "onBlur",
   });
+
+  const isActive = updateProductForm.watch("isActive");
 
   useEffect(() => {
     updateProductForm.reset(defaultValues);
@@ -177,7 +179,10 @@ export const useUpdateProduct = () => {
       title: "Ошибка",
       description: t(`status:${error?.code}`) || error?.message,
     },
-    onSuccess: () => navigate(`/products/${createdProductId}`),
+    onSuccess: () => {
+      if (isActive) return navigate(`/products/${createdProductId}`);
+      navigate("/workspace/marketplace");
+    },
   });
 
   useEffect(() => {
