@@ -23,7 +23,7 @@ export function LoginTemplate({
   toForgotPassword,
 }: LoginTemplateProps) {
   return (
-    <AuthLayout title="Добро пожаловать" onClose={onClose}>
+    <AuthLayout title="Вход в аккаунт" onClose={onClose}>
       <LoginForm
         onSubmit={onSubmit}
         register={register}
@@ -32,8 +32,8 @@ export function LoginTemplate({
         toForgotPassword={toForgotPassword}
       />
 
-      <div className="flex items-center justify-center mt-8 pt-4">
-        <p className="text-sm text-muted-foreground">
+      <div className="flex flex-col items-center justify-center mt-8 pt-4">
+        <p className="text-sm text-foreground">
           Нет аккаунта?{" "}
           <button
             type="button"
@@ -42,6 +42,12 @@ export function LoginTemplate({
           >
             Регистрация
           </button>
+        </p>
+        <p className="text-xs text-muted-foreground text-center mt-2">
+          Регистрируясь, вы соглашаетесь с Условиями <br />
+          обслуживания и Политикой конфиденциальности
+          <br />
+          Prime Oracles.
         </p>
       </div>
     </AuthLayout>
