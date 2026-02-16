@@ -12,11 +12,13 @@ import {
 import { useToast } from "@/hooks/useToast";
 import { useCreateProductMutation } from "@/store/productsApi";
 import { useOnRequestResult } from "@/data/useOnRequestResult";
+import { useGetMyProfileQuery } from "@/store/usersApi";
 
 export const useCreateProduct = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { data: profile } = useGetMyProfileQuery();
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [createProduct, { data: createdProductId, isSuccess, isError, error }] =
     useCreateProductMutation();
@@ -160,6 +162,7 @@ export const useCreateProduct = () => {
 
   return {
     createProductForm,
+    profile,
     onSubmit,
     handleBackClick,
     handleMediaUpload,

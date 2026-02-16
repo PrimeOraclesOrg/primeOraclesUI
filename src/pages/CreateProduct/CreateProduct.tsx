@@ -4,6 +4,7 @@ import { useCreateProduct } from "./useCreateProduct";
 export default function CreateProduct() {
   const {
     createProductForm,
+    profile,
     onSubmit,
     handleBackClick,
     handleMediaUpload,
@@ -16,6 +17,7 @@ export default function CreateProduct() {
 
   return (
     <CreateProductTemplate
+      author={profile}
       form={createProductForm}
       previewMode="desktop"
       onBackClick={handleBackClick}
