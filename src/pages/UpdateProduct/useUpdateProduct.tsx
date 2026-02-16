@@ -26,7 +26,9 @@ export const useUpdateProduct = () => {
   const { id } = useParams();
   const {
     data: product,
+    isSuccess: isProductSuccess,
     isError: isProductError,
+    error: productError,
     isLoading: isProductLoading,
   } = useGetEditorProductPageQuery(id);
 
@@ -193,6 +195,15 @@ export const useUpdateProduct = () => {
       }
     };
   }, [updateProductForm]);
+
+  useOnRequestResult({
+    isSuccess: isProductSuccess,
+    isError: isProductError,
+    errorMessage: {
+      description: productError ? t(`status:${productError.code}`) : "",
+    },
+    onError: () => navigate(-1),
+  });
 
   return {
     updateProductForm,
