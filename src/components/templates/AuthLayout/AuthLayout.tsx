@@ -45,7 +45,7 @@ export function AuthLayout({
         <img
           src="/img/illustrations/mascot_1.avif"
           alt="Welcome"
-          className="absolute inset-0 w-full h-full object-cover object-right-top"
+          className="absolute right-0 bottom-0 max-h-[960px] max-w-full w-fit h-full object-cover object-right-top"
         />
         {/* Bottom text */}
         <div className="absolute bottom-6 left-6 right-6">
