@@ -175,7 +175,7 @@ export function UpdateProductForm({
             <SelectValue placeholder="Выберите категорию" />
           </SelectTrigger>
           <SelectContent>
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <SelectItem key={category.id} value={category.id}>
                 {t(`product:category.${category.code}`)}
               </SelectItem>

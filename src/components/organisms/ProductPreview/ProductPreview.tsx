@@ -31,7 +31,7 @@ export function ProductPreview({
   const mockRating = 0;
   const mockReviewCount = 0;
 
-  const category = categories.find((category) => category.id === data.category_l1_id);
+  const category = categories?.find((category) => category.id === data.category_l1_id);
   const type = category?.subcategories.find((type) => type.id === data.category_l2_id);
 
   const faqQuestions: FAQ[] = useMemo(() => {
