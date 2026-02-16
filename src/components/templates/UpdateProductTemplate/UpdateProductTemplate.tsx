@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
-import { CreateProductForm } from "@/components/organisms/CreateProductForm/CreateProductForm";
 import { ProductPreview } from "@/components/organisms/ProductPreview/ProductPreview";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FullProfile, ProductCategory } from "@/types";
