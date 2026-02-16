@@ -197,7 +197,7 @@ export function UpdateProductForm({
               </SelectTrigger>
               <SelectContent>
                 {categories
-                  .find((category) => category.id === values.category_l1_id)
+                  ?.find((category) => category.id === values.category_l1_id)
                   .subcategories.map((type) => (
                     <SelectItem key={type.id} value={type.id}>
                       {t(`product:subCategory.${type.code}`)}
