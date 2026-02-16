@@ -454,16 +454,9 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
 
     if (error) throw error;
 
-    const processAvatarPath = (avatarPath: string) => {
-      /* if user uploads new avatar - browser caches old one, so we update link every time to always have current avatar image  */
-      if (avatarPath.includes("default_avatars")) return avatarPath;
-      return `${avatarPath}?v=${new Date().getTime()}`;
-    };
-
     return {
       data: data && {
         ...data,
-        avatar_path: processAvatarPath(data.avatar_path),
         social_medias: data.social_medias as unknown as Array<SocialMedia>,
       },
       error: null,
