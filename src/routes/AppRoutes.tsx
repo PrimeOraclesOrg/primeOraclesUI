@@ -152,7 +152,7 @@ export function AppRoutes() {
         />
 
         <Route
-          path="/update-product/:id"
+          path="/products/:id/edit"
           element={
             <ProtectedRoute>
               <UpdateProduct />

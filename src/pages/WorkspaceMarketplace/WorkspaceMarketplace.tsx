@@ -30,7 +30,7 @@ export default function WorkspaceMarketplace() {
 
   const handleEdit = useCallback(
     (id: string) => {
-      navigate(`/update-product/${id}`);
+      navigate(`/products/${id}/edit`);
     },
     [navigate]
   );
