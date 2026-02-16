@@ -18,7 +18,7 @@ export const useCreateProduct = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { data: author } = useGetMyProfileQuery();
+  const { data: profile } = useGetMyProfileQuery();
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const { data: categories, isLoading: isCategoriesLoading } = useGetCategoriesForProductsQuery();
   const [createProduct, { data: createdProductId, isSuccess, isError, error }] =
@@ -166,6 +166,7 @@ export const useCreateProduct = () => {
     createProductForm,
     categories,
     isCategoriesLoading,
+    profile,
     onSubmit,
     handleBackClick,
     handleMediaUpload,
@@ -174,6 +175,5 @@ export const useCreateProduct = () => {
     handleRemoveAdvantage,
     handleAddFaq,
     handleRemoveFaq,
-    author,
   };
 };

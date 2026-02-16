@@ -7,6 +7,7 @@ export default function CreateProduct() {
     createProductForm,
     categories,
     isCategoriesLoading,
+    profile,
     onSubmit,
     handleBackClick,
     handleMediaUpload,
@@ -15,7 +16,6 @@ export default function CreateProduct() {
     handleRemoveAdvantage,
     handleAddFaq,
     handleRemoveFaq,
-    author,
   } = useCreateProduct();
 
   if (isCategoriesLoading) return <LoadingScreen />;
@@ -23,7 +23,7 @@ export default function CreateProduct() {
   return (
     <CreateProductTemplate
       categories={categories}
-      author={author}
+      author={profile}
       form={createProductForm}
       previewMode="desktop"
       onBackClick={handleBackClick}
