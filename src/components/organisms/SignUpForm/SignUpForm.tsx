@@ -43,7 +43,7 @@ export const SignUpForm = ({ onSubmit, register, errors, isSubmitting }: SignUpF
 
       <Button
         type="submit"
-        className="w-full h-12 text-base font-medium bg-secondary hover:bg-secondary/80 text-foreground transition-colors rounded-lg mt-6"
+        className="w-full h-12 text-base font-medium bg-secondary/5 hover:bg-secondary/80 text-foreground transition-colors rounded-lg mt-6 shadow-inner-glass"
         disabled={isSubmitting}
       >
         {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}

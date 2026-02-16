@@ -44,7 +44,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             type={isVisible ? "text" : "password"}
             disabled={disabled}
             className={cn(
-              "bg-secondary/30 border-border/50 h-12 pr-12 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg",
+              "bg-secondary/5 border-border/50 h-12 pr-12 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-0 focus:ring-offset-0 transition-colors rounded-lg shadow-inner-glass",
               error && "border-destructive focus:border-destructive",
               className
             )}

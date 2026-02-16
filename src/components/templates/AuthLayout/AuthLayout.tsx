@@ -9,7 +9,8 @@
 import type { ReactNode } from "react";
 import { ArrowLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import authHero from "@/assets/auth-hero.jpg";
+import { SpotLightPacmanShape } from "@/assets/graphics/SpotLightPacmanShape";
+import { BrandLogo } from "@/assets/icons";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -40,13 +41,20 @@ export function AuthLayout({
     <div className="h-screen w-full bg-background flex fixed left-0 top-0 z-20">
       {/* Left side - Hero Image (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <img src={authHero} alt="Welcome" className="absolute inset-0 w-full h-full object-cover" />
-        {/* Subtle overlay for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+        <BrandLogo className="absolute top-6 left-6 text-accent" />
+        <img
+          src="/img/illustrations/mascot_1.avif"
+          alt="Welcome"
+          className="absolute inset-0 w-full h-full object-cover object-right"
+        />
         {/* Bottom text */}
         <div className="absolute bottom-6 left-6 right-6">
           <p className="text-white/70 text-sm">Prime Oracles • Digital Marketplace</p>
         </div>
+
+        {/* Backgound light */}
+        <SpotLightPacmanShape className="absolute -z-10 top-[-300px] right-[200px] rotate-[75deg] text-[#FF6200] opacity-5 blur-[96px]" />
+        <SpotLightPacmanShape className="absolute -z-10 bottom-[-250px] right-[200px] rotate-[110deg] text-[#FF8800] opacity-10 blur-[96px]" />
       </div>
 
       {/* Right side - Form */}
