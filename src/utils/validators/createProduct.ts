@@ -1,13 +1,8 @@
 import { z } from "zod";
-import { PRODUCT_CATEGORIES } from "@/types/createProduct";
 
 /**
  * Validation schemas for the Create Product form
  */
-
-export const productCategorySchema = z.enum(PRODUCT_CATEGORIES, {
-  errorMap: () => ({ message: "Выберите категорию" }),
-});
 
 export const productTitleSchema = z
   .string()
@@ -48,7 +43,6 @@ export const productInstructionsSchema = z
 export const productPriceSchema = z.number().min(4, "Минимальная цена 4$");
 
 export const createProductSchema = z.object({
-  category: productCategorySchema,
   title: productTitleSchema,
   description: productDescriptionSchema,
   mediaUrl: z.union([z.string(), z.undefined()]).refine((val) => val && val.length > 0, {
@@ -74,6 +68,8 @@ export const createProductSchema = z.object({
     .max(5, "Максимум 5 вопросов"),
   instructions: productInstructionsSchema,
   price: productPriceSchema,
+  category_l1_id: z.string().min(1, { message: "Категория должна быть выбрана" }),
+  category_l2_id: z.string().min(1, { message: "Тип должен быть выбран" }),
 });
 
 export const validateCreateProductData = (values: CreateProductFormData) => {

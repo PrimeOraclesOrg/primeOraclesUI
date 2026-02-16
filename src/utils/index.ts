@@ -9,3 +9,4 @@ export { base64ToBlob, base64ToFile } from "./base64ToBlob";
 export { formatDateTime } from "./formatDateTime";
 export { getSocialLink } from "./getSocialLink";
 export { normalizeError, normalizeAsyncError } from "./normalizeError";
+export { type Prettify } from "./Prettify";
