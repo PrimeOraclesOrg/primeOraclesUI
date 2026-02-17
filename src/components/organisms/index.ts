@@ -13,3 +13,4 @@ export { PasswordUpdatePopup } from "./PasswordUpdatePopup/PasswordUpdatePopup";
 export { PasswordUpdateForm } from "./PasswordUpdateForm/PasswordUpdateForm";
 export { Footer } from "./Footer/Footer";
 export { ProductRating } from "./ProductRating/ProductRating";
+export { UpdateProductForm } from "./UpdateProductForm/UpdateProductForm";

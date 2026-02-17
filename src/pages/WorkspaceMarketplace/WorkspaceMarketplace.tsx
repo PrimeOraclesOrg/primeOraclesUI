@@ -28,17 +28,19 @@ export default function WorkspaceMarketplace() {
     setActiveTab(tab);
   }, []);
 
+  const handleEdit = useCallback(
+    (id: string) => {
+      navigate(`/products/${id}/edit`);
+    },
+    [navigate]
+  );
+
   const handleOpenPage = useCallback(
     (id: string) => {
       navigate(`/products/${id}`);
     },
     [navigate]
   );
-
-  const handleEdit = useCallback((id: string) => {
-    // TODO: Navigate to edit page when implemented
-    console.log("Edit product:", id);
-  }, []);
 
   const handleViewStats = useCallback((id: string) => {
     // TODO: Navigate to stats page when implemented

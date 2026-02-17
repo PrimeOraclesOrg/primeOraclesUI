@@ -19,3 +19,4 @@ export { SettingsBasicTemplate } from "./SettingsBasicTemplate/SettingsBasicTemp
 export { SettingsBalanceTemplate } from "./SettingsBalanceTemplate/SettingsBalanceTemplate";
 export { SettingsHistoryTemplate } from "./SettingsHistoryTemplate/SettingsHistoryTemplate";
 export { SettingsSecurityTemplate } from "./SettingsSecurityTemplate/SettingsSecurityTemplate";
+export { UpdateProductTemplate } from "./UpdateProductTemplate/UpdateProductTemplate";

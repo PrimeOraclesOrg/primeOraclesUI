@@ -47,6 +47,17 @@ export type PublicProductPage = Prettify<
   }
 >;
 
+export type EditorProductPage = Prettify<
+  Omit<
+    Database["public"]["Functions"]["get_editor_product_page"]["Returns"][0],
+    "faq" | "advantages" | "category"
+  > & {
+    faq: FAQ[];
+    advantages: Advantage[];
+    category: SpecificProductCategory;
+  }
+>;
+
 export type MyProduct = Prettify<
   Omit<Database["public"]["Functions"]["app_get_my_products"]["Returns"][0], "category"> & {
     category: SpecificProductCategory;

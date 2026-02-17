@@ -8,6 +8,7 @@
 import { PostgrestError } from "@supabase/supabase-js";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
+  EditorProductPage,
   FullProfile,
   MyProduct,
   Product,
@@ -43,6 +44,26 @@ export async function fetchMyProducts({
         ...product,
         cover_url: buildCoverUrl(product.cover_url),
       })) as unknown as Array<MyProduct>,
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
+  }
+}
+
+export async function fetchEditorProductPage(id: string) {
+  try {
+    const { data, error } = await supabase
+      .rpc("get_editor_product_page", { p_product_id: id })
+      .single();
+
+    if (error) throw error;
+
+    return {
+      data: {
+        ...data,
+        cover_url: buildCoverUrl(data.cover_url),
+      } as unknown as EditorProductPage,
       error: null,
     };
   } catch (error) {
@@ -226,6 +247,46 @@ export async function createProductService(
   }
 }
 
+export async function updateProductService(
+  productId: string,
+  productData: CreateProductFormData,
+  mediaFile?: File | null
+): Promise<{ data: string | null; error: ServiceError | null }> {
+  try {
+    const { error: updateError } = await supabase.rpc("app_update_product", {
+      p_product_id: productId,
+      p_title: productData.title,
+      p_category_l1_id: productData.category_l1_id,
+      p_category_l2_id: productData.category_l2_id,
+      p_description: productData.description,
+      p_price: productData.price,
+      p_instructions: productData.instructions,
+      p_advantages: productData.advantages,
+      p_faq: productData.faq,
+      p_is_active: productData.isActive,
+    });
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    // Upload image if provided
+    if (mediaFile && productId) {
+      const { error: uploadError } = await supabase.storage
+        .from(PRODUCT_IMAGES_BUCKET)
+        .upload(productId, mediaFile, { contentType: mediaFile.type, upsert: true });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+    }
+
+    return { data: productId, error: null };
+  } catch (error) {
+    return normalizeError(error);
+  }
+}
+
 /**
  * Fetch product comments by product ID with optional pagination
  */
@@ -276,7 +337,11 @@ export async function uploadProductImage(productId: string, file: File) {
 /**
  * Update an existing product
  */
-export async function updateProduct(id: string, updates: Partial<Product>): Promise<Product> {
+export async function updateProduct(
+  id: string,
+  productData: CreateProductFormData,
+  mediaFile?: File | null
+): Promise<Product> {
   // TODO: Replace with Supabase update
   // const { data, error } = await supabase
   //   .from('products')

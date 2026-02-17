@@ -1,6 +1,7 @@
 import { baseApi } from "./baseApi";
 import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
+  EditorProductPage,
   MyProduct,
   Product,
   ProductCategory,
@@ -13,6 +14,8 @@ import {
   fetchProductComments,
   fetchMyProducts,
   fetchCategoriesForProducts,
+  fetchEditorProductPage,
+  updateProductService,
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FetchMyProductsParams } from "@/services/productsService/types";
@@ -54,6 +57,16 @@ export const productsApi = baseApi.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: ["Products"],
+    }),
+
+    getEditorProductPage: builder.query<EditorProductPage, string>({
+      queryFn: async (id) => {
+        const { data, error } = await fetchEditorProductPage(id);
+        if (error) return { error };
+        return { data };
+      },
+      providesTags: ["Products"],
     }),
 
     getProducts: builder.query<ProductsResponse, ProductsQueryArgs>({
@@ -131,6 +144,17 @@ export const productsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Products"],
     }),
+
+    updateProduct: builder.mutation<
+      string,
+      { productId: string; productData: CreateProductFormData; mediaFile?: File | null }
+    >({
+      queryFn: async ({ productId, productData, mediaFile }) => {
+        const { data, error } = await updateProductService(productId, productData, mediaFile);
+        return error ? { error } : { data };
+      },
+      invalidatesTags: ["Products"],
+    }),
   }),
 });
 
@@ -142,4 +166,6 @@ export const {
   useGetProductCommentsQuery,
   useCreateProductMutation,
   useGetCategoriesForProductsQuery,
+  useGetEditorProductPageQuery,
+  useUpdateProductMutation,
 } = productsApi;
