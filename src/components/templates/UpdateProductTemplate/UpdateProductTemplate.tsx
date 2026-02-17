@@ -14,7 +14,7 @@ interface UpdateProductTemplateProps {
   previewMode: PreviewMode;
   author: FullProfile;
   categories: Array<ProductCategory>;
-  wasDataChanged: boolean;
+  isDataChanged: boolean;
   onBackClick: () => void;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
@@ -30,7 +30,7 @@ export function UpdateProductTemplate({
   previewMode: initialPreviewMode,
   author,
   categories,
-  wasDataChanged,
+  isDataChanged,
   onBackClick,
   onMediaUpload,
   onMediaRemove,
@@ -71,7 +71,7 @@ export function UpdateProductTemplate({
               onAddFaq={onAddFaq}
               onRemoveFaq={onRemoveFaq}
               onSubmit={onSubmit}
-              wasDataChanged={wasDataChanged}
+              isDataChanged={isDataChanged}
             />
           </div>
 

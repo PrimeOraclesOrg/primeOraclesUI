@@ -28,7 +28,7 @@ import { useTranslation } from "react-i18next";
 interface UpdateProductFormProps {
   form: UseFormReturn<CreateProductFormData>;
   categories: Array<ProductCategory>;
-  wasDataChanged: boolean;
+  isDataChanged: boolean;
   onMediaUpload: (file: File) => void;
   onMediaRemove: () => void;
   onAddAdvantage: () => void;
@@ -41,7 +41,7 @@ interface UpdateProductFormProps {
 export function UpdateProductForm({
   form,
   categories,
-  wasDataChanged,
+  isDataChanged,
   onMediaUpload,
   onMediaRemove,
   onAddAdvantage,
@@ -466,7 +466,7 @@ export function UpdateProductForm({
       {/* Submit Button */}
       <Button
         type="submit"
-        disabled={isSubmitting || !wasDataChanged}
+        disabled={isSubmitting || !isDataChanged}
         className="w-full gold-gradient text-primary-foreground hover:opacity-90 transition-opacity h-12 text-base"
       >
         {isSubmitting ? "Сохранение..." : "Продолжить"}

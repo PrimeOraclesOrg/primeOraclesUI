@@ -34,7 +34,7 @@ export default function UpdateProduct() {
       onAddFaq={handleAddFaq}
       onRemoveFaq={handleRemoveFaq}
       onSubmit={updateProductForm.handleSubmit(onSubmit)}
-      wasDataChanged={updateProductForm.formState.isDirty}
+      isDataChanged={updateProductForm.formState.isDirty}
     />
   );
 }
