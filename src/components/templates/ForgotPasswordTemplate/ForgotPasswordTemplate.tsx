@@ -44,7 +44,7 @@ export function ForgotPasswordTemplate({
 
       {/* Footer */}
       <div className="text-center mt-8 pt-4">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-foreground">
           Вспомнили пароль?{" "}
           <button
             type="button"

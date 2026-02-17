@@ -38,7 +38,7 @@ export function SignUpTemplate({
 
       {/* Footer */}
       <div className="text-center mt-8 pt-4">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-foreground">
           Уже есть аккаунт?{" "}
           <button
             type="button"
@@ -47,6 +47,12 @@ export function SignUpTemplate({
           >
             Войти
           </button>
+        </p>
+        <p className="text-xs text-muted-foreground text-center mt-2">
+          Регистрируясь, вы соглашаетесь с Условиями <br />
+          обслуживания и Политикой конфиденциальности
+          <br />
+          Prime Oracles.
         </p>
       </div>
     </AuthLayout>
