@@ -252,7 +252,8 @@ export async function createProductService(
 export async function updateProductService(
   productId: string,
   productData: CreateProductFormData,
-  mediaFile?: File | null
+  mediaFile?: File | null,
+  oldCoverPath?: string
 ): Promise<{ data: string | null; error: ServiceError | null }> {
   try {
     const { data: newCoverUrl, error: updateError } = await supabase.rpc("app_update_product", {
@@ -275,13 +276,21 @@ export async function updateProductService(
 
     // Upload image if provided
     if (mediaFile && newCoverUrl) {
-      const newCploadPath = newCoverUrl.replace(`${PRODUCT_IMAGES_BUCKET}/`, "");
+      const newUploadPath = newCoverUrl.replace(`${PRODUCT_IMAGES_BUCKET}/`, "");
       const { error: uploadError } = await supabase.storage
         .from(PRODUCT_IMAGES_BUCKET)
-        .upload(newCploadPath, mediaFile, { contentType: mediaFile.type, upsert: true });
+        .upload(newUploadPath, mediaFile, { contentType: mediaFile.type, upsert: true });
 
       if (uploadError) {
         throw uploadError;
+      }
+
+      if (oldCoverPath) {
+        const { error: oldCoverRemoveError } = await supabase.storage
+          .from(PRODUCT_IMAGES_BUCKET)
+          .remove([oldCoverPath]);
+
+        if (oldCoverRemoveError) throw oldCoverRemoveError;
       }
     }
 
