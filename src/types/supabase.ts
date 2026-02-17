@@ -524,6 +524,7 @@ export type Database = {
           created_at: string;
           created_by: string;
           description: string;
+          fts: unknown;
           id: string;
           is_active: boolean;
           price: number;
@@ -544,6 +545,7 @@ export type Database = {
           created_at?: string;
           created_by: string;
           description: string;
+          fts?: unknown;
           id?: string;
           is_active?: boolean;
           price: number;
@@ -564,6 +566,7 @@ export type Database = {
           created_at?: string;
           created_by?: string;
           description?: string;
+          fts?: unknown;
           id?: string;
           is_active?: boolean;
           price?: number;
@@ -659,6 +662,13 @@ export type Database = {
             foreignKeyName: "products_advantages_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
+            referencedRelation: "products_search_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_advantages_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
             referencedRelation: "user_transactions_view";
             referencedColumns: ["product_id"];
           },
@@ -729,6 +739,13 @@ export type Database = {
             foreignKeyName: "products_comments_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
+            referencedRelation: "products_search_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_comments_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
             referencedRelation: "user_transactions_view";
             referencedColumns: ["product_id"];
           },
@@ -775,6 +792,13 @@ export type Database = {
             foreignKeyName: "products_faq_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
+            referencedRelation: "products_search_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_faq_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
             referencedRelation: "user_transactions_view";
             referencedColumns: ["product_id"];
           },
@@ -815,6 +839,13 @@ export type Database = {
             columns: ["product_id"];
             isOneToOne: true;
             referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "products_resources_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: true;
+            referencedRelation: "products_search_view";
             referencedColumns: ["id"];
           },
           {
@@ -1096,6 +1127,13 @@ export type Database = {
             foreignKeyName: "purchases_product_id_fkey";
             columns: ["product_id"];
             isOneToOne: false;
+            referencedRelation: "products_search_view";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchases_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
             referencedRelation: "user_transactions_view";
             referencedColumns: ["product_id"];
           },
@@ -1362,6 +1400,21 @@ export type Database = {
         };
         Relationships: [];
       };
+      products_search_view: {
+        Row: {
+          fts: unknown;
+          id: string | null;
+        };
+        Insert: {
+          fts?: unknown;
+          id?: string | null;
+        };
+        Update: {
+          fts?: unknown;
+          id?: string | null;
+        };
+        Relationships: [];
+      };
       public_profiles_full_view: {
         Row: {
           avatar_path: string | null;
@@ -1437,6 +1490,21 @@ export type Database = {
         Returns: string;
       };
       _app_product_validation_constants: { Args: never; Returns: Json };
+      _app_products_build_cursor: {
+        Args: { p_sort: Database["public"]["Enums"]["product_sort_option"] };
+        Returns: string;
+      };
+      _app_products_cursor_condition: {
+        Args: {
+          p_cursor: Json;
+          p_sort: Database["public"]["Enums"]["product_sort_option"];
+        };
+        Returns: string;
+      };
+      _app_products_sort_clause: {
+        Args: { p_sort: Database["public"]["Enums"]["product_sort_option"] };
+        Returns: string;
+      };
       _app_require_completed_profile: { Args: never; Returns: undefined };
       _app_sanitize_text: {
         Args: { p_allow_newlines?: boolean; p_input: string };
@@ -1527,7 +1595,7 @@ export type Database = {
           p_price: number;
           p_title: string;
         };
-        Returns: string;
+        Returns: Json;
       };
       app_create_product_comment: {
         Args: { p_comment: string; p_product_id: string; p_rating: number };
@@ -1578,6 +1646,27 @@ export type Database = {
         };
         Returns: undefined;
       };
+      app_search_products: {
+        Args: {
+          p_category_l1?: string;
+          p_category_l2?: string;
+          p_cursor?: Json;
+          p_limit?: number;
+          p_query?: string;
+          p_sort?: Database["public"]["Enums"]["product_sort_option"];
+        };
+        Returns: {
+          category: Json;
+          comments_count: number;
+          cover_url: string;
+          creator: Json;
+          id: string;
+          next_cursor: Json;
+          price: number;
+          rating: number;
+          title: string;
+        }[];
+      };
       app_update_product: {
         Args: {
           p_advantages?: Json;
@@ -1589,9 +1678,10 @@ export type Database = {
           p_is_active?: boolean;
           p_price?: number;
           p_product_id: string;
+          p_refresh_cover?: boolean;
           p_title?: string;
         };
-        Returns: undefined;
+        Returns: string;
       };
       app_update_profile: {
         Args: {
@@ -1727,6 +1817,15 @@ export type Database = {
         | "locked"
         | "refunding"
         | "refunded";
+      product_sort_option:
+        | "best_match"
+        | "title_asc"
+        | "title_desc"
+        | "rating_desc"
+        | "rating_asc"
+        | "price_desc"
+        | "price_asc"
+        | "popularity_desc";
       profile_security_event_type: "password_reset_otp_verified";
       profile_security_provider_type: "email" | "sms";
       purchase_status:
@@ -1926,6 +2025,16 @@ export const Constants = {
         "locked",
         "refunding",
         "refunded",
+      ],
+      product_sort_option: [
+        "best_match",
+        "title_asc",
+        "title_desc",
+        "rating_desc",
+        "rating_asc",
+        "price_desc",
+        "price_asc",
+        "popularity_desc",
       ],
       profile_security_event_type: ["password_reset_otp_verified"],
       profile_security_provider_type: ["email", "sms"],
