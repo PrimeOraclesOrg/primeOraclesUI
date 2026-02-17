@@ -58,6 +58,10 @@ export function CreateProductForm({
     watch,
   } = form;
 
+  useEffect(() => {
+    console.log("isSubmitting:", isSubmitting);
+  }, [isSubmitting]);
+
   const values = watch();
   const title = watch("title");
   const description = watch("description");
@@ -467,7 +471,7 @@ export function CreateProductForm({
         disabled={isSubmitting}
         className="w-full gold-gradient text-primary-foreground hover:opacity-90 transition-opacity h-12 text-base"
       >
-        {isSubmitting ? "Сохранение..." : "Продолжить"}
+        {isSubmitting ? "Продукт создается..." : "Создать продукт"}
       </Button>
     </form>
   );

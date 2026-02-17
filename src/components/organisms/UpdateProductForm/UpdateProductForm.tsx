@@ -470,7 +470,7 @@ export function UpdateProductForm({
         disabled={isSubmitting || !wasDataChanged}
         className="w-full gold-gradient text-primary-foreground hover:opacity-90 transition-opacity h-12 text-base"
       >
-        {isSubmitting ? "Сохранение..." : "Продолжить"}
+        {isSubmitting ? "Обновление продукта..." : "Обновить продукт"}
       </Button>
     </form>
   );

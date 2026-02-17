@@ -153,8 +153,8 @@ export const useUpdateProduct = () => {
     [updateProductForm]
   );
 
-  const onSubmit = (values: CreateProductFormData) => {
-    updateProduct({
+  const onSubmit = async (values: CreateProductFormData) => {
+    await updateProduct({
       productId: product.id,
       productData: {
         title: values.title,
