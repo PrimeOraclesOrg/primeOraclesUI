@@ -14,7 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FormSection, FormField } from "@/components/atoms";
-import {} from "@/types/createProduct";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import {
   isValidDecimalDraft,
