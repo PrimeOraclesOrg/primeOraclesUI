@@ -55,19 +55,19 @@ export function ProductDetailTemplate({
 
         <div className="max-w-6xl mx-auto">
           {/* Product Header */}
-          <div className="flex flex-col lg:flex-row gap-8 pb-8 sm:pb-12">
+          <div className="flex flex-col min-[1200px]:flex-row gap-8 pb-8 sm:pb-12">
             {/* Product Image */}
-            <div className="aspect-[16/9] rounded-xl overflow-hidden bg-card">
+            <div className="aspect-[16/9] max-h-fit rounded-xl overflow-hidden bg-card">
               <img
                 src={product.cover_url}
                 alt={product.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full max-h-fit object-cover"
               />
             </div>
 
             {/* Product Info */}
-            <div className="flex-1 flex flex-col lg:flex-row lg:items-start gap-6">
-              <div className="min-w-80 flex-1 lg:max-w-96 overflow-hidden">
+            <div className="flex-1 flex flex-col xl:flex-row min-[1200px]:items-start gap-6">
+              <div className="min-w-80 flex-1 min-[1200px]:max-w-96 overflow-hidden">
                 <div className="flex items-center gap-3 mb-2">
                   <UserAvatar avatarPath={product.creator.avatar_path} />
                   <span className="text-foreground font-medium">{product.creator.name}</span>
