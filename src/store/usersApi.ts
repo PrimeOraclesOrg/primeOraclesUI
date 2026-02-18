@@ -17,9 +17,12 @@ export const usersApi = baseApi.injectEndpoints({
       },
       providesTags: ["User"],
     }),
-    updateMyProfile: builder.mutation<FullProfile | null, UpdateProfileFormData>({
-      queryFn: async (formData) => {
-        const { data, error } = await updateProfile(formData);
+    updateMyProfile: builder.mutation<
+      FullProfile | null,
+      { formData: UpdateProfileFormData; avatarToDelete?: string }
+    >({
+      queryFn: async ({ formData, avatarToDelete }) => {
+        const { data, error } = await updateProfile(formData, avatarToDelete);
 
         if (error) {
           return { error };

@@ -50,10 +50,15 @@ export const useBasicSettings = () => {
   });
 
   const onUpdateProfileSubmit = useCallback(
-    (data: UpdateProfileFormData) => {
-      updateProfile(data);
+    async (data: UpdateProfileFormData) => {
+      const avatarToDelete =
+        !profile.avatar_path.includes("default_avatars") &&
+        (data.selectedAvatar || data.uploadedAvatar)
+          ? profile.avatar_path
+          : null;
+      await updateProfile({ formData: data, avatarToDelete });
     },
-    [updateProfile]
+    [updateProfile, profile]
   );
 
   useEffect(() => {
