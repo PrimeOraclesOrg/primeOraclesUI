@@ -115,14 +115,14 @@ export function ProductDetailTemplate({
           </div>
 
           {/* Description Section */}
-          <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10 overflow-hidden">
+          <div className="pb-8 sm:pb-12 sm:border-t border-border sm:pt-10 overflow-hidden">
             <h2 className="text-xl font-bold text-foreground mb-6">Описание</h2>
             <p className="text-foreground">{product.description}</p>
           </div>
 
           {/* Features Section */}
           {product?.advantages.length > 0 && (
-            <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10 overflow-hidden">
+            <div className="pb-8 sm:pb-12 sm:border-t border-border sm:pt-10 overflow-hidden">
               <h2 className="text-xl font-bold text-foreground mb-6">Особенности</h2>
               <div className="grid grid-cols-1 gap-3">
                 {product.advantages.map(({ position, description }) => {
@@ -144,7 +144,7 @@ export function ProductDetailTemplate({
 
           {/* FAQ Section */}
           {product?.faq.length > 0 && (
-            <div className="pb-8 sm:pb-12 sm:border-t sm:pt-10">
+            <div className="pb-8 sm:pb-12 sm:border-t border-border sm:pt-10">
               <h2 className="text-xl font-bold text-foreground mb-6 text-center">
                 Часто задаваемые вопросы:
               </h2>
@@ -167,7 +167,7 @@ export function ProductDetailTemplate({
           )}
 
           {/* About the creator Section */}
-          <div className="mb-4 sm:mb-6 sm:border-t sm:pt-10 overflow-hidden">
+          <div className="mb-4 sm:mb-6 sm:border-t border-border sm:pt-10 overflow-hidden">
             <h2 className="text-xl font-bold text-foreground mb-6">О создателе</h2>
             <div className="flex-1 flex-col">
               <div className="flex-1 flex flex-col justify-between sm:flex-row sm:items-center gap-4">
@@ -217,7 +217,7 @@ export function ProductDetailTemplate({
         </div>
         {/* Product name + Buy CTA Section */}
       </div>
-      <div className="py-8 flex flex-col sm:flex-row items-center justify-between gap-4 px-6 sm:border-t md:rounded-lg">
+      <div className="py-8 flex flex-col sm:flex-row items-center justify-between gap-4 px-6 sm:border-t border-border md:rounded-lg">
         <h2 className="text-xl font-bold text-foreground">{product.title}</h2>
         <Button
           size="lg"

@@ -13,6 +13,7 @@ import {
 } from "@/store/productsApi";
 import { useOnRequestResult } from "@/data/useOnRequestResult";
 import { useGetMyProfileQuery } from "@/store/usersApi";
+import { PRODUCT_IMAGES_BUCKET } from "@/utils";
 
 export const useUpdateProduct = () => {
   const { t } = useTranslation();
@@ -152,8 +153,8 @@ export const useUpdateProduct = () => {
     [updateProductForm]
   );
 
-  const onSubmit = (values: CreateProductFormData) => {
-    updateProduct({
+  const onSubmit = async (values: CreateProductFormData) => {
+    await updateProduct({
       productId: product.id,
       productData: {
         title: values.title,
@@ -166,6 +167,7 @@ export const useUpdateProduct = () => {
         price: values.price,
         isActive: values.isActive,
       },
+      oldCoverPath: product?.cover_url.split(`${PRODUCT_IMAGES_BUCKET}/`)[1],
       mediaFile,
     });
   };

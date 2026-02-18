@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { UseFormReturn } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { Plus, Trash2, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -163,47 +163,61 @@ export function UpdateProductForm({
     <form onSubmit={onSubmit} className="space-y-5">
       {/* Category Section */}
       <FormSection title="Категория">
-        <Select
-          value={values.category_l1_id}
-          onValueChange={(value) => {
-            setValue("category_l1_id", value, { shouldDirty: true });
-            setValue("category_l2_id", "", { shouldDirty: true });
-          }}
-        >
-          <SelectTrigger className="w-full bg-background border-border">
-            <SelectValue placeholder="Выберите категорию" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories?.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
-                {t(`product:category.${category.code}`)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Controller
+          name="category_l1_id"
+          control={form.control}
+          render={({ field }) => (
+            <Select
+              value={values.category_l1_id}
+              onValueChange={(value) => {
+                setValue("category_l1_id", value, { shouldDirty: true });
+                setValue("category_l2_id", "", { shouldDirty: true });
+              }}
+            >
+              <SelectTrigger ref={field.ref} className="w-full bg-background border-border">
+                <SelectValue placeholder="Выберите категорию" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {t(`product:category.${category.code}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.category_l1_id && (
           <p className="text-sm text-destructive mt-1">{errors.category_l1_id.message}</p>
         )}
 
         {values.category_l1_id && (
           <>
-            <Select
-              value={values.category_l2_id}
-              onValueChange={(value) => setValue("category_l2_id", value, { shouldDirty: true })}
-            >
-              <SelectTrigger className="w-full bg-background border-border">
-                <SelectValue placeholder="Выберите тип" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories
-                  ?.find((category) => category.id === values.category_l1_id)
-                  .subcategories.map((type) => (
-                    <SelectItem key={type.id} value={type.id}>
-                      {t(`product:subCategory.${type.code}`)}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
+            <Controller
+              name="category_l2_id"
+              control={form.control}
+              render={({ field }) => (
+                <Select
+                  value={values.category_l2_id}
+                  onValueChange={(value) =>
+                    setValue("category_l2_id", value, { shouldDirty: true })
+                  }
+                >
+                  <SelectTrigger ref={field.ref} className="w-full bg-background border-border">
+                    <SelectValue placeholder="Выберите тип" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories
+                      .find((category) => category.id === values.category_l1_id)
+                      .subcategories.map((type) => (
+                        <SelectItem key={type.id} value={type.id}>
+                          {t(`product:subCategory.${type.code}`)}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
             {errors.category_l2_id && (
               <p className="text-sm text-destructive mt-1">{errors.category_l2_id.message}</p>
             )}
@@ -469,7 +483,7 @@ export function UpdateProductForm({
         disabled={isSubmitting || !isDataChanged}
         className="w-full gold-gradient text-primary-foreground hover:opacity-90 transition-opacity h-12 text-base"
       >
-        {isSubmitting ? "Сохранение..." : "Продолжить"}
+        {isSubmitting ? "Обновление продукта..." : "Обновить продукт"}
       </Button>
     </form>
   );

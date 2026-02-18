@@ -23,6 +23,7 @@ import { formatDate } from "@/utils/formatters";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { buildCoverUrl } from "@/utils/base64ToBlob";
 import { FetchMyProductsParams, ProductsFilter, ProductsResult } from "./types";
+import { CreateProductResponse } from "@/types/createProduct";
 
 export async function fetchMyProducts({
   p_cursor,
@@ -214,7 +215,7 @@ export async function createProductService(
     }
 
     // Create the product
-    const { data: productId, error: createError } = await supabase.rpc("app_create_product", {
+    const { data, error: createError } = (await supabase.rpc("app_create_product", {
       p_title: productData.title,
       p_category_l1_id: productData.category_l1_id,
       p_category_l2_id: productData.category_l2_id,
@@ -224,24 +225,25 @@ export async function createProductService(
       p_advantages: productData.advantages,
       p_faq: productData.faq,
       p_is_active: productData.isActive,
-    });
+    })) as { data: CreateProductResponse; error: PostgrestError };
 
     if (createError) {
       throw createError;
     }
 
     // Upload image if provided
-    if (mediaFile && productId) {
+    if (mediaFile && data.cover_url) {
+      const uploadPath = data.cover_url.replace(`${PRODUCT_IMAGES_BUCKET}/`, "");
       const { error: uploadError } = await supabase.storage
         .from(PRODUCT_IMAGES_BUCKET)
-        .upload(productId, mediaFile, { contentType: mediaFile.type, upsert: true });
+        .upload(uploadPath, mediaFile, { contentType: mediaFile.type, upsert: true });
 
       if (uploadError) {
         throw uploadError;
       }
     }
 
-    return { data: productId, error: null };
+    return { data: data.id, error: null };
   } catch (error) {
     return normalizeError(error);
   }
@@ -250,10 +252,11 @@ export async function createProductService(
 export async function updateProductService(
   productId: string,
   productData: CreateProductFormData,
-  mediaFile?: File | null
+  mediaFile?: File | null,
+  oldCoverPath?: string
 ): Promise<{ data: string | null; error: ServiceError | null }> {
   try {
-    const { error: updateError } = await supabase.rpc("app_update_product", {
+    const { data: newCoverUrl, error: updateError } = await supabase.rpc("app_update_product", {
       p_product_id: productId,
       p_title: productData.title,
       p_category_l1_id: productData.category_l1_id,
@@ -264,6 +267,7 @@ export async function updateProductService(
       p_advantages: productData.advantages,
       p_faq: productData.faq,
       p_is_active: productData.isActive,
+      p_refresh_cover: !!mediaFile,
     });
 
     if (updateError) {
@@ -271,13 +275,22 @@ export async function updateProductService(
     }
 
     // Upload image if provided
-    if (mediaFile && productId) {
+    if (mediaFile && newCoverUrl) {
+      const newUploadPath = newCoverUrl.replace(`${PRODUCT_IMAGES_BUCKET}/`, "");
       const { error: uploadError } = await supabase.storage
         .from(PRODUCT_IMAGES_BUCKET)
-        .upload(productId, mediaFile, { contentType: mediaFile.type, upsert: true });
+        .upload(newUploadPath, mediaFile, { contentType: mediaFile.type, upsert: true });
 
       if (uploadError) {
         throw uploadError;
+      }
+
+      if (oldCoverPath) {
+        const { error: oldCoverRemoveError } = await supabase.storage
+          .from(PRODUCT_IMAGES_BUCKET)
+          .remove([oldCoverPath]);
+
+        if (oldCoverRemoveError) throw oldCoverRemoveError;
       }
     }
 

@@ -122,8 +122,8 @@ export const useCreateProduct = () => {
     [createProductForm]
   );
 
-  const onSubmit = (values: CreateProductFormData) => {
-    createProduct({
+  const onSubmit = async (values: CreateProductFormData) => {
+    await createProduct({
       productData: {
         title: values.title,
         description: values.description,

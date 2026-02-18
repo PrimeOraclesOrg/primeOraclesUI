@@ -147,10 +147,20 @@ export const productsApi = baseApi.injectEndpoints({
 
     updateProduct: builder.mutation<
       string,
-      { productId: string; productData: CreateProductFormData; mediaFile?: File | null }
+      {
+        productId: string;
+        productData: CreateProductFormData;
+        oldCoverPath?: string;
+        mediaFile?: File | null;
+      }
     >({
-      queryFn: async ({ productId, productData, mediaFile }) => {
-        const { data, error } = await updateProductService(productId, productData, mediaFile);
+      queryFn: async ({ productId, productData, oldCoverPath, mediaFile }) => {
+        const { data, error } = await updateProductService(
+          productId,
+          productData,
+          mediaFile,
+          oldCoverPath
+        );
         return error ? { error } : { data };
       },
       invalidatesTags: ["Products"],

@@ -1,7 +1,6 @@
 /**
  * Types for the Create Product form
  */
-
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 
 export interface ProductAdvantage {
@@ -27,3 +26,8 @@ export const DEFAULT_FORM_DATA: CreateProductFormData = {
   category_l1_id: "",
   category_l2_id: "",
 };
+
+export interface CreateProductResponse {
+  id: string;
+  cover_url: string;
+}
