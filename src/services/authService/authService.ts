@@ -313,12 +313,13 @@ export async function checkUsernameAvailability(username: string) {
 
 export async function uploadAvatar(
   avatarBase64: string,
-  userId: string
+  avatarUrl: string
 ): Promise<AuthResult<null>> {
   try {
+    const avatarPath = avatarUrl.replace("avatars/", "");
     const { error } = await supabase.storage
       .from("avatars")
-      .upload(userId, base64ToBlob(avatarBase64), {
+      .upload(avatarPath, base64ToBlob(avatarBase64), {
         contentType: "image/png",
         upsert: true,
       });
@@ -328,6 +329,24 @@ export async function uploadAvatar(
         code: error?.name,
         message: error?.message,
       };
+
+    return {
+      data: null,
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
+  }
+}
+
+export async function deleteAvatar(avatarPath: string): Promise<AuthResult<null>> {
+  try {
+    const avatarToRemove = avatarPath.replace("avatars/", "");
+    const { error: avatarRemoveError } = await supabase.storage
+      .from("avatars")
+      .remove([avatarToRemove]);
+
+    if (avatarRemoveError) throw avatarRemoveError;
 
     return {
       data: null,
@@ -349,7 +368,7 @@ export async function profileRegistrationUpdate(
   } | null>
 ) {
   try {
-    const { error } = await supabase.rpc("app_profile_registration_update", {
+    const { data, error } = await supabase.rpc("app_profile_registration_update", {
       p_username: username,
       p_name: name,
       p_bio: description || null,
@@ -360,7 +379,7 @@ export async function profileRegistrationUpdate(
     if (error) throw error;
 
     return {
-      data: null,
+      data,
       error: null,
     };
   } catch (error) {
@@ -412,18 +431,18 @@ export async function completeProfile({
     const { error: usernameAvailabilityError } = await checkUsernameAvailability(username);
     if (usernameAvailabilityError) throw usernameAvailabilityError;
 
-    if (!getAvatarName(selectedAvatar) && uploadedAvatar) {
-      const { error } = await uploadAvatar(uploadedAvatar, user.id);
-      if (error) throw error;
-    }
-
-    const { error } = await profileRegistrationUpdate(
+    const { data: avatarUrl, error } = await profileRegistrationUpdate(
       username,
       name,
       description,
       getAvatarName(selectedAvatar),
       getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl })
     );
+
+    if (!getAvatarName(selectedAvatar) && uploadedAvatar) {
+      const { error } = await uploadAvatar(uploadedAvatar, avatarUrl);
+      if (error) throw error;
+    }
 
     if (error) throw error;
 
@@ -466,35 +485,39 @@ export async function getUserProfile(): Promise<AuthResult<FullProfile>> {
   }
 }
 
-export async function updateProfile({
-  name,
-  description,
-  instagramUrl,
-  tiktokUrl,
-  youtubeUrl,
-  selectedAvatar,
-  uploadedAvatar,
-}: UpdateProfileFormData): Promise<AuthResult<FullProfile>> {
+export async function updateProfile(
+  {
+    name,
+    description,
+    instagramUrl,
+    tiktokUrl,
+    youtubeUrl,
+    selectedAvatar,
+    uploadedAvatar,
+  }: UpdateProfileFormData,
+  avatarToDelete?: string
+): Promise<AuthResult<FullProfile>> {
   try {
-    const { data: session, error: sessionError } = await getSession();
-
-    if (sessionError) throw sessionError;
-
     const changeAvatar = Boolean(selectedAvatar || uploadedAvatar);
     const isUploadedAvatar = Boolean(!selectedAvatar && uploadedAvatar);
 
-    if (isUploadedAvatar) {
-      const { error } = await uploadAvatar(uploadedAvatar, session.user.id);
-      if (error) throw error;
-    }
-
-    const { error } = await supabase.rpc("app_update_profile", {
+    const { data: avatarUrl, error } = await supabase.rpc("app_update_profile", {
       p_name: name,
       p_bio: description || null,
       p_social_medias: getSocialMedias({ instagramUrl, tiktokUrl, youtubeUrl }) || [],
       p_default_avatar_name: changeAvatar ? getAvatarName(selectedAvatar) : null,
       p_use_custom_avatar: changeAvatar ? isUploadedAvatar : null,
     });
+
+    if (isUploadedAvatar) {
+      const { error } = await uploadAvatar(uploadedAvatar, avatarUrl);
+      if (error) throw error;
+    }
+
+    if (avatarToDelete) {
+      const { error: avatarDeleteError } = await deleteAvatar(avatarToDelete);
+      if (avatarDeleteError) throw avatarDeleteError;
+    }
 
     if (error) throw error;
 
