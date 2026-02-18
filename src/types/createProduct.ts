@@ -2,7 +2,6 @@
  * Types for the Create Product form
  */
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import { Database } from "./supabase";
 
 export interface ProductAdvantage {
   description: string;
