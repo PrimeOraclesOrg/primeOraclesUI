@@ -5,8 +5,8 @@ import Rewards from "@/pages/Rewards";
 import Marketplace from "@/pages/Marketplace";
 import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
-import ProductDetail from "@/pages/ProductDetail";
-import CreateProduct from "@/pages/CreateProduct/CreateProduct";
+import ProductDetail from "@/pages/@product/ProductDetail";
+import CreateProduct from "@/pages/@product/CreateProduct/CreateProduct";
 import WorkspaceMarketplace from "@/pages/WorkspaceMarketplace/WorkspaceMarketplace";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
@@ -23,7 +23,7 @@ import { useGetMyProfileQuery } from "@/store/usersApi";
 import { useGetAuthUserQuery } from "@/store/authApi";
 import { useForceProfileSetup } from "@/hooks/useForceProfileSetup";
 import { useAuthListener } from "@/hooks/useAuthListener";
-import UpdateProduct from "@/pages/UpdateProduct/UpdateProduct";
+import UpdateProduct from "@/pages/@product/UpdateProduct/UpdateProduct";
 
 export function AppRoutes() {
   useAuthListener();
