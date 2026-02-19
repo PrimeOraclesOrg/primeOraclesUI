@@ -65,9 +65,26 @@ export const productsApi = baseApi.injectEndpoints({
     getProducts: builder.query<PublicProductCard[], SearchProductsParams>({
       queryFn: async (params) => {
         const { data, error } = await fetchProducts(params);
-
         if (error) return { error };
         return { data };
+      },
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        if (!queryArgs) {
+          return `${endpointName}-default`;
+        }
+
+        const { p_sort = "created_at_desc" } = queryArgs;
+        return `${endpointName}-${p_sort}`;
+      },
+
+      merge: (currentCache, newItems, { arg }) => {
+        if (!arg.p_cursor) {
+          return newItems;
+        }
+        return [...currentCache, ...newItems];
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
       },
       providesTags: ["Products"],
     }),

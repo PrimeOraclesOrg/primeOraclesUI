@@ -159,6 +159,61 @@ export type Database = {
           },
         ];
       };
+      communities: {
+        Row: {
+          cover_url: string | null;
+          created_at: string;
+          created_by: string;
+          id: string;
+          is_active: boolean;
+          is_verified: boolean;
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          cover_url?: string | null;
+          created_at?: string;
+          created_by: string;
+          id?: string;
+          is_active?: boolean;
+          is_verified?: boolean;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          cover_url?: string | null;
+          created_at?: string;
+          created_by?: string;
+          id?: string;
+          is_active?: boolean;
+          is_verified?: boolean;
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "communities_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "communities_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "communities_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "public_profiles_full_view";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       content_reward_category_l1: {
         Row: {
           code: string;
@@ -222,48 +277,124 @@ export type Database = {
           },
         ];
       };
+      content_reward_requirements: {
+        Row: {
+          content_reward_id: string;
+          id: string;
+          requirement: string;
+        };
+        Insert: {
+          content_reward_id: string;
+          id?: string;
+          requirement: string;
+        };
+        Update: {
+          content_reward_id?: string;
+          id?: string;
+          requirement?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "content_reward_requirements_content_reward_id_fkey";
+            columns: ["content_reward_id"];
+            isOneToOne: false;
+            referencedRelation: "content_rewards";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      content_reward_social_medias: {
+        Row: {
+          content_reward_id: string;
+          id: string;
+          type: Database["public"]["Enums"]["content_reward_media_type"];
+        };
+        Insert: {
+          content_reward_id: string;
+          id?: string;
+          type: Database["public"]["Enums"]["content_reward_media_type"];
+        };
+        Update: {
+          content_reward_id?: string;
+          id?: string;
+          type?: Database["public"]["Enums"]["content_reward_media_type"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "content_reward_social_medias_content_reward_id_fkey";
+            columns: ["content_reward_id"];
+            isOneToOne: false;
+            referencedRelation: "content_rewards";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       content_rewards: {
         Row: {
+          additional_info_url: string | null;
+          budget: number;
+          card_logo_url: string | null;
           category_l1_id: string;
           category_l2_id: string;
           cover_url: string | null;
           created_at: string;
           created_by: string;
           description: string;
+          end_date: string;
           hook_description: string;
           id: string;
-          is_active: boolean;
+          max_payout: number;
+          min_payout: number;
+          rate_per_views: number;
+          start_date: string;
           status: Database["public"]["Enums"]["content_reward_status"];
           title: string;
           updated_at: string;
+          views_to_payout: number;
         };
         Insert: {
+          additional_info_url?: string | null;
+          budget: number;
+          card_logo_url?: string | null;
           category_l1_id: string;
           category_l2_id: string;
           cover_url?: string | null;
           created_at?: string;
           created_by: string;
           description: string;
+          end_date: string;
           hook_description: string;
           id?: string;
-          is_active?: boolean;
+          max_payout: number;
+          min_payout: number;
+          rate_per_views: number;
+          start_date: string;
           status?: Database["public"]["Enums"]["content_reward_status"];
           title: string;
           updated_at?: string;
+          views_to_payout: number;
         };
         Update: {
+          additional_info_url?: string | null;
+          budget?: number;
+          card_logo_url?: string | null;
           category_l1_id?: string;
           category_l2_id?: string;
           cover_url?: string | null;
           created_at?: string;
           created_by?: string;
           description?: string;
+          end_date?: string;
           hook_description?: string;
           id?: string;
-          is_active?: boolean;
+          max_payout?: number;
+          min_payout?: number;
+          rate_per_views?: number;
+          start_date?: string;
           status?: Database["public"]["Enums"]["content_reward_status"];
           title?: string;
           updated_at?: string;
+          views_to_payout?: number;
         };
         Relationships: [
           {
@@ -1832,6 +1963,7 @@ export type Database = {
           comments_count: number;
           cover_url: string;
           creator: Json;
+          has_more: boolean;
           id: string;
           next_cursor: Json;
           price: number;
@@ -1953,7 +2085,8 @@ export type Database = {
         | "reversal";
       accounting_type: "asset" | "liability" | "equity" | "revenue" | "expense";
       billable_type: "purchase";
-      content_reward_status: "active" | "closed" | "finished" | "closing_soon";
+      content_reward_media_type: "instagram" | "tiktok" | "youtube";
+      content_reward_status: "draft" | "active" | "closed" | "finished" | "closing_soon";
       escrow_state: "locked" | "released" | "refunded";
       ledger_direction: "credit" | "debit";
       ledger_event_type:
@@ -2159,7 +2292,8 @@ export const Constants = {
       ],
       accounting_type: ["asset", "liability", "equity", "revenue", "expense"],
       billable_type: ["purchase"],
-      content_reward_status: ["active", "closed", "finished", "closing_soon"],
+      content_reward_media_type: ["instagram", "tiktok", "youtube"],
+      content_reward_status: ["draft", "active", "closed", "finished", "closing_soon"],
       escrow_state: ["locked", "released", "refunded"],
       ledger_direction: ["credit", "debit"],
       ledger_event_type: [

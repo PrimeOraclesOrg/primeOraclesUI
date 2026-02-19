@@ -1,16 +1,22 @@
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
-import { SearchBar, CategoryTabs, ProductCard, Pagination } from "@/components/molecules";
+import { ProductCard } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
 import type { PublicProductCard } from "@/types";
 
 interface MarketplaceTemplateProps {
   products: PublicProductCard[];
+  loadMoreButtonShown: boolean;
+  isFetching: boolean;
   onProductClick: (productId: string) => void;
   onCreateClick: () => void;
+  onLoadMore: () => void;
 }
 
 export function MarketplaceTemplate({
   products,
+  loadMoreButtonShown,
+  isFetching,
+  onLoadMore,
   onProductClick,
   onCreateClick,
 }: MarketplaceTemplateProps) {
@@ -48,6 +54,14 @@ export function MarketplaceTemplate({
           "Загрузка..."
         )}
       </div>
+
+      {loadMoreButtonShown && (
+        <div className="text-center">
+          <Button onClick={onLoadMore} disabled={isFetching}>
+            {isFetching ? "Загрузка..." : "Загрузить еще"}
+          </Button>
+        </div>
+      )}
     </MainLayout>
   );
 }
