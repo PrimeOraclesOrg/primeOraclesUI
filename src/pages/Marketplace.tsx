@@ -7,10 +7,8 @@ import { useCallback, useState } from "react";
 export default function Marketplace() {
   const navigate = useNavigate();
   const [cursor, setCursor] = useState<SearchProductsParams["p_cursor"]>(null);
-  const PAGE_LIMIT = 8;
   const { data: products, isFetching } = useGetProductsQuery({
     p_cursor: cursor,
-    p_limit: PAGE_LIMIT,
   });
 
   const loadMoreButtonShown = products && products[products.length - 1]?.has_more;
