@@ -5,8 +5,6 @@ import Rewards from "@/pages/Rewards";
 import Marketplace from "@/pages/Marketplace";
 import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
-import ProductDetail from "@/pages/@product/ProductDetail";
-import CreateProduct from "@/pages/@product/CreateProduct/CreateProduct";
 import WorkspaceMarketplace from "@/pages/WorkspaceMarketplace/WorkspaceMarketplace";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
@@ -15,15 +13,17 @@ import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 import { AuthRoute } from "@/components/shared";
 import { LoadingScreen } from "@/components/atoms";
-import { BasicSettings } from "@/pages/@settings/BasicSettings/BasicSettings";
-import { SecuritySettings } from "@/pages/@settings/SecuritySettings/SecuritySettings";
-import { BalanceSettings } from "@/pages/@settings/BalanceSettings/BalanceSettings";
-import { HistorySettings } from "@/pages/@settings/HistorySettings/HistorySettings";
 import { useGetMyProfileQuery } from "@/store/usersApi";
 import { useGetAuthUserQuery } from "@/store/authApi";
 import { useForceProfileSetup } from "@/hooks/useForceProfileSetup";
 import { useAuthListener } from "@/hooks/useAuthListener";
-import UpdateProduct from "@/pages/@product/UpdateProduct/UpdateProduct";
+import { CreateProduct, ProductDetail, UpdateProduct } from "@/pages/@product";
+import {
+  BalanceSettings,
+  BasicSettings,
+  HistorySettings,
+  SecuritySettings,
+} from "@/pages/@settings";
 
 export function AppRoutes() {
   useAuthListener();

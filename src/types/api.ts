@@ -46,3 +46,5 @@ export interface LearningResponse {
 export interface LessonDetailsResponse {
   lesson: LessonDetails;
 }
+
+export type Cursor = { id: string; created_at: string } | null;

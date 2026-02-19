@@ -10,10 +10,12 @@ import { mockProducts, productCategories, homePageProducts } from "@/data/produc
 import {
   EditorProductPage,
   FullProfile,
+  HomeProductCard,
   MyProduct,
   Product,
   ProductCategory,
   ProductCommentsResponse,
+  PublicProductCard,
   PublicProductPage,
   Review,
   ServiceError,
@@ -22,7 +24,7 @@ import { PRODUCT_IMAGES_BUCKET, supabase, normalizeError } from "@/utils";
 import { formatDate } from "@/utils/formatters";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { buildCoverUrl } from "@/utils/base64ToBlob";
-import { FetchMyProductsParams, ProductsFilter, ProductsResult } from "./types";
+import { FetchMyProductsParams, SearchProductsParams } from "./types";
 import { CreateProductResponse } from "@/types/createProduct";
 
 export async function fetchMyProducts({
@@ -75,31 +77,21 @@ export async function fetchEditorProductPage(id: string) {
 /**
  * Fetch products with optional filtering
  */
-export async function fetchProducts(filter: ProductsFilter = {}): Promise<ProductsResult> {
-  // TODO: Replace with Supabase query
-  // const { data, error } = await supabase
-  //   .from('products')
-  //   .select('*')
-  //   .eq('category', filter.category)
-  //   .ilike('title', `%${filter.searchQuery}%`)
-  //   .range(filter.offset, filter.offset + filter.limit);
+export async function fetchProducts(filter: SearchProductsParams) {
+  try {
+    const { data, error } = await supabase.rpc("app_search_products", filter);
+    if (error) throw error;
 
-  let filtered = [...mockProducts];
-
-  if (filter.category && filter.category !== "Все") {
-    filtered = filtered.filter((p) => p.category === filter.category);
+    return {
+      data: data.map((product) => ({
+        ...product,
+        cover_url: buildCoverUrl(product.cover_url),
+      })) as unknown as PublicProductCard[],
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
   }
-
-  if (filter.searchQuery) {
-    const query = filter.searchQuery.toLowerCase();
-    filtered = filtered.filter((p) => p.title.toLowerCase().includes(query));
-  }
-
-  return {
-    products: filtered,
-    categories: productCategories,
-    total: filtered.length,
-  };
 }
 
 /**
@@ -123,7 +115,7 @@ export async function fetchCategoriesForProducts() {
 /**
  * Fetch products for home page
  */
-export async function fetchHomeProducts(): Promise<Product[]> {
+export async function fetchHomeProducts(): Promise<HomeProductCard[]> {
   // TODO: Replace with Supabase query
   // const { data, error } = await supabase
   //   .from('products')

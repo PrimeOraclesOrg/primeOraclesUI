@@ -1,12 +1,6 @@
-import { FAQ, Product, ProductDetails, RatingDistributionItem, Review } from "@/types";
+import { Cursor, FAQ, Product, ProductDetails, RatingDistributionItem, Review } from "@/types";
 import { Database } from "@/types/supabase";
-
-export interface ProductsFilter {
-  category?: string;
-  searchQuery?: string;
-  limit?: number;
-  offset?: number;
-}
+import { Prettify } from "@/utils";
 
 export interface ProductsResult {
   products: Product[];
@@ -25,5 +19,11 @@ export type FetchMyProductsParams = Omit<
   Database["public"]["Functions"]["app_get_my_products"]["Args"],
   "p_cursor"
 > & {
-  p_cursor?: { id: string; created_at: string } | null;
+  p_cursor?: Cursor;
 };
+
+export type SearchProductsParams = Prettify<
+  Omit<Database["public"]["Functions"]["app_search_products"]["Args"], "p_cursor"> & {
+    p_cursor?: Cursor;
+  }
+>;

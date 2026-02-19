@@ -1,11 +1,13 @@
 import { baseApi } from "./baseApi";
-import { mockProducts, productCategories, homePageProducts } from "@/data/products";
+import { homePageProducts } from "@/data/products";
 import {
   EditorProductPage,
+  HomeProductCard,
   MyProduct,
   Product,
   ProductCategory,
   ProductCommentsResponse,
+  PublicProductCard,
   PublicProductPage,
 } from "@/types";
 import {
@@ -16,19 +18,10 @@ import {
   fetchCategoriesForProducts,
   fetchEditorProductPage,
   updateProductService,
+  fetchProducts,
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import { FetchMyProductsParams } from "@/services/productsService/types";
-
-interface ProductsQueryArgs {
-  category?: string;
-  searchQuery?: string;
-}
-
-interface ProductsResponse {
-  products: Product[];
-  categories: string[];
-}
+import { FetchMyProductsParams, SearchProductsParams } from "@/services/productsService/types";
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -69,25 +62,12 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    getProducts: builder.query<ProductsResponse, ProductsQueryArgs>({
-      queryFn: ({ category, searchQuery }) => {
-        let filtered = [...mockProducts];
+    getProducts: builder.query<PublicProductCard[], SearchProductsParams>({
+      queryFn: async (params) => {
+        const { data, error } = await fetchProducts(params);
 
-        if (category && category !== "Все") {
-          filtered = filtered.filter((p) => p.category === category);
-        }
-
-        if (searchQuery) {
-          const query = searchQuery.toLowerCase();
-          filtered = filtered.filter((p) => p.title.toLowerCase().includes(query));
-        }
-
-        return {
-          data: {
-            products: filtered,
-            categories: productCategories,
-          },
-        };
+        if (error) return { error };
+        return { data };
       },
       providesTags: ["Products"],
     }),
@@ -101,7 +81,7 @@ export const productsApi = baseApi.injectEndpoints({
       },
     }),
 
-    getHomeProducts: builder.query<Product[], void>({
+    getHomeProducts: builder.query<HomeProductCard[], void>({
       queryFn: () => {
         return { data: homePageProducts };
       },
