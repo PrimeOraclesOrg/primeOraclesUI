@@ -1,4 +1,4 @@
-import type { Product } from "@/types";
+import type { HomeProductCard, Product } from "@/types";
 
 import productCrypto from "@/assets/product-crypto.jpg";
 import productWealth from "@/assets/product-wealth.jpg";
@@ -97,45 +97,41 @@ export const mockProducts: Product[] = [
 ];
 
 // Products for home page
-export const homePageProducts: Product[] = [
+export const homePageProducts: HomeProductCard[] = [
   {
     id: "1",
-    image: productCrypto,
+    cover_url: productCrypto,
     title: "Криптовалютная торговая стратегия, которая работает с Точность 98%🚀",
-    author: { name: "Crypto Auto Pump Signals Pro" },
+    creator: { name: "Crypto Auto Pump Signals Pro" },
     rating: 5.0,
-    reviewCount: 145,
+    comments_count: 145,
     price: 230.0,
-    category: "Крипто",
   },
   {
     id: "2",
-    image: productTradingBot,
+    cover_url: productTradingBot,
     title: "Продажа торгового бота на форексе",
-    author: { name: "The Haven Free" },
+    creator: { name: "The Haven Free" },
     rating: 4.1,
-    reviewCount: 521,
-    price: "free",
-    category: "Торговля",
+    comments_count: 521,
+    price: 0,
   },
   {
     id: "3",
-    image: productSoftware,
+    cover_url: productSoftware,
     title: "Аренда Adobe Photoshop + AI",
-    author: { name: "Quavo Speaks" },
+    creator: { name: "Quavo Speaks" },
     rating: 5.0,
-    reviewCount: 19,
+    comments_count: 19,
     price: 10.0,
-    category: "Софт",
   },
   {
     id: "5",
+    cover_url: productWealth,
     title: "№1 комьюнити по торговле криптовалютой",
-    image: productWealth,
-    price: "free",
-    author: { name: "Wealth Group Credit Card Pay" },
+    creator: { name: "Wealth Group Credit Card Pay" },
     rating: 4.95,
-    reviewCount: 421,
-    category: "Сообщества",
+    comments_count: 421,
+    price: 0,
   },
 ];

@@ -1,8 +1,9 @@
 import { RatingStars } from "@/components/atoms";
-import type { Product } from "@/types";
+import type { HomeProductCard, PublicProductCard } from "@/types";
+import { UserAvatar } from "../UserAvatar/UserAvatar";
 
 interface ProductCardProps {
-  product: Product;
+  product: PublicProductCard | HomeProductCard;
   onClick?: () => void;
 }
 
@@ -11,12 +12,12 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
     <div onClick={onClick} className="surface-card overflow-hidden card-hover cursor-pointer group">
       <div className="relative aspect-video overflow-hidden">
         <img
-          src={product.image}
+          src={product.cover_url}
           alt={product.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute bottom-3 right-3">
-          {product.price === "free" ? (
+          {product.price == 0 ? (
             <span className="badge-free">Бесплатно</span>
           ) : (
             <span className="badge-price">${product.price.toFixed(2)}</span>
@@ -26,19 +27,15 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
 
       <div className="p-4">
         <div className="flex items-start gap-3">
-          {product.author.avatar && (
-            <img
-              src={product.author.avatar}
-              alt={product.author.name}
-              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-            />
+          {"avatar_path" in product.creator && (
+            <UserAvatar avatarPath={product.creator.avatar_path} />
           )}
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-foreground line-clamp-2 leading-tight mb-1">
               {product.title}
             </h3>
-            <p className="text-sm text-muted-foreground truncate mb-2">{product.author.name}</p>
-            <RatingStars rating={product.rating} reviewCount={product.reviewCount} size="sm" />
+            <p className="text-sm text-muted-foreground truncate mb-2">{product.creator.name}</p>
+            <RatingStars rating={product.rating} reviewCount={product.comments_count} size="sm" />
           </div>
         </div>
       </div>

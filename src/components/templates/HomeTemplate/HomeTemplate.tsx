@@ -1,7 +1,7 @@
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { RewardCard, ProductCard, FAQAccordion } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import type { Reward, Product } from "@/types";
+import type { Reward, Product, HomeProductCard } from "@/types";
 import { SpotLightShape } from "@/assets/graphics/SpotLightShape";
 import { SpotLightShoeShape } from "@/assets/graphics/SpotLightShoeShape";
 import { SpotLightDiskShape } from "@/assets/graphics/SpotLightDiskShape";
@@ -9,7 +9,7 @@ import { ArrowRight } from "lucide-react";
 
 interface HomeTemplateProps {
   rewardsPreview: Reward[];
-  productsPreview: Product[];
+  productsPreview: HomeProductCard[];
   onCreateClick: () => void;
 }
 
