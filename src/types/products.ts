@@ -60,7 +60,7 @@ export type PublicProductCard = Prettify<
 >;
 
 export type HomeProductCard = Prettify<
-  Omit<PublicProductCard, "next_cursor" | "creator" | "category"> & {
+  Pick<PublicProductCard, "id" | "cover_url" | "price" | "title" | "rating" | "comments_count"> & {
     creator: {
       name: string;
     };
