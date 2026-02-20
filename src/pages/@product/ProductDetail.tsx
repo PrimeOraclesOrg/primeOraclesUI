@@ -4,13 +4,21 @@ import { ProductDetailTemplate } from "@/components/templates";
 import { usePopup } from "@/hooks/usePopup";
 import { useGetProductDetailsQuery, useGetProductCommentsQuery } from "@/store";
 import { useCallback, useEffect, useState } from "react";
+import { usePurchaseProductMutation } from "@/store/productsApi";
+import { useOnRequestResult } from "@/hooks/useOnRequestResult";
+import { useTranslation } from "react-i18next";
 
 export default function ProductDetail() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { openPopup } = usePopup();
   const [currentCommentsPage, setCurrentCommentsPage] = useState(1);
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
+  const [
+    purchaseProduct,
+    { isError: isPurchaseError, isSuccess: isPurchaseSuccess, error: purchaseError },
+  ] = usePurchaseProductMutation();
 
   const { data: product, isLoading, isError } = useGetProductDetailsQuery(id);
   const {
@@ -21,6 +29,17 @@ export default function ProductDetail() {
     { productId: id, page: currentCommentsPage, rating: ratingFilter },
     { skip: !id }
   );
+
+  useOnRequestResult({
+    isSuccess: isPurchaseSuccess,
+    isError: isPurchaseError,
+    errorMessage: {
+      description: purchaseError ? t(`status:${purchaseError.code}`) : "",
+    },
+    successMessage: {
+      description: "Покупка успешна!",
+    },
+  });
 
   if (isError) {
     navigate("/not-found", { replace: true });
@@ -42,6 +61,10 @@ export default function ProductDetail() {
     [setCurrentCommentsPage, setRatingFilter]
   );
 
+  const onPurchaseClick = () => {
+    purchaseProduct(id);
+  };
+
   useEffect(() => {
     setCurrentCommentsPage(1);
     setRatingFilter(null);
@@ -51,6 +74,7 @@ export default function ProductDetail() {
     <ProductDetailTemplate
       product={product}
       isLoading={isLoading}
+      onPurchaseClick={onPurchaseClick}
       onBackClick={onBackClick}
       onOpenChatPopup={onOpenChatPopup}
       commentsData={commentsData}

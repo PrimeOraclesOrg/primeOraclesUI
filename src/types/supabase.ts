@@ -336,6 +336,7 @@ export type Database = {
           card_logo_url: string | null;
           category_l1_id: string;
           category_l2_id: string;
+          community_id: string;
           cover_url: string | null;
           created_at: string;
           created_by: string;
@@ -358,6 +359,7 @@ export type Database = {
           card_logo_url?: string | null;
           category_l1_id: string;
           category_l2_id: string;
+          community_id: string;
           cover_url?: string | null;
           created_at?: string;
           created_by: string;
@@ -380,6 +382,7 @@ export type Database = {
           card_logo_url?: string | null;
           category_l1_id?: string;
           category_l2_id?: string;
+          community_id?: string;
           cover_url?: string | null;
           created_at?: string;
           created_by?: string;
@@ -416,6 +419,13 @@ export type Database = {
             columns: ["category_l2_id"];
             isOneToOne: false;
             referencedRelation: "content_reward_category_l2";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "content_rewards_community_id_fkey";
+            columns: ["community_id"];
+            isOneToOne: false;
+            referencedRelation: "communities";
             referencedColumns: ["id"];
           },
           {

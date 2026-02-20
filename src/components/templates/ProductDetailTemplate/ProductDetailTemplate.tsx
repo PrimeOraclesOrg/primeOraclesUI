@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 interface ProductDetailTemplateProps {
   product: PublicProductPage;
   isLoading: boolean;
+  onPurchaseClick: () => void;
   onBackClick: () => void;
   onOpenChatPopup: () => void;
   commentsData: ProductCommentsResponse;
@@ -25,6 +26,7 @@ interface ProductDetailTemplateProps {
 export function ProductDetailTemplate({
   product,
   isLoading,
+  onPurchaseClick,
   onBackClick,
   onOpenChatPopup,
   commentsData,
@@ -99,6 +101,7 @@ export function ProductDetailTemplate({
                 <Button
                   size="sm"
                   className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full lg:w-auto px-6"
+                  onClick={onPurchaseClick}
                 >
                   Купить за {product.price}$
                 </Button>

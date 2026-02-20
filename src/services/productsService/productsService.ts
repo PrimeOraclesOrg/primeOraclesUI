@@ -370,3 +370,53 @@ export async function deleteProduct(id: string): Promise<void> {
 
   throw new Error("Not implemented - requires Supabase integration");
 }
+
+/**
+ * Purchase a product
+ */
+
+export async function purchaseProduct(productId: string) {
+  try {
+    const { data: product, error: productFetchError } = await fetchProductById(productId);
+    if (productFetchError) throw productFetchError;
+
+    const { data: purchaseId, error: createPurchaseError } = await supabase.rpc(
+      "rpc_create_purchase",
+      {
+        p_product_id: productId,
+      }
+    );
+    if (createPurchaseError) throw createPurchaseError;
+
+    const { error: createPaymentError } = await supabase.functions.invoke("create_payment", {
+      body: {
+        purchase_id: purchaseId,
+        status: "paid",
+        payment_amount_usd: product.price.toFixed(2),
+      },
+    });
+    if (createPaymentError) throw createPaymentError;
+
+    const { error: testPaymentError } = await testPayment(product, purchaseId);
+    if (testPaymentError) throw testPaymentError;
+  } catch (error) {
+    return normalizeError(error);
+  }
+}
+
+async function testPayment(product: PublicProductPage, purchaseId: string) {
+  try {
+    const { error } = await supabase.functions.invoke("payment_webhook", {
+      body: {
+        uuid: crypto.randomUUID(),
+        order_id: purchaseId,
+        status: "paid",
+        payment_amount_usd: product.price.toFixed(2),
+      },
+    });
+
+    if (error) throw error;
+  } catch (error) {
+    return normalizeError(error);
+  }
+}

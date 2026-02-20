@@ -19,6 +19,7 @@ import {
   fetchEditorProductPage,
   updateProductService,
   fetchProducts,
+  purchaseProduct,
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FetchMyProductsParams, SearchProductsParams } from "@/services/productsService/types";
@@ -162,6 +163,13 @@ export const productsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Products"],
     }),
+    purchaseProduct: builder.mutation<void, string>({
+      queryFn: async (productId) => {
+        const { data, error } = await purchaseProduct(productId);
+        if (error) return { error };
+        return { data };
+      },
+    }),
   }),
 });
 
@@ -175,4 +183,5 @@ export const {
   useGetCategoriesForProductsQuery,
   useGetEditorProductPageQuery,
   useUpdateProductMutation,
+  usePurchaseProductMutation,
 } = productsApi;
