@@ -38,7 +38,7 @@ export function MarketplaceTemplate({
         </div>
 
         {/* Product Grid */}
-        {products ? (
+        {products?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {products.map((product, index) => (
               <div
@@ -51,7 +51,11 @@ export function MarketplaceTemplate({
             ))}
           </div>
         ) : (
-          "Загрузка..."
+          <div className="surface-card p-12 text-center">
+            <p className="text-muted-foreground">
+              {isFetching ? "Загрузка..." : "Продукты не найдены"}
+            </p>
+          </div>
         )}
       </div>
 
