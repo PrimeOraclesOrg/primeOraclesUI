@@ -2,9 +2,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ChatPopupContent } from "@/components/organisms";
 import { ProductDetailTemplate } from "@/components/templates";
 import { usePopup } from "@/hooks/usePopup";
-import { useGetProductDetailsQuery, useGetProductCommentsQuery } from "@/store";
+import {
+  useGetProductDetailsQuery,
+  useGetProductCommentsQuery,
+  usePurchaseProductMutation,
+} from "@/store";
 import { useCallback, useEffect, useState } from "react";
-import { usePurchaseProductMutation } from "@/store/productsApi";
 import { useOnRequestResult } from "@/hooks/useOnRequestResult";
 import { useTranslation } from "react-i18next";
 
@@ -17,7 +20,12 @@ export default function ProductDetail() {
   const [ratingFilter, setRatingFilter] = useState<number | null>(null);
   const [
     purchaseProduct,
-    { isError: isPurchaseError, isSuccess: isPurchaseSuccess, error: purchaseError },
+    {
+      isError: isPurchaseError,
+      isSuccess: isPurchaseSuccess,
+      error: purchaseError,
+      isLoading: isPurchaseLoading,
+    },
   ] = usePurchaseProductMutation();
 
   const { data: product, isLoading, isError } = useGetProductDetailsQuery(id);
@@ -34,7 +42,7 @@ export default function ProductDetail() {
     isSuccess: isPurchaseSuccess,
     isError: isPurchaseError,
     errorMessage: {
-      description: purchaseError ? t(`status:${purchaseError.code}`) : "",
+      description: purchaseError ? t(`status:${purchaseError?.code}`) : "",
     },
     successMessage: {
       description: "Покупка успешна!",
@@ -61,9 +69,9 @@ export default function ProductDetail() {
     [setCurrentCommentsPage, setRatingFilter]
   );
 
-  const onPurchaseClick = () => {
-    purchaseProduct(id);
-  };
+  const onPurchaseClick = useCallback(() => {
+    if (id && product) purchaseProduct({ productId: id, productPrice: product.price.toFixed(2) });
+  }, [purchaseProduct, id, product]);
 
   useEffect(() => {
     setCurrentCommentsPage(1);
@@ -74,6 +82,7 @@ export default function ProductDetail() {
     <ProductDetailTemplate
       product={product}
       isLoading={isLoading}
+      isPurchaseLoading={isPurchaseLoading}
       onPurchaseClick={onPurchaseClick}
       onBackClick={onBackClick}
       onOpenChatPopup={onOpenChatPopup}

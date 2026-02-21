@@ -19,6 +19,7 @@ import {
   PublicProductPage,
   Review,
   ServiceError,
+  ServiceResult,
 } from "@/types";
 import { PRODUCT_IMAGES_BUCKET, supabase, normalizeError, normalizeAsyncError } from "@/utils";
 import { formatDate } from "@/utils/formatters";
@@ -375,11 +376,11 @@ export async function deleteProduct(id: string): Promise<void> {
  * Purchase a product
  */
 
-export async function purchaseProduct(productId: string) {
+export async function purchaseProduct(
+  productId: string,
+  productPrice: string
+): Promise<ServiceResult<null>> {
   try {
-    const { data: product, error: productFetchError } = await fetchProductById(productId);
-    if (productFetchError) throw productFetchError;
-
     const { data: purchaseId, error: createPurchaseError } = await supabase.rpc(
       "rpc_create_purchase",
       {
@@ -394,15 +395,15 @@ export async function purchaseProduct(productId: string) {
         body: {
           purchase_id: purchaseId,
           status: "paid",
-          payment_amount_usd: product.price.toFixed(2),
+          payment_amount_usd: productPrice,
         },
       }
     );
     if (createPaymentError) throw createPaymentError;
 
     const { error: testPaymentError } = await testPayment(
-      product,
       purchaseId,
+      productPrice,
       paymentData.provider_payment_id
     );
     if (testPaymentError) throw testPaymentError;
@@ -415,18 +416,14 @@ export async function purchaseProduct(productId: string) {
   }
 }
 
-async function testPayment(
-  product: PublicProductPage,
-  purchaseId: string,
-  providerPaymentId: string
-) {
+async function testPayment(purchaseId: string, productPrice: string, providerPaymentId: string) {
   try {
     const { error } = await supabase.functions.invoke("payment_webhook", {
       body: {
         uuid: providerPaymentId,
         order_id: purchaseId,
         status: "paid",
-        payment_amount_usd: product.price.toFixed(2),
+        payment_amount_usd: productPrice,
       },
     });
 
@@ -436,6 +433,6 @@ async function testPayment(
       error: null,
     };
   } catch (error) {
-    return normalizeError(error);
+    return normalizeAsyncError(error);
   }
 }

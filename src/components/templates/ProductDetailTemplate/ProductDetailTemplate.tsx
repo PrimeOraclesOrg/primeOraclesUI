@@ -21,6 +21,7 @@ interface ProductDetailTemplateProps {
   onRatingFilterChange: (stars?: number) => void;
   isCommentsLoading: boolean;
   isCommentsError: boolean;
+  isPurchaseLoading: boolean;
 }
 
 export function ProductDetailTemplate({
@@ -36,6 +37,7 @@ export function ProductDetailTemplate({
   onRatingFilterChange,
   isCommentsLoading,
   isCommentsError,
+  isPurchaseLoading,
 }: ProductDetailTemplateProps) {
   const { t } = useTranslation();
 
@@ -101,9 +103,10 @@ export function ProductDetailTemplate({
                 <Button
                   size="sm"
                   className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity w-full lg:w-auto px-6"
+                  disabled={isPurchaseLoading}
                   onClick={onPurchaseClick}
                 >
-                  Купить за {product.price}$
+                  {isPurchaseLoading ? "Покупка в процессе..." : `Купить за ${product.price}$`}
                 </Button>
                 <Button
                   variant="outline"

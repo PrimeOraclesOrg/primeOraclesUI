@@ -163,9 +163,9 @@ export const productsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Products"],
     }),
-    purchaseProduct: builder.mutation<void, string>({
-      queryFn: async (productId) => {
-        const { error } = await purchaseProduct(productId);
+    purchaseProduct: builder.mutation<void, { productId: string; productPrice: string }>({
+      queryFn: async ({ productId, productPrice }) => {
+        const { error } = await purchaseProduct(productId, productPrice);
         if (error) return { error };
         return { data: null };
       },

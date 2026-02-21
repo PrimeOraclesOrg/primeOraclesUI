@@ -8,6 +8,12 @@ export {
   useGetHomeProductsQuery,
   useGetProductDetailsQuery,
   useGetProductCommentsQuery,
+  usePurchaseProductMutation,
+  useGetCategoriesForProductsQuery,
+  useGetEditorProductPageQuery,
+  useCreateProductMutation,
+  useGetMyProductsQuery,
+  useUpdateProductMutation,
 } from "./productsApi";
 export { rewardsApi, useGetRewardsQuery, useGetHomeRewardsQuery } from "./rewardsApi";
 export { learningApi, useGetLearningItemsQuery, useGetLessonDetailsQuery } from "./learningApi";
