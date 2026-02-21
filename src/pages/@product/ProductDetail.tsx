@@ -39,7 +39,6 @@ export default function ProductDetail() {
     successMessage: {
       description: "Покупка успешна!",
     },
-    onError: () => console.log("purchaseError:", purchaseError),
   });
 
   if (isError) {

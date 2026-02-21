@@ -1,4 +1,9 @@
-import { AuthError, FunctionsFetchError, PostgrestError } from "@supabase/supabase-js";
+import {
+  AuthError,
+  FunctionsFetchError,
+  FunctionsHttpError,
+  PostgrestError,
+} from "@supabase/supabase-js";
 import { ServiceResult } from "@/types";
 
 export const normalizeError = (error: AuthError | PostgrestError): ServiceResult<null> => {
@@ -22,9 +27,9 @@ export const normalizeError = (error: AuthError | PostgrestError): ServiceResult
 };
 
 export const normalizeAsyncError = async (
-  error: FunctionsFetchError | AuthError | PostgrestError
+  error: FunctionsFetchError | FunctionsHttpError | AuthError | PostgrestError
 ): Promise<ServiceResult<null>> => {
-  if (error instanceof FunctionsFetchError) {
+  if (error instanceof FunctionsFetchError || error instanceof FunctionsHttpError) {
     return {
       data: null,
       error: {

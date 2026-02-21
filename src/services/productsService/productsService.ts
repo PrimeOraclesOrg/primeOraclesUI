@@ -20,7 +20,7 @@ import {
   Review,
   ServiceError,
 } from "@/types";
-import { PRODUCT_IMAGES_BUCKET, supabase, normalizeError } from "@/utils";
+import { PRODUCT_IMAGES_BUCKET, supabase, normalizeError, normalizeAsyncError } from "@/utils";
 import { formatDate } from "@/utils/formatters";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { buildCoverUrl } from "@/utils/base64ToBlob";
@@ -411,8 +411,7 @@ export async function purchaseProduct(productId: string) {
       error: null,
     };
   } catch (error) {
-    if (error) console.log(error);
-    return normalizeError(error);
+    return normalizeAsyncError(error);
   }
 }
 
@@ -422,7 +421,6 @@ async function testPayment(
   providerPaymentId: string
 ) {
   try {
-    console.log("providerPaymentId:", providerPaymentId);
     const { error } = await supabase.functions.invoke("payment_webhook", {
       body: {
         uuid: providerPaymentId,

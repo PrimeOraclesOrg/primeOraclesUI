@@ -69,5 +69,7 @@
   "invalid_faq_question": "Вопрос FAQ введен не верно.",
   "invalid_faq_answer": "Ответ FAQ введен не верно.",
   "invalid_advantage_position": "Позиция преимущества введена не верно.",
-  "invalid_advantage_description": "Описание преимущества введено не верно."
+  "invalid_advantage_description": "Описание преимущества введено не верно.",
+  "self_purchase_not_allowed": "Нельзя купить свой продукт",
+  "purchase_not_payable": "Оплата невозможна"
 }
