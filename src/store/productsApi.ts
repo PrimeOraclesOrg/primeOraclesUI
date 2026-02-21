@@ -165,9 +165,9 @@ export const productsApi = baseApi.injectEndpoints({
     }),
     purchaseProduct: builder.mutation<void, string>({
       queryFn: async (productId) => {
-        const { data, error } = await purchaseProduct(productId);
+        const { error } = await purchaseProduct(productId);
         if (error) return { error };
-        return { data };
+        return { data: null };
       },
     }),
   }),

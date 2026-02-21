@@ -388,27 +388,44 @@ export async function purchaseProduct(productId: string) {
     );
     if (createPurchaseError) throw createPurchaseError;
 
-    const { error: createPaymentError } = await supabase.functions.invoke("create_payment", {
-      body: {
-        purchase_id: purchaseId,
-        status: "paid",
-        payment_amount_usd: product.price.toFixed(2),
-      },
-    });
+    const { data: paymentData, error: createPaymentError } = await supabase.functions.invoke(
+      "create_payment",
+      {
+        body: {
+          purchase_id: purchaseId,
+          status: "paid",
+          payment_amount_usd: product.price.toFixed(2),
+        },
+      }
+    );
     if (createPaymentError) throw createPaymentError;
 
-    const { error: testPaymentError } = await testPayment(product, purchaseId);
+    const { error: testPaymentError } = await testPayment(
+      product,
+      purchaseId,
+      paymentData.provider_payment_id
+    );
     if (testPaymentError) throw testPaymentError;
+    return {
+      data: null,
+      error: null,
+    };
   } catch (error) {
+    if (error) console.log(error);
     return normalizeError(error);
   }
 }
 
-async function testPayment(product: PublicProductPage, purchaseId: string) {
+async function testPayment(
+  product: PublicProductPage,
+  purchaseId: string,
+  providerPaymentId: string
+) {
   try {
+    console.log("providerPaymentId:", providerPaymentId);
     const { error } = await supabase.functions.invoke("payment_webhook", {
       body: {
-        uuid: crypto.randomUUID(),
+        uuid: providerPaymentId,
         order_id: purchaseId,
         status: "paid",
         payment_amount_usd: product.price.toFixed(2),
@@ -416,6 +433,10 @@ async function testPayment(product: PublicProductPage, purchaseId: string) {
     });
 
     if (error) throw error;
+    return {
+      data: null,
+      error: null,
+    };
   } catch (error) {
     return normalizeError(error);
   }
