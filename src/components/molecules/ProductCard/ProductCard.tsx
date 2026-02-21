@@ -9,8 +9,8 @@ interface ProductCardProps {
 
 export function ProductCard({ product, onClick }: ProductCardProps) {
   return (
-    <div onClick={onClick} className="surface-card overflow-hidden card-hover cursor-pointer group">
-      <div className="relative aspect-video overflow-hidden">
+    <div onClick={onClick} className="overflow-hidden cursor-pointer group h-full">
+      <div className="relative aspect-video overflow-hidden rounded-sm">
         <img
           src={product.cover_url}
           alt={product.title}
@@ -25,16 +25,16 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="py-2">
         <div className="flex items-start gap-3">
           {"avatar_path" in product.creator && (
-            <UserAvatar avatarPath={product.creator.avatar_path} />
+            <UserAvatar size="8" avatarPath={product.creator.avatar_path} />
           )}
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground line-clamp-2 leading-tight mb-1">
+            <h3 className="font-medium font-Roboto text-balance text-foreground line-clamp-3 leading-tight mb-1">
               {product.title}
             </h3>
-            <p className="text-sm text-muted-foreground truncate mb-2">{product.creator.name}</p>
+            <p className="text-sm text-muted-foreground truncate">{product.creator.name}</p>
             <RatingStars rating={product.rating} reviewCount={product.comments_count} size="sm" />
           </div>
         </div>

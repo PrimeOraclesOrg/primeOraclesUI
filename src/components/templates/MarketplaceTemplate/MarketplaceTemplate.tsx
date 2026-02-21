@@ -60,6 +60,7 @@ export function MarketplaceTemplate({
             <Button variant="outline">Цифровые продукты</Button>
             <Button variant="outline">Другое</Button>
           </div>
+          <h4 className="mt-2 font-Roboto font-bold text-sm">Выберите тип</h4>
           <div className="flex justify-between items-center">
             <div>
               <Button className="bg-transparent hover:bg-transparent text-accent rounded-none border-b-2 border-accent">
@@ -100,7 +101,7 @@ export function MarketplaceTemplate({
 
         {/* Product Grid */}
         {products?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8 items-stretch">
             {products.map((product, index) => (
               <div
                 key={`${product.id}-${index}`}
