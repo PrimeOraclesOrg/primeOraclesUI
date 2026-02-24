@@ -164,7 +164,7 @@ export const useCreateProduct = () => {
 
   return {
     createProductForm,
-    categories,
+    categories: categories?.filter((category) => category.code !== "all"),
     isCategoriesLoading,
     profile,
     onSubmit,

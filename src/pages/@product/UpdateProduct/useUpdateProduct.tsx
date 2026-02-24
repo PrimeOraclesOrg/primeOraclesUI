@@ -211,7 +211,7 @@ export const useUpdateProduct = () => {
     updateProductForm,
     isProductLoading,
     profile,
-    categories,
+    categories: categories?.filter((category) => category.code !== "all"),
     onSubmit,
     handleBackClick,
     handleMediaUpload,
