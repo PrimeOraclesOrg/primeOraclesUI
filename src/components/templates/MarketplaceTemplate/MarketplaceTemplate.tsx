@@ -39,16 +39,16 @@ export function MarketplaceTemplate({
   const { t } = useTranslation();
 
   const setCategory = (categoryId: string) => {
-    searchForm.setValue("category_l1_code", categoryId || "");
+    searchForm.setValue("category_l1", categoryId || "");
     setSubCategory("");
   };
 
   const setSubCategory = (typeId: string) => {
-    searchForm.setValue("category_l2_code", typeId || "");
+    searchForm.setValue("category_l2", typeId || "");
   };
 
-  const currentCategory = searchForm.watch("category_l1_code");
-  const currentSubCategory = searchForm.watch("category_l2_code");
+  const currentCategory = searchForm.watch("category_l1");
+  const currentSubCategory = searchForm.watch("category_l2");
 
   return (
     <MainLayout>
@@ -88,7 +88,7 @@ export function MarketplaceTemplate({
           )}
         </div>
         <div className="flex flex-col mb-4">
-          <div className="flex-1 mb-8">
+          <div className="w-full mb-8">
             {currentCategory && (
               <>
                 <h4 className="my-2 font-Roboto font-bold text-sm">Выберите тип</h4>
@@ -124,22 +124,25 @@ export function MarketplaceTemplate({
               </>
             )}
           </div>
-          <div className="flex items-center gap-2 self-end">
-            <span className="text-sm text-muted-foreground">Сортировка</span>
-            <Select defaultValue="popularity">
-              <SelectTrigger className="w-full max-w-48">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="popularity">По попоулярности</SelectItem>
-                  <SelectItem value="newest">Новые сверху</SelectItem>
-                  <SelectItem value="oldest">Старые сверху</SelectItem>
-                  <SelectItem value="lowest_price">Дешевые сверху</SelectItem>
-                  <SelectItem value="highest_price">Дорогие сверху</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+          <div className="flex justify-between">
+            <h3>Доступные продукты</h3>
+            <div className="flex items-center gap-2 self-end">
+              <span className="text-sm text-muted-foreground">Сортировка</span>
+              <Select defaultValue="popularity">
+                <SelectTrigger className="w-full max-w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="popularity">По попоулярности</SelectItem>
+                    <SelectItem value="newest">Новые сверху</SelectItem>
+                    <SelectItem value="oldest">Старые сверху</SelectItem>
+                    <SelectItem value="lowest_price">Дешевые сверху</SelectItem>
+                    <SelectItem value="highest_price">Дорогие сверху</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 

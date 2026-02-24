@@ -11,23 +11,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export default function Marketplace() {
   const navigate = useNavigate();
   const [cursor, setCursor] = useState<SearchProductsParams["p_cursor"]>(null);
+  const { data: categories } = useGetCategoriesForProductsQuery();
 
   const PAGE_LIMIT = 20;
-  const { data: products, isFetching } = useGetProductsQuery({
-    p_cursor: cursor,
-    p_limit: PAGE_LIMIT,
-  });
-  const { data: categories } = useGetCategoriesForProductsQuery();
 
   const marketSearchForm = useForm<MarketSearchFormData>({
     resolver: zodResolver(marketSearchSchema),
     defaultValues: {
       searchRequest: "",
       sort_by: "",
-      category_l1_code: "all",
-      category_l2_code: "",
+      category_l1: "all",
+      category_l2: "",
     },
     mode: "onBlur",
+  });
+
+  const formData = marketSearchForm.watch();
+
+  const { data: products, isFetching } = useGetProductsQuery({
+    p_category_l1: formData.category_l1,
+    p_category_l2: formData.category_l2,
+    p_cursor: cursor,
+    p_limit: PAGE_LIMIT,
   });
 
   const loadMoreButtonShown = products && products[products.length - 1]?.has_more;

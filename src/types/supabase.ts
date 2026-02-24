@@ -16,6 +16,7 @@ export type Database = {
           is_closed: boolean;
           purchase_id: string;
           seller_id: string;
+          updated_at: string;
         };
         Insert: {
           buyer_id: string;
@@ -24,6 +25,7 @@ export type Database = {
           is_closed?: boolean;
           purchase_id: string;
           seller_id: string;
+          updated_at?: string;
         };
         Update: {
           buyer_id?: string;
@@ -32,6 +34,7 @@ export type Database = {
           is_closed?: boolean;
           purchase_id?: string;
           seller_id?: string;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -150,12 +153,59 @@ export type Database = {
             referencedRelation: "chats";
             referencedColumns: ["id"];
           },
+        ];
+      };
+      chats_read_cursors: {
+        Row: {
+          chat_id: string;
+          last_read_at: string;
+          user_id: string;
+        };
+        Insert: {
+          chat_id: string;
+          last_read_at?: string;
+          user_id: string;
+        };
+        Update: {
+          chat_id?: string;
+          last_read_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
           {
-            foreignKeyName: "chats_messages_chat_id_fkey";
+            foreignKeyName: "chats_read_cursors_chat_id_fkey";
             columns: ["chat_id"];
             isOneToOne: false;
-            referencedRelation: "user_chats_view";
+            referencedRelation: "buyer_purchases_view";
             referencedColumns: ["chat_id"];
+          },
+          {
+            foreignKeyName: "chats_read_cursors_chat_id_fkey";
+            columns: ["chat_id"];
+            isOneToOne: false;
+            referencedRelation: "chats";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chats_read_cursors_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "chats_read_cursors_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chats_read_cursors_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "public_profiles_full_view";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -336,6 +386,7 @@ export type Database = {
           card_logo_url: string | null;
           category_l1_id: string;
           category_l2_id: string;
+          community_id: string;
           cover_url: string | null;
           created_at: string;
           created_by: string;
@@ -358,6 +409,7 @@ export type Database = {
           card_logo_url?: string | null;
           category_l1_id: string;
           category_l2_id: string;
+          community_id: string;
           cover_url?: string | null;
           created_at?: string;
           created_by: string;
@@ -380,6 +432,7 @@ export type Database = {
           card_logo_url?: string | null;
           category_l1_id?: string;
           category_l2_id?: string;
+          community_id?: string;
           cover_url?: string | null;
           created_at?: string;
           created_by?: string;
@@ -416,6 +469,13 @@ export type Database = {
             columns: ["category_l2_id"];
             isOneToOne: false;
             referencedRelation: "content_reward_category_l2";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "content_rewards_community_id_fkey";
+            columns: ["community_id"];
+            isOneToOne: false;
+            referencedRelation: "communities";
             referencedColumns: ["id"];
           },
           {
@@ -574,6 +634,7 @@ export type Database = {
           id: string;
           reference_id: string;
           reference_type: Database["public"]["Enums"]["ledger_reference_type"];
+          transaction_type: Database["public"]["Enums"]["ledger_transaction_type"];
         };
         Insert: {
           created_at?: string;
@@ -581,6 +642,7 @@ export type Database = {
           id?: string;
           reference_id: string;
           reference_type: Database["public"]["Enums"]["ledger_reference_type"];
+          transaction_type?: Database["public"]["Enums"]["ledger_transaction_type"];
         };
         Update: {
           created_at?: string;
@@ -588,8 +650,64 @@ export type Database = {
           id?: string;
           reference_id?: string;
           reference_type?: Database["public"]["Enums"]["ledger_reference_type"];
+          transaction_type?: Database["public"]["Enums"]["ledger_transaction_type"];
         };
         Relationships: [];
+      };
+      notifications: {
+        Row: {
+          body: string;
+          created_at: string;
+          id: string;
+          is_read: boolean;
+          metadata: Json | null;
+          title: string;
+          type: Database["public"]["Enums"]["notification_type"];
+          user_id: string;
+        };
+        Insert: {
+          body: string;
+          created_at?: string;
+          id?: string;
+          is_read?: boolean;
+          metadata?: Json | null;
+          title: string;
+          type: Database["public"]["Enums"]["notification_type"];
+          user_id: string;
+        };
+        Update: {
+          body?: string;
+          created_at?: string;
+          id?: string;
+          is_read?: boolean;
+          metadata?: Json | null;
+          title?: string;
+          type?: Database["public"]["Enums"]["notification_type"];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "buyer_purchases_view";
+            referencedColumns: ["seller_id"];
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "public_profiles_full_view";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       payment_intents: {
         Row: {
@@ -785,13 +903,6 @@ export type Database = {
             foreignKeyName: "product_category_l2_l1_id_fkey";
             columns: ["l1_id"];
             isOneToOne: false;
-            referencedRelation: "product_categories_view";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "product_category_l2_l1_id_fkey";
-            columns: ["l1_id"];
-            isOneToOne: false;
             referencedRelation: "product_category_l1";
             referencedColumns: ["id"];
           },
@@ -862,13 +973,6 @@ export type Database = {
           updated_at?: string;
         };
         Relationships: [
-          {
-            foreignKeyName: "products_category_l1_id_fkey";
-            columns: ["category_l1_id"];
-            isOneToOne: false;
-            referencedRelation: "product_categories_view";
-            referencedColumns: ["id"];
-          },
           {
             foreignKeyName: "products_category_l1_id_fkey";
             columns: ["category_l1_id"];
@@ -947,13 +1051,6 @@ export type Database = {
             referencedRelation: "products_search_view";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "products_advantages_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "user_transactions_view";
-            referencedColumns: ["product_id"];
-          },
         ];
       };
       products_comments: {
@@ -1024,13 +1121,6 @@ export type Database = {
             referencedRelation: "products_search_view";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "products_comments_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "user_transactions_view";
-            referencedColumns: ["product_id"];
-          },
         ];
       };
       products_faq: {
@@ -1077,13 +1167,6 @@ export type Database = {
             referencedRelation: "products_search_view";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "products_faq_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "user_transactions_view";
-            referencedColumns: ["product_id"];
-          },
         ];
       };
       products_resources: {
@@ -1129,13 +1212,6 @@ export type Database = {
             isOneToOne: true;
             referencedRelation: "products_search_view";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "products_resources_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: true;
-            referencedRelation: "user_transactions_view";
-            referencedColumns: ["product_id"];
           },
         ];
       };
@@ -1413,13 +1489,6 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "purchases_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "user_transactions_view";
-            referencedColumns: ["product_id"];
-          },
-          {
             foreignKeyName: "purchases_seller_id_fkey";
             columns: ["seller_id"];
             isOneToOne: false;
@@ -1540,13 +1609,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "user_ledger_entries";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "user_balances_last_entry_id_fkey";
-            columns: ["last_entry_id"];
-            isOneToOne: false;
-            referencedRelation: "user_transactions_view";
-            referencedColumns: ["transaction_id"];
           },
           {
             foreignKeyName: "user_balances_user_id_fkey";
@@ -1689,18 +1751,6 @@ export type Database = {
           sort_order: number | null;
           subcategories: Json | null;
         };
-        Insert: {
-          code?: string | null;
-          id?: string | null;
-          sort_order?: number | null;
-          subcategories?: never;
-        };
-        Update: {
-          code?: string | null;
-          id?: string | null;
-          sort_order?: number | null;
-          subcategories?: never;
-        };
         Relationships: [];
       };
       products_search_view: {
@@ -1731,28 +1781,15 @@ export type Database = {
         };
         Relationships: [];
       };
-      user_chats_view: {
-        Row: {
-          chat_created_at: string | null;
-          chat_id: string | null;
-          chat_is_closed: boolean | null;
-          product_category: Json | null;
-          product_cover_url: string | null;
-          product_title: string | null;
-          purchase_confirmation_deadline: string | null;
-        };
-        Relationships: [];
-      };
       user_transactions_view: {
         Row: {
-          accounting_action: Database["public"]["Enums"]["accounting_action"] | null;
           amount_usd: number | null;
-          direction: Database["public"]["Enums"]["ledger_direction"] | null;
-          event_type: Database["public"]["Enums"]["ledger_event_type"] | null;
+          event_type: string | null;
           product_cover_url: string | null;
           product_id: string | null;
           product_title: string | null;
           reference_id: string | null;
+          source: string | null;
           transaction_date: string | null;
           transaction_id: string | null;
         };
@@ -2064,6 +2101,46 @@ export type Database = {
         Returns: boolean;
       };
       rpc_create_purchase: { Args: { p_product_id: string }; Returns: string };
+      rpc_get_chat_history: { Args: { p_chat_id: string }; Returns: Json };
+      rpc_get_notifications: {
+        Args: { p_cursor?: Json; p_limit?: number };
+        Returns: {
+          body: string;
+          created_at: string;
+          has_more: boolean;
+          id: string;
+          is_read: boolean;
+          metadata: Json;
+          next_cursor: Json;
+          title: string;
+          type: Database["public"]["Enums"]["notification_type"];
+        }[];
+      };
+      rpc_get_product_chat: { Args: { p_product_id: string }; Returns: string };
+      rpc_get_user_chats: {
+        Args: {
+          p_cursor?: Json;
+          p_filter?: string;
+          p_limit?: number;
+          p_search?: string;
+        };
+        Returns: {
+          chat_created_at: string;
+          chat_id: string;
+          chat_is_closed: boolean;
+          chat_updated_at: string;
+          counterparty_username: string;
+          has_more: boolean;
+          last_message_at: string;
+          last_message_text: string;
+          next_cursor: Json;
+          product_cover_url: string;
+          product_title: string;
+          purchase_confirmation_deadline: string;
+          unread_count: number;
+        }[];
+      };
+      rpc_mark_chat_read: { Args: { p_chat_id: string }; Returns: undefined };
       rpc_payment_paid: {
         Args: { p_payment_amount_usd: number; p_provider_payment_id: string };
         Returns: string;
@@ -2104,6 +2181,8 @@ export type Database = {
         | "withdrawal"
         | "fee_adjustment"
         | "manual_correction";
+      ledger_transaction_type: "internal" | "boundary_in" | "boundary_out";
+      notification_type: "purchase_paid" | "product_sold" | "chat_message_received";
       owner_product_sort_option:
         | "title_asc"
         | "title_desc"
@@ -2313,6 +2392,8 @@ export const Constants = {
         "fee_adjustment",
         "manual_correction",
       ],
+      ledger_transaction_type: ["internal", "boundary_in", "boundary_out"],
+      notification_type: ["purchase_paid", "product_sold", "chat_message_received"],
       owner_product_sort_option: [
         "title_asc",
         "title_desc",
