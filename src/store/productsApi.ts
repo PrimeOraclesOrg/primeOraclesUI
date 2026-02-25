@@ -73,8 +73,8 @@ export const productsApi = baseApi.injectEndpoints({
           return `${endpointName}-default`;
         }
 
-        const { p_sort = "created_at_desc" } = queryArgs;
-        return `${endpointName}-${p_sort}`;
+        const { p_sort, p_query, p_category_l1, p_category_l2 } = queryArgs;
+        return `${endpointName}-${p_sort}-${p_query}-${p_category_l1}-${p_category_l2}`;
       },
 
       merge: (currentCache, newItems, { arg }) => {
