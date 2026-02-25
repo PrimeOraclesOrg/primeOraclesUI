@@ -24,6 +24,7 @@ import { useGetAuthUserQuery } from "@/store/authApi";
 import { useForceProfileSetup } from "@/hooks/useForceProfileSetup";
 import { useAuthListener } from "@/hooks/useAuthListener";
 import UpdateProduct from "@/pages/UpdateProduct/UpdateProduct";
+import { Messages } from "@/pages/Messages/Messages";
 
 export function AppRoutes() {
   useAuthListener();
@@ -121,7 +122,7 @@ export function AppRoutes() {
           path="/messages"
           element={
             <ProtectedRoute>
-              <Marketplace />
+              <Messages />
             </ProtectedRoute>
           }
         />
