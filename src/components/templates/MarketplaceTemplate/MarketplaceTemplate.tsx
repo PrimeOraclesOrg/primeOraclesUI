@@ -51,7 +51,7 @@ export function MarketplaceTemplate({
   const { t } = useTranslation();
 
   const setCategory = (categoryId: string) => {
-    searchForm.setValue("category_l1", categoryId || "");
+    searchForm.setValue("category_l1", categoryId || categories[0].code);
     setSubCategory("");
   };
 
@@ -76,7 +76,7 @@ export function MarketplaceTemplate({
   }, [categories, currentCategory]);
 
   const currentCategoryLabel = useMemo(() => {
-    if (!currentCategory || currentCategory === "all") return "Все категории";
+    if (currentCategory === "all") return "Все категории";
     return t(`product:category.${currentCategory}`);
   }, [currentCategory, t]);
 
@@ -114,10 +114,10 @@ export function MarketplaceTemplate({
     scrollRef.current?.scrollBy({ left: dir * 200, behavior: "smooth" });
   };
 
-  const hasActiveFilters = !!currentCategory || !!currentSubCategory;
+  const hasActiveFilters = currentCategory !== categories?.[0].code || !!currentSubCategory;
 
   const resetFilters = () => {
-    setCategory("");
+    setCategory(categories?.[0].code);
     setSubCategory("");
   };
 
@@ -189,7 +189,7 @@ export function MarketplaceTemplate({
                 key={category.code}
                 onClick={() => setCategory(category.code)}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                  "px-4 py-2 rounded-md text-sm font-medium transition-all",
                   currentCategory === category.code
                     ? "gold-gradient text-primary-foreground shadow-md shadow-primary/20 ring-2 ring-primary/30"
                     : "bg-secondary text-secondary-foreground hover:bg-muted"
@@ -217,7 +217,7 @@ export function MarketplaceTemplate({
             <p className="text-xs text-muted-foreground mb-2">
               {currentCategoryLabel}
               <span className="mx-1">›</span>
-              {currentSubCategoryLabel}
+              <span className="text-accent">{currentSubCategoryLabel}</span>
             </p>
 
             {/* Scrollable tabs */}

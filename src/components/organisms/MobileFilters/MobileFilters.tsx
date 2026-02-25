@@ -33,10 +33,7 @@ export function MobileFilters({
   return (
     <div className="fixed inset-0 z-50 sm:hidden">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-background/60 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Bottom Sheet */}
       <div className="absolute bottom-0 left-0 right-0 max-h-[90dvh] bg-card rounded-t-2xl border-t border-border flex flex-col animate-slide-up">
@@ -57,7 +54,7 @@ export function MobileFilters({
         </div>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto px-4 pb-4">
+        <div className="flex-1 overflow-y-auto px-4 pb-4 scrollbar-hide">
           {/* Categories */}
           <div className="mb-6">
             <p className="text-xs font-semibold text-muted-foreground tracking-wider mb-3">
@@ -84,18 +81,14 @@ export function MobileFilters({
           {/* Subcategories */}
           {currentCategory && subcategories.length > 0 && (
             <div className="mb-6">
-              <p className="text-xs font-semibold text-muted-foreground tracking-wider mb-3">
-                ТИП
-              </p>
+              <p className="text-xs font-semibold text-muted-foreground tracking-wider mb-3">ТИП</p>
               <div className="rounded-xl bg-secondary/50 overflow-hidden">
                 {/* "All" option */}
                 <button
                   onClick={() => onSubCategoryChange("")}
                   className={cn(
                     "w-full flex items-center justify-between px-4 py-3 text-sm border-b border-border/50 transition-colors",
-                    !currentSubCategory
-                      ? "text-accent font-medium"
-                      : "text-foreground"
+                    !currentSubCategory ? "text-accent font-medium" : "text-foreground"
                   )}
                 >
                   <span>Все</span>
