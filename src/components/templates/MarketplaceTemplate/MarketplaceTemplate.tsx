@@ -291,6 +291,11 @@ export function MarketplaceTemplate({
           </div>
         </div>
 
+        {/* Banner */}
+        <div className="h-48 bg-[#000] rounded-md mb-6 relative">
+          <Button className="absolute top-4 right-4">Нажми сюда</Button>
+        </div>
+
         {/* 6. Product grid */}
         {products?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
