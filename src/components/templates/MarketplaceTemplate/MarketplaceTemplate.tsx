@@ -14,27 +14,36 @@ import { useTranslation } from "react-i18next";
 import { UseFormReturn } from "react-hook-form";
 import { MarketSearchFormData } from "@/utils/validators/marketSearch";
 import { cn } from "@/utils";
+import { marketSortOptions } from "@/data/market";
 
 interface MarketplaceTemplateProps {
   products: PublicProductCard[];
-  loadMoreButtonShown: boolean;
+  isLoadMoreButtonShown: boolean;
+  isCategorySelectPopupShown: boolean;
   isFetching: boolean;
   categories: ProductCategory[];
   searchForm: UseFormReturn<MarketSearchFormData>;
+  selectedCategoriesCount: number;
   onProductClick: (productId: string) => void;
   onCreateClick: () => void;
   onLoadMore: () => void;
+  onCategorySelectOpen: () => void;
+  onCategorySelectClose: () => void;
 }
 
 export function MarketplaceTemplate({
   products,
-  loadMoreButtonShown,
+  isLoadMoreButtonShown,
+  isCategorySelectPopupShown,
   isFetching,
   categories,
   searchForm,
+  selectedCategoriesCount,
   onLoadMore,
   onProductClick,
   onCreateClick,
+  onCategorySelectOpen,
+  onCategorySelectClose,
 }: MarketplaceTemplateProps) {
   const { t } = useTranslation();
 
@@ -54,95 +63,122 @@ export function MarketplaceTemplate({
     <MainLayout>
       <div className="p-6 lg:p-8">
         {/* Banner */}
-        <div className="h-48 bg-[#000] rounded-md mb-6"></div>
+        <div className="h-48 bg-[#000] rounded-md mb-6 relative">
+          <Button className="absolute top-4 right-4">Нажми сюда</Button>
+        </div>
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div className="flex-1">
-            <SearchBar value={"" /* searchQuery */} onChange={/* onSearchChange */ () => {}} />
+            <SearchBar {...searchForm.register("searchRequest")} />
           </div>
           <Button
             onClick={onCreateClick}
-            className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity px-4 md:px-6 whitespace-nowrap"
+            className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity px-4 md:px-6 whitespace-nowrap hidden sm:inline"
           >
-            <span className="hidden sm:inline">Создать компанию</span>
-            <span className="sm:hidden">Создать</span>
+            <span>Создать компанию</span>
           </Button>
         </div>
 
         {/* Filter and sort options */}
-        <div>
-          <h3 className="mb-2 font-Roboto font-bold">Выберите категорию</h3>
-          {categories && (
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,150px)] gap-2">
-              {categories.map((category) => (
-                <Button
-                  key={category.code}
-                  variant={currentCategory === category.code ? "default" : "outline"}
-                  onClick={() => setCategory(category.code)}
-                >
-                  {t(`product:category.${category.code}`)}
-                </Button>
-              ))}
-            </div>
+        <div
+          className={cn(
+            "top-0 left-0 w-full h-full max-sm:pt-24 pb-8 px-4 bg-background sm:bg-transparent z-10 sm:relative max-sm:overflow-auto",
+            isCategorySelectPopupShown
+              ? "max-sm:[html:has(&)_body]:overflow-hidden max-sm:fixed"
+              : "max-sm:hidden"
           )}
-        </div>
-        <div className="flex flex-col mb-4">
-          <div className="w-full mb-8">
-            {currentCategory && (
-              <>
-                <h4 className="my-2 font-Roboto font-bold text-sm">Выберите тип</h4>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fit,120px)]">
-                  <Button
-                    className={cn(
-                      "bg-transparent hover:bg-transparent rounded-none border-b-2",
-                      currentSubCategory
-                        ? "text-foreground hover:text-accent border-border hover:border-accent"
-                        : "border-accent text-accent"
-                    )}
-                    onClick={() => setSubCategory("")}
-                  >
-                    Все
-                  </Button>
-                  {categories
-                    ?.find((category) => category.code === currentCategory)
-                    .subcategories.map((subCategory) => (
-                      <Button
-                        key={subCategory.code}
-                        className={cn(
-                          "bg-transparent hover:bg-transparent rounded-none border-b-2 flex-1",
-                          currentSubCategory === subCategory.code
-                            ? "border-accent text-accent"
-                            : "text-foreground hover:text-accent border-border hover:border-accent"
-                        )}
-                        onClick={() => setSubCategory(subCategory.code)}
-                      >
-                        {t(`product:subCategory.${subCategory.code}`)}
-                      </Button>
-                    ))}
+        >
+          <Button onClick={onCategorySelectClose} className="sm:hidden mb-4">
+            Назад
+          </Button>
+          <div className="flex flex-col sm:block">
+            <div className="max-sm:mb-8">
+              <h3 className="mb-2 font-Roboto font-bold max-sm:text-center max-sm:text-lg max-sm:mb-4">
+                Выберите категорию
+              </h3>
+              {categories && (
+                <div className="grid min-[460px]:grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,150px)] gap-2">
+                  {categories.map((category) => (
+                    <Button
+                      key={category.code}
+                      variant={currentCategory === category.code ? "default" : "outline"}
+                      onClick={() => setCategory(category.code)}
+                    >
+                      {t(`product:category.${category.code}`)}
+                    </Button>
+                  ))}
                 </div>
-              </>
-            )}
-          </div>
-          <div className="flex justify-between">
-            <h3>Доступные продукты</h3>
-            <div className="flex items-center gap-2 self-end">
-              <span className="text-sm text-muted-foreground">Сортировка</span>
-              <Select defaultValue="popularity">
-                <SelectTrigger className="w-full max-w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="popularity">По попоулярности</SelectItem>
-                    <SelectItem value="newest">Новые сверху</SelectItem>
-                    <SelectItem value="oldest">Старые сверху</SelectItem>
-                    <SelectItem value="lowest_price">Дешевые сверху</SelectItem>
-                    <SelectItem value="highest_price">Дорогие сверху</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              )}
             </div>
+            <div className="flex flex-col mb-4 max-sm:mb-8">
+              <div className="w-full">
+                {currentCategory && (
+                  <>
+                    <h4 className="my-2 font-Roboto font-bold text-sm max-sm:text-center max-sm:text-lg max-sm:mb-4">
+                      Выберите тип
+                    </h4>
+                    <div className="grid min-[460px]:grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fit,120px)]">
+                      <Button
+                        className={cn(
+                          "bg-transparent hover:bg-transparent rounded-none border-b-2",
+                          currentSubCategory
+                            ? "text-foreground hover:text-accent border-border hover:border-accent"
+                            : "border-accent text-accent"
+                        )}
+                        onClick={() => setSubCategory("")}
+                      >
+                        Все
+                      </Button>
+                      {categories
+                        ?.find((category) => category.code === currentCategory)
+                        .subcategories.map((subCategory) => (
+                          <Button
+                            key={subCategory.code}
+                            className={cn(
+                              "bg-transparent hover:bg-transparent rounded-none border-b-2 flex-1",
+                              currentSubCategory === subCategory.code
+                                ? "border-accent text-accent"
+                                : "text-foreground hover:text-accent border-border hover:border-accent"
+                            )}
+                            onClick={() => setSubCategory(subCategory.code)}
+                          >
+                            {t(`product:subCategory.${subCategory.code}`)}
+                          </Button>
+                        ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+            <Button onClick={onCategorySelectClose} className="sm:hidden">
+              Применить
+            </Button>
+          </div>
+        </div>
+
+        <Button onClick={onCategorySelectOpen} className="mb-2 sm:hidden">
+          Выбор категории ({selectedCategoriesCount})
+        </Button>
+
+        <div className="flex justify-between mb-4">
+          <h3 className="hidden sm:block">Доступные продукты</h3>
+          <div className="flex items-center gap-2 self-end">
+            <span className="text-sm text-muted-foreground">Сортировка</span>
+            <Select defaultValue={marketSortOptions[0].id}>
+              <SelectTrigger className="w-full max-w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {marketSortOptions.map((sortOption) => (
+                    <SelectItem key={sortOption.id} value={sortOption.id}>
+                      {sortOption.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -168,7 +204,7 @@ export function MarketplaceTemplate({
         )}
       </div>
 
-      {loadMoreButtonShown && (
+      {isLoadMoreButtonShown && (
         <div className="text-center">
           <Button onClick={onLoadMore} disabled={isFetching}>
             {isFetching ? "Загрузка..." : "Загрузить еще"}
