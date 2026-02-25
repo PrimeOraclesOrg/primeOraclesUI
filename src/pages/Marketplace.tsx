@@ -48,7 +48,7 @@ export default function Marketplace() {
   }, [formData.searchRequest]);
 
   {
-    //! ПРИ СМЕНЕ КАТЕГОРИИ ОЧИЩАТЬ ПРЕДЫДУЩИЙ РЕЗУЛЬТАТ В КЭШЕ
+    //! ПРИ СМЕНЕ КАТЕГОРИИ ОЧИЩАТЬ ПРЕДЫДУЩИЙ РЕЗУЛЬТАТ В КЭШЕ (cursor = null)
   }
   const { data: products, isFetching } = useGetProductsQuery({
     p_query: searchRequest || null,

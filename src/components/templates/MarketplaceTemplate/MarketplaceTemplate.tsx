@@ -124,6 +124,10 @@ export function MarketplaceTemplate({
   return (
     <MainLayout>
       <div className="p-6 lg:p-8">
+        {/* Banner */}
+        <div className="h-48 bg-[#000] rounded-md mb-6 relative">
+          <Button className="absolute top-4 right-4">Нажми сюда</Button>
+        </div>
         {/* 1. Header row */}
         <div className="flex items-center gap-3 mb-5">
           <div className="flex-1">
@@ -289,11 +293,6 @@ export function MarketplaceTemplate({
               </SelectContent>
             </Select>
           </div>
-        </div>
-
-        {/* Banner */}
-        <div className="h-48 bg-[#000] rounded-md mb-6 relative">
-          <Button className="absolute top-4 right-4">Нажми сюда</Button>
         </div>
 
         {/* 6. Product grid */}
