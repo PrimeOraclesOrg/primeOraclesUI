@@ -15,6 +15,8 @@ import { UseFormReturn } from "react-hook-form";
 import { MarketSearchFormData } from "@/utils/validators/marketSearch";
 import { cn } from "@/utils";
 import { marketSortOptions } from "@/data/market";
+import { MobileFilters } from "@/components/organisms/MobileFilters/MobileFilters";
+import { SlidersHorizontal } from "lucide-react";
 
 interface MarketplaceTemplateProps {
   products: PublicProductCard[];
@@ -80,25 +82,26 @@ export function MarketplaceTemplate({
           </Button>
         </div>
 
-        {/* Filter and sort options */}
-        <div
-          className={cn(
-            "top-0 left-0 w-full h-full max-sm:pt-24 pb-8 px-4 bg-background sm:bg-transparent z-10 sm:relative max-sm:overflow-auto",
-            isCategorySelectPopupShown
-              ? "max-sm:[html:has(&)_body]:overflow-hidden max-sm:fixed"
-              : "max-sm:hidden"
-          )}
-        >
-          <Button onClick={onCategorySelectClose} className="sm:hidden mb-4">
-            Назад
-          </Button>
-          <div className="flex flex-col sm:block">
-            <div className="max-sm:mb-8">
-              <h3 className="mb-2 font-Roboto font-bold max-sm:text-center max-sm:text-lg max-sm:mb-4">
+        {/* Mobile Filters Bottom Sheet */}
+        <MobileFilters
+          isOpen={isCategorySelectPopupShown}
+          categories={categories}
+          currentCategory={currentCategory}
+          currentSubCategory={currentSubCategory}
+          onCategoryChange={setCategory}
+          onSubCategoryChange={setSubCategory}
+          onClose={onCategorySelectClose}
+        />
+
+        {/* Desktop Filters */}
+        <div className="hidden sm:block">
+          <div className="flex flex-col">
+            <div className="mb-4">
+              <h3 className="mb-2 font-Roboto font-bold">
                 Выберите категорию
               </h3>
               {categories && (
-                <div className="grid min-[460px]:grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,150px)] gap-2">
+                <div className="grid sm:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,150px)] gap-2">
                   {categories.map((category) => (
                     <Button
                       key={category.code}
@@ -111,14 +114,14 @@ export function MarketplaceTemplate({
                 </div>
               )}
             </div>
-            <div className="flex flex-col mb-4 max-sm:mb-8">
+            <div className="flex flex-col mb-4">
               <div className="w-full">
                 {currentCategory && (
                   <>
-                    <h4 className="my-2 font-Roboto font-bold text-sm max-sm:text-center max-sm:text-lg max-sm:mb-4">
+                    <h4 className="my-2 font-Roboto font-bold text-sm">
                       Выберите тип
                     </h4>
-                    <div className="grid min-[460px]:grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fit,120px)]">
+                    <div className="grid sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fit,120px)]">
                       <Button
                         className={cn(
                           "bg-transparent hover:bg-transparent rounded-none border-b-2",
@@ -132,7 +135,7 @@ export function MarketplaceTemplate({
                       </Button>
                       {categories
                         ?.find((category) => category.code === currentCategory)
-                        .subcategories.map((subCategory) => (
+                        ?.subcategories.map((subCategory) => (
                           <Button
                             key={subCategory.code}
                             className={cn(
@@ -151,15 +154,22 @@ export function MarketplaceTemplate({
                 )}
               </div>
             </div>
-            <Button onClick={onCategorySelectClose} className="sm:hidden">
-              Применить
-            </Button>
           </div>
         </div>
 
-        <Button onClick={onCategorySelectOpen} className="mb-2 sm:hidden">
-          Выбор категории ({selectedCategoriesCount})
-        </Button>
+        {/* Mobile filter trigger */}
+        <button
+          onClick={onCategorySelectOpen}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary text-foreground text-sm font-medium mb-4 sm:hidden"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          <span>Фильтры</span>
+          {selectedCategoriesCount > 0 && (
+            <span className="gold-gradient text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+              {selectedCategoriesCount}
+            </span>
+          )}
+        </button>
 
         <div className="flex justify-between mb-4">
           <h3 className="hidden sm:block">Доступные продукты</h3>
