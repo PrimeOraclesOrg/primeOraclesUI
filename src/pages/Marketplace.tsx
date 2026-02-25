@@ -68,7 +68,8 @@ export default function Marketplace() {
     }
   }, [products]);
 
-  const selectedCategoriesCount = +(formData.category_l1 !== "all") + +!!formData.category_l2;
+  const selectedCategoriesCount =
+    Number(formData.category_l1 !== "all") + Number(Boolean(formData.category_l2));
 
   return (
     <MarketplaceTemplate
