@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { ProductCard, SearchBar } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ import { MarketSearchFormData } from "@/utils/validators/marketSearch";
 import { cn } from "@/utils";
 import { marketSortOptions } from "@/data/market";
 import { MobileFilters } from "@/components/organisms/MobileFilters/MobileFilters";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface MarketplaceTemplateProps {
   products: PublicProductCard[];
@@ -61,28 +62,111 @@ export function MarketplaceTemplate({
   const currentCategory = searchForm.watch("category_l1");
   const currentSubCategory = searchForm.watch("category_l2");
 
+  // --- Subcategories logic ---
+  const subcategories = useMemo(() => {
+    if (!categories || categories.length === 0) return [];
+    if (!currentCategory || currentCategory === "all") {
+      // Deduplicate across all categories
+      const map = new Map<string, ProductCategory["subcategories"][0]>();
+      categories.flatMap((c) => c.subcategories).forEach((s) => map.set(s.code, s));
+      return Array.from(map.values());
+    }
+    const found = categories.find((c) => c.code === currentCategory);
+    return found?.subcategories ?? [];
+  }, [categories, currentCategory]);
+
+  const currentCategoryLabel = useMemo(() => {
+    if (!currentCategory || currentCategory === "all") return "Все категории";
+    return t(`product:category.${currentCategory}`);
+  }, [currentCategory, t]);
+
+  const currentSubCategoryLabel = useMemo(() => {
+    if (!currentSubCategory) return "Все";
+    return t(`product:subCategory.${currentSubCategory}`);
+  }, [currentSubCategory, t]);
+
+  // --- Scroll arrows for subcategories ---
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollState = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateScrollState();
+    el.addEventListener("scroll", updateScrollState, { passive: true });
+    const ro = new ResizeObserver(updateScrollState);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", updateScrollState);
+      ro.disconnect();
+    };
+  }, [updateScrollState, subcategories]);
+
+  const scrollBy = (dir: number) => {
+    scrollRef.current?.scrollBy({ left: dir * 200, behavior: "smooth" });
+  };
+
+  const hasActiveFilters = !!currentCategory || !!currentSubCategory;
+
+  const resetFilters = () => {
+    setCategory("");
+    setSubCategory("");
+  };
+
   return (
     <MainLayout>
       <div className="p-6 lg:p-8">
-        {/* Banner */}
-        <div className="h-48 bg-[#000] rounded-md mb-6 relative">
-          <Button className="absolute top-4 right-4">Нажми сюда</Button>
-        </div>
-
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6 md:mb-8">
+        {/* 1. Header row */}
+        <div className="flex items-center gap-3 mb-5">
           <div className="flex-1">
             <SearchBar {...searchForm.register("searchRequest")} />
           </div>
           <Button
             onClick={onCreateClick}
-            className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity px-4 md:px-6 whitespace-nowrap hidden sm:inline"
+            className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity px-6 whitespace-nowrap hidden sm:inline-flex"
           >
-            <span>Создать компанию</span>
+            Создать компанию
           </Button>
         </div>
 
-        {/* Mobile Filters Bottom Sheet */}
+        {/* 2. Mobile filters + sort (sm:hidden) */}
+        <div className="flex items-center gap-2 mb-4 sm:hidden">
+          <button
+            onClick={onCategorySelectOpen}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary text-foreground text-sm font-medium"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            <span>Фильтры</span>
+            {selectedCategoriesCount > 0 && (
+              <span className="gold-gradient text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                {selectedCategoriesCount}
+              </span>
+            )}
+          </button>
+          <Select defaultValue={marketSortOptions[0].id}>
+            <SelectTrigger className="flex-1">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {marketSortOptions.map((opt) => (
+                  <SelectItem key={opt.id} value={opt.id}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+
         <MobileFilters
           isOpen={isCategorySelectPopupShown}
           categories={categories}
@@ -93,97 +177,112 @@ export function MarketplaceTemplate({
           onClose={onCategorySelectClose}
         />
 
-        {/* Desktop Filters */}
-        <div className="hidden sm:block">
-          <div className="flex flex-col">
-            <div className="mb-4">
-              <h3 className="mb-2 font-Roboto font-bold">
-                Выберите категорию
-              </h3>
-              {categories && (
-                <div className="grid sm:grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,150px)] gap-2">
-                  {categories.map((category) => (
-                    <Button
-                      key={category.code}
-                      variant={currentCategory === category.code ? "default" : "outline"}
-                      onClick={() => setCategory(category.code)}
-                    >
-                      {t(`product:category.${category.code}`)}
-                    </Button>
-                  ))}
-                </div>
+        {/* 3. Desktop L1 categories */}
+        {categories && categories.length > 0 && (
+          <div className="hidden sm:flex flex-wrap gap-2 mb-4">
+            {categories.map((category) => (
+              <button
+                key={category.code}
+                onClick={() => setCategory(category.code)}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                  currentCategory === category.code
+                    ? "gold-gradient text-primary-foreground shadow-md shadow-primary/20 ring-2 ring-primary/30"
+                    : "bg-secondary text-secondary-foreground hover:bg-muted"
+                )}
+              >
+                {t(`product:category.${category.code}`)}
+              </button>
+            ))}
+            {hasActiveFilters && (
+              <button
+                onClick={resetFilters}
+                className="flex items-center gap-1 px-3 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+                Сбросить
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* 4. Subcategories L2 (always visible on desktop) */}
+        {subcategories.length > 0 && (
+          <div className="hidden sm:block mb-5">
+            {/* Breadcrumb */}
+            <p className="text-xs text-muted-foreground mb-2">
+              {currentCategoryLabel}
+              <span className="mx-1">›</span>
+              {currentSubCategoryLabel}
+            </p>
+
+            {/* Scrollable tabs */}
+            <div className="relative">
+              {canScrollLeft && (
+                <button
+                  onClick={() => scrollBy(-1)}
+                  className="absolute left-0 top-0 bottom-0 z-10 w-10 flex items-center justify-start bg-gradient-to-r from-background via-background/80 to-transparent"
+                >
+                  <ChevronLeft className="w-5 h-5 text-foreground" />
+                </button>
+              )}
+              <div
+                ref={scrollRef}
+                className="overflow-x-auto scrollbar-hide border-b border-border flex"
+              >
+                {/* "All" tab */}
+                <button
+                  onClick={() => setSubCategory("")}
+                  className={cn(
+                    "whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors shrink-0",
+                    !currentSubCategory
+                      ? "border-accent text-accent"
+                      : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"
+                  )}
+                >
+                  Все
+                </button>
+                {subcategories.map((sub) => (
+                  <button
+                    key={sub.code}
+                    onClick={() => setSubCategory(sub.code)}
+                    className={cn(
+                      "whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors shrink-0",
+                      currentSubCategory === sub.code
+                        ? "border-accent text-accent"
+                        : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"
+                    )}
+                  >
+                    {t(`product:subCategory.${sub.code}`)}
+                  </button>
+                ))}
+              </div>
+              {canScrollRight && (
+                <button
+                  onClick={() => scrollBy(1)}
+                  className="absolute right-0 top-0 bottom-0 z-10 w-10 flex items-center justify-end bg-gradient-to-l from-background via-background/80 to-transparent"
+                >
+                  <ChevronRight className="w-5 h-5 text-foreground" />
+                </button>
               )}
             </div>
-            <div className="flex flex-col mb-4">
-              <div className="w-full">
-                {currentCategory && (
-                  <>
-                    <h4 className="my-2 font-Roboto font-bold text-sm">
-                      Выберите тип
-                    </h4>
-                    <div className="grid sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))] lg:grid-cols-[repeat(auto-fit,120px)]">
-                      <Button
-                        className={cn(
-                          "bg-transparent hover:bg-transparent rounded-none border-b-2",
-                          currentSubCategory
-                            ? "text-foreground hover:text-accent border-border hover:border-accent"
-                            : "border-accent text-accent"
-                        )}
-                        onClick={() => setSubCategory("")}
-                      >
-                        Все
-                      </Button>
-                      {categories
-                        ?.find((category) => category.code === currentCategory)
-                        ?.subcategories.map((subCategory) => (
-                          <Button
-                            key={subCategory.code}
-                            className={cn(
-                              "bg-transparent hover:bg-transparent rounded-none border-b-2 flex-1",
-                              currentSubCategory === subCategory.code
-                                ? "border-accent text-accent"
-                                : "text-foreground hover:text-accent border-border hover:border-accent"
-                            )}
-                            onClick={() => setSubCategory(subCategory.code)}
-                          >
-                            {t(`product:subCategory.${subCategory.code}`)}
-                          </Button>
-                        ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
           </div>
-        </div>
+        )}
 
-        {/* Mobile filter trigger */}
-        <button
-          onClick={onCategorySelectOpen}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-secondary text-foreground text-sm font-medium mb-4 sm:hidden"
-        >
-          <SlidersHorizontal className="w-4 h-4" />
-          <span>Фильтры</span>
-          {selectedCategoriesCount > 0 && (
-            <span className="gold-gradient text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
-              {selectedCategoriesCount}
-            </span>
-          )}
-        </button>
-
-        <div className="flex justify-between mb-4">
-          <h3 className="hidden sm:block">Доступные продукты</h3>
-          <div className="flex items-center gap-2 self-end">
+        {/* 5. Desktop sort row */}
+        <div className="hidden sm:flex items-center justify-between mb-4">
+          <span className="text-sm text-muted-foreground">Найденные продукты</span>
+          <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Сортировка</span>
             <Select defaultValue={marketSortOptions[0].id}>
-              <SelectTrigger className="w-full max-w-48">
+              <SelectTrigger className="w-44 bg-secondary">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {marketSortOptions.map((sortOption) => (
-                    <SelectItem key={sortOption.id} value={sortOption.id}>
-                      {sortOption.label}
+                  {marketSortOptions.map((opt) => (
+                    <SelectItem key={opt.id} value={opt.id}>
+                      {opt.label}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -192,9 +291,9 @@ export function MarketplaceTemplate({
           </div>
         </div>
 
-        {/* Product Grid */}
+        {/* 6. Product grid */}
         {products?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {products.map((product, index) => (
               <div
                 key={`${product.id}-${index}`}
@@ -212,15 +311,16 @@ export function MarketplaceTemplate({
             </p>
           </div>
         )}
-      </div>
 
-      {isLoadMoreButtonShown && (
-        <div className="text-center">
-          <Button onClick={onLoadMore} disabled={isFetching}>
-            {isFetching ? "Загрузка..." : "Загрузить еще"}
-          </Button>
-        </div>
-      )}
+        {/* 7. Load more */}
+        {isLoadMoreButtonShown && (
+          <div className="text-center">
+            <Button onClick={onLoadMore} disabled={isFetching}>
+              {isFetching ? "Загрузка..." : "Загрузить еще"}
+            </Button>
+          </div>
+        )}
+      </div>
     </MainLayout>
   );
 }
