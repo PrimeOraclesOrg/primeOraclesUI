@@ -32,6 +32,9 @@ interface MarketplaceTemplateProps {
   onLoadMore: () => void;
   onCategorySelectOpen: () => void;
   onCategorySelectClose: () => void;
+  setCategory: (category: string) => void;
+  setSubCategory: (subCategory: string) => void;
+  resetFilters: () => void;
 }
 
 export function MarketplaceTemplate({
@@ -47,43 +50,31 @@ export function MarketplaceTemplate({
   onCreateClick,
   onCategorySelectOpen,
   onCategorySelectClose,
+  setCategory,
+  setSubCategory,
+  resetFilters,
 }: MarketplaceTemplateProps) {
   const { t } = useTranslation();
 
-  const setCategory = (categoryId: string) => {
-    searchForm.setValue("category_l1", categoryId || categories[0].code);
-    setSubCategory("");
-  };
-
-  const setSubCategory = (typeId: string) => {
-    searchForm.setValue("category_l2", typeId || "");
-  };
-
-  const currentCategory = searchForm.watch("category_l1");
-  const currentSubCategory = searchForm.watch("category_l2");
+  const currentCategoryCode = searchForm.watch("category_l1");
+  const currentSubCategoryCode = searchForm.watch("category_l2");
 
   // --- Subcategories logic ---
   const subcategories = useMemo(() => {
     if (!categories || categories.length === 0) return [];
-    if (!currentCategory || currentCategory === "all") {
-      // Deduplicate across all categories
-      const map = new Map<string, ProductCategory["subcategories"][0]>();
-      categories.flatMap((c) => c.subcategories).forEach((s) => map.set(s.code, s));
-      return Array.from(map.values());
-    }
-    const found = categories.find((c) => c.code === currentCategory);
-    return found?.subcategories ?? [];
-  }, [categories, currentCategory]);
+    const currentCategory = categories.find((category) => category.code === currentCategoryCode);
+    return currentCategory?.subcategories ?? [];
+  }, [categories, currentCategoryCode]);
 
   const currentCategoryLabel = useMemo(() => {
-    if (currentCategory === "all") return "Все категории";
-    return t(`product:category.${currentCategory}`);
-  }, [currentCategory, t]);
+    if (currentCategoryCode === "all") return "Все категории";
+    return t(`product:category.${currentCategoryCode}`);
+  }, [currentCategoryCode, t]);
 
   const currentSubCategoryLabel = useMemo(() => {
-    if (!currentSubCategory) return "Все";
-    return t(`product:subCategory.${currentSubCategory}`);
-  }, [currentSubCategory, t]);
+    if (!currentSubCategoryCode) return "Все";
+    return t(`product:subCategory.${currentSubCategoryCode}`);
+  }, [currentSubCategoryCode, t]);
 
   // --- Scroll arrows for subcategories ---
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -91,21 +82,23 @@ export function MarketplaceTemplate({
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   const updateScrollState = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 0);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) return;
+    setCanScrollLeft(scrollElement.scrollLeft > 0);
+    setCanScrollRight(
+      scrollElement.scrollLeft + scrollElement.clientWidth < scrollElement.scrollWidth - 1
+    );
   }, []);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) return;
     updateScrollState();
-    el.addEventListener("scroll", updateScrollState, { passive: true });
+    scrollElement.addEventListener("scroll", updateScrollState, { passive: true });
     const ro = new ResizeObserver(updateScrollState);
-    ro.observe(el);
+    ro.observe(scrollElement);
     return () => {
-      el.removeEventListener("scroll", updateScrollState);
+      scrollElement.removeEventListener("scroll", updateScrollState);
       ro.disconnect();
     };
   }, [updateScrollState, subcategories]);
@@ -114,12 +107,7 @@ export function MarketplaceTemplate({
     scrollRef.current?.scrollBy({ left: dir * 200, behavior: "smooth" });
   };
 
-  const hasActiveFilters = currentCategory !== categories?.[0].code || !!currentSubCategory;
-
-  const resetFilters = () => {
-    setCategory(categories?.[0].code);
-    setSubCategory("");
-  };
+  const hasActiveFilters = currentCategoryCode !== categories?.[0].code || !!currentSubCategoryCode;
 
   return (
     <MainLayout>
@@ -174,8 +162,8 @@ export function MarketplaceTemplate({
         <MobileFilters
           isOpen={isCategorySelectPopupShown}
           categories={categories}
-          currentCategory={currentCategory}
-          currentSubCategory={currentSubCategory}
+          currentCategoryCode={currentCategoryCode}
+          currentSubCategoryCode={currentCategoryCode}
           onCategoryChange={setCategory}
           onSubCategoryChange={setSubCategory}
           onClose={onCategorySelectClose}
@@ -190,7 +178,7 @@ export function MarketplaceTemplate({
                 onClick={() => setCategory(category.code)}
                 className={cn(
                   "px-4 py-2 rounded-md text-sm font-medium transition-all",
-                  currentCategory === category.code
+                  currentCategoryCode === category.code
                     ? "gold-gradient text-primary-foreground shadow-md shadow-primary/20 ring-2 ring-primary/30"
                     : "bg-secondary text-secondary-foreground hover:bg-muted"
                 )}
@@ -239,25 +227,25 @@ export function MarketplaceTemplate({
                   onClick={() => setSubCategory("")}
                   className={cn(
                     "whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors shrink-0",
-                    !currentSubCategory
+                    !currentSubCategoryCode
                       ? "border-accent text-accent"
                       : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"
                   )}
                 >
                   Все
                 </button>
-                {subcategories.map((sub) => (
+                {subcategories.map((subCategory) => (
                   <button
-                    key={sub.code}
-                    onClick={() => setSubCategory(sub.code)}
+                    key={subCategory.code}
+                    onClick={() => setSubCategory(subCategory.code)}
                     className={cn(
                       "whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors shrink-0",
-                      currentSubCategory === sub.code
+                      currentSubCategoryCode === subCategory.code
                         ? "border-accent text-accent"
                         : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"
                     )}
                   >
-                    {t(`product:subCategory.${sub.code}`)}
+                    {t(`product:subCategory.${subCategory.code}`)}
                   </button>
                 ))}
               </div>

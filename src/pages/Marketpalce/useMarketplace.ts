@@ -1,17 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import { useGetProductsQuery } from "@/store";
-import { MarketplaceTemplate } from "@/components/templates";
+import { marketSortOptions } from "@/data/market";
 import { SearchProductsParams } from "@/services/productsService/types";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useGetCategoriesForProductsQuery } from "@/store/productsApi";
-import { useForm } from "react-hook-form";
+import { useGetCategoriesForProductsQuery, useGetProductsQuery } from "@/store/productsApi";
+import { MarketSortOptions } from "@/types/market";
 import { MarketSearchFormData, marketSearchSchema } from "@/utils/validators/marketSearch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { marketSortOptions } from "@/data/market";
-import { MarketSortOptions } from "@/types/market";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 
-export default function Marketplace() {
-  const navigate = useNavigate();
+export const useMarketplace = () => {
   const [cursor, setCursor] = useState<SearchProductsParams["p_cursor"]>(null);
   const { data: categories } = useGetCategoriesForProductsQuery();
   const debounceTimeoutRef = useRef<NodeJS.Timeout>(null);
@@ -47,9 +43,6 @@ export default function Marketplace() {
     return clearDebounceTimeout;
   }, [formData.searchRequest]);
 
-  {
-    //! ПРИ СМЕНЕ КАТЕГОРИИ ОЧИЩАТЬ ПРЕДЫДУЩИЙ РЕЗУЛЬТАТ В КЭШЕ (cursor = null)
-  }
   const { data: products, isFetching } = useGetProductsQuery({
     p_query: searchRequest || null,
     p_sort: formData.sort_by as MarketSortOptions,
@@ -71,20 +64,34 @@ export default function Marketplace() {
   const selectedCategoriesCount =
     Number(formData.category_l1 !== "all") + Number(Boolean(formData.category_l2));
 
-  return (
-    <MarketplaceTemplate
-      products={products}
-      categories={categories}
-      onProductClick={(id) => navigate(`/products/${id}`)}
-      onCreateClick={() => navigate("/create-product")}
-      isLoadMoreButtonShown={isLoadMoreButtonShown}
-      isCategorySelectPopupShown={isCategorySelectPopupShown}
-      onCategorySelectOpen={() => setIsCategorySelectPopupShown(true)}
-      onCategorySelectClose={() => setIsCategorySelectPopupShown(false)}
-      onLoadMore={handleLoadMore}
-      isFetching={isFetching}
-      searchForm={marketSearchForm}
-      selectedCategoriesCount={selectedCategoriesCount}
-    />
-  );
-}
+  const setCategory = (categoryId: string) => {
+    marketSearchForm.setValue("category_l1", categoryId || categories[0].code);
+    setSubCategory("");
+    setCursor(null);
+  };
+
+  const setSubCategory = (typeId: string) => {
+    marketSearchForm.setValue("category_l2", typeId || "");
+    setCursor(null);
+  };
+
+  const resetFilters = () => {
+    setCategory(categories?.[0].code);
+    setSubCategory("");
+  };
+
+  return {
+    products,
+    categories,
+    isLoadMoreButtonShown,
+    isCategorySelectPopupShown,
+    setIsCategorySelectPopupShown,
+    handleLoadMore,
+    isFetching,
+    marketSearchForm,
+    selectedCategoriesCount,
+    setCategory,
+    setSubCategory,
+    resetFilters,
+  };
+};

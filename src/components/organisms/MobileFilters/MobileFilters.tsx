@@ -7,8 +7,8 @@ import { cn } from "@/utils";
 interface MobileFiltersProps {
   isOpen: boolean;
   categories: ProductCategory[];
-  currentCategory: string;
-  currentSubCategory: string;
+  currentCategoryCode: string;
+  currentSubCategoryCode: string;
   onCategoryChange: (categoryCode: string) => void;
   onSubCategoryChange: (subCategoryCode: string) => void;
   onClose: () => void;
@@ -17,8 +17,8 @@ interface MobileFiltersProps {
 export function MobileFilters({
   isOpen,
   categories,
-  currentCategory,
-  currentSubCategory,
+  currentCategoryCode,
+  currentSubCategoryCode,
   onCategoryChange,
   onSubCategoryChange,
   onClose,
@@ -27,7 +27,7 @@ export function MobileFilters({
 
   if (!isOpen) return null;
 
-  const activeCategory = categories?.find((c) => c.code === currentCategory);
+  const activeCategory = categories?.find((c) => c.code === currentCategoryCode);
   const subcategories = activeCategory?.subcategories ?? [];
 
   return (
@@ -67,7 +67,7 @@ export function MobileFilters({
                   onClick={() => onCategoryChange(category.code)}
                   className={cn(
                     "px-4 py-2.5 rounded-xl text-sm font-medium transition-all",
-                    currentCategory === category.code
+                    currentCategoryCode === category.code
                       ? "gold-gradient text-primary-foreground shadow-md shadow-primary/20"
                       : "bg-secondary text-foreground"
                   )}
@@ -79,7 +79,7 @@ export function MobileFilters({
           </div>
 
           {/* Subcategories */}
-          {currentCategory && subcategories.length > 0 && (
+          {currentCategoryCode && subcategories.length > 0 && (
             <div className="mb-6">
               <p className="text-xs font-semibold text-muted-foreground tracking-wider mb-3">ТИП</p>
               <div className="rounded-xl bg-secondary/50 overflow-hidden">
@@ -88,31 +88,31 @@ export function MobileFilters({
                   onClick={() => onSubCategoryChange("")}
                   className={cn(
                     "w-full flex items-center justify-between px-4 py-3 text-sm border-b border-border/50 transition-colors",
-                    !currentSubCategory ? "text-accent font-medium" : "text-foreground"
+                    !currentSubCategoryCode ? "text-accent font-medium" : "text-foreground"
                   )}
                 >
                   <span>Все</span>
-                  {!currentSubCategory ? (
+                  {!currentSubCategoryCode ? (
                     <Check className="w-4 h-4 text-accent" />
                   ) : (
                     <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   )}
                 </button>
 
-                {subcategories.map((sub, index) => (
+                {subcategories.map((subCategory, index) => (
                   <button
-                    key={sub.code}
-                    onClick={() => onSubCategoryChange(sub.code)}
+                    key={subCategory.code}
+                    onClick={() => onSubCategoryChange(subCategory.code)}
                     className={cn(
                       "w-full flex items-center justify-between px-4 py-3 text-sm transition-colors",
                       index < subcategories.length - 1 && "border-b border-border/50",
-                      currentSubCategory === sub.code
+                      currentSubCategoryCode === subCategory.code
                         ? "text-accent font-medium"
                         : "text-foreground"
                     )}
                   >
-                    <span>{t(`product:subCategory.${sub.code}`)}</span>
-                    {currentSubCategory === sub.code ? (
+                    <span>{t(`product:subCategory.${subCategory.code}`)}</span>
+                    {currentSubCategoryCode === subCategory.code ? (
                       <Check className="w-4 h-4 text-accent" />
                     ) : (
                       <ChevronRight className="w-4 h-4 text-muted-foreground" />

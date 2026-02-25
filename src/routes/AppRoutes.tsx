@@ -2,7 +2,7 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute/ProtectedRoute";
 import Home from "@/pages/Home";
 import Rewards from "@/pages/Rewards";
-import Marketplace from "@/pages/Marketplace";
+import Marketplace from "@/pages/Marketpalce/Marketplace";
 import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
 import WorkspaceMarketplace from "@/pages/WorkspaceMarketplace/WorkspaceMarketplace";
