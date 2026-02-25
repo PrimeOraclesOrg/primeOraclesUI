@@ -6,7 +6,10 @@ export const Messages = () => {
     chats,
     selectedChatId,
     selectedChat,
-    messages,
+    chatHistory,
+    isChatHistoryLoading,
+    isChatHistoryError,
+    optimisticMessages,
     activeTab,
     searchQuery,
     saleCount,
@@ -26,7 +29,10 @@ export const Messages = () => {
       chats={chats}
       selectedChatId={selectedChatId}
       selectedChat={selectedChat}
-      messages={messages}
+      chatHistory={chatHistory}
+      isChatHistoryLoading={isChatHistoryLoading}
+      isChatHistoryError={isChatHistoryError}
+      optimisticMessages={optimisticMessages}
       activeTab={activeTab}
       searchQuery={searchQuery}
       saleBadgeCount={saleCount}

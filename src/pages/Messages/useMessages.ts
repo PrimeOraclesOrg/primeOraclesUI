@@ -1,31 +1,18 @@
 import { useCallback, useMemo, useState } from "react";
-import { ChatsFilter } from "@/services/chatService/types";
+import { ChatsFilter, ChatHistoryMessage } from "@/services/chatService/types";
 import { chatsFilterFromTab } from "@/utils/chats";
+import { useGetChatHistoryQuery } from "@/store/chatsApi";
 import { usePaginatedChats } from "./usePaginatedChats";
 
 export type MessageTab = "Все" | "Покупка" | "Продажа";
-
-export interface Message {
-  id: string;
-  sender: "user" | "them";
-  text: string;
-  time: string;
-}
-
-const MOCK_MESSAGES: Record<string, Message[]> = {
-  "1": [
-    { id: "m1", sender: "them", text: "Рад слышать, да погнали! Как раз время", time: "21:01" },
-    { id: "m2", sender: "them", text: "Оставь еще отзыв, спасибо", time: "21:01" },
-    { id: "m3", sender: "user", text: "Все работает, го в доту?", time: "21:00" },
-  ],
-  "2": [{ id: "m4", sender: "them", text: "Добро пожаловать в Prime Oracle:", time: "12:00" }],
-};
 
 export const useMessages = () => {
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<MessageTab>("Все");
-  const [messagesByConversation, setMessagesByConversation] = useState(MOCK_MESSAGES);
+  const [optimisticMessagesByChatId, setOptimisticMessagesByChatId] = useState<
+    Record<string, ChatHistoryMessage[]>
+  >({});
 
   const filter = chatsFilterFromTab(activeTab);
   const { chats, isLoading, isFetching, hasMore, loadMore } = usePaginatedChats({
@@ -34,11 +21,21 @@ export const useMessages = () => {
     limit: 20,
   });
 
+  const {
+    data: chatHistory,
+    isLoading: isChatHistoryLoading,
+    isError: isChatHistoryError,
+  } = useGetChatHistoryQuery(selectedChatId ?? "", {
+    skip: !selectedChatId,
+  });
+
   const selectedChat = selectedChatId
     ? (chats.find((c) => c.chat_id === selectedChatId) ?? null)
     : null;
 
-  const messages = selectedChatId ? (messagesByConversation[selectedChatId] ?? []) : [];
+  const optimisticMessages = selectedChatId
+    ? (optimisticMessagesByChatId[selectedChatId] ?? [])
+    : [];
 
   const saleCount = useMemo(
     () => (filter === ChatsFilter.SELL ? chats.reduce((acc, c) => acc + c.unread_count, 0) : 0),
@@ -48,13 +45,14 @@ export const useMessages = () => {
   const handleSendMessage = useCallback(
     (text: string) => {
       if (!selectedChatId || !text.trim()) return;
-      const newMessage: Message = {
-        id: `m-${Date.now()}`,
-        sender: "user",
-        text: text.trim(),
-        time: new Date().toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" }),
+      const newMessage: ChatHistoryMessage = {
+        id: `opt-${Date.now()}`,
+        author_id: "",
+        message_text: text.trim(),
+        created_at: new Date().toISOString(),
+        is_own_message: true,
       };
-      setMessagesByConversation((prev) => ({
+      setOptimisticMessagesByChatId((prev) => ({
         ...prev,
         [selectedChatId]: [...(prev[selectedChatId] ?? []), newMessage],
       }));
@@ -64,17 +62,16 @@ export const useMessages = () => {
 
   const handleConfirmOrder = useCallback(() => {
     if (!selectedChatId) return;
-    setMessagesByConversation((prev) => ({
+    const newMessage: ChatHistoryMessage = {
+      id: `opt-confirm-${Date.now()}`,
+      author_id: "",
+      message_text: "Заказ подтвержден, спасибо!",
+      created_at: new Date().toISOString(),
+      is_own_message: false,
+    };
+    setOptimisticMessagesByChatId((prev) => ({
       ...prev,
-      [selectedChatId]: [
-        ...(prev[selectedChatId] ?? []),
-        {
-          id: `m-${Date.now()}`,
-          sender: "them",
-          text: "Заказ подтвержден, спасибо!",
-          time: new Date().toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" }),
-        },
-      ],
+      [selectedChatId]: [...(prev[selectedChatId] ?? []), newMessage],
     }));
   }, [selectedChatId]);
 
@@ -85,9 +82,10 @@ export const useMessages = () => {
     setSearchQuery,
     activeTab,
     setActiveTab,
-    messagesByConversation,
-    setMessagesByConversation,
-    messages,
+    chatHistory,
+    isChatHistoryLoading,
+    isChatHistoryError,
+    optimisticMessages,
     saleCount,
     handleSendMessage,
     handleConfirmOrder,
