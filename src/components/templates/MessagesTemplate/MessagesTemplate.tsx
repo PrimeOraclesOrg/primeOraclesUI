@@ -65,6 +65,11 @@ export function MessagesTemplate({
     onSelectChat(chatId);
   };
 
+  const handleTabChange = (tab: MessageTab) => {
+    onTabChange(tab);
+    onSelectChat(null);
+  };
+
   useEffect(() => {
     const textarea = messageInputRef.current;
     if (!textarea) return;
@@ -88,11 +93,21 @@ export function MessagesTemplate({
     textarea.style.overflowY = contentHeight > maxHeight ? "auto" : "hidden";
   }, [messageInput]);
 
+  const submitMessage = () => {
+    if (!messageInput.trim()) return;
+    onSendMessage(messageInput);
+    setMessageInput("");
+  };
+
   const handleSubmitMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (messageInput.trim()) {
-      onSendMessage(messageInput);
-      setMessageInput("");
+    submitMessage();
+  };
+
+  const handleMessageInputKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submitMessage();
     }
   };
 
@@ -120,7 +135,7 @@ export function MessagesTemplate({
                 <button
                   key={tab}
                   type="button"
-                  onClick={() => onTabChange(tab)}
+                  onClick={() => handleTabChange(tab)}
                   className={cn(
                     "relative flex flex-1 items-center justify-center gap-1.5 py-2.5 text-sm font-medium transition-colors",
                     activeTab === tab
@@ -353,15 +368,16 @@ export function MessagesTemplate({
                   rows={1}
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
+                  onKeyDown={handleMessageInputKeyDown}
                   placeholder="Написать сообщение..."
                   className="min-h-10 min-w-0 flex-1 resize-none border-border py-2 text-base focus-visible:ring-primary sm:text-sm"
                 />
                 <button
-                  type="button"
+                  type="submit"
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground sm:h-10 sm:w-10"
                   aria-label="Отправить сообщение"
                 >
-                  <Send className="h-4 w-4 sm:h-5 sm:w-5" onClick={handleSubmitMessage} />
+                  <Send className="h-4 w-4 sm:h-5 sm:w-5" />
                 </button>
               </form>
             </>
