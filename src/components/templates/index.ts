@@ -20,3 +20,4 @@ export { SettingsBalanceTemplate } from "./SettingsBalanceTemplate/SettingsBalan
 export { SettingsHistoryTemplate } from "./SettingsHistoryTemplate/SettingsHistoryTemplate";
 export { SettingsSecurityTemplate } from "./SettingsSecurityTemplate/SettingsSecurityTemplate";
 export { UpdateProductTemplate } from "./UpdateProductTemplate/UpdateProductTemplate";
+export { MessagesTemplate } from "./MessagesTemplate/MessagesTemplate";

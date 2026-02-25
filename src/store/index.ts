@@ -9,6 +9,7 @@ export {
   useGetProductDetailsQuery,
   useGetProductCommentsQuery,
 } from "./productsApi";
+export { chatsApi, useGetUserChatsQuery } from "./chatsApi";
 export { rewardsApi, useGetRewardsQuery, useGetHomeRewardsQuery } from "./rewardsApi";
 export { learningApi, useGetLearningItemsQuery, useGetLessonDetailsQuery } from "./learningApi";
 export {
