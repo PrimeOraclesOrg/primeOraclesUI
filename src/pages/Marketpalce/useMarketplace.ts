@@ -78,6 +78,12 @@ export const useMarketplace = () => {
     setCursor(null);
   };
 
+  const onSearchClear = () => {
+    marketSearchForm.setValue("searchRequest", "");
+    setSearchRequest("");
+    setCursor(null);
+  };
+
   return {
     products,
     categories,
@@ -88,6 +94,7 @@ export const useMarketplace = () => {
     isFetching,
     marketSearchForm,
     selectedCategoriesCount,
+    onSearchClear,
     refetchCategories,
     setIsCategorySelectPopupShown,
     handleLoadMore,

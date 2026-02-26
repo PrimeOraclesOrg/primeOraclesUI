@@ -24,6 +24,7 @@ export default function Marketplace() {
     setCategory,
     setIsCategorySelectPopupShown,
     setSubCategory,
+    onSearchClear,
   } = useMarketplace();
 
   if (isCategoriesLoading) {
@@ -60,6 +61,7 @@ export default function Marketplace() {
       setCategory={setCategory}
       setSubCategory={setSubCategory}
       resetFilters={resetFilters}
+      onSearchClear={onSearchClear}
     />
   );
 }
