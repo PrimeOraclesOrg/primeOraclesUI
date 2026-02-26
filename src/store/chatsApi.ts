@@ -1,6 +1,10 @@
 import { baseApi } from "@/store/baseApi";
-import { getUserChats } from "@/services/chatService/chatService";
-import { GetChatsResponse, GetUserChatsArgs } from "@/services/chatService/types";
+import { getChatHistory, getUserChats } from "@/services/chatService/chatService";
+import {
+  ChatHistoryResponse,
+  GetChatsResponse,
+  GetUserChatsArgs,
+} from "@/services/chatService/types";
 
 export const chatsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -37,7 +41,15 @@ export const chatsApi = baseApi.injectEndpoints({
 
       providesTags: ["Chats"],
     }),
+    getChatHistory: builder.query<ChatHistoryResponse, string>({
+      queryFn: async (p_chat_id) => {
+        const { data, error } = await getChatHistory(p_chat_id);
+        if (error) return { error };
+        return { data };
+      },
+      providesTags: (_result, _err, chatId) => [{ type: "Chats", id: `history-${chatId}` }],
+    }),
   }),
 });
 
-export const { useGetUserChatsQuery } = chatsApi;
+export const { useGetUserChatsQuery, useGetChatHistoryQuery } = chatsApi;

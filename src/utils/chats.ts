@@ -11,3 +11,10 @@ export const chatsFilterFromTab = (tab: MessageTab): ChatsFilter => {
       return ChatsFilter.ALL;
   }
 };
+
+export const formatMessageTime = (date: string): string => {
+  return new Date(date).toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};

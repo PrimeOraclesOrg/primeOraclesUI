@@ -1,7 +1,7 @@
 import { supabase, normalizeError } from "@/utils";
 import { ServiceResult } from "@/types/serviceTypes";
 import { Json } from "@/types/supabase";
-import { ChatCursor, GetChatsResponse, GetUserChatsArgs } from "./types";
+import { ChatCursor, ChatHistoryResponse, GetChatsResponse, GetUserChatsArgs } from "./types";
 
 export async function getUserChats({
   p_limit,
@@ -27,6 +27,23 @@ export async function getUserChats({
       data: { data: rows, hasMore, nextCursor },
       error: null,
     };
+  } catch (err) {
+    return normalizeError(err);
+  }
+}
+
+export async function getChatHistory(
+  p_chat_id: string
+): Promise<ServiceResult<ChatHistoryResponse>> {
+  try {
+    const { data: raw, error } = await supabase.rpc("rpc_get_chat_history", {
+      p_chat_id,
+    });
+
+    if (error) throw error;
+
+    const data = raw as unknown as ChatHistoryResponse;
+    return { data, error: null };
   } catch (err) {
     return normalizeError(err);
   }

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Bot, ChevronLeft, Plus, Send } from "lucide-react";
-import { Message, MessageTab } from "@/pages/Messages/useMessages";
+import { MessageTab } from "@/pages/Messages/useMessages";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { SearchBar } from "@/components/molecules/SearchBar/SearchBar";
 import { RatingStars } from "@/components/atoms/RatingStars/RatingStars";
@@ -9,15 +9,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { UserChat } from "@/services/chatService/types";
+import { ChatHistoryMessage, ChatHistoryResponse, UserChat } from "@/services/chatService/types";
 import { formatDate } from "@/utils/formatters";
 import { buildCoverUrl } from "@/utils/base64ToBlob";
+import { formatMessageTime } from "@/utils/chats";
 
 interface MessagesTemplateProps {
   chats: UserChat[];
   selectedChatId: string | null;
   selectedChat: UserChat | null;
-  messages: Message[];
+  chatHistory: ChatHistoryResponse | null;
+  optimisticMessages: ChatHistoryMessage[];
+  isChatHistoryLoading: boolean;
+  isChatHistoryError: boolean;
   activeTab: MessageTab;
   searchQuery: string;
   saleBadgeCount: number;
@@ -36,7 +40,10 @@ export function MessagesTemplate({
   chats,
   selectedChatId,
   selectedChat,
-  messages,
+  chatHistory,
+  optimisticMessages,
+  isChatHistoryLoading = false,
+  isChatHistoryError = false,
   activeTab,
   searchQuery,
   saleBadgeCount,
@@ -50,6 +57,10 @@ export function MessagesTemplate({
   hasMore = false,
   onLoadMore,
 }: MessagesTemplateProps) {
+  const messagesToShow: ChatHistoryMessage[] = [
+    ...(chatHistory?.messages ?? []),
+    ...optimisticMessages,
+  ];
   const [messageInput, setMessageInput] = useState("");
   const messageInputRef = useRef<HTMLTextAreaElement | null>(null);
   const resetMessageInputSize = () => {
@@ -310,10 +321,14 @@ export function MessagesTemplate({
                       <Label className="text-foreground">Ссылка на продукт</Label>
                       <p className="mt-1 text-sm text-muted-foreground">-</p>
                     </div>
-                    <div>
-                      <Label className="text-foreground">Инструкция к продукту</Label>
-                      <p className="mt-1 min-h-[80px] text-sm text-muted-foreground">-</p>
-                    </div>
+                    {chatHistory?.chat?.product_instructions && (
+                      <div>
+                        <Label className="text-foreground">Инструкция к продукту</Label>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {chatHistory.chat.product_instructions}
+                        </p>
+                      </div>
+                    )}
                     <Button
                       variant="outline"
                       className="w-full border-primary text-primary hover:bg-primary/10"
@@ -327,27 +342,43 @@ export function MessagesTemplate({
 
               {/* Messages */}
               <div className="min-h-0 flex-1 space-y-2 overflow-y-auto px-3 py-2 sm:px-4">
-                {messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={cn(
-                      "flex items-end gap-1.5 sm:gap-2",
-                      msg.sender === "user" ? "flex-row-reverse" : "flex-row"
-                    )}
-                  >
+                {isChatHistoryLoading ? (
+                  <div className="flex items-center justify-center p-6 text-sm text-muted-foreground">
+                    Загрузка…
+                  </div>
+                ) : isChatHistoryError ? (
+                  <div className="flex items-center justify-center p-6 text-sm text-muted-foreground">
+                    Ошибка загрузки истории чата
+                  </div>
+                ) : messagesToShow.length === 0 ? (
+                  <div className="flex items-center justify-center p-6 text-sm text-muted-foreground">
+                    Нет сообщений
+                  </div>
+                ) : (
+                  messagesToShow.map((msg) => (
                     <div
+                      key={msg.id}
                       className={cn(
-                        "min-w-0 max-w-[85%] break-words rounded-lg px-3 py-2 text-sm sm:max-w-[75%]",
-                        msg.sender === "user"
-                          ? "bg-primary/20 text-foreground"
-                          : "bg-muted text-foreground"
+                        "flex items-end gap-1.5 sm:gap-2",
+                        msg.is_own_message ? "flex-row-reverse" : "flex-row"
                       )}
                     >
-                      {msg.text}
+                      <div
+                        className={cn(
+                          "min-w-0 max-w-[85%] break-words rounded-lg px-3 py-2 text-sm sm:max-w-[75%]",
+                          msg.is_own_message
+                            ? "bg-primary/20 text-foreground"
+                            : "bg-muted text-foreground"
+                        )}
+                      >
+                        {msg.message_text}
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {formatMessageTime(msg.created_at)}
+                      </span>
                     </div>
-                    <span className="text-xs text-muted-foreground">{msg.time}</span>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
 
               {/* Message input */}
