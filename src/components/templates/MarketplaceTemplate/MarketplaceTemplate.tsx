@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { ProductCard, SearchBar } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,8 @@ import { MarketSearchFormData } from "@/utils/validators/marketSearch";
 import { cn } from "@/utils";
 import { marketSortOptions } from "@/data/market";
 import { MobileFilters } from "@/components/organisms/MobileFilters/MobileFilters";
-import { SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ScrollableRow } from "@/components/atoms";
+import { SlidersHorizontal, X } from "lucide-react";
 
 interface MarketplaceTemplateProps {
   products: PublicProductCard[];
@@ -76,37 +77,6 @@ export function MarketplaceTemplate({
     if (!currentSubCategoryCode) return "Все";
     return t(`product:subCategory.${currentSubCategoryCode}`);
   }, [currentSubCategoryCode, t]);
-
-  // --- Scroll arrows for subcategories ---
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-
-  const updateScrollState = useCallback(() => {
-    const scrollElement = scrollRef.current;
-    if (!scrollElement) return;
-    setCanScrollLeft(scrollElement.scrollLeft > 0);
-    setCanScrollRight(
-      scrollElement.scrollLeft + scrollElement.clientWidth < scrollElement.scrollWidth - 1
-    );
-  }, []);
-
-  useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (!scrollElement) return;
-    updateScrollState();
-    scrollElement.addEventListener("scroll", updateScrollState, { passive: true });
-    const ro = new ResizeObserver(updateScrollState);
-    ro.observe(scrollElement);
-    return () => {
-      scrollElement.removeEventListener("scroll", updateScrollState);
-      ro.disconnect();
-    };
-  }, [updateScrollState, subcategories]);
-
-  const scrollBy = (dir: number) => {
-    scrollRef.current?.scrollBy({ left: dir * 200, behavior: "smooth" });
-  };
 
   const hasActiveFilters = currentCategoryCode !== categories?.[0].code || !!currentSubCategoryCode;
 
@@ -173,7 +143,7 @@ export function MarketplaceTemplate({
           isOpen={isCategorySelectPopupShown}
           categories={categories}
           currentCategoryCode={currentCategoryCode}
-          currentSubCategoryCode={currentCategoryCode}
+          currentSubCategoryCode={currentSubCategoryCode}
           onCategoryChange={setCategory}
           onSubCategoryChange={setSubCategory}
           onClose={onCategorySelectClose}
@@ -219,55 +189,34 @@ export function MarketplaceTemplate({
             </p>
 
             {/* Scrollable tabs */}
-            <div className="relative">
-              {canScrollLeft && (
-                <button
-                  onClick={() => scrollBy(-1)}
-                  className="absolute left-0 top-0 bottom-0 z-10 w-10 flex items-center justify-start bg-gradient-to-r from-background via-background/80 to-transparent"
-                >
-                  <ChevronLeft className="w-5 h-5 text-foreground" />
-                </button>
-              )}
-              <div
-                ref={scrollRef}
-                className="overflow-x-auto scrollbar-hide border-b border-border flex"
+            <ScrollableRow className="border-b border-border">
+              {/* "All" tab */}
+              <button
+                onClick={() => setSubCategory("")}
+                className={cn(
+                  "whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors shrink-0",
+                  !currentSubCategoryCode
+                    ? "border-accent text-accent"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"
+                )}
               >
-                {/* "All" tab */}
+                Все
+              </button>
+              {subcategories.map((subCategory) => (
                 <button
-                  onClick={() => setSubCategory("")}
+                  key={subCategory.code}
+                  onClick={() => setSubCategory(subCategory.code)}
                   className={cn(
                     "whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors shrink-0",
-                    !currentSubCategoryCode
+                    currentSubCategoryCode === subCategory.code
                       ? "border-accent text-accent"
                       : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"
                   )}
                 >
-                  Все
+                  {t(`product:subCategory.${subCategory.code}`)}
                 </button>
-                {subcategories.map((subCategory) => (
-                  <button
-                    key={subCategory.code}
-                    onClick={() => setSubCategory(subCategory.code)}
-                    className={cn(
-                      "whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors shrink-0",
-                      currentSubCategoryCode === subCategory.code
-                        ? "border-accent text-accent"
-                        : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"
-                    )}
-                  >
-                    {t(`product:subCategory.${subCategory.code}`)}
-                  </button>
-                ))}
-              </div>
-              {canScrollRight && (
-                <button
-                  onClick={() => scrollBy(1)}
-                  className="absolute right-0 top-0 bottom-0 z-10 w-10 flex items-center justify-end bg-gradient-to-l from-background via-background/80 to-transparent"
-                >
-                  <ChevronRight className="w-5 h-5 text-foreground" />
-                </button>
-              )}
-            </div>
+              ))}
+            </ScrollableRow>
           </div>
         )}
 
