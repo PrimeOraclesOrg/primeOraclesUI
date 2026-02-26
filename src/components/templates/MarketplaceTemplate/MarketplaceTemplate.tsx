@@ -19,6 +19,7 @@ import { marketSortOptions } from "@/data/market";
 import { MobileFilters } from "@/components/organisms/MobileFilters/MobileFilters";
 import { ScrollableRow } from "@/components/atoms";
 import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Field } from "@/components/ui/field";
 
 interface MarketplaceTemplateProps {
   products: PublicProductCard[];
@@ -92,14 +93,16 @@ export function MarketplaceTemplate({
         {/* 1. Header row */}
         <div className="flex items-center gap-3 mb-5">
           <form className="flex-1 flex items-center gap-2" onSubmit={onSearch}>
-            <SearchBar {...searchForm.register("searchRequest")} />
-            <Button
-              variant="outline"
-              className="hover:bg-foreground/5 hover:text-foreground"
-              type="submit"
-            >
-              <span className="max-sm:hidden">Искать</span> <Search />
-            </Button>
+            <Field orientation="horizontal">
+              <SearchBar {...searchForm.register("searchRequest")} />
+              <Button
+                variant="outline"
+                className="hover:bg-foreground/5 hover:text-foreground"
+                type="submit"
+              >
+                <span className="max-sm:hidden">Искать</span> <Search />
+              </Button>
+            </Field>
           </form>
           <Button
             onClick={onCreateClick}
@@ -284,7 +287,12 @@ export function MarketplaceTemplate({
         {/* 7. Load more */}
         {isLoadMoreButtonShown && (
           <div className="text-center">
-            <Button variant="ghost" onClick={onLoadMore} disabled={isFetching}>
+            <Button
+              variant="ghost"
+              className="hover:bg-foreground/5 hover:text-foreground"
+              onClick={onLoadMore}
+              disabled={isFetching}
+            >
               {isFetching ? "Загрузка..." : "Загрузить еще"}
             </Button>
           </div>
