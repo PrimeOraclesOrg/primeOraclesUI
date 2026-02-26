@@ -26,7 +26,7 @@ export function MobileFilters({
 }: MobileFiltersProps) {
   const { t } = useTranslation();
 
-  const activeCategory = categories?.find((c) => c.code === currentCategoryCode);
+  const activeCategory = categories.find((c) => c.code === currentCategoryCode);
   const subcategories = activeCategory?.subcategories ?? [];
 
   return (

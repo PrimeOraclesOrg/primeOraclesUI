@@ -9,7 +9,12 @@ import { useForm } from "react-hook-form";
 
 export const useMarketplace = () => {
   const [cursor, setCursor] = useState<SearchProductsParams["p_cursor"]>(null);
-  const { data: categories } = useGetCategoriesForProductsQuery();
+  const {
+    data: categories,
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+    refetch: refetchCategories,
+  } = useGetCategoriesForProductsQuery();
   const debounceTimeoutRef = useRef<NodeJS.Timeout>(null);
   const [searchRequest, setSearchRequest] = useState("");
   const [isCategorySelectPopupShown, setIsCategorySelectPopupShown] = useState(false);
@@ -65,6 +70,7 @@ export const useMarketplace = () => {
     Number(formData.category_l1 !== "all") + Number(Boolean(formData.category_l2));
 
   const setCategory = (categoryId: string) => {
+    if (!categories) return;
     marketSearchForm.setValue("category_l1", categoryId || categories[0].code);
     setSubCategory("");
     setCursor(null);
@@ -76,13 +82,17 @@ export const useMarketplace = () => {
   };
 
   const resetFilters = () => {
-    setCategory(categories?.[0].code);
+    if (!categories) return;
+    setCategory(categories[0].code);
     setSubCategory("");
   };
 
   return {
     products,
     categories,
+    isCategoriesLoading,
+    isCategoriesError,
+    refetchCategories,
     isLoadMoreButtonShown,
     isCategorySelectPopupShown,
     setIsCategorySelectPopupShown,

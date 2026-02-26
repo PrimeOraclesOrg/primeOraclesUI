@@ -1,4 +1,7 @@
 import { MarketplaceTemplate } from "@/components/templates";
+import { LoadingScreen } from "@/components/atoms";
+import { ErrorState } from "@/components/atoms";
+import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
 import { useMarketplace } from "./useMarketplace";
 
@@ -6,6 +9,9 @@ export default function Marketplace() {
   const navigate = useNavigate();
   const {
     categories,
+    isCategoriesLoading,
+    isCategoriesError,
+    refetchCategories,
     isCategorySelectPopupShown,
     isFetching,
     isLoadMoreButtonShown,
@@ -18,6 +24,22 @@ export default function Marketplace() {
     setIsCategorySelectPopupShown,
     setSubCategory,
   } = useMarketplace();
+
+  if (isCategoriesLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (isCategoriesError || !categories) {
+    return (
+      <MainLayout>
+        <ErrorState
+          title="Не удалось загрузить категории"
+          message="Произошла ошибка при загрузке данных. Попробуйте ещё раз."
+          onRetry={refetchCategories}
+        />
+      </MainLayout>
+    );
+  }
 
   return (
     <MarketplaceTemplate

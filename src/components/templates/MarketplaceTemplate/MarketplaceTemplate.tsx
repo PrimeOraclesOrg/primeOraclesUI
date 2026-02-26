@@ -63,7 +63,7 @@ export function MarketplaceTemplate({
 
   // --- Subcategories logic ---
   const subcategories = useMemo(() => {
-    if (!categories || categories.length === 0) return [];
+    if (categories.length === 0) return [];
     const currentCategory = categories.find((category) => category.code === currentCategoryCode);
     return currentCategory?.subcategories ?? [];
   }, [categories, currentCategoryCode]);
@@ -78,7 +78,7 @@ export function MarketplaceTemplate({
     return t(`product:subCategory.${currentSubCategoryCode}`);
   }, [currentSubCategoryCode, t]);
 
-  const hasActiveFilters = currentCategoryCode !== categories?.[0].code || !!currentSubCategoryCode;
+  const hasActiveFilters = currentCategoryCode !== categories[0].code || !!currentSubCategoryCode;
 
   return (
     <MainLayout>
@@ -150,7 +150,7 @@ export function MarketplaceTemplate({
         />
 
         {/* 3. Desktop L1 categories */}
-        {categories && categories.length > 0 && (
+        {categories.length > 0 && (
           <div className="hidden sm:flex flex-wrap gap-2 mb-4">
             {categories.map((category) => (
               <button
@@ -252,7 +252,7 @@ export function MarketplaceTemplate({
         </div>
 
         {/* 6. Product grid */}
-        {products?.length > 0 ? (
+        {products && products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {products.map((product, index) => (
               <div
