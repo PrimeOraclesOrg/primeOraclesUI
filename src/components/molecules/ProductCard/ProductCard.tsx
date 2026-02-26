@@ -17,7 +17,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute bottom-3 right-3">
-          {product.price == 0 ? (
+          {product.price === 0 ? (
             <span className="badge-free">Бесплатно</span>
           ) : (
             <span className="badge-price">${product.price.toFixed(2)}</span>
