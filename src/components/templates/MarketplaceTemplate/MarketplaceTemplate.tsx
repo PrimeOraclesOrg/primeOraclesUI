@@ -5,7 +5,7 @@ import type { PublicProductCard } from "@/types";
 
 interface MarketplaceTemplateProps {
   products: PublicProductCard[];
-  loadMoreButtonShown: boolean;
+  showLoadMoreButton: boolean;
   isFetching: boolean;
   onProductClick: (productId: string) => void;
   onCreateClick: () => void;
@@ -14,7 +14,7 @@ interface MarketplaceTemplateProps {
 
 export function MarketplaceTemplate({
   products,
-  loadMoreButtonShown,
+  showLoadMoreButton,
   isFetching,
   onLoadMore,
   onProductClick,
@@ -59,7 +59,7 @@ export function MarketplaceTemplate({
         )}
       </div>
 
-      {loadMoreButtonShown && (
+      {showLoadMoreButton && (
         <div className="text-center">
           <Button onClick={onLoadMore} disabled={isFetching}>
             {isFetching ? "Загрузка..." : "Загрузить еще"}

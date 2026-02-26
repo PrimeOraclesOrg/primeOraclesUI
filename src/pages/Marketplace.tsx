@@ -11,7 +11,7 @@ export default function Marketplace() {
     p_cursor: cursor,
   });
 
-  const loadMoreButtonShown = products && products[products.length - 1]?.has_more;
+  const showLoadMoreButton = products && products[products.length - 1]?.has_more;
 
   const handleLoadMore = useCallback(() => {
     if (products && products.length > 0) {
@@ -25,7 +25,7 @@ export default function Marketplace() {
       products={products}
       onProductClick={(id) => navigate(`/products/${id}`)}
       onCreateClick={() => navigate("/create-product")}
-      loadMoreButtonShown={loadMoreButtonShown}
+      showLoadMoreButton={showLoadMoreButton}
       onLoadMore={handleLoadMore}
       isFetching={isFetching}
     />
