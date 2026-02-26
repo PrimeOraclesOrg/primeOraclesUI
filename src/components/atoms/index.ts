@@ -10,3 +10,4 @@ export { LoadingScreen } from "./LoadingScreen/LoadingScreen";
 export { SocialIcon, SocialIcons } from "./SocialIcons/SocialIcons";
 export { WorkspaceStatusBadge } from "./WorkspaceStatusBadge/WorkspaceStatusBadge";
 export { ScrollableRow } from "./ScrollableRow/ScrollableRow";
+export { BottomSheet } from "./BottomSheet/BottomSheet";
