@@ -48,3 +48,20 @@ export async function getChatHistory(
     return normalizeError(err);
   }
 }
+export async function sendMessageService(
+  p_chat_id: string,
+  p_message_text: string
+): Promise<ServiceResult<void>> {
+  try {
+    const { error } = await supabase.rpc("rpc_send_message", {
+      p_chat_id,
+      p_message_text,
+    });
+
+    if (error) throw error;
+
+    return { data: null, error: null };
+  } catch (err) {
+    return normalizeError(err);
+  }
+}
