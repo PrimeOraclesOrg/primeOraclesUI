@@ -9,32 +9,34 @@ interface ScrollableRowProps {
 }
 
 export function ScrollableRow({ children, className, scrollAmount = 200 }: ScrollableRowProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollElementRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   const updateScrollState = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 0);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    const scrollElement = scrollElementRef.current;
+    if (!scrollElement) return;
+    setCanScrollLeft(scrollElement.scrollLeft > 0);
+    setCanScrollRight(
+      scrollElement.scrollLeft + scrollElement.clientWidth < scrollElement.scrollWidth - 1
+    );
   }, []);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+    const scrollElement = scrollElementRef.current;
+    if (!scrollElement) return;
     updateScrollState();
-    el.addEventListener("scroll", updateScrollState, { passive: true });
-    const ro = new ResizeObserver(updateScrollState);
-    ro.observe(el);
+    scrollElement.addEventListener("scroll", updateScrollState, { passive: true });
+    const resizeObserver = new ResizeObserver(updateScrollState);
+    resizeObserver.observe(scrollElement);
     return () => {
-      el.removeEventListener("scroll", updateScrollState);
-      ro.disconnect();
+      scrollElement.removeEventListener("scroll", updateScrollState);
+      resizeObserver.disconnect();
     };
   }, [updateScrollState, children]);
 
   const scrollBy = (dir: number) => {
-    scrollRef.current?.scrollBy({ left: dir * scrollAmount, behavior: "smooth" });
+    scrollElementRef.current?.scrollBy({ left: dir * scrollAmount, behavior: "smooth" });
   };
 
   return (
@@ -48,7 +50,7 @@ export function ScrollableRow({ children, className, scrollAmount = 200 }: Scrol
         </button>
       )}
 
-      <div ref={scrollRef} className={cn("overflow-x-auto scrollbar-hide flex", className)}>
+      <div ref={scrollElementRef} className={cn("overflow-x-auto scrollbar-hide flex", className)}>
         {children}
       </div>
 
