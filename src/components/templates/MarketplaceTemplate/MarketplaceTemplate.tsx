@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
-import { UseFormReturn } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { MarketSearchFormData } from "@/utils/validators/marketSearch";
 import { cn } from "@/utils";
 import { marketSortOptions } from "@/data/market";
@@ -58,6 +58,7 @@ export function MarketplaceTemplate({
 
   const currentCategoryCode = searchForm.watch("category_l1");
   const currentSubCategoryCode = searchForm.watch("category_l2");
+  const sortOption = searchForm.watch("sort_by");
 
   // --- Subcategories logic ---
   const subcategories = useMemo(() => {
@@ -143,20 +144,29 @@ export function MarketplaceTemplate({
               </span>
             )}
           </button>
-          <Select defaultValue={marketSortOptions[0].id}>
-            <SelectTrigger className="flex-1">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {marketSortOptions.map((opt) => (
-                  <SelectItem key={opt.id} value={opt.id}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <Controller
+            name="sort_by"
+            control={searchForm.control}
+            render={({ field }) => (
+              <Select
+                value={sortOption}
+                onValueChange={(value) => searchForm.setValue("sort_by", value)}
+              >
+                <SelectTrigger ref={field.ref} className="flex-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {marketSortOptions.map((opt) => (
+                      <SelectItem key={opt.id} value={opt.id}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          />
         </div>
 
         <MobileFilters
@@ -266,20 +276,29 @@ export function MarketplaceTemplate({
           <span className="text-sm text-muted-foreground">Найденные продукты</span>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Сортировка</span>
-            <Select defaultValue={marketSortOptions[0].id}>
-              <SelectTrigger className="w-44 bg-secondary">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {marketSortOptions.map((opt) => (
-                    <SelectItem key={opt.id} value={opt.id}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <Controller
+              name="sort_by"
+              control={searchForm.control}
+              render={({ field }) => (
+                <Select
+                  value={sortOption}
+                  onValueChange={(value) => searchForm.setValue("sort_by", value)}
+                >
+                  <SelectTrigger ref={field.ref} className="w-44 bg-secondary">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {marketSortOptions.map((sortOption) => (
+                        <SelectItem key={sortOption.id} value={sortOption.id}>
+                          {sortOption.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
         </div>
 
