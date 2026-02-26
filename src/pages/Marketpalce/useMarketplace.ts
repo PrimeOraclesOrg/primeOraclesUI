@@ -75,6 +75,7 @@ export const useMarketplace = () => {
   const onSearch: FormEventHandler = (event) => {
     event.preventDefault();
     setSearchRequest(formData.searchRequest);
+    setCursor(null);
   };
 
   return {
