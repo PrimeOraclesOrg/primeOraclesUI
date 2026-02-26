@@ -42,7 +42,7 @@ export const useMarketplace = () => {
     p_limit: PAGE_LIMIT,
   });
 
-  const isLoadMoreButtonShown = products && products[products.length - 1]?.has_more;
+  const showLoadMoreButton = products && products[products.length - 1]?.has_more;
 
   const handleLoadMore = useCallback(() => {
     if (products && products.length > 0) {
@@ -89,7 +89,7 @@ export const useMarketplace = () => {
     categories,
     isCategoriesLoading,
     isCategoriesError,
-    isLoadMoreButtonShown,
+    showLoadMoreButton,
     isCategorySelectPopupShown,
     isFetching,
     marketSearchForm,

@@ -2,7 +2,7 @@ import { FormEventHandler, useMemo } from "react";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { ProductCard, SearchBar } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import type { ProductCategory, PublicProductCard } from "@/types";
+import type { ProductCategory } from "@/types";
 import {
   Select,
   SelectContent,
@@ -20,10 +20,11 @@ import { MobileFilters } from "@/components/organisms/MobileFilters/MobileFilter
 import { ScrollableRow } from "@/components/atoms";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Field } from "@/components/ui/field";
+import { Product } from "@/types/products";
 
 interface MarketplaceTemplateProps {
-  products: PublicProductCard[];
-  isLoadMoreButtonShown: boolean;
+  products: Product[];
+  showLoadMoreButton: boolean;
   isCategorySelectPopupShown: boolean;
   isFetching: boolean;
   categories: ProductCategory[];
@@ -43,7 +44,7 @@ interface MarketplaceTemplateProps {
 
 export function MarketplaceTemplate({
   products,
-  isLoadMoreButtonShown,
+  showLoadMoreButton,
   isCategorySelectPopupShown,
   isFetching,
   categories,
@@ -287,7 +288,7 @@ export function MarketplaceTemplate({
         )}
 
         {/* 7. Load more */}
-        {isLoadMoreButtonShown && (
+        {showLoadMoreButton && (
           <div className="text-center">
             <Button
               variant="ghost"

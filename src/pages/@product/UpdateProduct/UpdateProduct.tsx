@@ -2,7 +2,7 @@ import { LoadingScreen } from "@/components/atoms";
 import { useUpdateProduct } from "./useUpdateProduct";
 import { UpdateProductTemplate } from "@/components/templates";
 
-export default function UpdateProduct() {
+export function UpdateProduct() {
   const {
     updateProductForm,
     isProductLoading,

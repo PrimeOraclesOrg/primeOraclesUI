@@ -1,4 +1,4 @@
-import type { Product, Reward, LearningItem, LessonDetails } from "./models";
+import type { Reward, LearningItem, LessonDetails } from "./models";
 
 export interface ApiError {
   message: string;
@@ -11,11 +11,6 @@ export interface ApiError {
 export interface ProductsQueryArgs {
   category?: string;
   searchQuery?: string;
-}
-
-export interface ProductsResponse {
-  products: Product[];
-  categories: string[];
 }
 
 // ========================================

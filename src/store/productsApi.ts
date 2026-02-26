@@ -1,13 +1,11 @@
 import { baseApi } from "./baseApi";
-import { homePageProducts } from "@/data/products";
 import {
   EditorProductPage,
-  HomeProductCard,
+  HomeProduct,
   MyProduct,
   Product,
   ProductCategory,
   ProductCommentsResponse,
-  PublicProductCard,
   PublicProductPage,
 } from "@/types";
 import {
@@ -22,6 +20,7 @@ import {
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
 import { FetchMyProductsParams, SearchProductsParams } from "@/services/productsService/types";
+import { homePageProducts } from "@/data";
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -62,7 +61,7 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    getProducts: builder.query<PublicProductCard[], SearchProductsParams>({
+    getProducts: builder.query<Product[], SearchProductsParams>({
       queryFn: async (params) => {
         const { data, error } = await fetchProducts(params);
         if (error) return { error };
@@ -98,7 +97,7 @@ export const productsApi = baseApi.injectEndpoints({
       },
     }),
 
-    getHomeProducts: builder.query<HomeProductCard[], void>({
+    getHomeProducts: builder.query<HomeProduct[], void>({
       queryFn: () => {
         return { data: homePageProducts };
       },

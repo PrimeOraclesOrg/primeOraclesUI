@@ -13,7 +13,7 @@ export default function Marketplace() {
     isCategoriesError,
     isCategorySelectPopupShown,
     isFetching,
-    isLoadMoreButtonShown,
+    showLoadMoreButton,
     marketSearchForm,
     products,
     selectedCategoriesCount,
@@ -50,7 +50,7 @@ export default function Marketplace() {
       categories={categories}
       onProductClick={(id) => navigate(`/products/${id}`)}
       onCreateClick={() => navigate("/create-product")}
-      isLoadMoreButtonShown={isLoadMoreButtonShown}
+      showLoadMoreButton={showLoadMoreButton}
       isCategorySelectPopupShown={isCategorySelectPopupShown}
       onCategorySelectOpen={() => setIsCategorySelectPopupShown(true)}
       onCategorySelectClose={() => setIsCategorySelectPopupShown(false)}

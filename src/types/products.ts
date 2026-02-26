@@ -48,7 +48,7 @@ export type PublicProductPage = Prettify<
   }
 >;
 
-export type PublicProductCard = Prettify<
+export type Product = Prettify<
   Omit<
     Database["public"]["Functions"]["app_search_products"]["Returns"][0],
     "category" | "creator" | "next_cursor"
@@ -59,8 +59,8 @@ export type PublicProductCard = Prettify<
   }
 >;
 
-export type HomeProductCard = Prettify<
-  Pick<PublicProductCard, "id" | "cover_url" | "price" | "title" | "rating" | "comments_count"> & {
+export type HomeProduct = Prettify<
+  Pick<Product, "id" | "cover_url" | "price" | "title" | "rating" | "comments_count"> & {
     creator: {
       name: string;
     };

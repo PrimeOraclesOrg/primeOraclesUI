@@ -1,3 +1,3 @@
-export { default as ProductDetail } from "./ProductDetail";
-export { default as CreateProduct } from "./CreateProduct/CreateProduct";
-export { default as UpdateProduct } from "./UpdateProduct/UpdateProduct";
+export { ProductDetail } from "./ProductDetail";
+export { CreateProduct } from "./CreateProduct/CreateProduct";
+export { UpdateProduct } from "./UpdateProduct/UpdateProduct";

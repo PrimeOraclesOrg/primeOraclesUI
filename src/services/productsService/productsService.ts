@@ -6,16 +6,14 @@
  */
 
 import { PostgrestError } from "@supabase/supabase-js";
-import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
   EditorProductPage,
   FullProfile,
-  HomeProductCard,
+  HomeProduct,
   MyProduct,
   Product,
   ProductCategory,
   ProductCommentsResponse,
-  PublicProductCard,
   PublicProductPage,
   Review,
   ServiceError,
@@ -86,7 +84,7 @@ export async function fetchProducts(filter: SearchProductsParams) {
       data: data.map((product) => ({
         ...product,
         cover_url: buildCoverUrl(product.cover_url),
-      })) as unknown as PublicProductCard[],
+      })) as unknown as Product[],
       error: null,
     };
   } catch (error) {
@@ -110,20 +108,6 @@ export async function fetchCategoriesForProducts() {
   } catch (error) {
     return normalizeError(error);
   }
-}
-
-/**
- * Fetch products for home page
- */
-export async function fetchHomeProducts(): Promise<HomeProductCard[]> {
-  // TODO: Replace with Supabase query
-  // const { data, error } = await supabase
-  //   .from('products')
-  //   .select('*')
-  //   .eq('featured', true)
-  //   .limit(3);
-
-  return homePageProducts;
 }
 
 /**

@@ -5,7 +5,7 @@ import { usePopup } from "@/hooks/usePopup";
 import { useGetProductDetailsQuery, useGetProductCommentsQuery } from "@/store";
 import { useCallback, useEffect, useState } from "react";
 
-export default function ProductDetail() {
+export function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { openPopup } = usePopup();

@@ -1,9 +1,10 @@
 import { RatingStars } from "@/components/atoms";
-import type { HomeProductCard, PublicProductCard } from "@/types";
 import { UserAvatar } from "../UserAvatar/UserAvatar";
+import { HomeProduct } from "@/types";
+import { Product } from "@/types/products";
 
 interface ProductCardProps {
-  product: PublicProductCard | HomeProductCard;
+  product: Product | HomeProduct;
   onClick?: () => void;
 }
 
@@ -17,7 +18,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute bottom-3 right-3">
-          {product.price == 0 ? (
+          {product.price === 0 ? (
             <span className="badge-free">Бесплатно</span>
           ) : (
             <span className="badge-price">${product.price.toFixed(2)}</span>
