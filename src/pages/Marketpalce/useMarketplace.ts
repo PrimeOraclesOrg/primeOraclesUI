@@ -4,7 +4,7 @@ import { useGetCategoriesForProductsQuery, useGetProductsQuery } from "@/store/p
 import { MarketSortOptions } from "@/types/market";
 import { MarketSearchFormData, marketSearchSchema } from "@/utils/validators/marketSearch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { FormEventHandler, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export const useMarketplace = () => {
@@ -15,7 +15,6 @@ export const useMarketplace = () => {
     isError: isCategoriesError,
     refetch: refetchCategories,
   } = useGetCategoriesForProductsQuery();
-  const debounceTimeoutRef = useRef<NodeJS.Timeout>(null);
   const [searchRequest, setSearchRequest] = useState("");
   const [isCategorySelectPopupShown, setIsCategorySelectPopupShown] = useState(false);
 
@@ -33,20 +32,6 @@ export const useMarketplace = () => {
   });
 
   const formData = marketSearchForm.watch();
-
-  const clearDebounceTimeout = () => {
-    if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
-  };
-
-  useEffect(() => {
-    clearDebounceTimeout();
-
-    debounceTimeoutRef.current = setTimeout(() => {
-      setSearchRequest(formData.searchRequest);
-    }, 500);
-
-    return clearDebounceTimeout;
-  }, [formData.searchRequest]);
 
   const { data: products, isFetching } = useGetProductsQuery({
     p_query: searchRequest || null,
@@ -87,19 +72,25 @@ export const useMarketplace = () => {
     setSubCategory("");
   };
 
+  const onSearch: FormEventHandler = (event) => {
+    event.preventDefault();
+    setSearchRequest(formData.searchRequest);
+  };
+
   return {
     products,
     categories,
     isCategoriesLoading,
     isCategoriesError,
-    refetchCategories,
     isLoadMoreButtonShown,
     isCategorySelectPopupShown,
-    setIsCategorySelectPopupShown,
-    handleLoadMore,
     isFetching,
     marketSearchForm,
     selectedCategoriesCount,
+    refetchCategories,
+    setIsCategorySelectPopupShown,
+    handleLoadMore,
+    onSearch,
     setCategory,
     setSubCategory,
     resetFilters,

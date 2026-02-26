@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { FormEventHandler, useMemo } from "react";
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { ProductCard, SearchBar } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
@@ -12,13 +12,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
-import { Controller, UseFormReturn } from "react-hook-form";
+import { Controller, FormSubmitHandler, UseFormReturn } from "react-hook-form";
 import { MarketSearchFormData } from "@/utils/validators/marketSearch";
 import { cn } from "@/utils";
 import { marketSortOptions } from "@/data/market";
 import { MobileFilters } from "@/components/organisms/MobileFilters/MobileFilters";
 import { ScrollableRow } from "@/components/atoms";
-import { SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 
 interface MarketplaceTemplateProps {
   products: PublicProductCard[];
@@ -36,6 +36,7 @@ interface MarketplaceTemplateProps {
   setCategory: (category: string) => void;
   setSubCategory: (subCategory: string) => void;
   resetFilters: () => void;
+  onSearch: FormEventHandler<HTMLFormElement>;
 }
 
 export function MarketplaceTemplate({
@@ -46,6 +47,7 @@ export function MarketplaceTemplate({
   categories,
   searchForm,
   selectedCategoriesCount,
+  onSearch,
   onLoadMore,
   onProductClick,
   onCreateClick,
@@ -89,12 +91,19 @@ export function MarketplaceTemplate({
         </div>
         {/* 1. Header row */}
         <div className="flex items-center gap-3 mb-5">
-          <div className="flex-1">
+          <form className="flex-1 flex items-center gap-2" onSubmit={onSearch}>
             <SearchBar {...searchForm.register("searchRequest")} />
-          </div>
+            <Button
+              variant="outline"
+              className="hover:bg-foreground/5 hover:text-foreground"
+              type="submit"
+            >
+              <span className="max-sm:hidden">Искать</span> <Search />
+            </Button>
+          </form>
           <Button
             onClick={onCreateClick}
-            className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity px-6 whitespace-nowrap hidden sm:inline-flex"
+            className="gold-gradient text-primary-foreground hover:opacity-90 transition-opacity px-6 whitespace-nowrap hidden min-[1200px]:inline-flex"
           >
             Создать компанию
           </Button>

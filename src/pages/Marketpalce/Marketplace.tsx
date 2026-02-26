@@ -11,13 +11,14 @@ export default function Marketplace() {
     categories,
     isCategoriesLoading,
     isCategoriesError,
-    refetchCategories,
     isCategorySelectPopupShown,
     isFetching,
     isLoadMoreButtonShown,
     marketSearchForm,
     products,
     selectedCategoriesCount,
+    refetchCategories,
+    onSearch,
     handleLoadMore,
     resetFilters,
     setCategory,
@@ -43,6 +44,7 @@ export default function Marketplace() {
 
   return (
     <MarketplaceTemplate
+      onSearch={onSearch}
       products={products}
       categories={categories}
       onProductClick={(id) => navigate(`/products/${id}`)}
