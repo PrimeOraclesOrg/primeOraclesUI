@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChatsFilter, ChatHistoryMessage } from "@/services/chatService/types";
 import { chatsFilterFromTab } from "@/utils/chats";
-import { useGetChatHistoryQuery } from "@/store/chatsApi";
+import { useGetChatHistoryQuery, useSendMessageMutation } from "@/store/chatsApi";
 import { usePaginatedChats } from "./usePaginatedChats";
 
 export type MessageTab = "Все" | "Покупка" | "Продажа";
@@ -20,6 +20,11 @@ export const useMessages = () => {
     search: searchQuery,
     limit: 20,
   });
+
+  const [
+    sendMessageMutation,
+    { isLoading: isSendMessageLoading, isError: isSendMessageError, reset: resetSendState },
+  ] = useSendMessageMutation();
 
   const {
     data: chatHistory,
@@ -45,19 +50,12 @@ export const useMessages = () => {
   const handleSendMessage = useCallback(
     (text: string) => {
       if (!selectedChatId || !text.trim()) return;
-      const newMessage: ChatHistoryMessage = {
-        id: `opt-${Date.now()}`,
-        author_id: "",
-        message_text: text.trim(),
-        created_at: new Date().toISOString(),
-        is_own_message: true,
-      };
-      setOptimisticMessagesByChatId((prev) => ({
-        ...prev,
-        [selectedChatId]: [...(prev[selectedChatId] ?? []), newMessage],
-      }));
+      sendMessageMutation({
+        p_chat_id: selectedChatId,
+        p_message_text: text.trim(),
+      });
     },
-    [selectedChatId]
+    [selectedChatId, sendMessageMutation]
   );
 
   const handleConfirmOrder = useCallback(() => {
@@ -75,6 +73,10 @@ export const useMessages = () => {
     }));
   }, [selectedChatId]);
 
+  useEffect(() => {
+    resetSendState();
+  }, [selectedChatId, resetSendState]);
+
   return {
     selectedChatId,
     setSelectedChatId,
@@ -89,6 +91,8 @@ export const useMessages = () => {
     saleCount,
     handleSendMessage,
     handleConfirmOrder,
+    isSendMessageLoading,
+    isSendMessageError,
     isLoading,
     isFetching,
     hasMore,

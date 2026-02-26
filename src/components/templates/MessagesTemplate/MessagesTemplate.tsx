@@ -30,6 +30,8 @@ interface MessagesTemplateProps {
   onTabChange: (tab: MessageTab) => void;
   onSendMessage: (text: string) => void;
   onConfirmOrder: () => void;
+  isSendMessageLoading?: boolean;
+  isSendMessageError?: boolean;
   isLoading?: boolean;
   isLoadMoreFetching?: boolean;
   hasMore?: boolean;
@@ -52,6 +54,8 @@ export function MessagesTemplate({
   onTabChange,
   onSendMessage,
   onConfirmOrder,
+  isSendMessageLoading = false,
+  isSendMessageError = false,
   isLoading = false,
   isLoadMoreFetching = false,
   hasMore = false,
@@ -105,7 +109,7 @@ export function MessagesTemplate({
   }, [messageInput]);
 
   const submitMessage = () => {
-    if (!messageInput.trim()) return;
+    if (!messageInput.trim() || isSendMessageLoading) return;
     onSendMessage(messageInput);
     setMessageInput("");
   };
@@ -382,35 +386,39 @@ export function MessagesTemplate({
               </div>
 
               {/* Message input */}
-              <form
-                onSubmit={handleSubmitMessage}
-                className="shrink-0 flex items-center gap-1.5 border-t border-border p-2 sm:gap-2 sm:p-3"
-              >
-                <button
-                  type="button"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground sm:h-10 sm:w-10"
-                  aria-label="Прикрепить"
-                >
-                  <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
-                </button>
-                <Textarea
-                  id="message-input"
-                  ref={messageInputRef}
-                  rows={1}
-                  value={messageInput}
-                  onChange={(e) => setMessageInput(e.target.value)}
-                  onKeyDown={handleMessageInputKeyDown}
-                  placeholder="Написать сообщение..."
-                  className="min-h-10 min-w-0 flex-1 resize-none border-border py-2 text-base focus-visible:ring-primary sm:text-sm"
-                />
-                <button
-                  type="submit"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground sm:h-10 sm:w-10"
-                  aria-label="Отправить сообщение"
-                >
-                  <Send className="h-4 w-4 sm:h-5 sm:w-5" />
-                </button>
-              </form>
+              <div className="shrink-0 border-t border-border p-2 sm:p-3">
+                {isSendMessageError && (
+                  <p className="mb-2 text-sm text-destructive">Не удалось отправить сообщение</p>
+                )}
+                <form onSubmit={handleSubmitMessage} className="flex items-center gap-1.5 sm:gap-2">
+                  <button
+                    type="button"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground sm:h-10 sm:w-10"
+                    aria-label="Прикрепить"
+                  >
+                    <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+                  </button>
+                  <Textarea
+                    id="message-input"
+                    ref={messageInputRef}
+                    rows={1}
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                    onKeyDown={handleMessageInputKeyDown}
+                    placeholder="Написать сообщение..."
+                    disabled={isSendMessageLoading}
+                    className="min-h-10 min-w-0 flex-1 resize-none border-border py-2 text-base focus-visible:ring-primary sm:text-sm"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isSendMessageLoading}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-50 sm:h-10 sm:w-10"
+                    aria-label="Отправить сообщение"
+                  >
+                    <Send className="h-4 w-4 sm:h-5 sm:w-5" />
+                  </button>
+                </form>
+              </div>
             </>
           )}
         </div>

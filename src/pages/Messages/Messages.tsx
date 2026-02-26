@@ -18,6 +18,8 @@ export const Messages = () => {
     setActiveTab,
     handleSendMessage,
     handleConfirmOrder,
+    isSendMessageLoading,
+    isSendMessageError,
     isLoading,
     isFetching,
     hasMore,
@@ -41,6 +43,8 @@ export const Messages = () => {
       onTabChange={setActiveTab}
       onSendMessage={handleSendMessage}
       onConfirmOrder={handleConfirmOrder}
+      isSendMessageLoading={isSendMessageLoading}
+      isSendMessageError={isSendMessageError}
       isLoading={isLoading}
       isLoadMoreFetching={isFetching && !isLoading}
       hasMore={hasMore}
