@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
-import { Controller, FormSubmitHandler, UseFormReturn } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { MarketSearchFormData } from "@/utils/validators/marketSearch";
 import { cn } from "@/utils";
 import { marketSortOptions } from "@/data/market";
@@ -284,7 +284,7 @@ export function MarketplaceTemplate({
         {/* 7. Load more */}
         {isLoadMoreButtonShown && (
           <div className="text-center">
-            <Button onClick={onLoadMore} disabled={isFetching}>
+            <Button variant="ghost" onClick={onLoadMore} disabled={isFetching}>
               {isFetching ? "Загрузка..." : "Загрузить еще"}
             </Button>
           </div>

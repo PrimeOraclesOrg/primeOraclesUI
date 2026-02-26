@@ -12,7 +12,7 @@ export const SearchBar = forwardRef(
       <div className="relative flex-1 max-w-xl">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <Input
-          type="text"
+          type="search"
           placeholder="Введите запрос"
           {...props}
           ref={ref}

@@ -36,8 +36,8 @@ export const useMarketplace = () => {
   const { data: products, isFetching } = useGetProductsQuery({
     p_query: searchRequest || null,
     p_sort: formData.sort_by as MarketSortOptions,
-    p_category_l1: formData.category_l1,
-    p_category_l2: formData.category_l2,
+    p_category_l1: formData.category_l1 || "all",
+    p_category_l2: formData.category_l2 || "all",
     p_cursor: cursor,
     p_limit: PAGE_LIMIT,
   });
