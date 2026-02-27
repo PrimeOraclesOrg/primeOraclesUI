@@ -15,7 +15,7 @@ export const SearchBar = forwardRef(
     const [value, setValue] = useState("");
 
     return (
-      <div className="relative flex-1 max-w-xl">
+      <div className="group relative flex-1 max-w-xl">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <Input
           type="text"
@@ -33,7 +33,7 @@ export const SearchBar = forwardRef(
         />
         {onClear && value && (
           <button
-            className="bg-transparent border-none absolute right-4 top-1/2 -translate-y-1/2"
+            className="bg-transparent border-none absolute right-4 top-1/2 -translate-y-1/2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto"
             onClick={() => {
               onClear();
               setValue("");
