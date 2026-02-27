@@ -27,7 +27,7 @@ export const SearchBar = forwardRef(
           }}
           ref={ref}
           className={cn(
-            "pl-12 h-11 bg-secondary border-border rounded-full text-foreground placeholder:text-muted-foreground focus:ring-primary",
+            "pl-12 h-11 bg-secondary border-border rounded-full text-foreground placeholder:text-muted-foreground focus:ring-primary pr-8",
             className
           )}
         />
