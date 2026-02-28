@@ -30,7 +30,6 @@ interface MarketplaceTemplateProps {
   categories: ProductCategory[];
   searchForm: UseFormReturn<MarketSearchFormData>;
   selectedCategoriesCount: number;
-  onProductClick: (productId: string) => void;
   onCreateClick: () => void;
   onLoadMore: () => void;
   onCategorySelectOpen: () => void;
@@ -52,7 +51,6 @@ export function MarketplaceTemplate({
   selectedCategoriesCount,
   onSearch,
   onLoadMore,
-  onProductClick,
   onCreateClick,
   onCategorySelectOpen,
   onCategorySelectClose,
@@ -275,7 +273,7 @@ export function MarketplaceTemplate({
                 className="animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <ProductCard product={product} onClick={() => onProductClick(product.id)} />
+                <ProductCard product={product} />
               </div>
             ))}
           </div>

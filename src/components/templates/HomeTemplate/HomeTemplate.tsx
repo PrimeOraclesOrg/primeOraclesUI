@@ -86,7 +86,7 @@ export function HomeTemplate({
           </h2>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4 w-full max-w-6xl">
             {productsPreview.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} isHomeProduct />
             ))}
           </div>
         </div>

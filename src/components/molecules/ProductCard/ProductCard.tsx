@@ -5,12 +5,18 @@ import { Product } from "@/types/products";
 
 interface ProductCardProps {
   product: Product | HomeProduct;
-  onClick?: () => void;
+  isHomeProduct?: boolean;
 }
 
-export function ProductCard({ product, onClick }: ProductCardProps) {
+export function ProductCard({ product, isHomeProduct = false }: ProductCardProps) {
   return (
-    <div onClick={onClick} className="overflow-hidden cursor-pointer group h-full">
+    <a
+      href={isHomeProduct ? "#" : `/products/${product.id}`}
+      onClick={(event) => {
+        if (isHomeProduct) event.preventDefault();
+      }}
+      className="overflow-hidden cursor-pointer group h-full"
+    >
       <div className="relative aspect-video overflow-hidden rounded-sm">
         <img
           src={product.cover_url}
@@ -40,6 +46,6 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
           </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 }

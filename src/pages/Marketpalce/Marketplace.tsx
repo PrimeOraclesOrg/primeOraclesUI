@@ -48,7 +48,6 @@ export default function Marketplace() {
       onSearch={onSearch}
       products={products}
       categories={categories}
-      onProductClick={(id) => navigate(`/products/${id}`)}
       onCreateClick={() => navigate("/create-product")}
       showLoadMoreButton={showLoadMoreButton}
       isCategorySelectPopupShown={isCategorySelectPopupShown}
