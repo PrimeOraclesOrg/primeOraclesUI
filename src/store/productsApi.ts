@@ -1,7 +1,7 @@
 import { baseApi } from "./baseApi";
-import { mockProducts, productCategories, homePageProducts } from "@/data/products";
 import {
   EditorProductPage,
+  HomeProduct,
   MyProduct,
   Product,
   ProductCategory,
@@ -16,19 +16,11 @@ import {
   fetchCategoriesForProducts,
   fetchEditorProductPage,
   updateProductService,
+  fetchProducts,
 } from "@/services/productsService/productsService";
 import { CreateProductFormData } from "@/utils/validators/createProduct";
-import { FetchMyProductsParams } from "@/services/productsService/types";
-
-interface ProductsQueryArgs {
-  category?: string;
-  searchQuery?: string;
-}
-
-interface ProductsResponse {
-  products: Product[];
-  categories: string[];
-}
+import { FetchMyProductsParams, SearchProductsParams } from "@/services/productsService/types";
+import { homePageProducts } from "@/data";
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -69,25 +61,29 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: ["Products"],
     }),
 
-    getProducts: builder.query<ProductsResponse, ProductsQueryArgs>({
-      queryFn: ({ category, searchQuery }) => {
-        let filtered = [...mockProducts];
-
-        if (category && category !== "Все") {
-          filtered = filtered.filter((p) => p.category === category);
+    getProducts: builder.query<Product[], SearchProductsParams>({
+      queryFn: async (params) => {
+        const { data, error } = await fetchProducts(params);
+        if (error) return { error };
+        return { data };
+      },
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        if (!queryArgs) {
+          return `${endpointName}-default`;
         }
 
-        if (searchQuery) {
-          const query = searchQuery.toLowerCase();
-          filtered = filtered.filter((p) => p.title.toLowerCase().includes(query));
-        }
+        const { p_sort, p_query, p_category_l1, p_category_l2 } = queryArgs;
+        return `${endpointName}-${p_sort}-${p_query}-${p_category_l1}-${p_category_l2}`;
+      },
 
-        return {
-          data: {
-            products: filtered,
-            categories: productCategories,
-          },
-        };
+      merge: (currentCache, newItems, { arg }) => {
+        if (!arg.p_cursor) {
+          return newItems;
+        }
+        return [...currentCache, ...newItems];
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
       },
       providesTags: ["Products"],
     }),
@@ -101,7 +97,7 @@ export const productsApi = baseApi.injectEndpoints({
       },
     }),
 
-    getHomeProducts: builder.query<Product[], void>({
+    getHomeProducts: builder.query<HomeProduct[], void>({
       queryFn: () => {
         return { data: homePageProducts };
       },

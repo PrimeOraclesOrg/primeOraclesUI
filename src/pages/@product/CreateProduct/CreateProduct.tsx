@@ -2,7 +2,7 @@ import { CreateProductTemplate } from "@/components/templates/CreateProductTempl
 import { useCreateProduct } from "./useCreateProduct";
 import { LoadingScreen } from "@/components/atoms";
 
-export default function CreateProduct() {
+export function CreateProduct() {
   const {
     createProductForm,
     categories,

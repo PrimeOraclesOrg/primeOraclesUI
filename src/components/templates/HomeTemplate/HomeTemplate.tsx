@@ -1,7 +1,7 @@
 import { MainLayout } from "@/components/templates/MainLayout/MainLayout";
 import { RewardCard, ProductCard, FAQAccordion } from "@/components/molecules";
 import { Button } from "@/components/ui/button";
-import type { Reward, Product } from "@/types";
+import type { HomeProduct, Reward } from "@/types";
 import { SpotLightShape } from "@/assets/graphics/SpotLightShape";
 import { SpotLightShoeShape } from "@/assets/graphics/SpotLightShoeShape";
 import { SpotLightDiskShape } from "@/assets/graphics/SpotLightDiskShape";
@@ -9,7 +9,7 @@ import { ArrowRight } from "lucide-react";
 
 interface HomeTemplateProps {
   rewardsPreview: Reward[];
-  productsPreview: Product[];
+  productsPreview: HomeProduct[];
   onCreateClick: () => void;
 }
 
@@ -86,7 +86,7 @@ export function HomeTemplate({
           </h2>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4 w-full max-w-6xl">
             {productsPreview.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} isHomeProduct />
             ))}
           </div>
         </div>

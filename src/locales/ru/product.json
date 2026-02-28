@@ -1,5 +1,6 @@
 {
   "category": {
+    "all": "Все",
     "trading": "Трейдинг",
     "social-media": "Социальные сети",
     "ai-products": "AI Продукты",
@@ -9,6 +10,7 @@
   "subCategory": {
     "communities": "Сообщества",
     "softs": "Софты",
+    "bots": "Боты",
     "scripts": "Скрипты",
     "courses": "Обучение",
     "parsers": "Парсеры",

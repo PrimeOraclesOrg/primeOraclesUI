@@ -2,11 +2,9 @@ import { Routes, Route, Outlet } from "react-router-dom";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute/ProtectedRoute";
 import Home from "@/pages/Home";
 import Rewards from "@/pages/Rewards";
-import Marketplace from "@/pages/Marketplace";
+import Marketplace from "@/pages/Marketpalce/Marketplace";
 import Learning from "@/pages/Learning";
 import LearningDetail from "@/pages/LearningDetail";
-import ProductDetail from "@/pages/ProductDetail";
-import CreateProduct from "@/pages/CreateProduct/CreateProduct";
 import WorkspaceMarketplace from "@/pages/WorkspaceMarketplace/WorkspaceMarketplace";
 import NotFound from "@/pages/NotFound";
 import Login from "@/pages/Login";
@@ -15,15 +13,17 @@ import ResetPassword from "@/pages/ResetPassword/ResetPassword";
 import ProfileSetup from "@/pages/ProfileSetup/ProfileSetup";
 import { AuthRoute } from "@/components/shared";
 import { LoadingScreen } from "@/components/atoms";
-import { BasicSettings } from "@/pages/@settings/BasicSettings/BasicSettings";
-import { SecuritySettings } from "@/pages/@settings/SecuritySettings/SecuritySettings";
-import { BalanceSettings } from "@/pages/@settings/BalanceSettings/BalanceSettings";
-import { HistorySettings } from "@/pages/@settings/HistorySettings/HistorySettings";
 import { useGetMyProfileQuery } from "@/store/usersApi";
 import { useGetAuthUserQuery } from "@/store/authApi";
 import { useForceProfileSetup } from "@/hooks/useForceProfileSetup";
 import { useAuthListener } from "@/hooks/useAuthListener";
-import UpdateProduct from "@/pages/UpdateProduct/UpdateProduct";
+import { CreateProduct, ProductDetail, UpdateProduct } from "@/pages/@product";
+import {
+  BalanceSettings,
+  BasicSettings,
+  HistorySettings,
+  SecuritySettings,
+} from "@/pages/@settings";
 import { Messages } from "@/pages/Messages/Messages";
 
 export function AppRoutes() {

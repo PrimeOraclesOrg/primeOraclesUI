@@ -1,6 +1,7 @@
 import { Prettify } from "@/utils";
 import { FullProfile } from "./models";
 import { Database } from "./supabase";
+import { Cursor } from "./api";
 
 export type FAQ = {
   position: number;
@@ -44,6 +45,25 @@ export type PublicProductPage = Prettify<
     faq: FAQ[];
     advantages: Advantage[];
     category: SpecificProductCategory;
+  }
+>;
+
+export type Product = Prettify<
+  Omit<
+    Database["public"]["Functions"]["app_search_products"]["Returns"][0],
+    "category" | "creator" | "next_cursor"
+  > & {
+    creator: FullProfile;
+    category: SpecificProductCategory;
+    next_cursor: Cursor;
+  }
+>;
+
+export type HomeProduct = Prettify<
+  Pick<Product, "id" | "cover_url" | "price" | "title" | "rating" | "comments_count"> & {
+    creator: {
+      name: string;
+    };
   }
 >;
 

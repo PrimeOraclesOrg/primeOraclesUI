@@ -6,7 +6,7 @@ import { User } from "lucide-react";
 interface UserAvatarProps {
   avatarPath: string;
   className?: string;
-  size?: "10" | "16";
+  size?: "8" | "10" | "16";
 }
 
 export const UserAvatar = ({ avatarPath, size = "10", className }: UserAvatarProps) => {

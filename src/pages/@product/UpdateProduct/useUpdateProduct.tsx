@@ -1,34 +1,65 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProductFormData, createProductSchema } from "@/utils/validators/createProduct";
-import {
-  DEFAULT_FORM_DATA,
-  type ProductAdvantage,
-  type ProductFAQItem,
-} from "@/types/createProduct";
+import { type ProductAdvantage, type ProductFAQItem } from "@/types/createProduct";
 import { useToast } from "@/hooks/useToast";
-import { useCreateProductMutation, useGetCategoriesForProductsQuery } from "@/store/productsApi";
+import {
+  useGetCategoriesForProductsQuery,
+  useGetEditorProductPageQuery,
+  useUpdateProductMutation,
+} from "@/store/productsApi";
 import { useOnRequestResult } from "@/data/useOnRequestResult";
 import { useGetMyProfileQuery } from "@/store/usersApi";
+import { PRODUCT_IMAGES_BUCKET } from "@/utils";
 
-export const useCreateProduct = () => {
+export const useUpdateProduct = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { data: profile } = useGetMyProfileQuery();
   const [mediaFile, setMediaFile] = useState<File | null>(null);
-  const { data: categories, isLoading: isCategoriesLoading } = useGetCategoriesForProductsQuery();
-  const [createProduct, { data: createdProductId, isSuccess, isError, error }] =
-    useCreateProductMutation();
+  const [updateProduct, { data: createdProductId, isSuccess, isError, error }] =
+    useUpdateProductMutation();
+  const { data: categories } = useGetCategoriesForProductsQuery();
+  const { id } = useParams();
+  const {
+    data: product,
+    isSuccess: isProductSuccess,
+    isError: isProductError,
+    error: productError,
+    isLoading: isProductLoading,
+  } = useGetEditorProductPageQuery(id);
 
-  const createProductForm = useForm<CreateProductFormData>({
+  const defaultValues = useMemo(
+    () => ({
+      advantages: product?.advantages || [],
+      category_l1_id: product?.category.l1.id || "",
+      category_l2_id: product?.category.l2.id || "",
+      description: product?.description || "",
+      faq: product?.faq || [],
+      instructions: product?.instructions || "",
+      isActive: product?.is_active ?? true,
+      price: product?.price || 0,
+      title: product?.title || "",
+      mediaUrl: product?.cover_url || undefined,
+    }),
+    [product]
+  );
+
+  const updateProductForm = useForm<CreateProductFormData>({
     resolver: zodResolver(createProductSchema),
-    defaultValues: DEFAULT_FORM_DATA,
+    defaultValues,
     mode: "onBlur",
   });
+
+  const isActive = updateProductForm.watch("isActive");
+
+  useEffect(() => {
+    updateProductForm.reset(defaultValues);
+  }, [updateProductForm, defaultValues]);
 
   // Navigate back
   const handleBackClick = useCallback(() => {
@@ -59,82 +90,84 @@ export const useCreateProduct = () => {
         return;
       }
 
-      const currentUrl = createProductForm.getValues("mediaUrl");
+      const currentUrl = updateProductForm.getValues("mediaUrl");
       if (currentUrl) {
         URL.revokeObjectURL(currentUrl);
       }
 
       const url = URL.createObjectURL(file);
       setMediaFile(file);
-      createProductForm.setValue("mediaUrl", url, { shouldValidate: true });
-      createProductForm.clearErrors("mediaUrl");
+      updateProductForm.setValue("mediaUrl", url, { shouldValidate: true, shouldDirty: true });
+      updateProductForm.clearErrors("mediaUrl");
     },
-    [createProductForm, toast]
+    [updateProductForm, toast]
   );
 
   // Handle media remove
   const handleMediaRemove = useCallback(() => {
-    const currentUrl = createProductForm.getValues("mediaUrl");
+    const currentUrl = updateProductForm.getValues("mediaUrl");
     if (currentUrl) {
       URL.revokeObjectURL(currentUrl);
     }
     setMediaFile(null);
-    createProductForm.setValue("mediaUrl", undefined);
-  }, [createProductForm]);
+    updateProductForm.setValue("mediaUrl", undefined, { shouldDirty: true });
+  }, [updateProductForm]);
 
   // Advantages handlers
   const handleAddAdvantage = useCallback(() => {
-    const currentAdvantages = createProductForm.getValues("advantages");
+    const currentAdvantages = updateProductForm.getValues("advantages");
     if (currentAdvantages.length >= 5) return;
     const newPosition = currentAdvantages.length + 1;
     const newAdvantage: ProductAdvantage = { description: "", position: newPosition };
-    createProductForm.setValue("advantages", [...currentAdvantages, newAdvantage]);
-  }, [createProductForm]);
+    updateProductForm.setValue("advantages", [...currentAdvantages, newAdvantage]);
+  }, [updateProductForm]);
 
   const handleRemoveAdvantage = useCallback(
     (position: number) => {
-      const currentAdvantages = createProductForm.getValues("advantages");
+      const currentAdvantages = updateProductForm.getValues("advantages");
       const updated = currentAdvantages
         .filter((adv) => adv.position !== position)
         .map((adv, index) => ({ ...adv, position: index + 1 }));
-      createProductForm.setValue("advantages", updated);
+      updateProductForm.setValue("advantages", updated);
     },
-    [createProductForm]
+    [updateProductForm]
   );
 
   // FAQ handlers
   const handleAddFaq = useCallback(() => {
-    const currentFaq = createProductForm.getValues("faq");
+    const currentFaq = updateProductForm.getValues("faq");
     if (currentFaq.length >= 5) return;
     const newPosition = currentFaq.length + 1;
     const newFaq: ProductFAQItem = { question: "", answer: "", position: newPosition };
-    createProductForm.setValue("faq", [...currentFaq, newFaq]);
-  }, [createProductForm]);
+    updateProductForm.setValue("faq", [...currentFaq, newFaq]);
+  }, [updateProductForm]);
 
   const handleRemoveFaq = useCallback(
     (position: number) => {
-      const currentFaq = createProductForm.getValues("faq");
+      const currentFaq = updateProductForm.getValues("faq");
       const updated = currentFaq
         .filter((item) => item.position !== position)
         .map((item, index) => ({ ...item, position: index + 1 }));
-      createProductForm.setValue("faq", updated);
+      updateProductForm.setValue("faq", updated);
     },
-    [createProductForm]
+    [updateProductForm]
   );
 
   const onSubmit = async (values: CreateProductFormData) => {
-    await createProduct({
+    await updateProduct({
+      productId: product.id,
       productData: {
         title: values.title,
+        category_l1_id: values.category_l1_id,
+        category_l2_id: values.category_l2_id,
         description: values.description,
         advantages: values.advantages,
         faq: values.faq,
         instructions: values.instructions,
         price: values.price,
         isActive: values.isActive,
-        category_l1_id: values.category_l1_id,
-        category_l2_id: values.category_l2_id,
       },
+      oldCoverPath: product?.cover_url.split(`${PRODUCT_IMAGES_BUCKET}/`)[1],
       mediaFile,
     });
   };
@@ -143,30 +176,42 @@ export const useCreateProduct = () => {
     isSuccess,
     isError,
     successMessage: {
-      title: "Продукт создан",
-      description: "Ваш продукт успешно создан!",
+      title: "Продукт обновлен",
+      description: "Ваш продукт успешно обновлен!",
     },
     errorMessage: {
       title: "Ошибка",
       description: t(`status:${error?.code}`) || error?.message,
     },
-    onSuccess: () => navigate(`/products/${createdProductId}`),
+    onSuccess: () => {
+      if (isActive) return navigate(`/products/${createdProductId}`);
+      navigate("/workspace/marketplace");
+    },
   });
 
   useEffect(() => {
     return () => {
-      const currentUrl = createProductForm.getValues("mediaUrl");
+      const currentUrl = updateProductForm.getValues("mediaUrl");
       if (currentUrl) {
         URL.revokeObjectURL(currentUrl);
       }
     };
-  }, [createProductForm]);
+  }, [updateProductForm]);
+
+  useOnRequestResult({
+    isSuccess: isProductSuccess,
+    isError: isProductError,
+    errorMessage: {
+      description: productError ? t(`status:${productError.code}`) : "",
+    },
+    onError: () => navigate(-1),
+  });
 
   return {
-    createProductForm,
-    categories,
-    isCategoriesLoading,
+    updateProductForm,
+    isProductLoading,
     profile,
+    categories: categories?.filter((category) => category.code !== "all"),
     onSubmit,
     handleBackClick,
     handleMediaUpload,
