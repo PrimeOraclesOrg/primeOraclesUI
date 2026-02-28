@@ -95,7 +95,11 @@ export function MarketplaceTemplate({
         <div className="flex items-center gap-3 mb-5">
           <form className="flex-1 flex items-center gap-2" onSubmit={onSearch}>
             <Field orientation="horizontal">
-              <SearchBar onClear={onSearchClear} {...searchForm.register("searchRequest")} />
+              <SearchBar
+                onClear={onSearchClear}
+                {...searchForm.register("searchRequest")}
+                value={searchForm.watch("searchRequest")}
+              />
               <Button
                 variant="outline"
                 className="hover:bg-foreground/5 hover:text-foreground"
