@@ -24,6 +24,7 @@ import {
   HistorySettings,
   SecuritySettings,
 } from "@/pages/@settings";
+import { Messages } from "@/pages/Messages/Messages";
 
 export function AppRoutes() {
   useAuthListener();
@@ -121,7 +122,7 @@ export function AppRoutes() {
           path="/messages"
           element={
             <ProtectedRoute>
-              <Marketplace />
+              <Messages />
             </ProtectedRoute>
           }
         />

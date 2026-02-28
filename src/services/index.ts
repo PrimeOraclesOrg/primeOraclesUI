@@ -1,4 +1,5 @@
 export * from "./productsService/productsService";
+export * from "./chatService/chatService";
 export * from "./authService/authService";
 export {
   fetchUserProfile,
