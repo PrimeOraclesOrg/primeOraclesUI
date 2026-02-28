@@ -8,6 +8,21 @@
 import { mockSocialLinks } from "@/data/transactions";
 import { ServiceResult, UserProfileUpdate } from "./types";
 import { FullProfile, SocialMedia } from "@/types";
+import { normalizeError, supabase } from "@/utils";
+
+export async function fetchMyBalance() {
+  try {
+    const { data, error } = await supabase.rpc("get_user_balance");
+    if (error) throw error;
+
+    return {
+      data,
+      error: null,
+    };
+  } catch (error) {
+    return normalizeError(error);
+  }
+}
 
 /**
  * Get user profile by user ID

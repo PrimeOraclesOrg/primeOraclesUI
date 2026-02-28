@@ -2,6 +2,7 @@ import { FullProfile } from "@/types";
 import { baseApi } from "./baseApi";
 import { getUserProfile, updateProfile } from "@/services";
 import { UpdateProfileFormData } from "@/utils/validators/updateProfile";
+import { fetchMyBalance } from "@/services/usersService/usersService";
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -32,7 +33,16 @@ export const usersApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["User"],
     }),
+    getMyBalance: builder.query<number, void>({
+      queryFn: async () => {
+        const { data, error } = await fetchMyBalance();
+
+        if (error) return { error };
+
+        return { data };
+      },
+    }),
   }),
 });
 
-export const { useGetMyProfileQuery, useUpdateMyProfileMutation } = usersApi;
+export const { useGetMyProfileQuery, useUpdateMyProfileMutation, useGetMyBalanceQuery } = usersApi;
