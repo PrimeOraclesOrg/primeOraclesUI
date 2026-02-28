@@ -26,7 +26,7 @@ export const useMarketplace = () => {
   const [searchRequest, setSearchRequest] = useState(initialQuery);
   const [isCategorySelectPopupShown, setIsCategorySelectPopupShown] = useState(false);
 
-  const PAGE_LIMIT = 2;
+  const PAGE_LIMIT = 20;
 
   const marketSearchForm = useForm<MarketSearchFormData>({
     resolver: zodResolver(marketSearchSchema),
