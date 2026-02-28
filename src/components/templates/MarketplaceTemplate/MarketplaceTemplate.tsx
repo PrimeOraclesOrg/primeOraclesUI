@@ -25,7 +25,7 @@ import { Product } from "@/types/products";
 interface MarketplaceTemplateProps {
   products: Product[];
   showLoadMoreButton: boolean;
-  isCategorySelectPopupShown: boolean;
+  showCategorySelectPopup: boolean;
   isFetching: boolean;
   categories: ProductCategory[];
   searchForm: UseFormReturn<MarketSearchFormData>;
@@ -44,7 +44,7 @@ interface MarketplaceTemplateProps {
 export function MarketplaceTemplate({
   products,
   showLoadMoreButton,
-  isCategorySelectPopupShown,
+  showCategorySelectPopup,
   isFetching,
   categories,
   searchForm,
@@ -157,7 +157,7 @@ export function MarketplaceTemplate({
         </div>
 
         <MobileFilters
-          isOpen={isCategorySelectPopupShown}
+          isOpen={showCategorySelectPopup}
           categories={categories}
           currentCategoryCode={currentCategoryCode}
           currentSubCategoryCode={currentSubCategoryCode}

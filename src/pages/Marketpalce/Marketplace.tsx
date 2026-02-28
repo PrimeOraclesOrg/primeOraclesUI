@@ -11,7 +11,7 @@ export default function Marketplace() {
     categories,
     isCategoriesLoading,
     isCategoriesError,
-    isCategorySelectPopupShown,
+    showCategorySelectPopup,
     isFetching,
     showLoadMoreButton,
     marketSearchForm,
@@ -22,7 +22,7 @@ export default function Marketplace() {
     handleLoadMore,
     resetFilters,
     setCategory,
-    setIsCategorySelectPopupShown,
+    setShowCategorySelectPopup,
     setSubCategory,
     onSearchClear,
   } = useMarketplace();
@@ -50,9 +50,9 @@ export default function Marketplace() {
       categories={categories}
       onCreateClick={() => navigate("/create-product")}
       showLoadMoreButton={showLoadMoreButton}
-      isCategorySelectPopupShown={isCategorySelectPopupShown}
-      onCategorySelectOpen={() => setIsCategorySelectPopupShown(true)}
-      onCategorySelectClose={() => setIsCategorySelectPopupShown(false)}
+      showCategorySelectPopup={showCategorySelectPopup}
+      onCategorySelectOpen={() => setShowCategorySelectPopup(true)}
+      onCategorySelectClose={() => setShowCategorySelectPopup(false)}
       onLoadMore={handleLoadMore}
       isFetching={isFetching}
       searchForm={marketSearchForm}

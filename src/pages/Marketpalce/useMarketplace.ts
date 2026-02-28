@@ -24,7 +24,7 @@ export const useMarketplace = () => {
     refetch: refetchCategories,
   } = useGetCategoriesForProductsQuery();
   const [searchRequest, setSearchRequest] = useState(initialQuery);
-  const [isCategorySelectPopupShown, setIsCategorySelectPopupShown] = useState(false);
+  const [showCategorySelectPopup, setShowCategorySelectPopup] = useState(false);
 
   const PAGE_LIMIT = 20;
 
@@ -147,13 +147,13 @@ export const useMarketplace = () => {
     isCategoriesLoading,
     isCategoriesError,
     showLoadMoreButton,
-    isCategorySelectPopupShown,
+    showCategorySelectPopup,
     isFetching,
     marketSearchForm,
     selectedCategoriesCount,
     onSearchClear,
     refetchCategories,
-    setIsCategorySelectPopupShown,
+    setShowCategorySelectPopup,
     handleLoadMore,
     onSearch,
     setCategory,
