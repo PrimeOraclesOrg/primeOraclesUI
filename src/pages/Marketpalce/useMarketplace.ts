@@ -43,6 +43,7 @@ export const useMarketplace = () => {
 
   // Sync sort and category changes to URL (replace so history isn't polluted)
   useEffect(() => {
+    setCursor(null);
     setSearchParams(
       (prev) => {
         const next = new URLSearchParams(prev);
@@ -96,12 +97,10 @@ export const useMarketplace = () => {
     if (!categories) return;
     marketSearchForm.setValue("category_l1", categoryId || categories[0].code);
     setSubCategory("");
-    setCursor(null);
   };
 
   const setSubCategory = (typeId: string) => {
     marketSearchForm.setValue("category_l2", typeId || "");
-    setCursor(null);
   };
 
   const resetFilters = () => {
